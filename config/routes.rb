@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  resources :patients
+  # resources :patients
+
+  get 'patients/version'
+  get 'patients/patient_all'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
