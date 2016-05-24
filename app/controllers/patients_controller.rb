@@ -2,12 +2,19 @@ class PatientsController < ApplicationController
   # before_action :set_patient, only: [:show, :edit, :update, :destroy]
 
 
-  def version
+  # GET /patients/version
+def version
     render json: 'Patient API version 0.1'
   end
 
-  def patient_all
+  # GET /patients
+  def index
     render json: Patient.scan({}).collect { |data| data.to_h }
+  end
+
+  # GET /patients
+  def test_file
+    render json: FileBody('somefile.json')
   end
 
   # GET /patients
