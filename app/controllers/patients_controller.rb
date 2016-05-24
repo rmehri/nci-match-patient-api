@@ -14,7 +14,7 @@ def version
 
   # GET /patients
   def test_file
-    render json: FileBody('somefile.json')
+    render json: JSON.parse(File.new('./data/fake.json').to_s);
   end
 
   # GET /patients
