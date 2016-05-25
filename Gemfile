@@ -36,9 +36,17 @@ gem 'aws-record'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
+  gem 'rspec-rails', '~> 3.0'
+  gem 'rspec-activemodel-mocks'
+  gem 'factory_girl_rails', '~> 4.0'
+  gem 'faker'
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'spring'
 
-  gem 'rspec-rails'
+  # Codeclimate
+  gem 'codeclimate-test-reporter', require: nil
 end
 
 group :development do

@@ -16,6 +16,15 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+require "codeclimate-test-reporter"
+CodeClimate::TestReporter.start
+
+require 'factory_girl_rails'
+require 'rails_helper'
+require 'rspec/active_model/mocks'
+require 'aws-record'
+require 'active_model'
+
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
@@ -29,6 +38,8 @@ RSpec.configure do |config|
     # ...rather than:
     #     # => "be bigger than 2"
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
+
+    config.include FactoryGirl::Syntax::Methods
   end
 
   # rspec-mocks config goes here. You can use an alternate test double
@@ -37,11 +48,11 @@ RSpec.configure do |config|
     # Prevents you from mocking or stubbing a method that does not exist on
     # a real object. This is generally recommended, and will default to
     # `true` in RSpec 4.
-    mocks.verify_partial_doubles = true
+    # mocks.verify_partial_doubles = true
   end
 
-# The settings below are suggested to provide a good initial experience
-# with RSpec, but feel free to customize to your heart's content.
+  # The settings below are suggested to provide a good initial experience
+  # with RSpec, but feel free to customize to your heart's content.
 =begin
   # These two settings work together to allow you to limit a spec run
   # to individual examples or groups you care about by tagging them with
