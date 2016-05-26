@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
-  get 'patients', to: 'patients#index'
-  get "patients/:id" => "patients#show"
-  get "patients/:id/timeline" => "patients#timeline"
+  controller :version do
+    get 'version' => :version
+  end
+
+  controller :patients do
+    get 'patients' => :index
+    get "patients/:id" => :show
+    get "patients/:id/timeline" => :timeline
+  end
 end

@@ -1,8 +1,4 @@
 class PatientsController < ApplicationController
-  # GET /patients/version
-  def version
-    render json: 'Patient API version 0.1'
-  end
 
   # GET /patients
   def index
