@@ -11,8 +11,9 @@ class Patient
   string_attr :gender
   string_attr :ethnicity
   list_attr :races
-  float_attr :current_step_number
+  string_attr :current_step_number
   map_attr :current_assignment
+  string_attr :current_status
 
   map_attr :disease
   list_attr :prior_drugs

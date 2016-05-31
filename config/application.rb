@@ -21,12 +21,12 @@ module NciMatchPatientApi
     config.autoload_paths += Dir[Rails.root.join('app', 'models', '{*/}')]
     config.autoload_paths += Dir[Rails.root.join('lib')]
 
-    # config.middleware.insert_before 0, "Rack::Cors" do
-    #   allow do
-    #     origins '*'
-    #     resource '*', :headers => :any, :methods => [:get, :post, :options]
-    #   end
-    # end
+    config.middleware.insert_before 0, "Rack::Cors" do
+      allow do
+        origins '*'
+        resource '*', :headers => :any, :methods => [:get, :post, :options]
+      end
+    end
 
     config.before_configuration do
       env_file = Rails.root.join('config', 'environment.yml')
