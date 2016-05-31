@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'factory_girl_rails'
 
-describe PatientsController do
+xdescribe PatientsController do
 
   # before(:each) do
   #   setup_knock()
