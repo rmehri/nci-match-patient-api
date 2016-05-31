@@ -1,4 +1,5 @@
-class Patient
+
+class Specimen
   include Aws::Record
 
   set_table_name "#{ENV['table_prefix']}_#{self.name.underscore}_#{Rails.env}"
@@ -6,21 +7,26 @@ class Patient
   # validates_presence_of :patient_id, :study_id, :status
 
   string_attr :patient_id, hash_key: true
-  datetime_attr :registration_date, range_key: true
-  string_attr :study_id
-  string_attr :gender
-  string_attr :ethnicity
-  list_attr :races
-  float_attr :current_step_number
-  map_attr :current_assignment
+  datetime_attr :cg_collected_date, range_key: true
 
-  map_attr :disease
-  list_attr :prior_drugs
+  string_attr :cg_id
+  datetime_attr :cg_received_date
+  string_attr :study_id
+  string_attr :type
+
+  string_attr :pathology_status
+  datetime_attr :pathology_status_date
+  string_attr :disease_status
+
+  datetime_attr :variant_report_confirmed_date
+
+  list_attr :assays
+  list_attr :assignments
+  list_attr :nucleic_acid_sendouts
 
   if (ENV['aws_region_dynamo'] != 'localhost_test' && !self.table_exists?)
     migration = Aws::Record::TableMigration.new(self)
     migration.create!(provisioned_throughput: { read_capacity_units: 5, write_capacity_units: 5 })
     migration.wait_until_available
   end
-
 end

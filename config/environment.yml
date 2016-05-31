@@ -1,17 +1,17 @@
 development:
-  aws_dynamo_endpoint: "https://dynamodb.us-east-1.amazonaws.com"
+  aws_dynamo_endpoint: "http://localhost:8000"
   aws_region: "us-east-1"
   queue_name: "patient_development"
-  table_prefix: "pe"
+  table_prefix: "p"
 
 test:
   aws_dynamo_endpoint: "https://dynamodb.us-east-1.amazonaws.com"
   aws_region: "us-east-1"
   queue_name: "patient_test"
-  table_prefix: "pe"
+  table_prefix: "p"
 
 production:
   aws_dynamo_endpoint: "https://dynamodb.us-east-1.amazonaws.com"
   aws_region: "us-east-1"
   queue_name: "patient_production"
-  table_prefix: "pe"
+  table_prefix: "p"
