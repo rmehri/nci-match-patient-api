@@ -1,0 +1,206 @@
+######################################
+## From COG
+######################################
+
+## REGISTRATION message
+## possible status values: REGISTRATION, REGISTRATION_ERROR
+{
+	"header": {
+		"msg_guid": "0f8fad5b-d9cb-469f-al65-80067728950e",
+		"msg_dttm": "2016-05-09T22:06:33+00:00"
+	},
+	"study_id": "APEC1621",
+	"patient_id": "2222",
+	"step_number": "1.0",
+	"registration_date": "2016-05-09T22:06:33+00:00",
+	"status": "REGISTRATION",
+	"internal_use_only": {
+		"request_id": "4-654321",
+		"environment": "4",
+		"request": "REGISTRATION for patient_id 2222"
+	}
+}
+
+### Patient assignment message
+### possible status values: ON_TREATMENT_ARM, WILL_NOT_ENROLL
+{
+	"header": {
+		"msg_guid": "0f8fad5b-d9cb-469f-al65-80067728950e",
+		"msg_dttm": "2016-05-09T22:06:33+00:00"
+	},
+	"study_id": "APEC1621",
+	"patient_id": "2222",
+	"step_number": "1.1",
+	"treatment_arm_id": "APEC1621B",
+	"status": "ON_TREATMENT_ARM",
+	"message": "",
+	"internal_use_only": {
+		"request_id": "4-654321",
+		"environment": "4",
+		"request": "REGISTRATION for patient_id 2222"
+	}
+}
+
+
+### Off therapy message
+### possible status values: OFF_THERAPY, OFF_THERAPY_ERROR
+{
+	"header": {
+		"msg_guid": "0f8fad5b-d9cb-469f-al65-80067728950e",
+		"msg_dttm": "2016-05-09T22:06:33+00:00"
+	},
+	"study_id": "APEC1621",
+	"patient_id": "2222",
+	"treatment_arm_id": "APEC1621B",
+	"status": "OFF_THERAPY",
+	"message": "progression",
+	"internal_use_only": {
+		"request_id": "4-654321",
+		"environment": "4",
+		"request": "REGISTRATION for patient_id 2222"
+	}
+}
+
+### Off study message
+### possible status values: OFF_STUDY, OFF_STUDY_ERROR
+{
+	"header": {
+		"msg_guid": "0f8fad5b-d9cb-469f-al65-80067728950e",
+		"msg_dttm": "2016-05-09T22:06:33+00:00"
+	},
+	"study_id": "APEC1621",
+	"patient_id": "2222",
+	"status": "OFF_STUDY",
+	"message": "death",
+	"internal_use_only": {
+		"request_id": "4-654321",
+		"environment": "4",
+		"request": "REGISTRATION for patient_id 2222"
+	}
+}
+
+
+### Candidate treatment success message
+### possible status values:
+{
+	"header": {
+		"msg_guid": "0f8fad5b-d9cb-469f-al65-80067728950e",
+		"msg_dttm": "2016-05-09T22:06:33+00:00"
+	},
+	"study_id": "APEC1621",
+	"patient_id": "2222",
+	"treatment_arm_id": "APEC1621B",
+	"request_status": "SUCCESS",
+	"request_message": "",
+	"internal_use_only": {
+		"request_id": "4-654321",
+		"environment": "4",
+		"request": "REGISTRATION for patient_id 2222"
+	}
+}
+
+### Candidate treatment failure message
+### possible status values:
+{
+	"header": {
+		"msg_guid": "0f8fad5b-d9cb-469f-al65-80067728950e",
+		"msg_dttm": "2016-05-09T22:06:33+00:00"
+	},
+	"study_id": "APEC1621",
+	"patient_id": "2222",
+	"treatment_arm_id": "APEC1621B",
+	"request_status": "FAILURE",
+	"request_message": "Patient currently on another protocol therapy"
+	"internal_use_only": {
+		"request_id": "4-654321",
+		"environment": "4",
+		"request": "REGISTRATION for patient_id 2222"
+	}
+}
+
+
+
+#####################################################
+## NCH - Nationwide Childrens Hospital
+#####################################################
+
+### Specimen Received message
+{
+	"header": {
+		"msg_guid": "0f8fad5b-d9cb-469f-al65-80067728950e",
+		"msg_dttm": "2016-05-09T22:06:33+00:00"
+	},
+	"specimens_received" : [
+		{
+			"study_id": "APEC1621",
+			"patient_id": "17364",
+			"collection_grouping_id": "CGID-123456",
+			"type": "Blood",
+			"disease_status": "Normal",
+			"collection_ts": "2016-04-25T14:17:11+00:00",
+			"received_ts": "2016-04-25T15:17:11+00:00",
+			"internal_use_only": {
+				"stars_patient_id": "ABCXYZ",
+				"star_specimen_id": "ABCXYZ-ABC123",
+				"star_specimen_type": "Fresh Blood",
+				"qc_tx": "2016-04-25T16:21:34+00:00"
+			}
+		},
+		{
+			"study_id": "APEC1621",
+			"patient_id": "23123",
+			"collection_grouping_id": "CGID-77864",
+			"type": "Tissue",
+			"disease_status": "Diseased",
+			"collection_ts": "2016-04-25T14:17:11+00:00",
+			"received_ts": "2016-04-25T15:17:11+00:00",
+			"internal_use_only": {
+				"stars_patient_id": "QWERTY",
+				"star_specimen_id": "QWERTY-XYZ222",
+				"star_specimen_type": "Fresh Tissue Primary",
+				"qc_tx": "2016-04-25T16:21:34+00:00"
+			}
+		},
+		{
+			"study_id": "APEC1621",
+			"patient_id": "23123",
+			"collection_grouping_id": "CGID-77864",
+			"type": "Tissue",
+			"disease_status": "Diseased",
+			"collection_ts": "2016-04-25T15:17:11+00:00",
+			"received_ts": "2016-04-25T16:17:11+00:00",
+			"internal_use_only": {
+				"stars_patient_id": "QWERTY",
+				"star_specimen_id": "QWERTY-XYZ223",
+				"star_specimen_type": "Fresh Tissue Primary",
+				"qc_tx": "2016-04-25T17:21:35+00:00"
+			}
+		},
+		{
+			"study_id": "APEC1621",
+			"patient_id": "23123",
+			"collection_grouping_id": "CGID-77865",
+			"type": "Blood",
+			"disease_status": "Normal",
+			"collection_ts": "2016-04-25T14:17:11+00:00",
+			"received_ts": "2016-04-25T15:17:11+00:00",
+			"internal_use_only": {
+				"stars_patient_id": "QWERTY",
+				"star_specimen_id": "QWERTY-XYZ225",
+				"star_specimen_type": "Fresh Blood",
+				"qc_tx": "2016-04-25T17:21:35+00:00"
+			}
+		}
+	]
+}
+
+
+
+
+
+
+
+
+
+
+

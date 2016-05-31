@@ -17,6 +17,7 @@ class Patient
 
   map_attr :disease
   list_attr :prior_drugs
+  map_attr :documents
 
   if (ENV['aws_region_dynamo'] != 'localhost_test' && !self.table_exists?)
     migration = Aws::Record::TableMigration.new(self)
