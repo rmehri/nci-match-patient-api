@@ -15,17 +15,13 @@ class PatientsController < ApplicationController
   #   render json: data_hash
   # end
 
-
   # GET /patients/1/timeline
   def timeline
     begin
       if !params[:id].nil?
-        json_result = PatientEvent.scan(:scan_filter => {
-            "patient_id" => {
-                :comparison_operator => "EQ",
-                :attribute_value_list => [params[:id]]
-            }
-        }).collect { |data| data.to_h }
+        json_result = PatientEvent
+                          .scan(get_patient_filter([params[:id]]))
+                          .collect { |data| data.to_h }
       end
       render json: json_result
     rescue => error
@@ -44,12 +40,9 @@ class PatientsController < ApplicationController
   def show
     begin
       if !params[:id].nil?
-        json_result = Patient.scan(:scan_filter => {
-            "patient_id" => {
-                :comparison_operator => "EQ",
-                :attribute_value_list => [params[:id]]
-            }
-        }).collect { |data| data.to_h }
+        json_result = Patient
+                          .scan(get_patient_filter([params[:id]]))
+                          .collect { |data| data.to_h }
       end
       render json: json_result
     rescue => error
@@ -86,4 +79,13 @@ class PatientsController < ApplicationController
     end
   end
 
+  private
+  def get_patient_filter(id)
+    return :scan_filter => {
+        "patient_id" => {
+            :comparison_operator => "EQ",
+            :attribute_value_list => id
+        }
+    }
+  end
 end
