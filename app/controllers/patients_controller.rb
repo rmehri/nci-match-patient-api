@@ -15,6 +15,7 @@ class PatientsController < ApplicationController
   #   render json: data_hash
   # end
 
+
   # GET /patients/1/timeline
   def timeline
     begin
@@ -36,6 +37,7 @@ class PatientsController < ApplicationController
   #   data_hash = JSON.parse(file)
   #   render json: data_hash
   # end
+
 
   # GET /patients/1
   # GET /patients/1.json
@@ -60,18 +62,23 @@ class PatientsController < ApplicationController
   #   render json: data_hash
   # end
 
-  # POST /patients/1/variantreport/{confirm:"0|1", comments:"Some comments"}
+
+  # POST /patients/1/variantreport/{confirmed:"0|1", comments:"Some comments"}
   def variantreport
     begin
-      post_data = JSON.parse(request.raw_post)
-      post_data.deep_transform_keys!(&:underscore).symbolize_keys!
-      confirmResultModel = ConfirmResult.new.from_json(ConfirmResult.new.convert_models(post_data).to_json)
+      json_string = request.raw_post
 
-      if treatment_arm_model.valid?
-        Aws::Publisher.publish(@treatment_arm)
+      begin
+        confirmResultModel = ConfirmResult.from_json(json_string)
+      rescue
+        render json: {:status => "FAILURE", :message => "Invalid data received. Please check data format."}, :status => 400
+      end
+
+      if confirmResultModel != nil
+        Pe::Processor.confirmVariantReport(confirmResultModel)
         render json: {:status => "SUCCESS"}, :status => 200
-      else
-        render json: {:status => "FAILURE", :message => "Validation failed.  Please check all required fields are present"}, :status => 400
+      # else
+      #   render json: {:status => "FAILURE", :message => "Validation failed.  Please check all required fields are present"}, :status => 400
       end
 
     rescue => error

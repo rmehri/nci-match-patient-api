@@ -1,17 +1,39 @@
-describe ConfirmResult do
-  it "can be created" do
-    result = ConfirmResult.new
-    result.confirmed = true
-    result.comments = 'Some Comments'
+require 'json'
 
-    expect(result.confirmed).to eq(true)
-    expect(result.comments).to eq('Some Comments')
+describe ConfirmResult do
+  def getTestable
+    testable = ConfirmResult.new
+    testable.confirmed = true
+    testable.comments = 'Some Comments'
+    return testable
   end
 
-  xit "can convert from json" do
-    json = '{"confirm":"true","comment":"Some Comments"}';
-    model = ConfirmResult.new.from_json json
+  it "can be created" do
+    testable = getTestable
 
+    expect(testable.confirmed).to eq(true)
+    expect(testable.comments).to eq('Some Comments')
+  end
+
+  it "can convert from json" do
+    json_string = '{"confirmed":"true","comments":"Some Comments"}';
+
+    model = ConfirmResult.from_json json_string
+
+    expect(model).to_not eq nil
+    expect(model.confirmed).to eq("true")
+    expect(model.comments).to eq('Some Comments')
+
+  end
+
+  it "can convert to json" do
+    testable = getTestable
+
+    json_string = testable.to_json
+
+    expect {
+      JSON.parse(json_string)
+    }.to_not raise_error
 
   end
 end

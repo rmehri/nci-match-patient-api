@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-xdescribe VersionController do
+describe VersionController do
 
   describe "GET #version" do
     it "Should return the API version" do
