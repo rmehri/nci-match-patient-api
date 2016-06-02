@@ -21,7 +21,7 @@ describe Convert do
     
     model.prior_drugs          = ["Aspirin", "Motrin", "Vitamin C"]
     
-    model.documents            = [
+    model.documents            = {"list" =>[
         {
             "name" => "Document 1",
             "uploadedDate" => "2016-05-09T22:06:33+00:00",
@@ -37,7 +37,7 @@ describe Convert do
             "uploadedDate" => "2016-05-09T22:06:33+00:00",
             "user" => "Fox Mulder"
         }
-    ]
+    ]}
 
     model
   end
@@ -47,7 +47,22 @@ describe Convert do
 
     ui = Convert::PatientDbModel.to_ui_model db
 
-    expect(ui.patient_id).to eq("PAT123")
+    expect(ui.patient_id).to eq "PAT123"
+    expect(ui.gender).to eq "MALE"
+    expect(ui.current_status).to eq "REGISTRATION"
+
+    expect(ui.disease).to be_kind_of Hash
+    expect(ui.disease["name"]).to eq "Invasive Breast Carcinoma"
+
+    expect(ui.races).to be_kind_of Array
+    expect(ui.races.size).to eq 2
+
+    expect(ui.prior_drugs).to be_kind_of Array
+    expect(ui.prior_drugs[0]).to eq "Aspirin"
+
+    expect(ui.documents).to be_kind_of Hash
+    expect(ui.documents["list"]).to be_kind_of Array
+    expect(ui.documents["list"][0]["name"]).to eq "Document 1"
 
   end
 end

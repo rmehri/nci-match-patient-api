@@ -16,7 +16,7 @@ module Convert
 
       uiModel.disease              = dbModel.disease
       uiModel.prior_drugs          = dbModel.prior_drugs
-      # uiModel.documents            = dbModel.documents
+      uiModel.documents            = dbModel.documents
 
       return uiModel
     end
