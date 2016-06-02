@@ -24,7 +24,6 @@ class PatientUiModel
   attr_accessor :variant_report_selectors
   attr_accessor :variant_report
 
-  attr_accessor :assignment_report_selectors
   attr_accessor :assignment_report
 
 end
