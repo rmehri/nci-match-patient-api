@@ -19,9 +19,7 @@ class PatientsController < ApplicationController
   def timeline
     begin
       if !params[:id].nil?
-        json_result = PatientEvent
-                          .scan(get_patient_filter([params[:id]]))
-                          .collect { |data| data.to_h }
+        json_result = PatientEvent.scan(get_patient_filter([params[:id]])).collect { |data| data.to_h }
       end
       render json: json_result
     rescue => error
@@ -40,9 +38,7 @@ class PatientsController < ApplicationController
   def show
     begin
       if !params[:id].nil?
-        json_result = Patient
-                          .scan(get_patient_filter([params[:id]]))
-                          .collect { |data| data.to_h }
+        json_result = Patient.scan(get_patient_filter([params[:id]])).collect { |data| data.to_h }
       end
       render json: json_result
     rescue => error
