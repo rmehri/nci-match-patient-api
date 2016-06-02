@@ -18,11 +18,12 @@ module Convert
       uiModel.prior_drugs          = patient_dbm.prior_drugs
       uiModel.documents            = patient_dbm.documents
 
-      if biopsies_dbm != nil
-        uiModel.biopsy_selectors = biopsies_dbm.map { |b_dbm|
-          to_ui_biopsy_selector b_dbm
-        }
+      if events_dbm != nil
+        uiModel.timeline = events_dbm.map { |e_dbm| to_ui_event e_dbm }
+      end
 
+      if biopsies_dbm != nil
+        uiModel.biopsy_selectors = biopsies_dbm.map { |b_dbm| to_ui_biopsy_selector b_dbm }
         uiModel.biopsy = to_ui_biopsy biopsies_dbm[biopsies_dbm.size - 1]
       end
 
@@ -30,6 +31,16 @@ module Convert
     end
 
     private
+
+    def self.to_ui_event(dbm)
+      {
+          "event_date"    => dbm.event_date,
+          "event_name"    => dbm.event_name,
+          "event_type"    => dbm.event_type,
+          "event_message" => dbm.event_message,
+          "event_data"    => dbm.event_data
+      }
+    end
 
     def self.to_ui_biopsy_selector(dbm)
       {"text" => dbm.type, "biopsy_sequence_number" => dbm.biopsy_sequence_number}

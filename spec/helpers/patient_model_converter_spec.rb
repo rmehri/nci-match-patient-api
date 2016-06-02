@@ -41,7 +41,20 @@ describe Convert do
 
     model
   end
-  
+
+  let(:events_db_model_list) do
+    [1,2].map { |i|
+      PatientEvent.new(
+          :patient_id     => 'PAT123',
+          :event_date     => '2016-05-09T22:06:33+00:00',
+          :event_name     => 'Event Name ' + i.to_s,
+          :event_type     => 'TYPE' + i.to_s,
+          :event_message  => 'Message ' + i.to_s,
+          :event_data     => { "status" => "Pending", "biopsy_sequence_number" => "B-987456" }
+      )
+    }
+  end
+
   let(:biopsy_sel_db_model_list) do
     [1,2].map { |i|
       Biopsy.new(   
@@ -56,7 +69,7 @@ describe Convert do
     }
   end
 
-  it "can convert patient DB models" do
+  it "works with patient DB models" do
     dbm = patient_db_model
 
     uim = Convert::PatientDbModel.to_ui_model dbm, nil, nil, nil, nil, nil
@@ -80,22 +93,37 @@ describe Convert do
 
   end
 
-  it "can convert biopsy selector DB models" do
+  it "works with timeline DB models" do
+    patient_dbm = patient_db_model
+    events_dbm = events_db_model_list
+
+    uim = Convert::PatientDbModel.to_ui_model patient_dbm, events_dbm, nil, nil, nil, nil
+
+    expect(uim).to_not eq nil
+
+    expect(uim.timeline).to_not eq nil
+    expect(uim.timeline.size).to eq events_dbm.size
+    expect(uim.timeline[0]["event_name"]).to eq "Event Name 1"
+    expect(uim.timeline[1]["event_data"]["status"]).to eq "Pending"
+
+  end
+
+  it "works with biopsy selector DB models" do
     patient_dbm = patient_db_model
     biopsies_dbm = biopsy_sel_db_model_list
-
 
     uim = Convert::PatientDbModel.to_ui_model patient_dbm, nil, biopsies_dbm, nil, nil, nil
 
     expect(uim).to_not eq nil
 
     expect(uim.biopsy_selectors).to_not eq nil
+    expect(uim.biopsy_selectors.size).to eq biopsies_dbm.size
     expect(uim.biopsy_selectors[0]["text"]).to eq "TYPE1"
     expect(uim.biopsy_selectors[1]["biopsy_sequence_number"]).to eq "MSN123452"
 
   end
 
-  it "can convert biopsy DB model" do
+  it "works with biopsy DB model" do
     patient_dbm = patient_db_model
     biopsies_dbm = biopsy_sel_db_model_list
     
