@@ -19,7 +19,7 @@ class Patient
   list_attr :prior_drugs
   map_attr :documents
 
-  def self.ensure
+  def self.ensure_table
     if (ENV['aws_region_dynamo'] != 'localhost_test' && !self.table_exists?)
       migration = Aws::Record::TableMigration.new(self)
       migration.create!(provisioned_throughput: { read_capacity_units: 5, write_capacity_units: 5 })
