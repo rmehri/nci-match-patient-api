@@ -1,5 +1,5 @@
-describe PatientModelConverter do
-  let(:dbModel) do
+describe Convert do
+  let(:db_model) do
     model = Patient.new
 
     model.patient_id           = 'PAT123'
@@ -43,5 +43,11 @@ describe PatientModelConverter do
   end
 
   it "can convert DB model to UI model" do
+    db = db_model
+
+    ui = Convert::PatientDbModel.to_ui_model db
+
+    expect(ui.patient_id).to eq("PAT123")
+
   end
 end

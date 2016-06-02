@@ -19,6 +19,7 @@ module NciMatchPatientApi
   class Application < Rails::Application
     config.autoload_paths += Dir[Rails.root.join('app', 'models', '*')]
     config.autoload_paths += Dir[Rails.root.join('app', 'models', '{*/}')]
+    config.autoload_paths += Dir[Rails.root.join('app', 'helpers', '{*/}')]
     config.autoload_paths += Dir[Rails.root.join('lib')]
 
     config.middleware.insert_before 0, "Rack::Cors" do
