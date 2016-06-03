@@ -25,9 +25,4 @@ class Specimen
   list_attr :assignments
   list_attr :nucleic_acid_sendouts
 
-  if (ENV['aws_region_dynamo'] != 'localhost_test' && !self.table_exists?)
-    migration = Aws::Record::TableMigration.new(self)
-    migration.create!(provisioned_throughput: { read_capacity_units: 5, write_capacity_units: 5 })
-    migration.wait_until_available
-  end
 end

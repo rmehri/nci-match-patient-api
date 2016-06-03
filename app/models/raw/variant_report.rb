@@ -22,11 +22,4 @@ class VariantReport
   string_attr :rna_bai_file_path
   string_attr :vcf_path
 
-  def self.ensure_table
-    if (ENV['aws_region_dynamo'] != 'localhost_test' && !self.table_exists?)
-      migration = Aws::Record::TableMigration.new(self)
-      migration.create!(provisioned_throughput: { read_capacity_units: 5, write_capacity_units: 5 })
-      migration.wait_until_available
-    end
-  end
 end
