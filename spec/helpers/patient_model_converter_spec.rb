@@ -377,4 +377,27 @@ describe Convert do
 
   end
 
+
+  it "works with entire DB model" do
+    patient_dbm = patient_db_model(assignment_report)
+    events_dbm = events_db_model_list
+    biopsies_dbm = biopsy_db_model_list
+    variant_reports_dbm = variant_report_db_model_list
+    variants_dbm = variant_db_model_list
+    specimens_dbm = spepcimen_db_model_list
+
+    uim = Convert::PatientDbModel.to_ui_model patient_dbm, events_dbm, biopsies_dbm, variant_reports_dbm, variants_dbm, specimens_dbm
+
+    expect(uim).to_not eq nil
+    expect(uim.assignment_report).to_not eq nil
+    expect(uim.timeline).to_not eq nil
+    expect(uim.biopsy_selectors).to_not eq nil
+    expect(uim.biopsy).to_not eq nil
+    expect(uim.variant_report_selectors).to_not eq nil
+    expect(uim.variant_report).to_not eq nil
+    expect(uim.specimen_selectors).to_not eq nil
+    expect(uim.specimen).to_not eq nil
+
+  end
+
 end
