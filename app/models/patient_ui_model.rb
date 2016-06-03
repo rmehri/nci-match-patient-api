@@ -16,6 +16,10 @@ class PatientUiModel
 
   attr_accessor :timeline
 
+  attr_accessor :specimen_selectors
+  attr_accessor :specimen
+  attr_accessor :specimen_history
+
   attr_accessor :biopsy_variant_report_map
 
   attr_accessor :biopsy_selectors

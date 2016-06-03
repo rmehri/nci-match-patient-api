@@ -36,10 +36,20 @@ module Convert
         uiModel.assignment_report = patient_dbm.current_assignment
       end
 
+      if specimens_dbm != nil
+        uiModel.specimen_selectors = specimens_dbm.map { |s_dbm| to_ui_specimen_selector s_dbm }
+        uiModel.specimen = specimens_dbm[specimens_dbm.size - 1].data_to_h
+        uiModel.specimen_history = specimens_dbm.map { |s_dbm| s_dbm.data_to_h }
+      end
+
       return uiModel
     end
 
     private
+
+    def self.to_ui_specimen_selector(dbm)
+      {"text" => dbm.cg_id, "cg_collected_date" => dbm.cg_collected_date}
+    end
 
     def self.to_ui_biopsy_selector(dbm)
       {"text" => dbm.type, "biopsy_sequence_number" => dbm.biopsy_sequence_number}

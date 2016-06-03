@@ -172,6 +172,47 @@ describe Convert do
     }
   end
 
+  let(:spepcimen_db_model_list) do
+    [1,2].map { |i|
+      Specimen.new(
+        :patient_id  => "PAT123",
+        :cg_collected_date  => "2016-06-09T22:06:33+00:00",
+        :cg_id => "GID098" + i.to_s,
+        :cg_received_date => "2016-06-09T22:06:33+00:00",
+        :study_id => "APEC1621",
+        :type => "TUMOR",
+        :pathology_status => "Agreed on pathology",
+        :pathology_status_date => "2016-06-09T22:06:33+00:00",
+        :disease_status => "Deseased",
+        :variant_report_confirmed_date => "2016-06-09T22:06:33+00:00",
+        :assays => [
+            { :gene => 'PTEN',  :ordered_date => '2016-06-09T22:06:33+00:00', :result_date => '2016-07-09T22:06:33+00:00T', :result => 'POSITIVE' },
+            { :gene => 'MLH1',  :ordered_date => '2016-06-09T22:06:33+00:00', :result_date => '2016-07-09T22:06:33+00:00T', :result => 'POSITIVE' },
+            { :gene => 'MSCH2', :ordered_date => '2016-06-09T22:06:33+00:00', :result_date => '2016-07-09T22:06:33+00:00T', :result => 'POSITIVE' },
+            { :gene => 'RB',    :ordered_date => '2016-06-09T22:06:33+00:00', :result_date => '2016-07-09T22:06:33+00:00T', :result => 'NEGATIVE' }
+
+        ],
+        :assignments => nil,
+        :nucleic_acid_sendouts => [
+            {
+                :analyses => [
+                    { :analysis_id => 'MSN5678_v1_676...tyyrt4',   :status => 'Rejected',  :file_received_date => 'Sep 18, 2015, 1:08 PM GMT', :status => 'Rejected',  :status_date => '2016-06-09T22:06:33+00:00' }
+                ]
+            },
+            {
+                :msn => 'MSN1234', :tracking_number => '456745758776', :destination_date => '2016-05-09T22:06:33+00:00', :dna_concordance => 11.2, :dna_volume => 10, :reported_date => '2016-06-09T22:06:33+00:00', :comments => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+                :msn => 'MSN5678', :tracking_number => '675867856677', :destination_date => '2016-06-09T22:06:33+00:00', :dna_concordance => 10.2, :dna_volume => 9,  :reported_date => '2016-06-09T22:06:33+00:00',
+                :analyses => [
+                    { :analysis_id => 'MSN1234_v1_23453...jher4',  :status => 'Confirmed', :file_received_date => '2016-06-09T22:06:33+00:00', :status => 'Confirmed', :status_date => '2016-06-09T22:06:33+00:00' },
+                    { :analysis_id => 'MSN1234_v2_2rer53...yher4', :status => 'Rejected',  :file_received_date => '2016-09-09T22:06:33+00:00', :status => 'Rejected',  :status_date => '2016-06-09T22:06:33+00:00' }
+                ]
+            }
+
+        ]
+      )
+    }
+  end
+
   it "works with patient DB models" do
     dbm = patient_db_model
 
@@ -303,4 +344,37 @@ describe Convert do
 
 
   end
+
+  it "works with specimen selector DB models" do
+    patient_dbm = patient_db_model
+    specimens_dbm = spepcimen_db_model_list
+
+    uim = Convert::PatientDbModel.to_ui_model patient_dbm, nil, nil, nil, nil, specimens_dbm
+
+    expect(uim).to_not eq nil
+
+    expect(uim.specimen_selectors).to_not eq nil
+    expect(uim.specimen_selectors.size).to eq specimens_dbm.size
+    expect(uim.specimen_selectors[0]["text"]).to eq "GID0981"
+    expect(uim.specimen_selectors[1]["cg_collected_date"]).to eq "2016-06-09T22:06:33+00:00"
+
+  end
+
+  it "works with specimen DB model" do
+    patient_dbm = patient_db_model
+    specimens_dbm = spepcimen_db_model_list
+
+    uim = Convert::PatientDbModel.to_ui_model patient_dbm, nil, nil, nil, nil, specimens_dbm
+
+    expect(uim).to_not eq nil
+
+    expect(uim.specimen).to_not eq nil
+    expect(uim.specimen["cg_id"]).to eq "GID0982"
+    expect(uim.specimen["type"]).to eq "TUMOR"
+
+    expect(uim.specimen_history).to_not eq nil
+    expect(uim.specimen_history.size).to eq specimens_dbm.size
+
+  end
+
 end
