@@ -4,9 +4,4 @@ languages:
   PHP: true
   Python: true
 exclude_paths:
-- "data/create_fake_patient_data.js"
-- "data/create_fake_patient_timeline_data.js"
-- "data/messages.json"
-- "data/patient.json"
-- "data/patient_list.json"
-- "data/patient_timeline.json"
+- "data/**/*"
