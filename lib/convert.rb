@@ -1,7 +1,7 @@
 module Convert
 
   class PatientDbModel
-    def self.to_ui_model(patient_dbm, events_dbm, biopsies_dbm, variant_reports_dbm, variants_dbm, specimens_dbm)
+    def self.to_ui_model(patient_dbm, events_dbm, variant_reports_dbm, variants_dbm, specimens_dbm)
       uiModel = PatientUiModel.new
 
       uiModel.patient_id           = patient_dbm.patient_id
@@ -20,11 +20,6 @@ module Convert
 
       if events_dbm != nil
         uiModel.timeline = events_dbm.map { |e_dbm| e_dbm.data_to_h }
-      end
-
-      if biopsies_dbm != nil
-        uiModel.biopsy_selectors = biopsies_dbm.map { |b_dbm| to_ui_biopsy_selector b_dbm }
-        uiModel.biopsy = biopsies_dbm[biopsies_dbm.size - 1].data_to_h
       end
 
       if variant_reports_dbm != nil
@@ -49,10 +44,6 @@ module Convert
 
     def self.to_ui_specimen_selector(dbm)
       {"text" => dbm.cg_id, "cg_collected_date" => dbm.cg_collected_date}
-    end
-
-    def self.to_ui_biopsy_selector(dbm)
-      {"text" => dbm.type, "biopsy_sequence_number" => dbm.biopsy_sequence_number}
     end
 
     def self.to_ui_variant_report_selector(dbm)

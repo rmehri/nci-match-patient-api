@@ -56,20 +56,6 @@ describe Convert do
     }
   end
 
-  let(:biopsy_db_model_list) do
-    [1,2].map { |i|
-      Biopsy.new(   
-          :patient_id             => 'PAT123',
-          :biopsy_sequence_number => 'MSN12345' + i.to_s,
-          :biopsy_received_date   => '2016-05-09T22:06:33+00:00',
-          :cg_collected_date   => '2016-06-09T22:06:33+00:00',
-          :cg_id                  => 'GID098' + i.to_s,
-          :study_id               => 'APEC1621' + i.to_s,
-          :type                   => 'TYPE' + i.to_s,
-      )
-    }
-  end
-
   let(:variant_report_db_model_list) do
     [1,2].map { |i|
       VariantReport.new(
@@ -216,7 +202,7 @@ describe Convert do
   it "works with patient DB models" do
     dbm = patient_db_model
 
-    uim = Convert::PatientDbModel.to_ui_model dbm, nil, nil, nil, nil, nil
+    uim = Convert::PatientDbModel.to_ui_model dbm, nil, nil, nil, nil
 
     expect(uim.patient_id).to eq "PAT123"
     expect(uim.gender).to eq "MALE"
@@ -241,7 +227,7 @@ describe Convert do
     patient_dbm = patient_db_model
     events_dbm = events_db_model_list
 
-    uim = Convert::PatientDbModel.to_ui_model patient_dbm, events_dbm, nil, nil, nil, nil
+    uim = Convert::PatientDbModel.to_ui_model patient_dbm, events_dbm, nil, nil, nil
 
     expect(uim).to_not eq nil
 
@@ -252,40 +238,11 @@ describe Convert do
 
   end
 
-  it "works with biopsy selector DB models" do
-    patient_dbm = patient_db_model
-    biopsies_dbm = biopsy_db_model_list
-
-    uim = Convert::PatientDbModel.to_ui_model patient_dbm, nil, biopsies_dbm, nil, nil, nil
-
-    expect(uim).to_not eq nil
-
-    expect(uim.biopsy_selectors).to_not eq nil
-    expect(uim.biopsy_selectors.size).to eq biopsies_dbm.size
-    expect(uim.biopsy_selectors[0]["text"]).to eq "TYPE1"
-    expect(uim.biopsy_selectors[1]["biopsy_sequence_number"]).to eq "MSN123452"
-
-  end
-
-  it "works with biopsy DB model" do
-    patient_dbm = patient_db_model
-    biopsies_dbm = biopsy_db_model_list
-    
-    uim = Convert::PatientDbModel.to_ui_model patient_dbm, nil, biopsies_dbm, nil, nil, nil
-
-    expect(uim).to_not eq nil
-
-    expect(uim.biopsy).to_not eq nil
-    expect(uim.biopsy["type"]).to eq "TYPE2"
-    expect(uim.biopsy["biopsy_sequence_number"]).to eq "MSN123452"
-
-  end
-
   it "works with variant report selector DB models" do
     patient_dbm = patient_db_model
     variant_reports_dbm = variant_report_db_model_list
 
-    uim = Convert::PatientDbModel.to_ui_model patient_dbm, nil, nil, variant_reports_dbm, nil, nil
+    uim = Convert::PatientDbModel.to_ui_model patient_dbm, nil, variant_reports_dbm, nil, nil
 
     expect(uim).to_not eq nil
 
@@ -301,7 +258,7 @@ describe Convert do
     variant_reports_dbm = variant_report_db_model_list
     variants_dbm = variant_db_model_list
 
-    uim = Convert::PatientDbModel.to_ui_model patient_dbm, nil, nil, variant_reports_dbm, variants_dbm, nil
+    uim = Convert::PatientDbModel.to_ui_model patient_dbm, nil, variant_reports_dbm, variants_dbm, nil
 
     expect(uim).to_not eq nil
 
@@ -326,7 +283,7 @@ describe Convert do
   it "works with assignment report" do
     dbm = patient_db_model(assignment_report)
 
-    uim = Convert::PatientDbModel.to_ui_model dbm, nil, nil, nil, nil, nil
+    uim = Convert::PatientDbModel.to_ui_model dbm, nil, nil, nil, nil
 
     expect(uim).to_not eq nil
 
@@ -346,7 +303,7 @@ describe Convert do
     patient_dbm = patient_db_model
     specimens_dbm = spepcimen_db_model_list
 
-    uim = Convert::PatientDbModel.to_ui_model patient_dbm, nil, nil, nil, nil, specimens_dbm
+    uim = Convert::PatientDbModel.to_ui_model patient_dbm, nil, nil, nil, specimens_dbm
 
     expect(uim).to_not eq nil
 
@@ -361,7 +318,7 @@ describe Convert do
     patient_dbm = patient_db_model
     specimens_dbm = spepcimen_db_model_list
 
-    uim = Convert::PatientDbModel.to_ui_model patient_dbm, nil, nil, nil, nil, specimens_dbm
+    uim = Convert::PatientDbModel.to_ui_model patient_dbm, nil, nil, nil, specimens_dbm
 
     expect(uim).to_not eq nil
 
@@ -378,18 +335,15 @@ describe Convert do
   it "works with entire DB model" do
     patient_dbm = patient_db_model(assignment_report)
     events_dbm = events_db_model_list
-    biopsies_dbm = biopsy_db_model_list
     variant_reports_dbm = variant_report_db_model_list
     variants_dbm = variant_db_model_list
     specimens_dbm = spepcimen_db_model_list
 
-    uim = Convert::PatientDbModel.to_ui_model patient_dbm, events_dbm, biopsies_dbm, variant_reports_dbm, variants_dbm, specimens_dbm
+    uim = Convert::PatientDbModel.to_ui_model patient_dbm, events_dbm, variant_reports_dbm, variants_dbm, specimens_dbm
 
     expect(uim).to_not eq nil
     expect(uim.assignment_report).to_not eq nil
     expect(uim.timeline).to_not eq nil
-    expect(uim.biopsy_selectors).to_not eq nil
-    expect(uim.biopsy).to_not eq nil
     expect(uim.variant_report_selectors).to_not eq nil
     expect(uim.variant_report).to_not eq nil
     expect(uim.specimen_selectors).to_not eq nil
