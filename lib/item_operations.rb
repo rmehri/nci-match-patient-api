@@ -32,5 +32,11 @@ module Aws
       end
     end
 
+    module Ext
+      def data_to_h
+        JSON.parse(to_json)["data"]
+      end
+    end
+
   end
 end

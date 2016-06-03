@@ -197,9 +197,6 @@ describe Convert do
     patient_dbm = patient_db_model
     variant_reports_dbm = variant_report_db_model_list
 
-    # p "variant_reports_dbm"
-    # p variant_reports_dbm
-
     uim = Convert::PatientDbModel.to_ui_model patient_dbm, nil, nil, variant_reports_dbm, nil, nil
 
     expect(uim).to_not eq nil
@@ -215,6 +212,8 @@ describe Convert do
     patient_dbm = patient_db_model
     variant_reports_dbm = variant_report_db_model_list
     variants_dbm = variant_db_model_list
+
+    p JSON.parse(variants_dbm[0].to_json)["data"]
 
     uim = Convert::PatientDbModel.to_ui_model patient_dbm, nil, nil, variant_reports_dbm, variants_dbm, nil
 
@@ -234,7 +233,7 @@ describe Convert do
 
     expect(uim.variant_report["variants"]["single_nucleitide_variants"]).to be_kind_of Array
 
-    # expect(uim.variant_report["variants"]["single_nucleitide_variants"][0]["gene_name"]).to eq "gene"
+    expect(uim.variant_report["variants"]["single_nucleitide_variants"][0]["gene_name"]).to eq "gene"
 
   end
 end

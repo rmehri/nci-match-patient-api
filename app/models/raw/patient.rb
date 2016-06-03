@@ -1,5 +1,6 @@
 class Patient
   include Aws::Record
+  include Aws::Record::Ext
 
   set_table_name "#{ENV['table_prefix']}_#{self.name.underscore}_#{Rails.env}"
 
