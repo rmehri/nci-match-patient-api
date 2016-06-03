@@ -1,5 +1,6 @@
 describe Convert do
-  let(:patient_db_model) do
+
+  def patient_db_model(assignemnt_report = nil)
     model = Patient.new
 
     model.patient_id           = 'PAT123'
@@ -9,7 +10,7 @@ describe Convert do
     model.ethnicity            = 'WHITE'
     model.races                = ["WHITE", "HAWAIIAN"]
     model.current_step_number  = "1.0"
-    model.current_assignment   = {"assignment_id" => "1234", "assignment_status" => "some_status"}
+    model.current_assignment   = assignemnt_report
     model.current_status       = "REGISTRATION"
     model.disease              = {
         "name"              => "Invasive Breast Carcinoma",
@@ -125,6 +126,52 @@ describe Convert do
     }
   end
 
+  let(:assignment_report) do
+    {
+        "generated_date" => '2016-05-09T22:06:33+00 =>00',
+        "confirmed_date" => '2016-05-09T22:06:33+00 =>00',
+        "sent_to_cog_date" => '-',
+        "received_from_cog_date" => '-',
+        "biopsy_sequence_number" => 'T-15-000078',
+        "molecular_sequence_number" => 'MSN34534',
+        "analysis_id" => 'MSN34534_v2_kjdf3-kejrt-3425-mnb34ert34f',
+
+        "variant_report_amois" => [
+            { "title" => '[COSM12344]', "url" => '' },
+            { "title" => 'p.S310Y', "url" => '' },
+            { "title" => 'CISM23423', "url" => '' }
+        ],
+
+        "assays" => [
+            { "gene" => 'MSH2', "result" => 'Not Applicable', "comment" => 'Biopsy received prior to bimarker launch date' },
+            { "gene" => 'PTENs', "result" => 'POSITIVE', "comment" => '-' },
+            { "gene" => 'MLH1', "result" => 'Not Applicable', "comment" => 'Biopsy received prior to bimarker launch date' },
+            { "gene" => 'RB', "result" => 'Not Applicable', "comment" => 'Biopsy received prior to bimarker launch date' }
+        ],
+
+        "treatment_arms" => {
+            "no_match" => [
+                { "treatment_arm" => 'EAY131-U', "treatment_arm_version" => '2015-08-06', "treatment_arm_title" => 'EAY131-U (2015-08-06)', "reason" => 'The patient contains no matching variant.' },
+                { "treatment_arm" => 'EAY131-F', "treatment_arm_version" => '2015-08-06', "treatment_arm_title" => 'EAY131-U (2015-08-06)', "reason" => 'The patient contains no matching variant.' },
+                { "treatment_arm" => 'EAY131-F', "treatment_arm_version" => '2015-08-06', "treatment_arm_title" => 'EAY131-U (2015-08-06)', "reason" => 'The patient contains no matching variant.' },
+                { "treatment_arm" => 'EAY131-F', "treatment_arm_version" => '2015-08-06', "treatment_arm_title" => 'EAY131-U (2015-08-06)', "reason" => 'The patient contains no matching variant.' },
+                { "treatment_arm" => 'EAY131-G', "treatment_arm_version" => '2015-08-06', "treatment_arm_title" => 'EAY131-U (2015-08-06)', "reason" => 'The patient contains no matching variant.' },
+                { "treatment_arm" => 'EAY131-H', "treatment_arm_version" => '2015-08-06', "treatment_arm_title" => 'EAY131-U (2015-08-06)', "reason" => 'The patient contains no matching variant.' },
+                { "treatment_arm" => 'EAY131-R', "treatment_arm_version" => '2015-08-06', "treatment_arm_title" => 'EAY131-U (2015-08-06)', "reason" => 'The patient contains no matching variant.' },
+                { "treatment_arm" => 'EAY131-E', "treatment_arm_version" => '2015-08-06', "treatment_arm_title" => 'EAY131-U (2015-08-06)', "reason" => 'The patient contains no matching variant.' },
+                { "treatment_arm" => 'EAY131-A', "treatment_arm_version" => '2015-08-06', "treatment_arm_title" => 'EAY131-U (2015-08-06)', "reason" => 'The patient contains no matching variant.' },
+                { "treatment_arm" => 'EAY131-V', "treatment_arm_version" => '2015-08-06', "treatment_arm_title" => 'EAY131-U (2015-08-06)', "reason" => 'The patient contains no matching variant.' }
+            ],
+            "record_based_exclusion" => [
+                { "treatment_arm" => 'EAY131-Q', "treatment_arm_version" => '2015-08-06', "treatment_arm_title" => 'EAY131-U (2015-08-06)', "reason" => 'The patient excluded from this arm because of invasive breast carcinoma.' }
+            ],
+            "selected" => [
+                { "treatment_arm" => 'EAY131-B', "treatment_arm_version" => '2015-08-06', "treatment_arm_title" => 'EAY131-U (2015-08-06)', "reason" => 'The patient and treatment match on variand identifier [ABSF, DEDF].' }
+            ]
+        }
+    }
+  end
+
   it "works with patient DB models" do
     dbm = patient_db_model
 
@@ -213,8 +260,6 @@ describe Convert do
     variant_reports_dbm = variant_report_db_model_list
     variants_dbm = variant_db_model_list
 
-    p JSON.parse(variants_dbm[0].to_json)["data"]
-
     uim = Convert::PatientDbModel.to_ui_model patient_dbm, nil, nil, variant_reports_dbm, variants_dbm, nil
 
     expect(uim).to_not eq nil
@@ -234,6 +279,28 @@ describe Convert do
     expect(uim.variant_report["variants"]["single_nucleitide_variants"]).to be_kind_of Array
 
     expect(uim.variant_report["variants"]["single_nucleitide_variants"][0]["gene_name"]).to eq "gene"
+
+  end
+
+  it "works with assignment report" do
+    dbm = patient_db_model(assignment_report)
+
+    uim = Convert::PatientDbModel.to_ui_model dbm, nil, nil, nil, nil, nil
+
+    expect(uim).to_not eq nil
+
+    p "uim.assignment_report"
+    p uim.assignment_report
+
+    expect(uim.assignment_report).to_not eq nil
+    expect(uim.assignment_report["generated_date"]).to eq "2016-05-09T22:06:33+00 =>00"
+    expect(uim.assignment_report["variant_report_amois"].size).to eq 3
+    expect(uim.assignment_report["assays"].size).to eq 4
+    expect(uim.assignment_report["assays"][0]["gene"]).to eq "MSH2"
+    expect(uim.assignment_report["treatment_arms"]).to_not eq nil
+    expect(uim.assignment_report["treatment_arms"]["no_match"].size).to be > 0
+    expect(uim.assignment_report["treatment_arms"]["no_match"][0]["treatment_arm"]).to eq "EAY131-U"
+
 
   end
 end

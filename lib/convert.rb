@@ -32,6 +32,10 @@ module Convert
         uiModel.variant_report = to_ui_variant_report(variant_reports_dbm[variant_reports_dbm.size - 1], variants_dbm)
       end
 
+      if patient_dbm.current_assignment != nil
+        uiModel.assignment_report = patient_dbm.current_assignment
+      end
+
       return uiModel
     end
 
