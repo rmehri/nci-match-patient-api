@@ -19,7 +19,7 @@ class PatientsController < ApplicationController
   def timeline
     begin
       if !params[:id].nil?
-        json_result = PatientEvent.scan(get_patient_filter([params[:id]])).collect { |data| data.to_h }
+        json_result = scan_patient PatientEvent, [params[:id]]
       end
       render json: json_result
     rescue => error
@@ -38,7 +38,7 @@ class PatientsController < ApplicationController
   def show
     begin
       if !params[:id].nil?
-        json_result = Patient.scan(get_patient_filter([params[:id]])).collect { |data| data.to_h }
+        json_result = scan_patient Patient, [params[:id]]
       end
       render json: json_result
     rescue => error
@@ -66,22 +66,23 @@ class PatientsController < ApplicationController
       if confirmResultModel != nil
         Pe::Processor.confirmVariantReport(confirmResultModel)
         render json: {:status => "SUCCESS"}, :status => 200
-      # else
-      #   render json: {:status => "FAILURE", :message => "Validation failed.  Please check all required fields are present"}, :status => 400
       end
 
     rescue => error
+      p error
       standard_error_message(error)
     end
   end
 
   private
-  def get_patient_filter(id)
-    return :scan_filter => {
-        "patient_id" => {
-            :comparison_operator => "EQ",
-            :attribute_value_list => id
-        }
-    }
+  def scan_patient(record, id)
+    record.scan(
+          :scan_filter => {
+          "patient_id" => {
+              :comparison_operator => "EQ",
+              :attribute_value_list => id
+          }
+      }
+    );
   end
 end
