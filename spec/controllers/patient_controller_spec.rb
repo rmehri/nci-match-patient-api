@@ -64,6 +64,22 @@ describe PatientsController do
     expect(:get => "/patients/1/timeline" ).to route_to(:controller => "patients", :action => "timeline", :id => "1")
   end
 
+  let(:patient_list_dbm) do
+    stub_model PatientEvent,
+               :patient_id     => 'PAT123',
+               :event_date     => '2016-05-09T22:06:33+00:00',
+               :event_name     => 'Event Name 1',
+               :event_type     => 'TYPE1',
+               :event_message  => 'Message1',
+               :event_data     => { "status" => "Pending", "biopsy_sequence_number" => "B-987456" }
+  end
+
+  it "route to correct controller" do
+    expect(:get => "/patients" ).to route_to(:controller => "patients", :action => "index")
+    expect(:get => "/patients/1" ).to route_to(:controller => "patients", :action => "show", :id => "1")
+    expect(:get => "/patients/1/timeline" ).to route_to(:controller => "patients", :action => "timeline", :id => "1")
+  end
+
   xit "GET /patients to return json list of patients" do
     get :index, format: :json
 
