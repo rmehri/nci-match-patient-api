@@ -9,35 +9,17 @@ class PatientsController < ApplicationController
       standard_error_message(error)
     end
   end
-  # def index
-  #   file = File.read('./data/patient_list.json')
-  #   data_hash = JSON.parse(file)
-  #   render json: data_hash
-  # end
-
 
   # GET /patients/1/timeline
   def timeline
     render_patient_data PatientEvent, [params[:id]]
   end
-  # def timeline
-  #   file = File.read('./data/patient_timeline.json')
-  #   data_hash = JSON.parse(file)
-  #   render json: data_hash
-  # end
-
 
   # GET /patients/1
   # GET /patients/1.json
   def show
     render_patient_data Patient, [params[:id]]
   end
-  # def show
-  #   file = File.read('./data/patient.json')
-  #   data_hash = JSON.parse(file)
-  #   render json: data_hash
-  # end
-
 
   # POST /patients/1/variantreport/{confirmed:"0|1", comments:"Some comments"}
   def variantreport
@@ -60,6 +42,7 @@ class PatientsController < ApplicationController
       standard_error_message(error)
     end
   end
+
 
   private
   def render_patient_data(record, id)

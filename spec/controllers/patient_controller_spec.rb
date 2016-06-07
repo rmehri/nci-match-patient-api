@@ -104,6 +104,15 @@ describe PatientsController do
     }.to_not raise_error
   end
 
+  it "GET /patients/1 should handle errors by returning status 500" do
+    allow(Patient).to receive(:scan).and_raise("An Error")
+
+    get :show, :id => "2222"
+
+    expect(response).to have_http_status(500)
+    expect(response.body).to include "An Error"
+  end
+
   it "GET /patients/1/timeline to return json patient timeline" do
     allow(PatientEvent).to receive(:scan).and_return(patient_event_dbm)
 
