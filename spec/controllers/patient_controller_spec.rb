@@ -80,7 +80,9 @@ describe PatientsController do
     expect(:get => "/patients/1/timeline" ).to route_to(:controller => "patients", :action => "timeline", :id => "1")
   end
 
-  xit "GET /patients to return json list of patients" do
+  it "GET /patients to return json list of patients" do
+    allow(Patient).to receive(:scan).and_return([patient_dbm, patient_dbm])
+
     get :index, format: :json
 
     expect(response).to have_http_status(200)

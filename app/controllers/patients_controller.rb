@@ -15,16 +15,10 @@ class PatientsController < ApplicationController
   #   render json: data_hash
   # end
 
+
   # GET /patients/1/timeline
   def timeline
-    begin
-      if !params[:id].nil?
-        json_result = scan_patient PatientEvent, [params[:id]]
-      end
-      render json: json_result
-    rescue => error
-      standard_error_message(error)
-    end
+    render_patient_data PatientEvent, [params[:id]]
   end
   # def timeline
   #   file = File.read('./data/patient_timeline.json')
@@ -36,14 +30,7 @@ class PatientsController < ApplicationController
   # GET /patients/1
   # GET /patients/1.json
   def show
-    begin
-      if !params[:id].nil?
-        json_result = scan_patient Patient, [params[:id]]
-      end
-      render json: json_result
-    rescue => error
-      standard_error_message(error)
-    end
+    render_patient_data Patient, [params[:id]]
   end
   # def show
   #   file = File.read('./data/patient.json')
@@ -75,14 +62,19 @@ class PatientsController < ApplicationController
   end
 
   private
-  def scan_patient(record, id)
-    record.scan(
+  def render_patient_data(record, id)
+    begin
+      json_data = record.scan(
           :scan_filter => {
-          "patient_id" => {
-              :comparison_operator => "EQ",
-              :attribute_value_list => id
+              "patient_id" => {
+                  :comparison_operator => "EQ",
+                  :attribute_value_list => id
+              }
           }
-      }
-    );
+      );
+      render json: json_data
+    rescue => error
+      standard_error_message(error)
+    end
   end
 end
