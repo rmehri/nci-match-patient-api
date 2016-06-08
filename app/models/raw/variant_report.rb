@@ -3,7 +3,7 @@ class VariantReport
   include Aws::Record
   include Aws::Record::Ext
 
-  set_table_name "#{ENV['table_prefix']}_#{self.name.underscore}_#{Rails.env}"
+  set_table_name Config::Table.name self.name.underscore
 
   string_attr :cg_id, hash_key: true
   datetime_attr :variant_report_received_date, range_key: true

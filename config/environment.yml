@@ -1,17 +1,36 @@
+#"pe" stands for Patient Ecosystem
 development:
   aws_dynamo_endpoint: "http://localhost:8000"
   aws_region: "us-east-1"
-  queue_name: "patient_development"
-  table_prefix: "p"
+
+  #Constructed queue name: "patient_processor_dev_rzakharovrv"
+  queue_prefix: "patient_"
+  queue_suffix: "_dev_{:ENV:USER}"
+
+  #Constructed table name: "patient_events_dev_rzakharovrv"
+  table_prefix: "patient_"
+  table_suffix: "_dev_{:ENV:USER}"
 
 test:
   aws_dynamo_endpoint: "https://dynamodb.us-east-1.amazonaws.com"
   aws_region: "us-east-1"
-  queue_name: "patient_test"
-  table_prefix: "p"
+
+  #Constructed queue name: "patient_processor"
+  queue_prefix: "patient_"
+  queue_suffix: ""
+
+  #Constructed table name: "patient_events"
+  table_prefix: "patient_"
+  table_suffix: ""
 
 production:
   aws_dynamo_endpoint: "https://dynamodb.us-east-1.amazonaws.com"
   aws_region: "us-east-1"
-  queue_name: "patient_production"
-  table_prefix: "p"
+
+  #Constructed queue name: "patient_processor"
+  queue_prefix: "patient_"
+  queue_suffix: ""
+
+  #Constructed table name: "patient_events"
+  table_prefix: "patient_"
+  table_suffix: ""

@@ -10,6 +10,7 @@ require "action_mailer/railtie"
 require "action_view/railtie"
 require "sprockets/railtie"
 require "rails/test_unit/railtie"
+require 'wannabe_bool'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -33,7 +34,7 @@ module NciMatchPatientApi
       env_file = Rails.root.join('config', 'environment.yml')
       if File.exists?(env_file)
         YAML.load_file(env_file)[Rails.env].each do |key, value|
-          ENV[key.to_s] = value
+          ENV[key.to_s] = value.sub("{env:USER}", ENV["USER"])
         end
       end
     end

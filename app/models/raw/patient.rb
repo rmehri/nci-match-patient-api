@@ -2,7 +2,7 @@ class Patient
   include Aws::Record
   include Aws::Record::Ext
 
-  set_table_name "#{ENV['table_prefix']}_#{self.name.underscore}_#{Rails.env}"
+  set_table_name Config::Table.name self.name.underscore
 
   # validates_presence_of :patient_id, :study_id, :status
 

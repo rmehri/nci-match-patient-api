@@ -3,7 +3,7 @@ class Variant
   include Aws::Record
   include Aws::Record::Ext
 
-  set_table_name "#{ENV['table_prefix']}_#{self.name.underscore}_#{Rails.env}"
+  set_table_name Config::Table.name self.name.underscore
 
   string_attr :molecular_id_analysis_id, hash_key: true
   string_attr :variant_id, range_key: true

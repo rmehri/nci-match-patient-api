@@ -30,6 +30,8 @@ gem 'aws-record'
 gem 'knock', '~> 1.4.2'
 gem 'auth0'
 
+gem 'wannabe_bool'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
