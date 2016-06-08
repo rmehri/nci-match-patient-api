@@ -1,4 +1,3 @@
-#"pe" stands for Patient Ecosystem
 development:
   aws_dynamo_endpoint: "http://localhost:8000"
   aws_region: "us-east-1"
