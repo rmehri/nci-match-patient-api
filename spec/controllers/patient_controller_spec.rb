@@ -171,7 +171,8 @@ describe PatientsController do
 
   it "POST /specimenReceipt" do
     # route_to(:controller => "patients", :action => "specimen_receipt")
-    post :specimen_receipt
+    allow(Aws::Sqs::Publisher).to receive(:publish).and_return("")
+    post :specimen_receipt, valid_test_message.to_json
 
     expect {
       JSON.parse(response.body)
@@ -180,7 +181,8 @@ describe PatientsController do
 
   it "POST /assayOrder" do
     # route_to(:controller => "patients", :action => "assay_order")
-    post :assay_order
+    allow(Aws::Sqs::Publisher).to receive(:publish).and_return("")
+    post :assay_order, valid_test_message.to_json
 
     expect {
       JSON.parse(response.body)
@@ -189,7 +191,8 @@ describe PatientsController do
 
   it "POST /assayResult" do
     # route_to(:controller => "patients", :action => "assay_result")
-    post :assay_result
+    allow(Aws::Sqs::Publisher).to receive(:publish).and_return("")
+    post :assay_result, valid_test_message.to_json
 
     expect {
       JSON.parse(response.body)
@@ -198,7 +201,8 @@ describe PatientsController do
 
   it "POST /pathologyStatus" do
     # route_to(:controller => "patients", :action => "pathology_status")
-    post :pathology_status
+    allow(Aws::Sqs::Publisher).to receive(:publish).and_return("")
+    post :pathology_status, valid_test_message.to_json
 
     expect {
       JSON.parse(response.body)
@@ -207,7 +211,8 @@ describe PatientsController do
 
   it "POST /variantResult" do
     # route_to(:controller => "patients", :action => "variant_result")
-    post :variant_result
+    allow(Aws::Sqs::Publisher).to receive(:publish).and_return("")
+    post :variant_result, valid_test_message.to_json
 
     expect {
       JSON.parse(response.body)
@@ -216,6 +221,7 @@ describe PatientsController do
 
   it "POST /patients/1/sampleFile" do
     # route_to(:controller => "patients", :action => "sample_file", :patientid => "1")
+    allow(Aws::Sqs::Publisher).to receive(:publish).and_return("")
     post :sample_file, :patientid => "1"
 
     expect {
@@ -243,6 +249,7 @@ describe PatientsController do
 
   it "POST /patients/1/assignmentConfirmation" do
     # route_to(:controller => "patients", :action => "assignment_confirmation", :patientid => "1")
+    allow(Aws::Sqs::Publisher).to receive(:publish).and_return("")
     post :assignment_confirmation, :patientid => "1"
 
     expect {
@@ -252,7 +259,8 @@ describe PatientsController do
 
   it "POST /patientStatus" do
     # route_to(:controller => "patients", :action => "patient_status")
-    post :patient_status
+    allow(Aws::Sqs::Publisher).to receive(:publish).and_return("")
+    post :patient_status, valid_test_message.to_json
 
     expect {
       JSON.parse(response.body)

@@ -37,27 +37,27 @@ class PatientsController < ApplicationController
 
   # POST /specimenReceipt
   def specimen_receipt
-    render status: 200, json: '{"test":"test"}'
+    process_message
   end
 
   # POST /assayOrder
   def assay_order
-    render status: 200, json: '{"test":"test"}'
+    process_message
   end
 
   # POST /variantResult
   def assay_result
-    render status: 200, json: '{"test":"test"}'
+    process_message
   end
 
   # POST /variantResult
   def variant_result
-    render status: 200, json: '{"test":"test"}'
+    process_message
   end
 
   # POST /pathologyStatus
   def pathology_status
-    render status: 200, json: '{"test":"test"}'
+    process_message
   end
 
   # POST /patients/:patientid/sampleFile
@@ -65,12 +65,12 @@ class PatientsController < ApplicationController
     render status: 200, json: '{"test":"test"}'
   end
 
-  # POST /patients/:patientid/variantStatus
+  # PUT /patients/:patientid/variantStatus
   def variant_status
     render status: 200, json: '{"test":"test"}'
   end
 
-  # POST /patients/:patientid/variantReportStatus
+  # PUT /patients/:patientid/variantReportStatus
   def variant_report_status
     render status: 200, json: '{"test":"test"}'
   end
@@ -82,7 +82,7 @@ class PatientsController < ApplicationController
 
   # POST /patientStatus
   def patient_status
-    render status: 200, json: '{"test":"test"}'
+    process_message
   end
 
   # GET /patients/:patientid/documents
