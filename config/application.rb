@@ -34,7 +34,8 @@ module NciMatchPatientApi
       env_file = Rails.root.join('config', 'environment.yml')
       if File.exists?(env_file)
         YAML.load_file(env_file)[Rails.env].each do |key, value|
-          ENV[key.to_s] = value.sub("{env:USER}", ENV["USER"])
+          ENV[key.to_s] = value.sub("{:ENV:USER}", ENV["USER"])
+          # p key.to_s + " = " + ENV[key.to_s].to_s
         end
       end
     end

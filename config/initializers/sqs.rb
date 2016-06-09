@@ -1,3 +1,4 @@
+
 module Aws
   class Publisher
 
@@ -19,3 +20,4 @@ module Aws
     end
   end
 end
+

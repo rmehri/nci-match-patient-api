@@ -10,5 +10,4 @@ module Config
       ENV["queue_prefix"] + name + ENV["queue_suffix"]
     end
   end
-
 end

@@ -87,7 +87,7 @@ class PatientsController < ApplicationController
 
   # GET /patients/:patientid/documents
   def document_list
-    # AWS::Publisher.publish('{"test":"test"}', 'processor');
+    Aws::Publisher.publish('{"test":"test"}', Config::Queue.name('processor'))
     render status: 200, json: '{"test":"test"}'
   end
 
