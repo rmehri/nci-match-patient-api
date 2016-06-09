@@ -3,7 +3,7 @@ module NciMatchPatientApi
     def self.validate(message)
       begin
         # Mock implementation
-        return JSON.parse(message)["valid"].to_b;
+        return message[:valid];
       rescue Aws::SQS::Errors::ServiceError => error
         p error
       end

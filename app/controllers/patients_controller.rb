@@ -32,7 +32,7 @@ class PatientsController < ApplicationController
 
   # POST /registration
   def registration
-    render status: 200, json: '{"test":"test"}'
+    process_message
   end
 
   # POST /specimenReceipt
@@ -87,7 +87,6 @@ class PatientsController < ApplicationController
 
   # GET /patients/:patientid/documents
   def document_list
-    Aws::Publisher.publish('{"test":"test"}', Config::Queue.name('processor'))
     render status: 200, json: '{"test":"test"}'
   end
 
@@ -141,6 +140,7 @@ class PatientsController < ApplicationController
   # end
 
   private
+
   def render_patient_data(record, patientid)
     begin
       json_data = record.scan(
@@ -154,6 +154,46 @@ class PatientsController < ApplicationController
       render json: json_data
     rescue => error
       standard_error_message(error)
+    end
+  end
+
+  def valid_test_message
+    {:valid => true }
+  end
+
+  def invalid_test_message
+    {:valid => false }
+  end
+
+  def process_message
+    if validate_and_queue
+      render_validation_success
+    else
+      render_validation_failure;
+    end
+  end
+
+  def render_validation_success
+    render status: 200, json: {:status => "Success"}
+  end
+
+  def render_validation_failure
+    render status: 400, json: {:status => "Failure", :message => "Validation failed. Please check all required fields are present"}
+  end
+
+  def get_post_data
+    json_data = JSON.parse(request.raw_post)
+    json_data.deep_transform_keys!(&:underscore).symbolize_keys!
+  end
+
+  def validate_and_queue
+    message = get_post_data
+
+    if NciMatchPatientApi::StateMachine.validate(message)
+      Aws::Sqs::Publisher.publish(message, Config::Queue.name('processor'))
+      return true
+    else
+      return false
     end
   end
 end

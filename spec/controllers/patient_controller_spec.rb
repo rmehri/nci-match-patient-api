@@ -95,6 +95,15 @@ describe PatientsController do
     expect(:post => "/patients/1/documents").to route_to(:controller => "patients", :action => "new_document", :patientid => "1")
   end
 
+
+  let(:valid_test_message) do
+    {:valid => "true" }
+  end
+
+  let (:invalid_test_message) do
+    {:valid => "false" }
+  end
+
   it "GET /patients to return json list of patients" do
     allow(Patient).to receive(:scan).and_return([patient_dbm, patient_dbm])
 
@@ -151,7 +160,9 @@ describe PatientsController do
 
   it "POST /registration" do
     # route_to(:controller => "patients", :action => "registration")
-    post :registration
+
+    allow(Aws::Sqs::Publisher).to receive(:publish).and_return("")
+    post :registration, valid_test_message.to_json
 
     expect {
       JSON.parse(response.body)

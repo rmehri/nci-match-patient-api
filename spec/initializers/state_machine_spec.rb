@@ -3,11 +3,11 @@ require 'factory_girl_rails'
 
 describe NciMatchPatientApi::StateMachine do
   let(:valid_message) do
-    '{"valid":"true"}'
+    {:valid => true}
   end
 
   let(:invalid_message) do
-    '{"valid":"false"}'
+    {:valid => false}
   end
 
   it "valid message should validate" do
