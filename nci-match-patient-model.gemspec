@@ -1,7 +1,6 @@
-# % cat nci-match-patient-model.gemspec
 Gem::Specification.new do |s|
-  s.name        = 'nci-match-patient-model'
-  s.version     = '1.0.0'
+  s.name        = 'nci_match_patient_model'
+  s.version     = '1.0.2'
   s.date        = '2016-06-10'
   s.summary     = "Patient Models"
   s.description = "NCI MATCH Patient Models"
@@ -11,4 +10,6 @@ Gem::Specification.new do |s|
   s.homepage    =
       'https://github.com/CBIIT/'
   s.license = 'MIT'
+
+  s.add_dependency 'aws-record'
 end
