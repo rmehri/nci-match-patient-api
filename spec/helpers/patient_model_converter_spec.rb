@@ -359,6 +359,9 @@ describe Convert do
     expect(uim.specimen_selectors).to_not eq nil
     expect(uim.specimen).to_not eq nil
 
+    # Print entire model
+    # p JSON.parse(uim.to_json).deep_transform_keys!(&:underscore)
+
   end
 
 end
