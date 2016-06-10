@@ -4,8 +4,6 @@ class Patient
 
   set_table_name Config::Table.name self.name.underscore
 
-  # validates_presence_of :patient_id, :study_id, :status
-
   string_attr :patient_id, hash_key: true
   datetime_attr :registration_date, range_key: true
   string_attr :study_id
@@ -16,8 +14,10 @@ class Patient
   map_attr :current_assignment
   string_attr :current_status
 
+  map_attr :documents
+
   map_attr :disease
   list_attr :prior_drugs
-  map_attr :documents
+  string_attr :message
 
 end

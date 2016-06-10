@@ -13,6 +13,7 @@ class PatientUiModel
   attr_accessor :disease
   attr_accessor :prior_drugs
   attr_accessor :documents
+  attr_accessor :message
 
   attr_accessor :timeline
 

@@ -1,4 +1,3 @@
-
 class PatientEvent
   include Aws::Record
   include Aws::Record::Ext

@@ -17,6 +17,7 @@ module Convert
       uiModel.disease              = patient_dbm.disease
       uiModel.prior_drugs          = patient_dbm.prior_drugs
       uiModel.documents            = patient_dbm.documents
+      uiModel.message              = patient_dbm.message
 
       if events_dbm != nil
         uiModel.timeline = events_dbm.map { |e_dbm| e_dbm.data_to_h }
@@ -43,31 +44,36 @@ module Convert
     private
 
     def self.to_ui_specimen_selector(dbm)
-      {"text" => dbm.cg_id, "cg_collected_date" => dbm.cg_collected_date}
+      {"text" => dbm.specimen_id, "collected_date" => dbm.collected_date}
     end
 
     def self.to_ui_variant_report_selector(dbm)
       {
-          "text" => dbm.cg_id,
+          "text" => dbm.specimen_id,
           "variant_report_received_date" => dbm.variant_report_received_date
       }
     end
 
     def self.to_ui_variant_report(report_dbm, variants_dbm)
       {
-        "cg_id"                        => report_dbm.cg_id,
+        "specimen_id"                  => report_dbm.specimen_id,
         "variant_report_received_date" => report_dbm.variant_report_received_date,
         "patient_id"                   => report_dbm.patient_id,
-        "molecular_id"                 => report_dbm.molecular_id,
+        "sample_id"                    => report_dbm.sample_id,
         "analysis_id"                  => report_dbm.analysis_id,
         "status"                       => report_dbm.status,
-        "confirmed_date"               => report_dbm.confirmed_date,
-        "rejected_date"                => report_dbm.rejected_date,
+        "status_date"                  => report_dbm.status_date,
         "dna_bam_file_path"            => report_dbm.dna_bam_file_path,
         "dna_bai_file_path"            => report_dbm.dna_bai_file_path,
         "rna_bam_file_path"            => report_dbm.rna_bam_file_path,
         "rna_bai_file_path"            => report_dbm.rna_bai_file_path,
         "vcf_path"                     => report_dbm.vcf_path,
+        "total_variants"               => report_dbm.total_variants,
+        "cellularity"                  => report_dbm.cellularity,
+        "total_mois"                   => report_dbm.total_mois,
+        "total_amois"                  => report_dbm.total_amois,
+        "total_confirmed_mois"         => report_dbm.total_confirmed_mois,
+        "total_confirmed_amois"        => report_dbm.total_confirmed_amois,
         "variants"                     => {
             "single_nucleitide_variants" => query_variants(variants_dbm, "single_nucleitide_variants"),
             "indels"                     => query_variants(variants_dbm, "indels"),

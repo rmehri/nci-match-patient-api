@@ -1,20 +1,20 @@
-
 class Variant
   include Aws::Record
   include Aws::Record::Ext
 
   set_table_name Config::Table.name self.name.underscore
 
-  string_attr :molecular_id_analysis_id, hash_key: true
+  string_attr :msn_analysis_id, hash_key: true
   string_attr :variant_id, range_key: true
 
   string_attr :patient_id
-  string_attr :cg_id
+  string_attr :specimen_id
+  string_attr :sample_id
+  string_attr :analysis_id
   string_attr :variant_type
 
   string_attr :status
-  datetime_attr :confirmed_date
-  datetime_attr :rejected_date
+  datetime_attr :status_date
   string_attr :comment
 
   string_attr :gene_name
@@ -39,5 +39,4 @@ class Variant
   integer_attr :reference_allele_observation
   boolean_attr :inclusion
   boolean_attr :arm_specific
-
 end

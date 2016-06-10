@@ -22,7 +22,7 @@ describe Convert do
     
     model.prior_drugs          = ["Aspirin", "Motrin", "Vitamin C"]
     
-    model.documents            = {"list" =>[
+    model.documents            = {"list" => [
         {
             "name" => "Document 1",
             "uploadedDate" => "2016-05-09T22:06:33+00:00",
@@ -39,6 +39,8 @@ describe Convert do
             "user" => "Fox Mulder"
         }
     ]}
+
+    model.message = "Some message"
 
     model
   end
@@ -59,19 +61,24 @@ describe Convert do
   let(:variant_report_db_model_list) do
     [1,2].map { |i|
       VariantReport.new(
-          :cg_id                  => 'GID098' + i.to_s,
+          :specimen_id                  => 'SPEC098' + i.to_s,
           :variant_report_received_date   => '2016-05-09T22:06:33+00:00',
-          :patient_id             => 'PAT123',
-          :molecular_id             => 'MSN123',
-          :analysis_id             => 'AN123',
+          :patient_id             => 'PAT123' + i.to_s,
+          :sample_id             => 'SAM123' + i.to_s,
+          :analysis_id             => 'SAM123' + i.to_s,
           :status             => 'PENDING',
-          :confirmed_date   => '2016-05-09T22:06:33+00:00',
-          :rejected_date   => '2016-06-09T22:06:33+00:00',
+          :status_date   => '2016-05-09T22:06:33+00:00',
           :dna_bam_file_path => "http:\\\\blah.com\\dna_bam.data",
           :dna_bai_file_path => "http:\\\\blah.com\\dna_bai.data",
           :rna_bam_file_path => "http:\\\\blah.com\\rna_bam.data",
           :rna_bai_file_path => "http:\\\\blah.com\\rna_bai.data",
-          :vcf_path          => "http:\\\\blah.com\\vcf.data"
+          :vcf_path          => "http:\\\\blah.com\\vcf.data",
+          :total_variants         => "8",
+          :cellularity            => "7",
+          :total_mois             => "4",
+          :total_amois            => "2",
+          :total_confirmed_mois   => "3",
+          :total_confirmed_amois  => "1"
       )
     }
   end
@@ -79,14 +86,15 @@ describe Convert do
   let(:variant_db_model_list) do
     [1,2].map { |i|
       Variant.new(
-        :molecular_id_analysis_id => "MSN123AN123",
+        :msn_analysis_id => "MSN123AN123",
         :variant_id => "COSM123" + i.to_s,
         :patient_id => "PAT123",
-        :cg_id => "GID098" + "1",
+        :specimen_id => "SPEC098" + i.to_s,
+        :sample_id => "SAM098" + i.to_s,
+        :analysis_id => "ANZ9876" + i.to_s,
         :variant_type => "single_nucleitide_variants",
         :status => "CONFIRMED",
-        :confirmed_date => "",
-        :rejected_date => "2016-06-09T22:06:33+00:00",
+        :status_date => "2016-06-09T22:06:33+00:00",
         :comment => "Don't need this",
         :gene_name => "gene",
         :chromosome => "chr3",
@@ -162,9 +170,9 @@ describe Convert do
     [1,2].map { |i|
       Specimen.new(
         :patient_id  => "PAT123",
-        :cg_collected_date  => "2016-06-09T22:06:33+00:00",
-        :cg_id => "GID098" + i.to_s,
-        :cg_received_date => "2016-06-09T22:06:33+00:00",
+        :collected_date  => "2016-06-09T22:06:33+00:00",
+        :specimen_id => "SPEC098" + i.to_s,
+        :failed_date => "2016-06-09T22:06:33+00:00",
         :study_id => "APEC1621",
         :type => "TUMOR",
         :pathology_status => "Agreed on pathology",
@@ -179,7 +187,7 @@ describe Convert do
 
         ],
         :assignments => nil,
-        :nucleic_acid_sendouts => [
+        :specimen_shipments => [
             {
                 :analyses => [
                     { :analysis_id => 'MSN5678_v1_676...tyyrt4',   :status => 'Rejected',  :file_received_date => 'Sep 18, 2015, 1:08 PM GMT', :status => 'Rejected',  :status_date => '2016-06-09T22:06:33+00:00' }
@@ -248,7 +256,7 @@ describe Convert do
 
     expect(uim.variant_report_selectors).to_not eq nil
     expect(uim.variant_report_selectors.size).to eq variant_reports_dbm.size
-    expect(uim.variant_report_selectors[0]["text"]).to eq "GID0981"
+    expect(uim.variant_report_selectors[0]["text"]).to eq "SPEC0981"
     expect(uim.variant_report_selectors[1]["variant_report_received_date"]).to eq "2016-05-09T22:06:33+00:00"
 
   end
@@ -264,8 +272,10 @@ describe Convert do
 
     expect(uim.variant_report).to_not eq nil
 
-    expect(uim.variant_report["cg_id"]).to eq "GID0982"
-    expect(uim.variant_report["analysis_id"]).to eq "AN123"
+    expect(uim.variant_report["specimen_id"]).to eq "SPEC0982"
+    expect(uim.variant_report["patient_id"]).to eq "PAT1232"
+    expect(uim.variant_report["sample_id"]).to eq "SAM1232"
+    expect(uim.variant_report["analysis_id"]).to eq "SAM1232"
 
     expect(uim.variant_report["variants"]).to_not eq nil
 
@@ -309,8 +319,8 @@ describe Convert do
 
     expect(uim.specimen_selectors).to_not eq nil
     expect(uim.specimen_selectors.size).to eq specimens_dbm.size
-    expect(uim.specimen_selectors[0]["text"]).to eq "GID0981"
-    expect(uim.specimen_selectors[1]["cg_collected_date"]).to eq "2016-06-09T22:06:33+00:00"
+    expect(uim.specimen_selectors[0]["text"]).to eq "SPEC0981"
+    expect(uim.specimen_selectors[1]["collected_date"]).to eq "2016-06-09T22:06:33+00:00"
 
   end
 
@@ -323,7 +333,7 @@ describe Convert do
     expect(uim).to_not eq nil
 
     expect(uim.specimen).to_not eq nil
-    expect(uim.specimen["cg_id"]).to eq "GID0982"
+    expect(uim.specimen["specimen_id"]).to eq "SPEC0982"
     expect(uim.specimen["type"]).to eq "TUMOR"
 
     expect(uim.specimen_history).to_not eq nil

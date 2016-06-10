@@ -100,44 +100,6 @@ class PatientsController < ApplicationController
     render status: 200, json: '{"test":"test"}'
   end
 
-  # POST /patients/1/variantreport/{confirmed:"0|1", comments:"Some comments"}
-  # def variantreport
-  #   begin
-  #     json_string = request.raw_post
-  #
-  #     begin
-  #       confirmResultModel = ConfirmResult.from_json(json_string)
-  #     rescue
-  #       render json: {:status => "FAILURE", :message => "Invalid data received. Please check data format."}, :status => 400
-  #     end
-  #
-  #     if confirmResultModel != nil
-  #       Pe::Processor.confirmVariantReport(confirmResultModel)
-  #       render json: {:status => "SUCCESS"}, :status => 200
-  #     end
-  #
-  #   rescue => error
-  #     p error
-  #     standard_error_message(error)
-  #   end
-  # end
-
-
-  # def new_patient
-  #   begin
-  #     @treatment_arm = JSON.parse(request.raw_post)
-  #     @treatment_arm.deep_transform_keys!(&:underscore).symbolize_keys!
-  #     treatment_arm_model = TreatmentArm.new.from_json(TreatmentArm.new.convert_models(@treatment_arm).to_json)
-  #     if treatment_arm_model.valid?
-  #       Aws::Publisher.publish(@treatment_arm)
-  #       render json: {:status => "SUCCESS"}, :status => 200
-  #     else
-  #       render json: {:status => "FAILURE", :message => "Validation failed.  Please check all required fields are present"}, :status => 400
-  #     end
-  #   rescue => error
-  #     standard_error_message(error)
-  #   end
-  # end
 
   private
 
