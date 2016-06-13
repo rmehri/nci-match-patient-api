@@ -4,7 +4,7 @@ class PatientsController < ApplicationController
   # GET /patients
   def patient_list
     begin
-      render json: Patient.scan({}).collect { |data| data.to_h }
+      render json: NciMatchPatientModels::Patient.scan({}).collect { |data| data.to_h }
     rescue => error
       standard_error_message(error)
     end
@@ -12,12 +12,12 @@ class PatientsController < ApplicationController
 
   # GET /patients/1/timeline
   def timeline
-    render_patient_data PatientEvent, [params[:patientid]]
+    render_patient_data NciMatchPatientModels::PatientEvent, [params[:patientid]]
   end
 
   # GET /patients/1
   def patient
-    render_patient_data Patient, [params[:patientid]]
+    render_patient_data NciMatchPatientModels::Patient, [params[:patientid]]
   end
 
   # GET /patients/:patientid/sampleHistory/:sampleid

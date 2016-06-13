@@ -1,7 +1,7 @@
 describe Convert do
 
   def patient_db_model(assignemnt_report = nil)
-    model = Patient.new
+    model = NciMatchPatientModels::Patient.new
 
     model.patient_id           = 'PAT123'
     model.registration_date    = '2016-05-09T22:06:33+00:00'
@@ -47,7 +47,7 @@ describe Convert do
 
   let(:events_db_model_list) do
     [1,2].map { |i|
-      PatientEvent.new(
+      NciMatchPatientModels::PatientEvent.new(
           :patient_id     => 'PAT123',
           :event_date     => '2016-05-09T22:06:33+00:00',
           :event_name     => 'Event Name ' + i.to_s,
@@ -60,7 +60,7 @@ describe Convert do
 
   let(:variant_report_db_model_list) do
     [1,2].map { |i|
-      VariantReport.new(
+      NciMatchPatientModels::VariantReport.new(
           :specimen_id                  => 'SPEC098' + i.to_s,
           :variant_report_received_date   => '2016-05-09T22:06:33+00:00',
           :patient_id             => 'PAT123' + i.to_s,
@@ -85,7 +85,7 @@ describe Convert do
 
   let(:variant_db_model_list) do
     [1,2].map { |i|
-      Variant.new(
+      NciMatchPatientModels::Variant.new(
         :msn_analysis_id => "MSN123AN123",
         :variant_id => "COSM123" + i.to_s,
         :patient_id => "PAT123",
@@ -168,7 +168,7 @@ describe Convert do
 
   let(:spepcimen_db_model_list) do
     [1,2].map { |i|
-      Specimen.new(
+       NciMatchPatientModels::Specimen.new(
         :patient_id  => "PAT123",
         :collected_date  => "2016-06-09T22:06:33+00:00",
         :specimen_id => "SPEC098" + i.to_s,

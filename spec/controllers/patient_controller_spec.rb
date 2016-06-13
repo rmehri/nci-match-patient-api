@@ -10,7 +10,7 @@ describe PatientsController do
   let(:patient_dbm) do
     assignemnt_report = nil
 
-    stub_model Patient,
+    stub_model NciMatchPatientModels::Patient,
                :patient_id => 'PAT123',
                :registration_date => '2016-05-09T22:06:33+00:00',
                :study_id => 'APEC1621',
@@ -49,7 +49,7 @@ describe PatientsController do
   end
 
   let(:patient_event_dbm) do
-    stub_model PatientEvent,
+    stub_model NciMatchPatientModels::PatientEvent,
                :patient_id => 'PAT123',
                :event_date => '2016-05-09T22:06:33+00:00',
                :event_name => 'Event Name 1',
@@ -65,7 +65,7 @@ describe PatientsController do
   end
 
   let(:patient_list_dbm) do
-    stub_model PatientEvent,
+    stub_model NciMatchPatientModels::PatientEvent,
                :patient_id => 'PAT123',
                :event_date => '2016-05-09T22:06:33+00:00',
                :event_name => 'Event Name 1',
@@ -105,7 +105,7 @@ describe PatientsController do
   end
 
   it "GET /patients to return json list of patients" do
-    allow(Patient).to receive(:scan).and_return([patient_dbm, patient_dbm])
+    allow(NciMatchPatientModels::Patient).to receive(:scan).and_return([patient_dbm, patient_dbm])
 
     get :patient_list, format: :json
 
@@ -117,7 +117,7 @@ describe PatientsController do
   end
 
   it "GET /patients/1 to return json patient" do
-    allow(Patient).to receive(:scan).and_return(patient_dbm)
+    allow(NciMatchPatientModels::Patient).to receive(:scan).and_return(patient_dbm)
 
     get :patient, :patientid => "2222"
 
@@ -129,7 +129,7 @@ describe PatientsController do
   end
 
   it "GET /patients/1 should handle errors by returning status 500" do
-    allow(Patient).to receive(:scan).and_raise("An Error")
+    allow(NciMatchPatientModels::Patient).to receive(:scan).and_raise("An Error")
 
     get :patient, :patientid => "2222"
 
@@ -138,7 +138,7 @@ describe PatientsController do
   end
 
   it "GET /patients/1/timeline to return json patient timeline" do
-    allow(PatientEvent).to receive(:scan).and_return(patient_event_dbm)
+    allow(NciMatchPatientModels::PatientEvent).to receive(:scan).and_return(patient_event_dbm)
 
     get :timeline, :patientid => "1", format: :json
 
