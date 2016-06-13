@@ -25,12 +25,14 @@ gem 'rack-cors'
 
 gem 'aws-sdk', '~>2'
 gem 'aws-sdk-rails'
-gem 'aws-record'
+gem 'aws-record', '>= 1.0.0.pre.8'
 
 gem 'knock', '~> 1.4.2'
 gem 'auth0'
 
 gem 'wannabe_bool'
+
+gem 'nci_match_patient_models', :git => 'git://github.com/CBIIT/nci-match-lib.git'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
