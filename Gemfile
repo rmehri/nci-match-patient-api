@@ -32,7 +32,7 @@ gem 'auth0'
 
 gem 'wannabe_bool'
 
-gem 'nci_match_patient_models', :git => 'https://github.com/CBIIT/nci-match-lib.git'
+gem 'nci_match_patient_models', :https => 'https://github.com/CBIIT/nci-match-lib.git'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
