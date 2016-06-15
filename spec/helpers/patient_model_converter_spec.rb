@@ -61,13 +61,13 @@ describe Convert do
   let(:variant_report_db_model_list) do
     [1,2].map { |i|
       NciMatchPatientModels::VariantReport.new(
-          :specimen_id                  => 'SPEC098' + i.to_s,
+          :surgical_event_id                  => 'SUREVT098' + i.to_s,
           :variant_report_received_date   => '2016-05-09T22:06:33+00:00',
           :patient_id             => 'PAT123' + i.to_s,
-          :sample_id             => 'SAM123' + i.to_s,
-          :analysis_id             => 'SAM123' + i.to_s,
-          :status             => 'PENDING',
-          :status_date   => '2016-05-09T22:06:33+00:00',
+          :molecular_id           => 'MOL123' + i.to_s,
+          :analysis_id            => 'SAM123' + i.to_s,
+          :status                 => 'PENDING',
+          :status_date       => '2016-05-09T22:06:33+00:00',
           :dna_bam_file_path => "http:\\\\blah.com\\dna_bam.data",
           :dna_bai_file_path => "http:\\\\blah.com\\dna_bai.data",
           :rna_bam_file_path => "http:\\\\blah.com\\rna_bam.data",
@@ -86,13 +86,13 @@ describe Convert do
   let(:variant_db_model_list) do
     [1,2].map { |i|
       NciMatchPatientModels::Variant.new(
-        :msn_analysis_id => "MSN123AN123",
-        :variant_id => "COSM123" + i.to_s,
-        :patient_id => "PAT123",
-        :specimen_id => "SPEC098" + i.to_s,
-        :sample_id => "SAM098" + i.to_s,
-        :analysis_id => "ANZ9876" + i.to_s,
+        :molecular_id_analysis_id => "MSNANL123AN123",
         :variant_type => "single_nucleitide_variants",
+        :patient_id => "PAT123",
+        :surgical_event_id => "SUREVT098" + i.to_s,
+        :molecular_id => "MOL098" + i.to_s,
+        :analysis_id => "ANZ9876" + i.to_s,
+        :variant_id => "VAR9876" + i.to_s,
         :status => "CONFIRMED",
         :status_date => "2016-06-09T22:06:33+00:00",
         :comment => "Don't need this",
@@ -166,18 +166,17 @@ describe Convert do
     }
   end
 
-  let(:spepcimen_db_model_list) do
+  let(:specimen_db_model_list) do
     [1,2].map { |i|
        NciMatchPatientModels::Specimen.new(
         :patient_id  => "PAT123",
         :collected_date  => "2016-06-09T22:06:33+00:00",
-        :specimen_id => "SPEC098" + i.to_s,
+        :surgical_event_id => "SUREVT098" + i.to_s,
         :failed_date => "2016-06-09T22:06:33+00:00",
         :study_id => "APEC1621",
         :type => "TUMOR",
         :pathology_status => "Agreed on pathology",
         :pathology_status_date => "2016-06-09T22:06:33+00:00",
-        :disease_status => "Deseased",
         :variant_report_confirmed_date => "2016-06-09T22:06:33+00:00",
         :assays => [
             { :gene => 'PTEN',  :ordered_date => '2016-06-09T22:06:33+00:00', :result_date => '2016-07-09T22:06:33+00:00T', :result => 'POSITIVE' },
@@ -256,7 +255,7 @@ describe Convert do
 
     expect(uim.variant_report_selectors).to_not eq nil
     expect(uim.variant_report_selectors.size).to eq variant_reports_dbm.size
-    expect(uim.variant_report_selectors[0]["text"]).to eq "SPEC0981"
+    expect(uim.variant_report_selectors[0]["text"]).to eq "SUREVT0981"
     expect(uim.variant_report_selectors[1]["variant_report_received_date"]).to eq "2016-05-09T22:06:33+00:00"
 
   end
@@ -272,9 +271,9 @@ describe Convert do
 
     expect(uim.variant_report).to_not eq nil
 
-    expect(uim.variant_report["specimen_id"]).to eq "SPEC0982"
+    expect(uim.variant_report["surgical_event_id"]).to eq "SUREVT0982"
     expect(uim.variant_report["patient_id"]).to eq "PAT1232"
-    expect(uim.variant_report["sample_id"]).to eq "SAM1232"
+    expect(uim.variant_report["molecular_id"]).to eq "MOL1232"
     expect(uim.variant_report["analysis_id"]).to eq "SAM1232"
 
     expect(uim.variant_report["variants"]).to_not eq nil
@@ -311,7 +310,7 @@ describe Convert do
 
   it "works with specimen selector DB models" do
     patient_dbm = patient_db_model
-    specimens_dbm = spepcimen_db_model_list
+    specimens_dbm = specimen_db_model_list
 
     uim = Convert::PatientDbModel.to_ui_model patient_dbm, nil, nil, nil, specimens_dbm
 
@@ -319,21 +318,21 @@ describe Convert do
 
     expect(uim.specimen_selectors).to_not eq nil
     expect(uim.specimen_selectors.size).to eq specimens_dbm.size
-    expect(uim.specimen_selectors[0]["text"]).to eq "SPEC0981"
+    expect(uim.specimen_selectors[0]["text"]).to eq "SUREVT0981"
     expect(uim.specimen_selectors[1]["collected_date"]).to eq "2016-06-09T22:06:33+00:00"
 
   end
 
   it "works with specimen DB model" do
     patient_dbm = patient_db_model
-    specimens_dbm = spepcimen_db_model_list
+    specimens_dbm = specimen_db_model_list
 
     uim = Convert::PatientDbModel.to_ui_model patient_dbm, nil, nil, nil, specimens_dbm
 
     expect(uim).to_not eq nil
 
     expect(uim.specimen).to_not eq nil
-    expect(uim.specimen["specimen_id"]).to eq "SPEC0982"
+    expect(uim.specimen["surgical_event_id"]).to eq "SUREVT0982"
     expect(uim.specimen["type"]).to eq "TUMOR"
 
     expect(uim.specimen_history).to_not eq nil
@@ -347,7 +346,7 @@ describe Convert do
     events_dbm = events_db_model_list
     variant_reports_dbm = variant_report_db_model_list
     variants_dbm = variant_db_model_list
-    specimens_dbm = spepcimen_db_model_list
+    specimens_dbm = specimen_db_model_list
 
     uim = Convert::PatientDbModel.to_ui_model patient_dbm, events_dbm, variant_reports_dbm, variants_dbm, specimens_dbm
 

@@ -44,22 +44,22 @@ module Convert
     private
 
     def self.to_ui_specimen_selector(dbm)
-      {"text" => dbm.specimen_id, "collected_date" => dbm.collected_date}
+      {"text" => dbm.surgical_event_id, "collected_date" => dbm.collected_date}
     end
 
     def self.to_ui_variant_report_selector(dbm)
       {
-          "text" => dbm.specimen_id,
+          "text" => dbm.surgical_event_id,
           "variant_report_received_date" => dbm.variant_report_received_date
       }
     end
 
     def self.to_ui_variant_report(report_dbm, variants_dbm)
       {
-        "specimen_id"                  => report_dbm.specimen_id,
+        "surgical_event_id"            => report_dbm.surgical_event_id,
         "variant_report_received_date" => report_dbm.variant_report_received_date,
         "patient_id"                   => report_dbm.patient_id,
-        "sample_id"                    => report_dbm.sample_id,
+        "molecular_id"                 => report_dbm.molecular_id,
         "analysis_id"                  => report_dbm.analysis_id,
         "status"                       => report_dbm.status,
         "status_date"                  => report_dbm.status_date,
