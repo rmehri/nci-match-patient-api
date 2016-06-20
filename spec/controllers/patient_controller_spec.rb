@@ -58,6 +58,29 @@ describe PatientsController do
                :event_data => {"status" => "Pending", "biopsy_sequence_number" => "B-987456"}
   end
 
+
+  it "model from gem should include Aws::Record" do
+
+    # p "!!!!!!!!!!!!!!!!!!!"
+    # p NciMatchPatientModels::Patient.instance_methods(true)
+    # p NciMatchPatientModels::Patient.methods.grep(/table_name/)
+
+    # o = NciMatchPatientModels::Patient.new
+
+    # o.table_name = 'blah'
+
+    # p o.table_name
+    # p "NciMatchPatientModels::Patient.table_name"
+    # NciMatchPatientModels::Patient.set_table_name "blah"
+    # p NciMatchPatientModels::Patient.table_name
+    #
+    # p ENV["table_prefix"].to_s
+    # p ENV["table_suffix"].to_s
+
+    expect(NciMatchPatientModels::Patient.include?(Aws::Record)).to be true
+  end
+
+
   it "route to correct controller" do
     expect(:get => "/patients").to route_to(:controller => "patients", :action => "patient_list")
     expect(:get => "/patients/1").to route_to(:controller => "patients", :action => "patient", :patientid => "1")
