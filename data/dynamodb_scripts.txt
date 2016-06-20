@@ -39,6 +39,13 @@ dynamodb.scan(params, function(err, data) {
     else ppJson(data); // successful response
 });
 
+p_patient_development
+p_patient_event_development
+patient_development
+patient_event_development
+specimen_development
+variant_development
+variant_report_development
 
 // Delete patient tables
 var params = {
