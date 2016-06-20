@@ -1,0 +1,95 @@
+// List tables
+var params = {
+    Limit: 10, // optional (to further limit the number of table names returned per page)
+};
+dynamodb.listTables(params, function(err, data) {
+    if (err) ppJson(err); // an error occurred
+    else ppJson(data); // successful response
+});
+
+// patient_development
+var params = {
+    TableName: 'patient_development',
+    Limit: 10 // optional (limit the number of items to evaluate)
+};
+dynamodb.scan(params, function(err, data) {
+    if (err) ppJson(err); // an error occurred
+    else ppJson(data); // successful response
+});
+
+
+// patient_event_development
+var params = {
+    TableName: 'patient_event_development',
+    Limit: 10 // optional (limit the number of items to evaluate)
+};
+dynamodb.scan(params, function(err, data) {
+    if (err) ppJson(err); // an error occurred
+    else ppJson(data); // successful response
+});
+
+
+// specimen_development
+var params = {
+    TableName: 'specimen_development',
+    Limit: 10 // optional (limit the number of items to evaluate)
+};
+dynamodb.scan(params, function(err, data) {
+    if (err) ppJson(err); // an error occurred
+    else ppJson(data); // successful response
+});
+
+
+// Delete patient tables
+var params = {
+    TableName: 'patient_development'
+};
+dynamodb.deleteTable(params, function(err, data) {
+    if (err) ppJson(err); // an error occurred
+    else ppJson(data); // successful response
+});
+
+
+var params = {
+    TableName: 'patient_event_development'
+};
+dynamodb.deleteTable(params, function(err, data) {
+    if (err) ppJson(err); // an error occurred
+    else ppJson(data); // successful response
+});
+
+
+var params = {
+    TableName: 'specimen_development'
+};
+dynamodb.deleteTable(params, function(err, data) {
+    if (err) ppJson(err); // an error occurred
+    else ppJson(data); // successful response
+});
+
+
+// Delete one patient data from patient_development
+var params = {
+    TableName: 'patient_development',
+    Key: {
+        'patient_id': '3344',
+        'registration_date': '2016-05-09T22:06:33+00:00'
+    }
+};
+docClient.delete(params, function(err, data) {
+    if (err) ppJson(err); // an error occurred
+    else ppJson(data); // successful response
+});
+
+// Delete one patient data from patient_development
+var params = {
+    TableName: 'patient_event',
+    Key: {
+        'patient_id': '3344',
+        'event_date': '2016-05-09T22:06:33+00:00'
+    }
+};
+docClient.delete(params, function(err, data) {
+    if (err) ppJson(err); // an error occurred
+    else ppJson(data); // successful response
+});
