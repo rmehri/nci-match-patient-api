@@ -151,7 +151,7 @@ class PatientsController < ApplicationController
   def validate_and_queue
     message = get_post_data
 
-    if NciMatchPatientApi::StateMachine.validate(message)
+    if StateMachine.validate(message)
       Aws::Sqs::Publisher.publish(message, Config::Queue.name('processor'))
       return true
     else

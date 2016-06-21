@@ -10,6 +10,7 @@ require "action_view/railtie"
 require "sprockets/railtie"
 require "rails/test_unit/railtie"
 require 'wannabe_bool'
+require 'httparty'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
