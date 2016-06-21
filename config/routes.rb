@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     put "patients/:patientid/variantReportStatus" => :variant_report_status
     post "patients/:patientid/assignmentConfirmation" => :assignment_confirmation
     post "patientStatus" => :patient_status
+    get "patients/:patientid/variantReportQc" => :qc_variant_report
 
     get "patients/:patientid/documents" => :document_list
     get "patients/:patientid/documents/:documentid" => :document

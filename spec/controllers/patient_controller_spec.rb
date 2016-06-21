@@ -103,6 +103,7 @@ describe PatientsController do
     expect(:get => "/patients/1/documents").to route_to(:controller => "patients", :action => "document_list", :patientid => "1")
     expect(:get => "/patients/1/documents/2").to route_to(:controller => "patients", :action => "document", :patientid => "1", :documentid => "2")
     expect(:post => "/patients/1/documents").to route_to(:controller => "patients", :action => "new_document", :patientid => "1")
+    expect(:get => "/patients/1/variantReportQc").to route_to(:controller => "patients", :action => "qc_variant_report", :patientid => "1")
   end
 
 
@@ -251,6 +252,15 @@ describe PatientsController do
   it "PUT /patients/1/variantReportStatus" do
     # route_to(:controller => "patients", :action => "variant_report_status", :patientid => "1")
     put :variant_report_status, :patientid => "1"
+
+    expect {
+      JSON.parse(response.body)
+    }.to_not raise_error
+  end
+
+  it "PUT /patients/1/variantReportQc" do
+    # route_to(:controller => "patients", :action => "variant_status", :patientid => "1")
+    put :qc_variant_report, :patientid => "1"
 
     expect {
       JSON.parse(response.body)
