@@ -7,6 +7,11 @@ describe PatientsController do
   #   setup_knock()
   # end
 
+  before(:each) do
+    allow(HTTParty::Request).to receive(:new).and_return(HTTParty::Request)
+    allow(HTTParty::Request).to receive(:perform).and_return(true)
+  end
+
   let(:patient_dbm) do
     assignemnt_report = nil
 
