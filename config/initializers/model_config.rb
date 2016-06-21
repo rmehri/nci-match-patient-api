@@ -14,7 +14,7 @@ module ModelConfig
 
     table.set_table_name "#{name}_#{Rails.env}"
     # table.set_table_name Config::Table.name table.new.class.name.underscore
-    p table.table_name
+    # p table.table_name
   end
 
 end

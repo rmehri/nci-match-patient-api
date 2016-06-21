@@ -10,8 +10,8 @@ class StateMachine
 
       result = post("/patientMessage", options)
 
-      p "message = "+message.to_s
-      p "result = "+result.to_s
+      # p "message = "+message.to_s
+      # p "result = "+result.to_s
       return result;
     rescue Error => error
       p error
@@ -20,5 +20,5 @@ class StateMachine
 end
 
 # message = '{"blah": "blah"}'
-#
-# puts StateMachine.validate message.to_s
+
+# puts StateMachine.validate message
