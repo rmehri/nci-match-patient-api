@@ -140,18 +140,17 @@ class PatientsController < ApplicationController
         events_dbm = scan(NciMatchPatientModels::PatientEvent, patientid).collect { |r| r }
         specimens_dbm = scan(NciMatchPatientModels::Specimen, patientid).collect { |r| r }
         surgical_event_ids = specimens_dbm.map {|s| s.surgical_event_id}
-        variant_reports_dbm = nil
-        # variant_reports_dbm = NciMatchPatientModels::VariantReport.scan(
-        #     :scan_filter => {
-        #         "surgical_event_ids" => {:comparison_operator => "IN", :attribute_value_list => surgical_event_ids}
-        #     },
-        #     :conditional_operator => "AND"
-        # )
+
+        variant_reports_dbm = NciMatchPatientModels::VariantReport.scan(
+            :scan_filter => {
+                "surgical_event_ids" => {:comparison_operator => "IN", :attribute_value_list => surgical_event_ids}
+            }
+        ).collect { |r| r }
 
         # variant_reports_dbm = variant_report_db_model_list
         # variants_dbm = variant_db_model_list
 
-        uim = Convert::PatientDbModel.to_ui_model patient_dbm, events_dbm, variant_reports_dbm, nil, specimens_dbm
+        uim = Convert::PatientDbModel.to_ui_model patient_dbm, events_dbm, nil, nil, specimens_dbm
         # uim = Convert::PatientDbModel.to_ui_model patient_dbm, events_dbm, variant_reports_dbm, variants_dbm, specimens_dbm
 
         # p uim
