@@ -105,17 +105,46 @@ class PatientsController < ApplicationController
 
   def render_patient_data(record, patientid)
     begin
-      json_data = record.scan(
-          :scan_filter => {
-              "patient_id" => {
-                  :comparison_operator => "EQ",
-                  :attribute_value_list => patientid
-              }
-          }
-      );
+      # json_data = record.scan(
+      #     :scan_filter => {
+      #         "patient_id" => {
+      #             :comparison_operator => "EQ",
+      #             :attribute_value_list => patientid
+      #         }
+      #     }
+      # )
+
+      json_data = load_patient_data record, patientid
+
       render json: json_data
     rescue => error
       standard_error_message(error)
+    end
+  end
+
+  def load_patient_data(record, patientid)
+    json_data = record.scan(
+        :scan_filter => {
+            "patient_id" => {
+                :comparison_operator => "EQ",
+                :attribute_value_list => patientid
+            }
+        }
+    ).collect { |r| r };
+
+    if json_data.length > 0
+      patient_dbm = json_data[0]
+      # events_dbm = events_db_model_list
+      # variant_reports_dbm = variant_report_db_model_list
+      # variants_dbm = variant_db_model_list
+      # specimens_dbm = specimen_db_model_list
+
+      uim = Convert::PatientDbModel.to_ui_model patient_dbm, nil, nil, nil, nil
+      # uim = Convert::PatientDbModel.to_ui_model patient_dbm, events_dbm, variant_reports_dbm, variants_dbm, specimens_dbm
+
+      p uim
+    else
+      raise "Unable to find Patient " + patientid.to_s
     end
   end
 

@@ -7,9 +7,9 @@ module Convert
       uiModel.patient_id           = patient_dbm.patient_id
       uiModel.registration_date    = patient_dbm.registration_date
       uiModel.study_id             = patient_dbm.study_id
-      uiModel.gender               = patient_dbm.gender
-      uiModel.ethnicity            = patient_dbm.ethnicity
-      uiModel.races                = patient_dbm.races
+      uiModel.gender               = patient_dbm.gender || 'Gender Unknown'
+      uiModel.ethnicity            = patient_dbm.ethnicity || 'Ethnicity Unknown'
+      uiModel.races                = patient_dbm.races || 'Race Unknown'
       uiModel.current_step_number  = patient_dbm.current_step_number
       uiModel.current_assignment   = patient_dbm.current_assignment
       uiModel.current_status       = patient_dbm.current_status
