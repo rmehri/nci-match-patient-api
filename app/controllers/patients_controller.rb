@@ -141,11 +141,13 @@ class PatientsController < ApplicationController
         specimens_dbm = scan(NciMatchPatientModels::Specimen, patientid).collect { |r| r }
         surgical_event_ids = specimens_dbm.map {|s| s.surgical_event_id}
 
-        variant_reports_dbm = NciMatchPatientModels::VariantReport.scan(
-            :scan_filter => {
-                "surgical_event_ids" => {:comparison_operator => "IN", :attribute_value_list => surgical_event_ids}
-            }
-        ).collect { |r| r }
+        if surgical_event_ids.count > 0
+          variant_reports_dbm = NciMatchPatientModels::VariantReport.scan(
+              :scan_filter => {
+                  "surgical_event_ids" => {:comparison_operator => "IN", :attribute_value_list => surgical_event_ids}
+              }
+          ).collect { |r| r }
+        end
 
         # variant_reports_dbm = variant_report_db_model_list
         # variants_dbm = variant_db_model_list
@@ -164,46 +166,6 @@ class PatientsController < ApplicationController
       standard_error_message(error)
     end
   end
-
-  # def scan_record(record, patientid)
-  #     record.scan(
-  #         :scan_filter => {
-  #             "patient_id" => {
-  #                 :comparison_operator => "EQ",
-  #                 :attribute_value_list => patientid
-  #             }
-  #         }
-  #     )
-  # end
-
-  # def render_patient_event_data(patientid)
-  #   begin
-  #     json_data = scan_record NciMatchPatientModels::PatientEvent, patientid
-  #     render json: json_data
-  #   rescue => error
-  #     standard_error_message(error)
-  #   end
-  # end
-
-  # def render_patient_data(patientid)
-  #   json_data = scan_record NciMatchPatientModels::Patient, patientid
-  #
-  #   if json_data.length > 0
-  #     patient_dbm = json_data[0]
-  #     # events_dbm = events_db_model_list
-  #     # variant_reports_dbm = variant_report_db_model_list
-  #     # variants_dbm = variant_db_model_list
-  #     # specimens_dbm = specimen_db_model_list
-  #
-  #     uim = Convert::PatientDbModel.to_ui_model patient_dbm, nil, nil, nil, nil
-  #     # uim = Convert::PatientDbModel.to_ui_model patient_dbm, events_dbm, variant_reports_dbm, variants_dbm, specimens_dbm
-  #
-  #     # p uim
-  #     uim
-  #   else
-  #     raise "Unable to find Patient " + patientid.to_s
-  #   end
-  # end
 
   def valid_test_message
     {:valid => true}

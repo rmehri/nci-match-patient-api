@@ -19,20 +19,20 @@ module Convert
       uiModel.documents            = patient_dbm.documents
       uiModel.message              = patient_dbm.message
 
-      if events_dbm != nil
+      if events_dbm != nil && events_dbm.count > 0
         uiModel.timeline = events_dbm.map { |e_dbm| e_dbm.data_to_h }
       end
 
-      if variant_reports_dbm != nil
+      if variant_reports_dbm != nil && variant_reports_dbm.count > 0
         uiModel.variant_report_selectors = variant_reports_dbm.map { |vr_dbm| to_ui_variant_report_selector vr_dbm }
         uiModel.variant_report = to_ui_variant_report(variant_reports_dbm[variant_reports_dbm.length - 1], variants_dbm)
       end
 
-      if patient_dbm.current_assignment != nil
+      if patient_dbm.current_assignment != nil && patient_dbm.count > 0
         uiModel.assignment_report = patient_dbm.current_assignment
       end
 
-      if specimens_dbm != nil
+      if specimens_dbm != nil && specimens_dbm.count > 0
         uiModel.specimen_selectors = specimens_dbm.map { |s_dbm| to_ui_specimen_selector s_dbm }
         uiModel.specimen = specimens_dbm[specimens_dbm.length - 1].data_to_h
         uiModel.specimen_history = specimens_dbm.map { |s_dbm| s_dbm.data_to_h }
