@@ -5,7 +5,7 @@ class StateMachine
   def self.validate(message)
     begin
       options = {
-          body: message
+          body: message.to_json
       }
 
       result = post("/patientMessage", options)
