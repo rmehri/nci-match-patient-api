@@ -199,7 +199,12 @@ class PatientsController < ApplicationController
   def validate_and_queue
     message = get_post_data
 
-    if StateMachine.validate(message)
+    res = StateMachine.validate(message)
+    #
+    # p "res"
+    # p res
+
+    if res == "true"
       Aws::Sqs::Publisher.publish(message, Config::Queue.name('processor'))
       return true
     else

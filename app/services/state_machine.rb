@@ -7,18 +7,12 @@ class StateMachine
       options = {
           body: message.to_json
       }
-
       result = post("/patientMessage", options)
-
-      # p "message = "+message.to_s
-      # p "result = "+result.to_s
-      return result;
+      # p "result.to_s";
+      # p result.to_s;
+      result.to_s;
     rescue Error => error
       p error
     end
   end
 end
-
-# message = '{"blah": "blah"}'
-
-# puts StateMachine.validate message
