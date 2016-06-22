@@ -128,7 +128,7 @@ describe PatientsController do
   end
 
   it "GET /patients/1 to return json patient" do
-    allow(NciMatchPatientModels::Patient).to receive(:scan).and_return(patient_dbm)
+    allow(NciMatchPatientModels::Patient).to receive(:scan).and_return([patient_dbm])
 
     get :patient, :patientid => "2222"
 
@@ -149,7 +149,7 @@ describe PatientsController do
   end
 
   it "GET /patients/1/timeline to return json patient timeline" do
-    allow(NciMatchPatientModels::PatientEvent).to receive(:scan).and_return(patient_event_dbm)
+    allow(NciMatchPatientModels::PatientEvent).to receive(:scan).and_return([patient_event_dbm])
 
     get :timeline, :patientid => "1", format: :json
 
