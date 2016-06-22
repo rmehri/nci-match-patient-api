@@ -63,6 +63,67 @@ describe PatientsController do
                :event_data => {"status" => "Pending", "biopsy_sequence_number" => "B-987456"}
   end
 
+  let(:specimen_dbm) do
+    stub_model NciMatchPatientModels::Specimen,
+               :patient_id => 'PAT123',
+               :collected_date => '2016-05-09T22:06:33+00:00',
+               :surgical_event_id => 'SUREVT1',
+               :failed_date => '2016-05-09T22:06:33+00:00',
+               :study_id => 'APEC1621',
+               :type => 'Blood',
+               :pathology_status => 'Exists',
+               :pathology_status_date => '2016-05-09T22:06:33+00:00',
+               :variant_report_confirmed_date => '2016-05-09T22:06:33+00:00',
+               :active_molecular_id => 'ACTMOLID123',
+               :assays => [],
+               :assignments => [],
+               :specimen_shipments => []
+  end
+
+  let(:variant_report_dbm) do
+    stub_model NciMatchPatientModels::VariantReport,
+      :surgical_event_id => 'SUREVT1',
+      :variant_report_received_date => '2016-05-09T22:06:33+00:00',
+
+      :patient_id => 'PAT123',
+      :molecular_id => 'ACTMOLID123',
+      :analysis_id => 'ANLS123',
+      :status => 'PENDING',
+      :status_date => '2016-05-09T22:06:33+00:00',
+
+      :comment => 'Panding confirmation',
+
+      :dna_bam_file_path => 'http://blah.com/file',
+      :dna_bai_file_path => 'http://blah.com/file',
+      :rna_bam_file_path => 'http://blah.com/file',
+      :rna_bai_file_path => 'http://blah.com/file',
+      :vcf_path => 'http://blah.com/file',
+
+      :total_variants => 10,
+      :cellularity => 4,
+      :total_mois => 6,
+      :total_amois => 2,
+      :total_confirmed_mois => 4,
+      :total_confirmed_amois => 2
+  end
+
+  let(:variant_dbm) do
+    stub_model NciMatchPatientModels::Variant,
+
+      :molecular_id_analysis_id        => 'MOLANLSID123',
+      :variant_type                    => 'MSH1',
+
+      :patient_id                      => 'PAT123',
+      :surgical_event_id               => 'SUREVT1',
+      :molecular_id                    => 'MOLDID',
+      :analysis_id                     => 'ANLS123',
+
+      :status                          => 'CONFIRNED',
+      :status_date                     => '2016-05-09T22:06:33+00:00',
+      :comment                         => 'Confrirmed'
+
+  end
+
 
   it "model from gem should include Aws::Record" do
     expect(NciMatchPatientModels::Patient.include?(Aws::Record)).to be true
@@ -108,11 +169,11 @@ describe PatientsController do
 
 
   let(:valid_test_message) do
-    {:valid => "true" }
+    {:valid => "true"}
   end
 
   let (:invalid_test_message) do
-    {:valid => "false" }
+    {:valid => "false"}
   end
 
   it "GET /patients to return json list of patients" do
@@ -129,6 +190,10 @@ describe PatientsController do
 
   it "GET /patients/1 to return json patient" do
     allow(NciMatchPatientModels::Patient).to receive(:scan).and_return([patient_dbm])
+    allow(NciMatchPatientModels::PatientEvent).to receive(:scan).and_return([patient_event_dbm])
+    allow(NciMatchPatientModels::Specimen).to receive(:scan).and_return([specimen_dbm])
+    allow(NciMatchPatientModels::VariantReport).to receive(:scan).and_return([variant_report_dbm])
+    allow(NciMatchPatientModels::Variant).to receive(:scan).and_return([variant_dbm])
 
     get :patient, :patientid => "2222"
 
