@@ -32,12 +32,17 @@ class PatientsController < ApplicationController
 
   # POST /registration
   def registration
-    process_message
+    process_message("Cog")
   end
 
+  #POST
+  def specimen_shipped
+    process_message("SpecimenShipped")
+end
+
   # POST /specimenReceipt
-  def specimen_receipt
-    process_message
+  def specimen_received
+    process_message("SpecimenReceived")
   end
 
   # POST /assayOrder
@@ -175,8 +180,8 @@ class PatientsController < ApplicationController
     {:valid => false}
   end
 
-  def process_message
-    if validate_and_queue
+  def process_message(*message_type)
+    if validate_and_queue(message_type)
       render_validation_success
     else
       render_validation_failure;
@@ -196,14 +201,10 @@ class PatientsController < ApplicationController
     json_data.deep_transform_keys!(&:underscore).symbolize_keys!
   end
 
-  def validate_and_queue
+  def validate_and_queue(*message_type)
     message = get_post_data
-
-    res = StateMachine.validate(message)
-    #
-    # p "res"
-    # p res
-
+    message_type = {message_type[-1][-1] => message}
+    res = StateMachine.validate(message_type)
     if res == "true"
       Aws::Sqs::Publisher.publish(message, Config::Queue.name('processor'))
       return true
