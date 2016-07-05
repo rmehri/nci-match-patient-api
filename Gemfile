@@ -31,7 +31,7 @@ gem 'auth0'
 
 gem 'wannabe_bool'
 
-gem 'nci_match_patient_models', "0.13.0", :git => 'https://github.com/CBIIT/nci-match-lib.git'
+gem 'nci_match_patient_models', "0.14.0", :git => 'https://github.com/CBIIT/nci-match-lib.git'
 
 gem "httparty"
 
