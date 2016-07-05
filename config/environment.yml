@@ -22,6 +22,18 @@ test:
   table_prefix: "p_"
   table_suffix: ""
 
+uat:
+  aws_dynamo_endpoint: "https://dynamodb.us-east-1.amazonaws.com"
+  aws_region: "us-east-1"
+
+  #Constructed queue name: "patient_processor"
+  queue_prefix: "p_"
+  queue_suffix: ""
+
+  #Constructed table name: "patient_events"
+  table_prefix: "p_"
+  table_suffix: ""
+
 production:
   aws_dynamo_endpoint: "https://dynamodb.us-east-1.amazonaws.com"
   aws_region: "us-east-1"
