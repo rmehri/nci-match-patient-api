@@ -151,7 +151,7 @@ describe PatientsController do
     expect(:get => "/patients/1/timeline").to route_to(:controller => "patients", :action => "timeline", :patientid => "1")
     expect(:get => "/patients/1/sampleHistory/2").to route_to(:controller => "patients", :action => "sample", :patientid => "1", :sampleid => "2")
     expect(:post => "/registration").to route_to(:controller => "patients", :action => "registration")
-    expect(:post => "/specimenReceipt").to route_to(:controller => "patients", :action => "specimen_receipt")
+    expect(:post => "/specimenReceived").to route_to(:controller => "patients", :action => "specimen_received")
     expect(:post => "/assayOrder").to route_to(:controller => "patients", :action => "assay_order")
     expect(:post => "/assayResult").to route_to(:controller => "patients", :action => "assay_result")
     expect(:post => "/pathologyStatus").to route_to(:controller => "patients", :action => "pathology_status")
@@ -245,10 +245,10 @@ describe PatientsController do
     }.to_not raise_error
   end
 
-  it "POST /specimenReceipt" do
+  it "POST /specimenReceived" do
     # route_to(:controller => "patients", :action => "specimen_receipt")
     allow(Aws::Sqs::Publisher).to receive(:publish).and_return("")
-    post :specimen_receipt, valid_test_message.to_json
+    post :specimen_received, valid_test_message.to_json
 
     expect {
       JSON.parse(response.body)

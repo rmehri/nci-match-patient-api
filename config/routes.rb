@@ -11,7 +11,8 @@ Rails.application.routes.draw do
     get "patients/:patientid/qcVariantReport/:sampleid/:type" => :qc_variant_report
 
     post "registration" => :registration
-    post "specimenReceipt" => :specimen_receipt
+    post "specimenReceived" => :specimen_received
+    post "specimenShipped" => :specimen_shipped
     post "assayOrder" => :assay_order
     post "assayResult" => :assay_result
     post "pathologyStatus" => :pathology_status
