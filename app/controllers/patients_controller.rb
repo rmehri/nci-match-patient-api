@@ -32,6 +32,7 @@ class PatientsController < ApplicationController
 
   # POST /registration
   def registration
+    Rails.logger.info "Registrating patient..."
     process_message("Cog")
   end
 
@@ -198,6 +199,7 @@ end
 
   def get_post_data
     json_data = JSON.parse(request.raw_post)
+    Rails.logger.debug "Got message: #{json_data.to_json}"
     json_data.deep_transform_keys!(&:underscore).symbolize_keys!
   end
 
@@ -206,7 +208,9 @@ end
     message_type = {message_type[-1][-1] => message}
     res = StateMachine.validate(message_type)
     if res == "true"
-      Aws::Sqs::Publisher.publish(message, Config::Queue.name('processor'))
+      queue_name = Config::Queue.name('processor')
+      Rails.logger.debug "Patient API publishing to queue: #{queue_name}..."
+      Aws::Sqs::Publisher.publish(message, queue_name)
       return true
     else
       return false
