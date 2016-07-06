@@ -3,12 +3,13 @@ development:
   aws_region: "us-east-1"
 
   #Constructed queue name: "patient_processor_dev_rzakharovrv"
-  queue_prefix: "patient_"
-  queue_suffix: "_dev_{:ENV:USER}"
+  queue_name: "patient"
+  queue_prefix: ""
+#  queue_suffix: "_dev_{:ENV:USER}"
 
   #Constructed table name: "patient_events_dev_rzakharovrv"
-  table_prefix: "p_"
-  table_suffix: "_dev_{:ENV:USER}"
+  table_prefix: "ys"
+#  table_suffix: "_dev_{:ENV:USER}"
 
 test:
   aws_dynamo_endpoint: "https://dynamodb.us-east-1.amazonaws.com"
