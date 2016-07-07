@@ -201,11 +201,18 @@ end
     json_data = JSON.parse(request.raw_post)
     Rails.logger.debug "Got message: #{json_data.to_json}"
     json_data.deep_transform_keys!(&:underscore).symbolize_keys!
+    Rails.logger.debug "After transform: #{json_data.to_json}"
+    json_data
   end
 
   def validate_and_queue(*message_type)
+
+    Rails.logger.debug "Message_type val: #{message_type}"
+
     message = get_post_data
     message_type = {message_type[-1][-1] => message}
+    Rails.logger.debug "Message type: #{message_type}"
+
     res = StateMachine.validate(message_type)
     if res == "true"
       queue_name = Config::Queue.name('processor')
