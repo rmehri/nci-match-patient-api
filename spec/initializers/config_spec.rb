@@ -8,7 +8,7 @@ describe Config::Table do
 
       # pattern: <table_prefix_>table_name_<env>
       # env == test_local
-      expect(name).to eq ENV["table_prefix"] + "_table_name_test_local"
+      expect(name).to eq ENV["table_prefix"] + "_table_name_#{Rails.env}"
     end
   end
 
@@ -18,7 +18,7 @@ describe Config::Table do
 
       # pattern: <queue_prefix_>table_name_<env>
       # env == test_local
-      expect(name).to eq "#{ENV["queue_prefix"]}_patient_test_local"
+      expect(name).to eq "#{ENV["queue_prefix"]}_#{ENV["queue_name"]}_#{Rails.env}"
     end
   end
 end
