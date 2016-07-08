@@ -22,7 +22,7 @@ module ModelConfig
   end
 
   def self.ensure_table(table)
-    if (!table.table_exists? || Rails.env != 'test_local')
+    if (!table.table_exists? && (!Rails.env.to_s.start_with?("test")))
       migration = Aws::Record::TableMigration.new(table)
       migration.create!(provisioned_throughput: { read_capacity_units: 5, write_capacity_units: 5 })
       migration.wait_until_available
