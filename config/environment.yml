@@ -6,13 +6,29 @@ development:
   # Constructed queue name: "<prefix>_patient_development" - with valid prefix
   #                        "patient_development"            - with empty prefix
   queue_name: "patient"
-  queue_prefix: ""
+  queue_prefix: "sy"
 #  queue_suffix: "_dev_{:ENV:USER}"
 
   # table_prefix could be empty. Environment is the suffix, added by default
   # Constructed table name: "<prefix>_patient_events_development" - with valid prefix
   #                        "patient_event_development"            - with empty prefix
   table_prefix: "ys"
+
+test_local:
+  aws_dynamo_endpoint: "http://localhost:8000"
+  aws_region: "us-east-1"
+
+  # queue_prefix could be empty. Environment is the suffix, added by default
+  # Constructed queue name: "<prefix>_patient_development" - with valid prefix
+  #                        "patient_development"            - with empty prefix
+  queue_name: "patient"
+  queue_prefix: "tl"
+#  queue_suffix: "_dev_{:ENV:USER}"
+
+  # table_prefix could be empty. Environment is the suffix, added by default
+  # Constructed table name: "<prefix>_patient_events_development" - with valid prefix
+  #                        "patient_event_development"            - with empty prefix
+  table_prefix: "tl"
 
 test:
   aws_dynamo_endpoint: "https://dynamodb.us-east-1.amazonaws.com"
