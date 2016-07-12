@@ -13,6 +13,8 @@ development:
   # Constructed table name: "<prefix>_patient_events_development" - with valid prefix
   #                        "patient_event_development"            - with empty prefix
   table_prefix: "ys"
+  read_capacity_units: "30"
+  write_capacity_units: "30"
 
 test_local:
   aws_dynamo_endpoint: "http://localhost:8000"
@@ -29,6 +31,8 @@ test_local:
   # Constructed table name: "<prefix>_patient_events_development" - with valid prefix
   #                        "patient_event_development"            - with empty prefix
   table_prefix: "tl"
+  read_capacity_units: "5"
+  write_capacity_units: "5"
 
 test:
   aws_dynamo_endpoint: "https://dynamodb.us-east-1.amazonaws.com"
@@ -41,7 +45,8 @@ test:
 
   #Constructed table name: "patient_events"
   table_prefix: "ts"
-#  table_suffix: ""
+  read_capacity_units: "5"
+  write_capacity_units: "5"
 
 uat:
   aws_dynamo_endpoint: "https://dynamodb.us-east-1.amazonaws.com"
@@ -53,7 +58,8 @@ uat:
 
   #Constructed table name: "patient_events"
   table_prefix: "p_"
-  table_suffix: ""
+  read_capacity_units: "5"
+  write_capacity_units: "5"
 
 production:
   aws_dynamo_endpoint: "https://dynamodb.us-east-1.amazonaws.com"
@@ -65,4 +71,5 @@ production:
 
   #Constructed table name: "patient_events"
   table_prefix: "p_"
-  table_suffix: ""
+  read_capacity_units: "50"
+  write_capacity_units: "50"
