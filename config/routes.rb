@@ -13,7 +13,6 @@ Rails.application.routes.draw do
     post "registration" => :registration
     post "specimenReceived" => :specimen_received
     post "specimenShipped" => :specimen_shipped
-    post "assayOrder" => :assay_order
     post "assayResult" => :assay_result
     post "pathologyStatus" => :pathology_status
     post "variantResult" => :variant_result

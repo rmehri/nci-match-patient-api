@@ -39,21 +39,16 @@ class PatientsController < ApplicationController
   #POST
   def specimen_shipped
     process_message("SpecimenShipped")
-end
+  end
 
   # POST /specimenReceipt
   def specimen_received
     process_message("SpecimenReceived")
   end
 
-  # POST /assayOrder
-  def assay_order
-    process_message
-  end
-
   # POST /variantResult
   def assay_result
-    process_message
+    process_message("Assay")
   end
 
   # POST /variantResult
@@ -63,7 +58,7 @@ end
 
   # POST /pathologyStatus
   def pathology_status
-    process_message
+    process_message("Pathology")
   end
 
   # POST /patients/:patientid/sampleFile
