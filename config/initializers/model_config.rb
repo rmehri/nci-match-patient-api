@@ -7,11 +7,14 @@ module ModelConfig
     configure_table NciMatchPatientModels::VariantReport
     configure_table NciMatchPatientModels::Specimen
 
-    ensure_table NciMatchPatientModels::Patient
-    ensure_table NciMatchPatientModels::Event
-    ensure_table NciMatchPatientModels::Variant
-    ensure_table NciMatchPatientModels::VariantReport
-    ensure_table NciMatchPatientModels::Specimen
+    if (!Rails.env.to_s.start_with?("test"))
+      ensure_table NciMatchPatientModels::Patient
+      ensure_table NciMatchPatientModels::Event
+      ensure_table NciMatchPatientModels::Variant
+      ensure_table NciMatchPatientModels::VariantReport
+      ensure_table NciMatchPatientModels::Specimen
+    end
+
   end
 
   def self.configure_table(table)
@@ -23,7 +26,7 @@ module ModelConfig
 
   def self.ensure_table(table)
 
-    if (!table.table_exists? && (!Rails.env.to_s.start_with?("test")))
+    if (!table.table_exists?)
       read_capacity_units =  ENV['read_capacity_units'].to_i
       write_capacity_units = ENV['write_capacity_units'].to_i
 
