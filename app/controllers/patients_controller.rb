@@ -230,7 +230,7 @@ end
 
     res = StateMachine.validate(message_type)
     if res == "true"
-      queue_name = Config::Queue.name('processor')
+      queue_name = ENV['queue_name']
       Rails.logger.debug "Patient API publishing to queue: #{queue_name}..."
       Aws::Sqs::Publisher.publish(message, queue_name)
       return true

@@ -18,7 +18,7 @@ module ModelConfig
     name = table.new.class.name.underscore
     name = name.to_s.split('/').last || ''
 
-    table.set_table_name Config::Table.name(name)
+    table.set_table_name name
   end
 
   def self.ensure_table(table)

@@ -2,17 +2,9 @@ development:
   aws_dynamo_endpoint: "http://localhost:8000"
   aws_region: "us-east-1"
 
-  # queue_prefix could be empty. Environment is the suffix, added by default
-  # Constructed queue name: "<prefix>_patient_development" - with valid prefix
-  #                        "patient_development"            - with empty prefix
-  queue_name: "patient"
-  queue_prefix: "sy"
-#  queue_suffix: "_dev_{:ENV:USER}"
+  queue_name: "sy_patient_development"
 
-  # table_prefix could be empty. Environment is the suffix, added by default
-  # Constructed table name: "<prefix>_patient_events_development" - with valid prefix
-  #                        "patient_event_development"            - with empty prefix
-  table_prefix: "ys"
+  # dynamodb setting
   read_capacity_units: "30"
   write_capacity_units: "30"
 
@@ -20,17 +12,9 @@ test_local:
   aws_dynamo_endpoint: "http://localhost:8000"
   aws_region: "us-east-1"
 
-  # queue_prefix could be empty. Environment is the suffix, added by default
-  # Constructed queue name: "<prefix>_patient_development" - with valid prefix
-  #                        "patient_development"            - with empty prefix
-  queue_name: "patient"
-  queue_prefix: "tl"
-#  queue_suffix: "_dev_{:ENV:USER}"
+  queue_name: "sy_patient_development"
 
-  # table_prefix could be empty. Environment is the suffix, added by default
-  # Constructed table name: "<prefix>_patient_events_development" - with valid prefix
-  #                        "patient_event_development"            - with empty prefix
-  table_prefix: "tl"
+  # dynamodb setting
   read_capacity_units: "5"
   write_capacity_units: "5"
 
@@ -40,11 +24,8 @@ test:
 
   #Constructed queue name: "patient_processor"
   queue_name: "patient"
-  queue_prefix: "ts"
-#  queue_suffix: ""
 
-  #Constructed table name: "patient_events"
-  table_prefix: "ts"
+  # dynamodb setting
   read_capacity_units: "5"
   write_capacity_units: "5"
 
@@ -53,11 +34,9 @@ uat:
   aws_region: "us-east-1"
 
   #Constructed queue name: "patient_processor"
-  queue_prefix: "p_"
-  queue_suffix: ""
+  queue_name: "patient_processor"
 
-  #Constructed table name: "patient_events"
-  table_prefix: "p_"
+  # dynamodb setting
   read_capacity_units: "5"
   write_capacity_units: "5"
 
@@ -66,10 +45,8 @@ production:
   aws_region: "us-east-1"
 
   #Constructed queue name: "patient_processor"
-  queue_prefix: "p_"
-  queue_suffix: ""
+  queue_name: "patient_processor"
 
-  #Constructed table name: "patient_events"
-  table_prefix: "p_"
-  read_capacity_units: "50"
-  write_capacity_units: "50"
+  # dynamodb setting
+  read_capacity_units: "5"
+  write_capacity_units: "5"
