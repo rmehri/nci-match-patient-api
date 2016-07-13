@@ -23,7 +23,7 @@ test:
   aws_region: "us-east-1"
 
   #Constructed queue name: "patient_processor"
-  queue_name: "patient"
+  queue_name: "patient_test"
 
   # dynamodb setting
   read_capacity_units: "5"
@@ -34,7 +34,7 @@ uat:
   aws_region: "us-east-1"
 
   #Constructed queue name: "patient_processor"
-  queue_name: "patient_processor"
+  queue_name: "patient_uat"
 
   # dynamodb setting
   read_capacity_units: "5"
@@ -45,7 +45,7 @@ production:
   aws_region: "us-east-1"
 
   #Constructed queue name: "patient_processor"
-  queue_name: "patient_processor"
+  queue_name: "patient"
 
   # dynamodb setting
   read_capacity_units: "5"

@@ -189,9 +189,9 @@ describe PatientsController do
   end
 
   it "GET /patients/1 to return json patient" do
-    allow(NciMatchPatientModels::Patient).to receive(:query).and_return([patient_dbm])
-    allow(NciMatchPatientModels::Specimen).to receive(:query).and_return([specimen_dbm])
-    allow(NciMatchPatientModels::Event).to receive(:query).and_return([patient_event_dbm])
+    allow(NciMatchPatientModels::Patient).to receive(:query_patient_by_id).and_return([patient_dbm])
+    allow(NciMatchPatientModels::Specimen).to receive(:query_specimens_by_patient_id).and_return([specimen_dbm])
+    allow(NciMatchPatientModels::Event).to receive(:query_events_by_id).and_return([patient_event_dbm])
 
     # allow(NciMatchPatientModels::VariantReport).to receive(:scan).and_return([variant_report_dbm])
     # allow(NciMatchPatientModels::Variant).to receive(:scan).and_return([variant_dbm])
