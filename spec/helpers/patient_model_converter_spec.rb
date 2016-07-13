@@ -47,8 +47,8 @@ describe Convert do
 
   let(:events_db_model_list) do
     [1,2].map { |i|
-      NciMatchPatientModels::PatientEvent.new(
-          :patient_id     => 'PAT123',
+      NciMatchPatientModels::Event.new(
+          :id     => 'PAT123',
           :event_date     => '2016-05-09T22:06:33+00:00',
           :event_name     => 'Event Name ' + i.to_s,
           :event_type     => 'TYPE' + i.to_s,
@@ -308,21 +308,6 @@ describe Convert do
 
   end
 
-  it "works with specimen selector DB models" do
-    patient_dbm = patient_db_model
-    specimens_dbm = specimen_db_model_list
-
-    uim = Convert::PatientDbModel.to_ui_model patient_dbm, nil, nil, nil, specimens_dbm
-
-    expect(uim).to_not eq nil
-
-    expect(uim.specimen_selectors).to_not eq nil
-    expect(uim.specimen_selectors.size).to eq specimens_dbm.size
-    expect(uim.specimen_selectors[0]["text"]).to eq "SUREVT0981"
-    expect(uim.specimen_selectors[1]["collected_date"]).to eq "2016-06-09T22:06:33+00:00"
-
-  end
-
   it "works with specimen DB model" do
     patient_dbm = patient_db_model
     specimens_dbm = specimen_db_model_list
@@ -331,12 +316,8 @@ describe Convert do
 
     expect(uim).to_not eq nil
 
-    expect(uim.specimen).to_not eq nil
-    expect(uim.specimen["surgical_event_id"]).to eq "SUREVT0982"
-    expect(uim.specimen["type"]).to eq "TUMOR"
-
-    expect(uim.specimen_history).to_not eq nil
-    expect(uim.specimen_history.size).to eq specimens_dbm.size
+    expect(uim.specimens).to_not eq nil
+    expect(uim.specimens.size).to eq specimens_dbm.size
 
   end
 
@@ -355,11 +336,7 @@ describe Convert do
     expect(uim.timeline).to_not eq nil
     expect(uim.variant_report_selectors).to_not eq nil
     expect(uim.variant_report).to_not eq nil
-    expect(uim.specimen_selectors).to_not eq nil
-    expect(uim.specimen).to_not eq nil
-
-    # Print entire model
-    # p JSON.parse(uim.to_json).deep_transform_keys!(&:underscore)
+    expect(uim.specimens).to_not eq nil
 
   end
 

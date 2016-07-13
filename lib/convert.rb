@@ -19,7 +19,7 @@ module Convert
       uiModel.documents            = patient_dbm.documents
       uiModel.message              = patient_dbm.message
 
-      if events_dbm != nil && events_dbm.length > 0
+      if events_dbm != nil && events_dbm.count > 0
         uiModel.timeline = events_dbm.map { |e_dbm| e_dbm.data_to_h }
       end
 
@@ -32,10 +32,10 @@ module Convert
         uiModel.assignment_report = patient_dbm.current_assignment
       end
 
-      if specimens_dbm != nil && specimens_dbm.length > 0
-        uiModel.specimen_selectors = specimens_dbm.map { |s_dbm| to_ui_specimen_selector s_dbm }
-        uiModel.specimen = specimens_dbm[specimens_dbm.length - 1].data_to_h
-        uiModel.specimen_history = specimens_dbm.map { |s_dbm| s_dbm.data_to_h }
+      if specimens_dbm != nil && specimens_dbm.count > 0
+        # uiModel.specimen_selectors = specimens_dbm.map { |s_dbm| to_ui_specimen_selector s_dbm }
+        # uiModel.specimen = specimens_dbm[specimens_dbm.length - 1].data_to_h
+        uiModel.specimens = specimens_dbm.map { |s_dbm| s_dbm.data_to_h }
       end
 
       return uiModel
