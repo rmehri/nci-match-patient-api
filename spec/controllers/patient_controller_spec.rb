@@ -60,7 +60,7 @@ describe PatientsController do
                :patient_id => 'PAT123',
                :event_date => '2016-05-09T22:06:33+00:00',
                :event_name => 'Event Name 1',
-               :event_type => 'TYPE1',
+               :event_type => 'Patient',
                :event_message => 'Message1',
                :event_data => {"status" => "Pending", "biopsy_sequence_number" => "B-987456"}
   end
@@ -154,7 +154,6 @@ describe PatientsController do
     expect(:get => "/patients/1/sampleHistory/2").to route_to(:controller => "patients", :action => "sample", :patientid => "1", :sampleid => "2")
     expect(:post => "/registration").to route_to(:controller => "patients", :action => "registration")
     expect(:post => "/specimenReceived").to route_to(:controller => "patients", :action => "specimen_received")
-    expect(:post => "/assayOrder").to route_to(:controller => "patients", :action => "assay_order")
     expect(:post => "/assayResult").to route_to(:controller => "patients", :action => "assay_result")
     expect(:post => "/pathologyStatus").to route_to(:controller => "patients", :action => "pathology_status")
     expect(:post => "/variantResult").to route_to(:controller => "patients", :action => "variant_result")
@@ -194,9 +193,6 @@ describe PatientsController do
     allow(NciMatchPatientModels::Patient).to receive(:query).and_return([patient_dbm])
     allow(NciMatchPatientModels::Specimen).to receive(:query).and_return([specimen_dbm])
     allow(NciMatchPatientModels::Event).to receive(:query).and_return([patient_event_dbm])
-
-    # allow(NciMatchPatientModels::VariantReport).to receive(:scan).and_return([variant_report_dbm])
-    # allow(NciMatchPatientModels::Variant).to receive(:scan).and_return([variant_dbm])
 
     get :patient, :patientid => "2222"
 
@@ -252,16 +248,6 @@ describe PatientsController do
     # route_to(:controller => "patients", :action => "specimen_receipt")
     allow(Aws::Sqs::Publisher).to receive(:publish).and_return("")
     post :specimen_received, valid_test_message.to_json
-
-    expect {
-      JSON.parse(response.body)
-    }.to_not raise_error
-  end
-
-  it "POST /assayOrder" do
-    # route_to(:controller => "patients", :action => "assay_order")
-    allow(Aws::Sqs::Publisher).to receive(:publish).and_return("")
-    post :assay_order, valid_test_message.to_json
 
     expect {
       JSON.parse(response.body)
