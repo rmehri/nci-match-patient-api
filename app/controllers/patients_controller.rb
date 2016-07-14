@@ -183,7 +183,6 @@ class PatientsController < ApplicationController
     json_data = JSON.parse(request.raw_post)
     Rails.logger.debug "Got message: #{json_data.to_json}"
     json_data.deep_transform_keys!(&:underscore).symbolize_keys!
-    Rails.logger.debug "After transform: #{json_data.to_json}"
     json_data
   end
 
@@ -196,6 +195,7 @@ class PatientsController < ApplicationController
     Rails.logger.debug "Message type: #{message_type}"
 
     res = StateMachine.validate(message_type)
+    Rails.logger.debug "Response from StateMachine: #{res}"
     if res == "true"
       queue_name = ENV['queue_name']
       Rails.logger.debug "Patient API publishing to queue: #{queue_name}..."
