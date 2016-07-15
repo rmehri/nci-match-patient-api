@@ -4,12 +4,16 @@ class StateMachine
 
   def self.validate(message)
     begin
-      options = {
-          body: message.to_json
-      }
-      result = post("/patientMessage", options)
-      # p "result.to_s";
-      # p result.to_s;
+      # options = {
+      #     body: message.to_json
+      # }
+      # result = post("/patientMessage", options)
+
+      result = post("/patientMessage",
+                    {
+                        :body => message.to_json,
+                        :headers => { 'Content-Type' => 'application/json', 'Accept' => 'application/json'}
+                    })
       result.to_s;
     rescue Error => error
       p error
