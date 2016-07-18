@@ -10,11 +10,8 @@ module MessageValidator
     cattr_reader :schema
   end
 
-  def self.get_message_type(message_json)
+  def self.get_message_type(message)
     type = 'UNKNOWN'
-
-    message = JSON.parse(message_json)
-    message.deep_transform_keys!(&:underscore).symbolize_keys!
 
     if (!message[:status].nil? && message[:status] == 'REGISTRATION')
       type = "Cog"
@@ -29,6 +26,16 @@ module MessageValidator
     end
 
     type
+  end
+
+  def self.validate_json_message(type, message_json)
+    klazz = ("MessageValidator::" + type + "Validator").constantize
+    begin
+      JSON::Validator.validate!(klazz.schema, message_json)
+      nil
+    rescue => error
+      error.message
+    end
   end
 
 end

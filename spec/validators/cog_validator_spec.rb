@@ -18,7 +18,7 @@ describe 'CogValidator behavior' do
             "environment"=> "4",
             "request"=> "REGISTRATION for patient_id 2222"
         }
-    }
+    }.to_json
   end
 
   let(:bad_message) do
@@ -36,21 +36,33 @@ describe 'CogValidator behavior' do
             "environment"=> "4",
             "request"=> "REGISTRATION for patient_id 2222"
         }
-    }
+    }.to_json
   end
 
   it "should get type 'Cog' from MessageValidator" do
-    type = MessageValidator.get_message_type(good_message.to_json)
+    message = JSON.parse(good_message)
+    message.deep_transform_keys!(&:underscore).symbolize_keys!
+    type = MessageValidator.get_message_type(message)
     expect(type).to eq('Cog')
   end
 
   it "should validate a good message" do
-    valid = JSON::Validator.validate(MessageValidator::CogValidator.schema, good_message.to_json)
+    message = JSON.parse(good_message)
+    message.deep_transform_keys!(&:underscore).symbolize_keys!
+    valid = JSON::Validator.validate(MessageValidator::CogValidator.schema, message)
     expect(valid).to be_truthy
   end
 
   it "should invalidate a bad message" do
-    valid = JSON::Validator.validate(MessageValidator::CogValidator.schema, bad_message.to_json)
+    message = JSON.parse(bad_message)
+    message.deep_transform_keys!(&:underscore).symbolize_keys!
+    valid = JSON::Validator.validate(MessageValidator::CogValidator.schema, message)
     expect(valid).to be_falsey
+  end
+
+  it "should throw exception" do
+    message = JSON.parse(bad_message)
+    message.deep_transform_keys!(&:underscore).symbolize_keys!
+    MessageValidator.validate_json_message("Cog", message)
   end
 end

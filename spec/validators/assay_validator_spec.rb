@@ -11,7 +11,7 @@ describe 'AssayValidator behavior' do
         "reported_date":"2015-12-12T12:12:09.071-05:00",
         "ordered_date":"2015-12-12T12:11:09.071-05:00",
         "result":"POSITIVE"
-    }
+    }.to_json
   end
 
   let(:bad_message) do
@@ -22,21 +22,28 @@ describe 'AssayValidator behavior' do
         "reported_date":"2015-12-12T12:12:09.071-05:00",
         "ordered_date":"2015-12-12T12:11:09.071-05:00",
         "result":"POSITIVE"
-    }
+    }.to_json
+
   end
 
   it "should get type 'Assay' from MessageValidator" do
-    type = MessageValidator.get_message_type(good_message.to_json)
+    message = JSON.parse(good_message)
+    message.deep_transform_keys!(&:underscore).symbolize_keys!
+    type = MessageValidator.get_message_type(message)
     expect(type).to eq('Assay')
   end
 
   it "should validate a good message" do
-    valid = JSON::Validator.validate(MessageValidator::AssayValidator.schema, good_message.to_json)
+    message = JSON.parse(good_message)
+    message.deep_transform_keys!(&:underscore).symbolize_keys!
+    valid = JSON::Validator.validate(MessageValidator::AssayValidator.schema, message)
     expect(valid).to be_truthy
   end
 
   it "should invalidate a bad message" do
-    valid = JSON::Validator.validate(MessageValidator::AssayValidator.schema, bad_message.to_json)
+    message = JSON.parse(bad_message)
+    message.deep_transform_keys!(&:underscore).symbolize_keys!
+    valid = JSON::Validator.validate(MessageValidator::AssayValidator.schema, message)
     expect(valid).to be_falsey
   end
 end

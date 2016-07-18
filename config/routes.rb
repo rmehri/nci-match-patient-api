@@ -28,4 +28,8 @@ Rails.application.routes.draw do
     get "patients/:patientid/documents/:documentid" => :document
     post "patients/:patientid/documents" => :new_document
   end
+
+  controller :services do
+    post "trigger" => :trigger
+  end
 end

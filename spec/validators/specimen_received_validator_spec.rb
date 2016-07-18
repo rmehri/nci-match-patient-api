@@ -22,7 +22,7 @@ describe 'SpecimenReceivedValidator behavior' do
                 "qc_dttm": "2016-04-25T16:21:34+00:00"
             }
         }
-    }
+    }.to_json
   end
 
   let(:good_message_tissue) do
@@ -47,7 +47,7 @@ describe 'SpecimenReceivedValidator behavior' do
                 "qc_ts": "2016-04-25T16:21:34+00:00"
             }
         }
-    }
+    }.to_json
   end
 
   let(:bad_message_unknown_type) do
@@ -72,27 +72,35 @@ describe 'SpecimenReceivedValidator behavior' do
                 "qc_ts": "2016-04-25T16:21:34+00:00"
             }
         }
-    }
+    }.to_json
   end
 
   it "should get type 'SpecimenReceived' from MessageValidator" do
-    type = MessageValidator.get_message_type(good_message_blood.to_json)
+    message = JSON.parse(good_message_blood)
+    message.deep_transform_keys!(&:underscore).symbolize_keys!
+    type = MessageValidator.get_message_type(message)
     expect(type).to eq('SpecimenReceived')
   end
 
   it "should validate a good blood message" do
-    valid = JSON::Validator.validate(MessageValidator::SpecimenReceivedValidator.schema, good_message_blood.to_json)
+    message = JSON.parse(good_message_blood)
+    message.deep_transform_keys!(&:underscore).symbolize_keys!
+    valid = JSON::Validator.validate(MessageValidator::SpecimenReceivedValidator.schema, message)
     expect(valid).to be_truthy
   end
 
   it "should validate a good tissue message" do
-    valid = JSON::Validator.validate(MessageValidator::SpecimenReceivedValidator.schema, good_message_tissue.to_json)
+    message = JSON.parse(good_message_tissue)
+    message.deep_transform_keys!(&:underscore).symbolize_keys!
+    valid = JSON::Validator.validate(MessageValidator::SpecimenReceivedValidator.schema, message)
     expect(valid).to be_truthy
   end
 
   it "should invalidate a bad message" do
+    message = JSON.parse(bad_message_unknown_type)
+    message.deep_transform_keys!(&:underscore).symbolize_keys!
     valid = JSON::Validator.validate(MessageValidator::SpecimenReceivedValidator.schema,
-                                     bad_message_unknown_type.to_json)
+                                     message)
     expect(valid).to be_falsey
   end
 end
