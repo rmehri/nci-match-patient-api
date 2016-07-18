@@ -23,6 +23,6 @@ Rails.application.routes.draw do
   end
 
   controller :services do
-    post "api/patient/trigger" => :trigger
+    post "trigger" => :trigger
   end
 end

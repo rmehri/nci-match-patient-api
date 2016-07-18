@@ -30,7 +30,7 @@ describe ServicesController do
 
 
   it "should route to correct controller" do
-    expect(:post => "/api/patient/trigger").to route_to(:controller => "services", :action => "trigger")
+    expect(:post => "trigger").to route_to(:controller => "services", :action => "trigger")
   end
 
   # it "POST /trigger" do
