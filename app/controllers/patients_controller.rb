@@ -30,37 +30,6 @@ class PatientsController < ApplicationController
     render status: 200, json: '{"test":"test"}'
   end
 
-  # POST /registration
-  def registration
-    Rails.logger.info "Registrating patient..."
-    process_message("Cog")
-  end
-
-  #POST
-  def specimen_shipped
-    process_message("SpecimenShipped")
-  end
-
-  # POST /specimenReceipt
-  def specimen_received
-    process_message("SpecimenReceived")
-  end
-
-  # POST /variantResult
-  def assay_result
-    process_message("Assay")
-  end
-
-  # POST /variantResult
-  def variant_result
-    process_message
-  end
-
-  # POST /pathologyStatus
-  def pathology_status
-    process_message("Pathology")
-  end
-
   # POST /patients/:patientid/sampleFile
   def sample_file
     render status: 200, json: '{"test":"test"}'

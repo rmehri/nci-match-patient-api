@@ -10,13 +10,6 @@ Rails.application.routes.draw do
     get "patients/:patientid/sampleHistory/:sampleid" => :sample
     get "patients/:patientid/qcVariantReport/:sampleid/:type" => :qc_variant_report
 
-    post "registration" => :registration
-    post "specimenReceived" => :specimen_received
-    post "specimenShipped" => :specimen_shipped
-    post "assayResult" => :assay_result
-    post "pathologyStatus" => :pathology_status
-    post "variantResult" => :variant_result
-
     post "patients/:patientid/sampleFile" => :sample_file
     put "patients/:patientid/variantStatus" => :variant_status
     put "patients/:patientid/variantReportStatus" => :variant_report_status
@@ -30,6 +23,6 @@ Rails.application.routes.draw do
   end
 
   controller :services do
-    post "trigger" => :trigger
+    post "api/patient/trigger" => :trigger
   end
 end
