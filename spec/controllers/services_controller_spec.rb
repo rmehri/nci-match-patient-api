@@ -28,20 +28,17 @@ describe ServicesController do
     }.to_json
   end
 
-
   it "should route to correct controller" do
     expect(:post => "trigger").to route_to(:controller => "services", :action => "trigger")
   end
 
-  # it "POST /trigger" do
-  #   message = JSON.parse(good_message)
-  #   message.deep_transform_keys!(&:underscore).symbolize_keys!
-  #
-  #   allow(Aws::Sqs::Publisher).to receive(:publish).and_return("")
-  #   post :trigger, valid_test_message
-  #
-  #   expect {
-  #     JSON.parse(response.body)
-  #   }.to_not raise_error
-  # end
+  it "POST /trigger" do
+
+    allow(Aws::Sqs::Publisher).to receive(:publish).and_return("")
+    post :trigger, good_message
+
+    expect {
+      JSON.parse(response.body)
+    }.to_not raise_error
+  end
 end
