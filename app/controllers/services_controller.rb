@@ -25,7 +25,7 @@ class ServicesController < ApplicationController
 
   def get_post_data
     json_data = JSON.parse(request.raw_post)
-    AppLogger.log("ServiceController", "Patient Api received message: #{json_data.to_json}")
+    AppLogger.log(self.class.name, "Patient Api received message: #{json_data.to_json}")
     json_data.deep_transform_keys!(&:underscore).symbolize_keys!
     json_data
   end
@@ -35,17 +35,16 @@ class ServicesController < ApplicationController
     AppLogger.log(self.class.name, "Validting messesage of type [#{message_type}]")
 
     message_type = {message_type => message}
-    res = StateMachine.validate(message_type)
+    result = StateMachine.validate(message_type)
 
-    if res == "true"
-      queue_name = ENV['queue_name']
-      Rails.logger.debug "Patient API publishing to queue: #{queue_name}..."
-      Aws::Sqs::Publisher.publish(message, queue_name)
-      return true
-    else
-      return false
+    if result != 'true'
+      result_hash = JSON.parse(result)
+      raise "Incoming message failed patient state validation: #{result_hash['error']}"
     end
 
+    queue_name = ENV['queue_name']
+    Rails.logger.debug "Patient API publishing to queue: #{queue_name}..."
+    Aws::Sqs::Publisher.publish(message, queue_name)
 
   end
 
