@@ -276,7 +276,12 @@ describe PatientsController do
   end
 
   it "POST /patientStatus" do
-    # route_to(:controller => "patients", :action => "patient_status")
+    message_body = {"status" => "Success", "error" => "some error"}
+    allow(HTTParty::Request).to receive(:new).and_return(HTTParty::Request)
+    allow(HTTParty::Response).to receive(:new).and_return(HTTParty::Response)
+    allow(HTTParty::Request).to receive(:perform).and_return(HTTParty::Response)
+    allow(HTTParty::Response).to receive(:body).and_return(message_body)
+
     allow(Aws::Sqs::Publisher).to receive(:publish).and_return("")
     post :patient_status, valid_test_message.to_json
 
