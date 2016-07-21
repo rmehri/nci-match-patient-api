@@ -23,6 +23,8 @@ module MessageValidator
       type = "Assay"
     elsif (!message[:message].nil? && message[:message].start_with?("PATHOLOGY"))
       type = "Pathology"
+    elsif (!message[:analysis_id].nil)
+      type = "Variant"
     end
 
     type
