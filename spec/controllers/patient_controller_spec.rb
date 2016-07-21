@@ -188,6 +188,7 @@ describe PatientsController do
     allow(NciMatchPatientModels::Patient).to receive(:query).and_return([patient_dbm])
     allow(NciMatchPatientModels::Specimen).to receive(:query).and_return([specimen_dbm])
     allow(NciMatchPatientModels::Event).to receive(:query).and_return([patient_event_dbm])
+    allow(NciMatchPatientModels::VariantReport).to receive(:query).and_return([variant_dbm])
 
     get :patient, :patientid => "2222"
 

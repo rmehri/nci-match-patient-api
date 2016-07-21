@@ -22,7 +22,7 @@ class PatientUiModel
   attr_accessor :biopsy_variant_report_map
 
   attr_accessor :variant_report_selectors
-  attr_accessor :variant_report
+  attr_accessor :variant_reports
 
   attr_accessor :assignment_report
 

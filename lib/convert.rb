@@ -24,8 +24,7 @@ module Convert
       end
 
       if variant_reports_dbm != nil && variant_reports_dbm.length > 0
-        uiModel.variant_report_selectors = variant_reports_dbm.map { |vr_dbm| to_ui_variant_report_selector vr_dbm }
-        uiModel.variant_report = to_ui_variant_report(variant_reports_dbm[variant_reports_dbm.length - 1], variants_dbm)
+        uiModel.variant_reports = to_ui_variant_report(variant_reports_dbm[variant_reports_dbm.length - 1], variants_dbm)
       end
 
       if patient_dbm.current_assignment != nil
