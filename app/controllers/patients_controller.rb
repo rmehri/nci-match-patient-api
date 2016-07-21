@@ -104,7 +104,7 @@ class PatientsController < ApplicationController
   def render_patient_data(patientid)
     begin
 
-      patient_dbm = NciMatchPatientModels::Patient.query_patient_by_id(patientid[0])
+      patient_dbm = NciMatchPatientModels::Patient.hjt(patientid[0])
       raise "Unable to find patient #{patientid[0]}" if patient_dbm.nil?
       AppLogger.log_debug(self.class.name, "Got patient: #{patient_dbm.to_json}")
 
@@ -115,6 +115,7 @@ class PatientsController < ApplicationController
       events_dbm = NciMatchPatientModels::Event.query_events_by_id(patientid[0], false)
       AppLogger.log_debug(self.class.name, "Got #{events_dbm.count} events for patient #{patientid[0]}") if !events_dbm.nil?
 
+      p "============================= s_id: #{surgical_event_ids.to_json}"
       variant_reports = get_variant_reports(surgical_event_ids)
 
       uim = Convert::PatientDbModel.to_ui_model patient_dbm, events_dbm, nil, nil, specimens_dbm
@@ -181,11 +182,15 @@ class PatientsController < ApplicationController
 
   def get_variant_reports(surgical_event_ids)
     variant_reports = []
-    return variant_reports if surgical_event_ids.count == 0
+    p "================== number of s id: #{surgical_event_ids.length}"
+    return variant_reports if surgical_event_ids.length == 0
 
     surgical_event_ids.each do |surgical_event_id|
-      variant_reports_dbm = NciMatchPatientModels::VariantReport.query_by_surgical_event_id(surgical_event_id, false).collect {|r| r}
-      variant_reports << variant_reports_dbm
+      dbos = NciMatchPatientModels::VariantReport.find_by({})
+
+      p "==================== got something: #{dbos.nil?}"
+      # variant_reports_dbm = NciMatchPatientModels::VariantReport.query_by_surgical_event_id(surgical_event_id, false).collect {|r| r}
+      # variant_reports << variant_reports_dbm
     end
 
     variant_reports
