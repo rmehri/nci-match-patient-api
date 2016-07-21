@@ -35,6 +35,7 @@ class ServicesController < ApplicationController
     AppLogger.log(self.class.name, "Validting messesage of type [#{message_type}]")
 
     message_type = {message_type => message}
+    p message_type
     result = StateMachine.validate(message_type)
 
     if result != 'true'
