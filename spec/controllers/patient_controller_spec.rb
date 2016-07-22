@@ -205,7 +205,7 @@ describe PatientsController do
     get :patient, :patientid => "2222"
 
     expect(response).to have_http_status(500)
-    expect(response.body).to include "An Error"
+    expect(response.body).to include "Failure"
   end
 
   it "GET /patients/1/timeline to return json patient timeline" do
