@@ -8,10 +8,13 @@ module MessageValidator
           "properties" => {
               "specimen_received" => {
                   "type" => "object",
-                  "required" => ["patient_id", "study_id", "type"],
+                  "required" => ["patient_id", "surgical_event_id", "study_id", "type"],
                   "properties" => {
+                      "study_id" => {"type" => "string", "minLength" => 1,
+                                     "enum" => ["APEC1621"]},
                       "patient_id" => {"type" => "string", "minLength" => 1},
-                      "type" => {"type" => "string", "minLength" => 1, "enum" => ["BLOOD", "TISSUE"]}
+                      "type" => {"type" => "string", "minLength" => 1, "enum" => ["BLOOD", "TISSUE"]},
+                      "surgical_event_id" => {"type" => "string", "minLength" => 1}
                   }
               }
           }
