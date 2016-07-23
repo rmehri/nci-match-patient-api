@@ -1,7 +1,7 @@
 module Convert
 
   class PatientDbModel
-    def self.to_ui_model(patient_dbm, events_dbm, variant_reports_dbm, variants_dbm, specimens_dbm)
+    def self.to_ui_model(patient_dbm, variant_reports_dbm, variants_dbm, specimens_dbm)
       uiModel = PatientUiModel.new
 
       uiModel.patient_id           = patient_dbm.patient_id
@@ -19,13 +19,9 @@ module Convert
       uiModel.documents            = patient_dbm.documents
       uiModel.message              = patient_dbm.message
 
-      if events_dbm != nil && events_dbm.length > 0
-        uiModel.timeline = events_dbm.map { |e_dbm| e_dbm.data_to_h }
-      end
 
       if variant_reports_dbm != nil && variant_reports_dbm.length > 0
-        uiModel.variant_reports = variant_reports_dbm
-        # uiModel.variant_reports = to_ui_variant_report(variant_reports_dbm, nil)
+        uiModel.variant_reports = to_ui_variant_reports(variant_reports_dbm, variants_dbm)
       end
 
       if patient_dbm.current_assignment != nil
@@ -52,6 +48,52 @@ module Convert
           "text" => dbm.surgical_event_id,
           "variant_report_received_date" => dbm.variant_report_received_date
       }
+    end
+
+    def self.to_ui_variant_reports(variant_reports_dbm, variants_dbm)
+      variant_reports_ui = []
+      variant_reports_dbm.each do |variant_report_dbm|
+        variant_report_ui = to_ui_variant_report(variant_report_dbm)
+
+        variants_dbm_for_report = select_variants_for_variant_report(variants_dbm,
+                                                                     variant_report_dbm.molecular_id,
+                                                                     variant_report_dbm.analysis_id)
+
+        variants_ui = to_ui_variants_by_variant_type(variants_dbm_for_report)
+        variant_report_ui['variants'] = variants_ui
+
+        total_mois = 0
+        total_amois = 0
+        total_confirmed_mois = 0
+        total_confirmed_amoi = 0
+
+        variants_dbm_for_report.each do | variant_dbm |
+          total_mois += 1
+          total_amois += 1 if variant_dbm.is_amois
+          total_confirmed_mois += 1 if (variant_dbm.status == "CONFIRMED")
+          total_confirmed_amois +=1 if (variant_dbm.status == "CONFIRMED" && variant_dbm.is_amois)
+        end
+
+        variant_report_ui['total_mois']  = total_mois
+        variant_report_ui['total_amois']  = total_amois
+        variant_report_ui['total_confirmed_mois']  = total_confirmed_mois
+        variant_report_ui['total_confirmed_amois']  = total_confirmed_amoi
+
+        variant_reports_ui.push(variant_report_ui)
+      end
+
+      variant_reports_ui
+    end
+
+    def self.select_variants_for_variant_report(variants_dbm, molecular_id, analysis_id)
+      variants_dbm_for_report = []
+      if (variants_dbm != nil)
+        variants_dbm_for_report = variants_dbm
+            .select {|v| (v.molecular_id == molecular_id && v.analysis_id == analysis_id)}
+      end
+
+      AppLogger.log_debug(self.class.name, "Variant report [#{molecular_id} | #{analysis_id}] has #{variants_dbm_for_report.length} variants")
+      variants_dbm_for_report
     end
 
     def self.to_ui_variant_report(report_dbm)
@@ -86,7 +128,21 @@ module Convert
       report
     end
 
+    def self.to_ui_variants_by_variant_type(variants_dbm)
+      variants_ui_snv = query_variants(variants_dbm, "single_nucleotide_variants")
+      variants_ui_indels = query_variants(variants_dbm, "indels")
+
+      variants = {
+          "snvs_and_indels"            => variants_ui_snv.push(*variants_ui_indels),
+          "copy_number_variants"         => query_variants(variants_dbm, "copy_number_variants"),
+          "gene_fusions"                => query_variants(variants_dbm, "unified_gene_fusions")
+      }
+      variants
+    end
+
     def self.to_ui_variants(variants_dbm)
+
+
       variants = {
                 "single_nucleitide_variants" => query_variants(variants_dbm, "single_nucleotide_variants"),
                 "indels"                     => query_variants(variants_dbm, "indels"),

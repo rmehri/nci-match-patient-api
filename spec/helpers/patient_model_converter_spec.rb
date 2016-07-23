@@ -211,7 +211,7 @@ describe Convert do
   it "works with patient DB models" do
     dbm = patient_db_model
 
-    uim = Convert::PatientDbModel.to_ui_model dbm, nil, nil, nil, nil
+    uim = Convert::PatientDbModel.to_ui_model dbm, nil, nil, nil
 
     expect(uim.patient_id).to eq "PAT123"
     expect(uim.gender).to eq "MALE"
@@ -232,69 +232,36 @@ describe Convert do
 
   end
 
-  it "works with timeline DB models" do
-    patient_dbm = patient_db_model
-    events_dbm = events_db_model_list
-
-    uim = Convert::PatientDbModel.to_ui_model patient_dbm, events_dbm, nil, nil, nil
-
-    expect(uim).to_not eq nil
-
-    expect(uim.timeline).to_not eq nil
-    expect(uim.timeline.size).to eq events_dbm.size
-    expect(uim.timeline[0]["event_name"]).to eq "Event Name 1"
-    expect(uim.timeline[1]["event_data"]["status"]).to eq "Pending"
-
-  end
-
-  # it "works with variant report selector DB models" do
-  #   patient_dbm = patient_db_model
-  #   variant_reports_dbm = variant_report_db_model_list
-  #
-  #   uim = Convert::PatientDbModel.to_ui_model patient_dbm, nil, variant_reports_dbm, nil, nil
-  #
-  #   expect(uim).to_not eq nil
-  #
-  #   expect(uim.variant_report_selectors).to_not eq nil
-  #   expect(uim.variant_report_selectors.size).to eq variant_reports_dbm.size
-  #   expect(uim.variant_report_selectors[0]["text"]).to eq "SUREVT0981"
-  #   expect(uim.variant_report_selectors[1]["variant_report_received_date"]).to eq "2016-05-09T22:06:33+00:00"
-  #
-  # end
-
   it "works with variant report DB model" do
     patient_dbm = patient_db_model
     variant_reports_dbm = variant_report_db_model_list
     variants_dbm = variant_db_model_list
 
-    uim = Convert::PatientDbModel.to_ui_model patient_dbm, nil, variant_reports_dbm, variants_dbm, nil
+    uim = Convert::PatientDbModel.to_ui_model patient_dbm, variant_reports_dbm, variants_dbm, nil
 
     expect(uim).to_not eq nil
 
     expect(uim.variant_reports).to_not eq nil
 
-    expect(uim.variant_reports["surgical_event_id"]).to eq "SUREVT0982"
-    expect(uim.variant_reports["patient_id"]).to eq "PAT1232"
-    expect(uim.variant_reports["molecular_id"]).to eq "MOL1232"
-    expect(uim.variant_reports["analysis_id"]).to eq "SAM1232"
+    expect(uim.variant_reports[1]["surgical_event_id"]).to eq "SUREVT0982"
+    expect(uim.variant_reports[1]["patient_id"]).to eq "PAT1232"
+    expect(uim.variant_reports[1]["molecular_id"]).to eq "MOL1232"
+    expect(uim.variant_reports[1]["analysis_id"]).to eq "SAM1232"
 
-    expect(uim.variant_reports["variants"]).to_not eq nil
+    expect(uim.variant_reports[1]["variants"]).to_not eq nil
 
-    expect(uim.variant_reports["variants"]["single_nucleitide_variants"]).to_not eq nil
-    expect(uim.variant_reports["variants"]["indels"]).to_not eq nil
-    expect(uim.variant_reports["variants"]["copyNumberVariants"]).to_not eq nil
-    expect(uim.variant_reports["variants"]["geneFusions"]).to_not eq nil
+    expect(uim.variant_reports[1]["variants"]["snvs_and_indels"]).to_not eq nil
+    expect(uim.variant_reports[1]["variants"]["copy_number_variants"]).to_not eq nil
+    expect(uim.variant_reports[1]["variants"]["gene_fusions"]).to_not eq nil
 
-    expect(uim.variant_reports["variants"]["single_nucleitide_variants"]).to be_kind_of Array
-
-    expect(uim.variant_reports["variants"]["single_nucleitide_variants"][0]["gene_name"]).to eq "gene"
+    expect(uim.variant_reports[1]["variants"]["snvs_and_indels"]).to be_kind_of Array
 
   end
 
   it "works with assignment report" do
     dbm = patient_db_model(assignment_report)
 
-    uim = Convert::PatientDbModel.to_ui_model dbm, nil, nil, nil, nil
+    uim = Convert::PatientDbModel.to_ui_model dbm, nil, nil, nil
 
     expect(uim).to_not eq nil
 
@@ -314,7 +281,7 @@ describe Convert do
     patient_dbm = patient_db_model
     specimens_dbm = specimen_db_model_list
 
-    uim = Convert::PatientDbModel.to_ui_model patient_dbm, nil, nil, nil, specimens_dbm
+    uim = Convert::PatientDbModel.to_ui_model patient_dbm, nil, nil, specimens_dbm
 
     expect(uim).to_not eq nil
 
@@ -326,17 +293,15 @@ describe Convert do
 
   it "works with entire DB model" do
     patient_dbm = patient_db_model(assignment_report)
-    events_dbm = events_db_model_list
+    # events_dbm = events_db_model_list
     variant_reports_dbm = variant_report_db_model_list
     variants_dbm = variant_db_model_list
     specimens_dbm = specimen_db_model_list
 
-    uim = Convert::PatientDbModel.to_ui_model patient_dbm, events_dbm, variant_reports_dbm, variants_dbm, specimens_dbm
+    uim = Convert::PatientDbModel.to_ui_model patient_dbm, variant_reports_dbm, variants_dbm, specimens_dbm
 
     expect(uim).to_not eq nil
     expect(uim.assignment_report).to_not eq nil
-    expect(uim.timeline).to_not eq nil
-    # expect(uim.variant_report_selectors).to_not eq nil
     expect(uim.variant_reports).to_not eq nil
     expect(uim.specimens).to_not eq nil
 
