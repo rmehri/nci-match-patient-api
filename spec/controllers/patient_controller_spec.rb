@@ -209,7 +209,7 @@ describe PatientsController do
   end
 
   it "GET /patients/1/timeline to return json patient timeline" do
-    allow(NciMatchPatientModels::Event).to receive(:scan).and_return([patient_event_dbm])
+    allow(NciMatchPatientModels::Event).to receive(:query).and_return([patient_event_dbm])
 
     get :timeline, :patientid => "1", format: :json
 
