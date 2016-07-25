@@ -8,6 +8,9 @@ development:
   read_capacity_units: "30"
   write_capacity_units: "30"
 
+  patient_state_api: "http://localhost:10241/"
+  patient_processor: "http://localhost:10242"
+
 test:
   aws_dynamo_endpoint: "http://localhost:8000"
   aws_region: "us-east-1"
@@ -17,6 +20,9 @@ test:
   # dynamodb setting
   read_capacity_units: "5"
   write_capacity_units: "5"
+
+  patient_state_api: "http://pedmatch.org:10241/"
+  patient_processor: "http://localhost:10242"
 
 uat:
   aws_dynamo_endpoint: "https://dynamodb.us-east-1.amazonaws.com"
@@ -29,6 +35,9 @@ uat:
   read_capacity_units: "5"
   write_capacity_units: "5"
 
+  patient_state_api: "http://pedmatch.org:10241/"
+  patient_processor: "http://localhost:10242"
+
 production:
   aws_dynamo_endpoint: "https://dynamodb.us-east-1.amazonaws.com"
   aws_region: "us-east-1"
@@ -39,3 +48,6 @@ production:
   # dynamodb setting
   read_capacity_units: "5"
   write_capacity_units: "5"
+
+  patient_state_api: "http://pedmatch.org:10241/"
+  patient_processor: "http://localhost:10242"

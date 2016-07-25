@@ -1,6 +1,6 @@
 class StateMachine
   include HTTParty
-  base_uri 'localhost:10241'
+  base_uri "#{ENV['patient_state_api']}"
 
   def self.validate(message)
     begin

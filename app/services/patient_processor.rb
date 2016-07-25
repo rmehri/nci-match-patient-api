@@ -1,7 +1,7 @@
 
 class PatientProcessor
   include HTTParty
-  base_uri 'localhost:10242'
+  base_uri "#{ENV['patient_processor']}"
 
   def self.validate(message)
     begin
