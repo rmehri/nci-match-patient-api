@@ -115,9 +115,7 @@ describe Convert do
         :allele_frequency => "0.0344",
         :flow_alternative_allele_observation_count => "alt obs",
         :flow_reference_allele_observation => "alt allele",
-        :reference_allele_observation => "ref allele",
-        :inclusion => "inlc",
-        :arm_specific => "arm spec"
+        :reference_allele_observation => "ref allele"
       )
     }
   end
