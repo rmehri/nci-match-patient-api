@@ -184,7 +184,12 @@ class PatientsController < ApplicationController
     variant_reports_dbm_for_patient = []
 
     surgical_event_ids.each do | surgical_event_id |
+      #TODO: BLOOD variant report doesn't have surgical event id. Need to handle differently
+      next if surgical_event_id.nil?
       variant_reports_dbm = NciMatchPatientModels::VariantReport.query_by_surgical_event_id(surgical_event_id, false).collect {|r| r}
+
+      #TODO: do find_by for BLOOD variant reports?
+
       AppLogger.log_debug(self.class.name, "Specimen [#{surgical_event_id}] has #{variant_reports_dbm.length} variant reports")
       variant_reports_dbm_for_patient.push(*variant_reports_dbm)
     end

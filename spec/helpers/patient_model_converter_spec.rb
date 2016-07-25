@@ -95,7 +95,7 @@ describe Convert do
         :molecular_id => "MOL098" + i.to_s,
         :analysis_id => "ANZ9876" + i.to_s,
         :variant_id => "VAR9876" + i.to_s,
-        :status => "CONFIRMED",
+        :confirmed => true,
         :status_date => "2016-06-09T22:06:33+00:00",
         :comment => "Don't need this",
         :gene_name => "gene",

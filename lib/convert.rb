@@ -70,8 +70,8 @@ module Convert
         variants_dbm_for_report.each do | variant_dbm |
           total_mois += 1
           total_amois += 1 if variant_dbm.is_amois
-          total_confirmed_mois += 1 if (variant_dbm.status == "CONFIRMED")
-          total_confirmed_amois +=1 if (variant_dbm.status == "CONFIRMED" && variant_dbm.is_amois)
+          total_confirmed_mois += 1 if (variant_dbm.confirmed)
+          total_confirmed_amois +=1 if (variant_dbm.confirmed && variant_dbm.is_amois)
         end
 
         variant_report_ui['total_mois']  = total_mois
@@ -112,18 +112,6 @@ module Convert
           "rna_bai_file_path"            => report_dbm.rna_bai_path_name,
           "vcf_path"                     => report_dbm.vcf_path_name,
           "s3_bucket"                    => report_dbm.s3_bucket
-          # "total_variants"               => report_dbm.total_variants,
-          # "cellularity"                  => report_dbm.cellularity,
-          # "total_mois"                   => report_dbm.total_mois,
-          # "total_amois"                  => report_dbm.total_amois,
-          # "total_confirmed_mois"         => report_dbm.total_confirmed_mois,
-          # "total_confirmed_amois"        => report_dbm.total_confirmed_amois,
-          # "variants"                     => {
-          #     "single_nucleitide_variants" => query_variants(variants_dbm, "single_nucleitide_variants"),
-          #     "indels"                     => query_variants(variants_dbm, "indels"),
-          #     "copyNumberVariants"         => query_variants(variants_dbm, "copyNumberVariants"),
-          #     "geneFusions"                => query_variants(variants_dbm, "geneFusions")
-          # }
       }
       report
     end
