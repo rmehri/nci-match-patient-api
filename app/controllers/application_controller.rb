@@ -9,7 +9,8 @@ class ApplicationController < ActionController::Base
   end
 
   def standard_error_message(error_message, error_code=500)
+
     AppLogger.log_error(self.class.name, error_message)
-    render :json => {:message => error_message}, :status => error_code
+    render status: error_code, json: {:message => error_message}
   end
 end

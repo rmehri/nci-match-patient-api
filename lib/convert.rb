@@ -52,6 +52,7 @@ module Convert
 
     def self.to_ui_variant_reports(variant_reports_dbm, variants_dbm)
       variant_reports_ui = []
+
       variant_reports_dbm.each do |variant_report_dbm|
         variant_report_ui = to_ui_variant_report(variant_report_dbm)
 

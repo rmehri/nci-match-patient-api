@@ -6,7 +6,7 @@ class PatientsController < ApplicationController
     begin
       render json: NciMatchPatientModels::Patient.scan({}).collect { |data| data.to_h }
     rescue => error
-      standard_error_message(error)
+      standard_error_message(error.message)
     end
   end
 
@@ -45,7 +45,7 @@ class PatientsController < ApplicationController
       standard_success_message(JSON.parse(response_json)['message'])
 
     rescue => error
-      standard_error_message(error)
+      standard_error_message(error.message)
     end
 
   end
@@ -110,30 +110,29 @@ class PatientsController < ApplicationController
       events = events_dbm.map { |e_dbm| e_dbm.data_to_h }
       render json: events
     rescue => error
-      standard_error_message(error)
+      standard_error_message(error.message)
     end
   end
 
-  def render_patient_data(patientid)
+  def render_patient_data(patient_id)
     begin
 
-      patient_dbm = NciMatchPatientModels::Patient.query_patient_by_id(patientid)
-      raise "Unable to find patient #{patientid}" if patient_dbm.nil?
+      patient_dbm = NciMatchPatientModels::Patient.query_patient_by_id(patient_id)
+      raise "Unable to find patient #{patient_id}" if patient_dbm.nil?
 
-      AppLogger.log_debug(self.class.name, "Found patient [#{patientid}]")
+      AppLogger.log_debug(self.class.name, "Found patient [#{patient_id}]")
 
-      specimens_dbm = NciMatchPatientModels::Specimen.query_specimens_by_patient_id(patientid, false).collect {|r| r}
-      AppLogger.log_debug(self.class.name, "Got #{specimens_dbm.length} specimens for patient [#{patientid}]")
+      specimens_dbm = NciMatchPatientModels::Specimen.query_specimens_by_patient_id(patient_id, false).collect {|r| r}
+      AppLogger.log_debug(self.class.name, "Got #{specimens_dbm.length} specimens for patient [#{patient_id}]")
 
-      surgical_event_ids = specimens_dbm.map {|s| s.surgical_event_id}
-      variant_reports_dbm = get_variant_reports(surgical_event_ids)
+      variant_reports_dbm = get_variant_reports(patient_id)
       variants_dbm = get_variants_for_reports(variant_reports_dbm)
 
       uim = Convert::PatientDbModel.to_ui_model patient_dbm, variant_reports_dbm, variants_dbm, specimens_dbm
       render json: uim
 
     rescue => error
-      standard_error_message(error)
+      standard_error_message(error.message)
     end
   end
 
@@ -188,28 +187,18 @@ class PatientsController < ApplicationController
     end
   end
 
-  def get_variant_reports(surgical_event_ids)
-    variant_reports_dbm_for_patient = []
+  def get_variant_reports(patient_id)
 
-    surgical_event_ids.each do | surgical_event_id |
-      #TODO: BLOOD variant report doesn't have surgical event id. Need to handle differently
-      next if surgical_event_id.nil?
-      variant_reports_dbm = NciMatchPatientModels::VariantReport.query_by_surgical_event_id(surgical_event_id, false).collect {|r| r}
+    variant_reports_dbm = NciMatchPatientModels::VariantReport.query_by_patient_id(patient_id, false).collect {|r| r}
 
-      #TODO: do find_by for BLOOD variant reports?
-
-      AppLogger.log_debug(self.class.name, "Specimen [#{surgical_event_id}] has #{variant_reports_dbm.length} variant reports")
-      variant_reports_dbm_for_patient.push(*variant_reports_dbm)
-    end
-
-    AppLogger.log_debug(self.class.name, "Patient has a total of #{variant_reports_dbm_for_patient.length} variant reports")
-    variant_reports_dbm_for_patient
+    AppLogger.log_debug(self.class.name, "Patient [#{patient_id}] has #{variant_reports_dbm.length} variant reports")
+    variant_reports_dbm
   end
 
   def get_variants_for_reports(variant_reports_dbm)
     variants_dbm = []
     variant_reports_dbm.each do |variant_report_dbm|
-      variants = NciMatchPatientModels::Variant.find_by({"surgical_event_id" => variant_report_dbm.surgical_event_id,
+      variants = NciMatchPatientModels::Variant.find_by({"patient_id" => variant_report_dbm.patient_id,
                                                          "molecular_id" => variant_report_dbm.molecular_id,
                                                          "analysis_id" => variant_report_dbm.analysis_id}).collect {|r| r}
       variants_dbm.push(*variants)
