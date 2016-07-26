@@ -4,8 +4,12 @@ class ApplicationController < ActionController::Base
   # protect_from_forgery with: :exception
 
   protected
-  def standard_error_message(error)
-    AppLogger.log_error(ApplicationController, error.message)
-    render :json => {:status => "Failure" ,:message => error.message}, :status => 500
+  def standard_success_message(message)
+    render :json => {:message => message}, :status => 200
+  end
+
+  def standard_error_message(error_message, error_code=500)
+    AppLogger.log_error(self.class.name, error_message)
+    render :json => {:message => error_message}, :status => error_code
   end
 end

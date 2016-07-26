@@ -205,7 +205,7 @@ describe PatientsController do
     get :patient, :patientid => "2222"
 
     expect(response).to have_http_status(500)
-    expect(response.body).to include "Failure"
+    expect(response.body).to include "message"
   end
 
   it "GET /patients/1/timeline to return json patient timeline" do
@@ -239,13 +239,30 @@ describe PatientsController do
     }.to_not raise_error
   end
 
+  let(:variant_status_message) do
+    {
+        "variant_uuid" => "e18e2bd6-b4e7-4375-99bd-c14df7d51f83",
+        "confirmed" => "true",
+        "comment" => "I here confirm this variant"
+    }.to_json
+  end
+  let(:variant_status_response) do
+    {
+        "message" => "success"
+    }.to_json
+  end
   it "PUT /patients/1/variantStatus" do
-    # route_to(:controller => "patients", :action => "variant_status", :patientid => "1")
-    # put :variant_status, :patientid => "1"
-    #
-    # expect {
-    #   JSON.parse(response.body)
-    # }.to_not raise_error
+
+    allow(HTTParty::Request).to receive(:new).and_return(HTTParty::Request)
+    allow(HTTParty::Response).to receive(:new).and_return(HTTParty::Response)
+    allow(HTTParty::Request).to receive(:perform).and_return(HTTParty::Response)
+    allow(HTTParty::Response).to receive(:body).and_return(variant_status_response)
+
+    put :variant_status, variant_status_message, :patientid => "1"
+
+    expect(response).to have_http_status(200)
+    expect(response.body).to include "message"
+
   end
 
   it "PUT /patients/1/variantReportStatus" do

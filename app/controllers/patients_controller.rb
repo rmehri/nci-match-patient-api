@@ -37,9 +37,17 @@ class PatientsController < ApplicationController
 
   # PUT /patients/:patientid/variantStatus
   def variant_status
-    input_data = get_post_data
-    p "===================== #{input_data}"
-    render status: 200, json: '{"test":"test"}'
+    begin
+      input_data = get_post_data
+      response_json = PatientProcessor.run_service("/confirm_variant", input_data)
+
+      AppLogger.log(self.class.name, "\nResponse from Patient Process: #{response_json}")
+      standard_success_message(JSON.parse(response_json)['message'])
+
+    rescue => error
+      standard_error_message(error)
+    end
+
   end
 
   # PUT /patients/:patientid/variantReportStatus
@@ -155,14 +163,14 @@ class PatientsController < ApplicationController
 
   def get_post_data
     json_data = JSON.parse(request.raw_post)
-    Rails.logger.debug "Got message: #{json_data.to_json}"
+    AppLogger.log_debug(self.class.name, "Patient API received message: #{json_data.to_json}")
     json_data.deep_transform_keys!(&:underscore).symbolize_keys!
     json_data
   end
 
   def validate_and_queue(*message_type)
 
-    Rails.logger.debug "Message_type val: #{message_type}"
+    AppLogger.log_debug(self.class.name, "Message_type val: #{message_type}")
 
     message = get_post_data
     message_type = {message_type[-1][-1] => message}
