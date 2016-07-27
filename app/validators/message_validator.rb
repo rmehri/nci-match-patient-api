@@ -6,6 +6,7 @@ module MessageValidator
   autoload :AssayValidator,                'assay_validator'
   autoload :PathologyValidator,            'pathology_validator'
   autoload :VariantValidator,              'variant_validator'
+  autoload :VariantReportStatusValidator,  'variant_report_status_validator'
 
   class << self
     cattr_reader :schema
@@ -24,6 +25,8 @@ module MessageValidator
       type = "Assay"
     elsif (!message[:message].nil? && message[:message].start_with?("PATHOLOGY"))
       type = "Pathology"
+    elsif (!message[:status].nil? && (message[:status] == 'CONFIRMED' || message[:status] == 'REJECTED'))
+      type = "VariantReportStatus"
     elsif (!message[:analysis_id].nil?)
       type = "Variant"
     end
