@@ -16,9 +16,9 @@ class ServicesController < ApplicationController
       status = validate_patient_state(message, type)
       raise "Incoming message failed patient state validation" if (status == false)
 
-      render status: 200, json: '{"status" : "Success", "message" :"Message has been processed successfully"}'
+      standard_success_message("Message has been processed successfully")
     rescue => error
-      standard_error_message(error)
+      standard_error_message(error.message)
     end
 
   end
