@@ -29,7 +29,7 @@ inttest:
   aws_region_dynamo: "us-east-1"
   aws_region: "us-east-1"
 
-  queue_name: "patient_inttest"
+  queue_name: "patient_test"
 
   # dynamodb setting
   read_capacity_units: "5"
