@@ -143,10 +143,13 @@ class PatientsController < ApplicationController
       specimens_dbm = NciMatchPatientModels::Specimen.query_specimens_by_patient_id(patient_id, false).collect {|r| r}
       AppLogger.log_debug(self.class.name, "Got #{specimens_dbm.length} specimens for patient [#{patient_id}]")
 
+      shipments_dbm = NciMatchPatientModels::Shipment.find_by({"patient_id" => patient_id}).collect {|r| r}
+      AppLogger.log_debug(self.class.name, "Found #{shipments_dbm.length} total shipments for patient [#{patient_id}]")
+
       variant_reports_dbm = get_variant_reports(patient_id)
       variants_dbm = get_variants_for_reports(variant_reports_dbm)
 
-      uim = Convert::PatientDbModel.to_ui_model patient_dbm, variant_reports_dbm, variants_dbm, specimens_dbm
+      uim = Convert::PatientDbModel.to_ui_model patient_dbm, variant_reports_dbm, variants_dbm, specimens_dbm, shipments_dbm
       render json: uim
 
     rescue => error

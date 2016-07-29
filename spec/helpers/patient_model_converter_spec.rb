@@ -209,7 +209,7 @@ describe Convert do
   it "works with patient DB models" do
     dbm = patient_db_model
 
-    uim = Convert::PatientDbModel.to_ui_model dbm, nil, nil, nil
+    uim = Convert::PatientDbModel.to_ui_model dbm, nil, nil, nil, nil
 
     expect(uim.patient_id).to eq "PAT123"
     expect(uim.gender).to eq "MALE"
@@ -235,7 +235,7 @@ describe Convert do
     variant_reports_dbm = variant_report_db_model_list
     variants_dbm = variant_db_model_list
 
-    uim = Convert::PatientDbModel.to_ui_model patient_dbm, variant_reports_dbm, variants_dbm, nil
+    uim = Convert::PatientDbModel.to_ui_model patient_dbm, variant_reports_dbm, variants_dbm, nil, nil
 
     expect(uim).to_not eq nil
 
@@ -259,7 +259,7 @@ describe Convert do
   it "works with assignment report" do
     dbm = patient_db_model(assignment_report)
 
-    uim = Convert::PatientDbModel.to_ui_model dbm, nil, nil, nil
+    uim = Convert::PatientDbModel.to_ui_model dbm, nil, nil, nil, nil
 
     expect(uim).to_not eq nil
 
@@ -279,7 +279,7 @@ describe Convert do
     patient_dbm = patient_db_model
     specimens_dbm = specimen_db_model_list
 
-    uim = Convert::PatientDbModel.to_ui_model patient_dbm, nil, nil, specimens_dbm
+    uim = Convert::PatientDbModel.to_ui_model patient_dbm, nil, nil, specimens_dbm, []
 
     expect(uim).to_not eq nil
 
@@ -288,7 +288,6 @@ describe Convert do
 
   end
 
-
   it "works with entire DB model" do
     patient_dbm = patient_db_model(assignment_report)
     # events_dbm = events_db_model_list
@@ -296,7 +295,7 @@ describe Convert do
     variants_dbm = variant_db_model_list
     specimens_dbm = specimen_db_model_list
 
-    uim = Convert::PatientDbModel.to_ui_model patient_dbm, variant_reports_dbm, variants_dbm, specimens_dbm
+    uim = Convert::PatientDbModel.to_ui_model patient_dbm, variant_reports_dbm, variants_dbm, specimens_dbm, []
 
     expect(uim).to_not eq nil
     expect(uim.assignment_report).to_not eq nil

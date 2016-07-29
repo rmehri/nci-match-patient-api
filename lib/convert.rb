@@ -1,7 +1,7 @@
 module Convert
 
   class PatientDbModel
-    def self.to_ui_model(patient_dbm, variant_reports_dbm, variants_dbm, specimens_dbm)
+    def self.to_ui_model(patient_dbm, variant_reports_dbm, variants_dbm, specimens_dbm, shipments_dbm)
       uiModel = PatientUiModel.new
 
       uiModel.patient_id           = patient_dbm.patient_id
@@ -29,9 +29,7 @@ module Convert
       end
 
       if specimens_dbm != nil && specimens_dbm.length > 0
-        # uiModel.specimen_selectors = specimens_dbm.map { |s_dbm| to_ui_specimen_selector s_dbm }
-        # uiModel.specimen = specimens_dbm[specimens_dbm.length - 1].data_to_h
-        uiModel.specimens = specimens_dbm.map { |s_dbm| s_dbm.data_to_h }
+        uiModel.specimens = to_ui_specimens(specimens_dbm, shipments_dbm)
       end
 
       return uiModel
@@ -39,15 +37,37 @@ module Convert
 
     private
 
-    def self.to_ui_specimen_selector(dbm)
-      {"text" => dbm.surgical_event_id, "collected_date" => dbm.collected_date}
-    end
+    # def self.to_ui_specimen_selector(dbm)
+    #   {"text" => dbm.surgical_event_id, "collected_date" => dbm.collected_date}
+    # end
+    #
+    # def self.to_ui_variant_report_selector(dbm)
+    #   {
+    #       "text" => dbm.surgical_event_id,
+    #       "variant_report_received_date" => dbm.variant_report_received_date
+    #   }
+    # end
 
-    def self.to_ui_variant_report_selector(dbm)
-      {
-          "text" => dbm.surgical_event_id,
-          "variant_report_received_date" => dbm.variant_report_received_date
-      }
+    def self.to_ui_specimens(specimens_dbm, shipments_dbm)
+      specimens_ui = []
+
+      specimens_dbm.each do | specimen_dbm |
+        specimen_ui = specimen_dbm.data_to_h
+
+        specimen_shipments_dbm = []
+        if (specimen_dbm.type == 'TISSUE')
+          specimen_shipments_dbm = shipments_dbm
+              .select {|v| (v.surgical_event_id == specimen_dbm.surgical_event_id)}
+        else
+          specimen_shipments_dbm = shipments_dbm
+                                       .select {|v| (v.type == 'BLOOD_DNA')}
+        end
+
+        specimen_ui['specimen_shipments'] = specimen_shipments_dbm.map { |shipment_dbm| shipment_dbm.data_to_h }
+        specimens_ui.push(specimen_ui)
+      end
+
+      specimens_ui
     end
 
     def self.to_ui_variant_reports(variant_reports_dbm, variants_dbm)
