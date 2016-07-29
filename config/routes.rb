@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   end
 
   controller :patients do
+    get 'timeline' => :timeline
+
     get 'patients' => :patient_list
     get "patients/:patientid" => :patient
     get "patients/:patientid/timeline" => :timeline
