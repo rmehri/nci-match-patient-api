@@ -10,6 +10,12 @@ class PatientsController < ApplicationController
     end
   end
 
+
+  # GET /timeline
+  def timeline
+    render_event_data
+  end
+
   # GET /patients/1/timeline
   def timeline
     render_event_patient_data [params[:patientid]]
@@ -99,6 +105,18 @@ class PatientsController < ApplicationController
     rescue => error2
       p error2
       raise
+    end
+  end
+
+  def render_event_data()
+    begin
+      events_dbm = NciMatchPatientModels::Event.scan({limit: 10}).collect {|r| r}
+      AppLogger.log_debug(self.class.name, "Got 10 events for dashboard") if !events_dbm.nil?
+
+      events = events_dbm.map { |e_dbm| e_dbm.data_to_h }
+      render json: events
+    rescue => error
+      standard_error_message(error.message)
     end
   end
 
