@@ -1,10 +1,11 @@
 aws dynamodb list-tables --endpoint-url http://localhost:8000
 
-aws dynamodb scan --endpoint-url http://localhost:8000 --table-name patient_development
+aws dynamodb scan --endpoint-url http://localhost:8000 --table-name patient
 
-aws dynamodb delete-table --endpoint-url http://localhost:8000 --table-name variant_development
-aws dynamodb delete-table --endpoint-url http://localhost:8000 --table-name variant_report_development
-aws dynamodb delete-table --endpoint-url http://localhost:8000 --table-name patient_development
-aws dynamodb delete-table --endpoint-url http://localhost:8000 --table-name patient_event_development
-aws dynamodb delete-table --endpoint-url http://localhost:8000 --table-name specimen_development
-aws dynamodb delete-table --endpoint-url http://localhost:8000 --table-name biopsy_development
+aws dynamodb delete-table --endpoint-url http://localhost:8000 --table-name event
+aws dynamodb delete-table --endpoint-url http://localhost:8000 --table-name patient
+aws dynamodb delete-table --endpoint-url http://localhost:8000 --table-name shipment
+aws dynamodb delete-table --endpoint-url http://localhost:8000 --table-name specimen
+aws dynamodb delete-table --endpoint-url http://localhost:8000 --table-name variant
+aws dynamodb delete-table --endpoint-url http://localhost:8000 --table-name variant_report
+aws dynamodb list-tables --endpoint-url http://localhost:8000
