@@ -6,6 +6,8 @@ module ModelConfig
     configure_table NciMatchPatientModels::Variant
     configure_table NciMatchPatientModels::VariantReport
     configure_table NciMatchPatientModels::Specimen
+    configure_table NciMatchPatientModels::Shipment
+    configure_table NciMatchPatientModels::Assignment
 
     if (!Rails.env.to_s.start_with?("test"))
       ensure_table NciMatchPatientModels::Patient
@@ -13,6 +15,8 @@ module ModelConfig
       ensure_table NciMatchPatientModels::Variant
       ensure_table NciMatchPatientModels::VariantReport
       ensure_table NciMatchPatientModels::Specimen
+      ensure_table NciMatchPatientModels::Shipment
+      ensure_table NciMatchPatientModels::Assignment
     end
 
   end
