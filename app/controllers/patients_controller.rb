@@ -122,7 +122,7 @@ class PatientsController < ApplicationController
 
   def render_event_patient_data(patientid)
     begin
-      events_dbm = NciMatchPatientModels::Event.query_events_by_id(patientid[0], false).collect {|r| r}
+      events_dbm = NciMatchPatientModels::Event.query_events_by_entity_id(patientid[0], false).collect {|r| r}
       AppLogger.log_debug(self.class.name, "Got #{events_dbm.count} events for patient #{patientid[0]}") if !events_dbm.nil?
 
       events = events_dbm.map { |e_dbm| e_dbm.data_to_h }
