@@ -7,5 +7,6 @@ aws dynamodb delete-table --endpoint-url http://localhost:8000 --table-name pati
 aws dynamodb delete-table --endpoint-url http://localhost:8000 --table-name shipment
 aws dynamodb delete-table --endpoint-url http://localhost:8000 --table-name specimen
 aws dynamodb delete-table --endpoint-url http://localhost:8000 --table-name variant
+aws dynamodb delete-table --endpoint-url http://localhost:8000 --table-name assignment
 aws dynamodb delete-table --endpoint-url http://localhost:8000 --table-name variant_report
 aws dynamodb list-tables --endpoint-url http://localhost:8000
