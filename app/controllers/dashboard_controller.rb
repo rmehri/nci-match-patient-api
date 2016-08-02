@@ -26,4 +26,30 @@ class DashboardController < ApplicationController
     end
   end
 
+  # GET /dashboard/patientStatistics
+  def patient_statistics
+    begin
+      stats = '{ 
+  "number_of_patients": "14",
+  "number_of_screened_patients": "12",
+  "number_of_patients_with_treatment": "11"
+}'
+      render json: stats
+    rescue => error
+      standard_error_message(error.message)
+    end
+  end
+
+  # GET /dashboard/sequencedAndConfirmedPatients
+  def sequenced_and_confirmed_patients
+    begin
+      stats = '{
+  "aMoiValues": [5, 10, 20, 30, 30, 50]
+}'
+      render json: stats
+    rescue => error
+      standard_error_message(error.message)
+    end
+  end
+
 end

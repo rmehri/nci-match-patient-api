@@ -31,6 +31,8 @@ Rails.application.routes.draw do
   controller :dashboard do
     get "dashboard/pendingVariantReports/:type" => :pending_variant_reports
     get "dashboard/pendingAssignmentReports" => :pending_assignment_reports
+    get "dashboard/patientStatistics" => :patient_statistics
+    get "dashboard/sequencedAndConfirmedPatients" => :sequenced_and_confirmed_patients
   end
   
 end
