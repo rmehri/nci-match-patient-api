@@ -12,13 +12,13 @@ describe Convert do
     model.current_step_number  = "1.0"
     model.current_assignment   = assignemnt_report
     model.current_status       = "REGISTRATION"
-    model.disease              = {
+    model.diseases              = [{
         "name"              => "Invasive Breast Carcinoma",
         "ctep_category"     => "Breast Neoplasm",
         "ctep_sub_category" => "Breast Cancer - Invasive",
         "ctep_term"         => "Invasive Breast Carcinoma",
         "med_dra_code"      => "1000961"
-    }
+    }]
     
     model.prior_drugs          = ["Aspirin", "Motrin", "Vitamin C"]
     
@@ -48,7 +48,7 @@ describe Convert do
   let(:events_db_model_list) do
     [1,2].map { |i|
       NciMatchPatientModels::Event.new(
-          :id     => 'PAT123',
+          :entity_id     => 'PAT123',
           :event_date     => '2016-05-09T22:06:33+00:00',
           :event_name     => 'Event Name ' + i.to_s,
           :event_type     => 'TYPE' + i.to_s,
@@ -215,8 +215,8 @@ describe Convert do
     expect(uim.gender).to eq "MALE"
     expect(uim.current_status).to eq "REGISTRATION"
 
-    expect(uim.disease).to be_kind_of Hash
-    expect(uim.disease["name"]).to eq "Invasive Breast Carcinoma"
+    expect(uim.disease).to be_kind_of Array
+    expect(uim.disease[0]["name"]).to eq "Invasive Breast Carcinoma"
 
     expect(uim.races).to be_kind_of Array
     expect(uim.races.size).to eq 2

@@ -14,7 +14,7 @@ module Convert
       uiModel.current_assignment   = patient_dbm.current_assignment
       uiModel.current_status       = patient_dbm.current_status
 
-      uiModel.disease              = patient_dbm.disease
+      uiModel.disease              = patient_dbm.diseases
       uiModel.prior_drugs          = patient_dbm.prior_drugs
       uiModel.documents            = patient_dbm.documents
       uiModel.message              = patient_dbm.message
