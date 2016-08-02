@@ -12,13 +12,13 @@ class PatientsController < ApplicationController
 
 
   # GET /timeline
-  def timeline
+  def dashboard_timeline
     render_event_data
   end
 
   # GET /patients/1/timeline
   def timeline
-    render_event_patient_data [params[:patientid]]
+    render_event_patient_data params[:patientid]
   end
 
   # GET /patients/1
@@ -108,13 +108,13 @@ class PatientsController < ApplicationController
     end
   end
 
-  def render_event_data()
+  def render_event_data
     begin
-      events_dbm = NciMatchPatientModels::Event.scan({limit: 10}).collect {|r| r}
-      AppLogger.log_debug(self.class.name, "Got 10 events for dashboard") if !events_dbm.nil?
-
+      events_dbm = NciMatchPatientModels::Event.scan().collect {|r| r}
+      AppLogger.log_debug(self.class.name, "Got #{events_dbm.count} events for dashboard") if !events_dbm.nil?
       events = events_dbm.map { |e_dbm| e_dbm.data_to_h }
       render json: events
+
     rescue => error
       standard_error_message(error.message)
     end
@@ -122,8 +122,8 @@ class PatientsController < ApplicationController
 
   def render_event_patient_data(patientid)
     begin
-      events_dbm = NciMatchPatientModels::Event.query_events_by_entity_id(patientid[0], false).collect {|r| r}
-      AppLogger.log_debug(self.class.name, "Got #{events_dbm.count} events for patient #{patientid[0]}") if !events_dbm.nil?
+      events_dbm = NciMatchPatientModels::Event.query_events_by_entity_id(patientid, false).collect {|r| r}
+      AppLogger.log_debug(self.class.name, "Got #{events_dbm.count} events for patient #{patientid}") if !events_dbm.nil?
 
       events = events_dbm.map { |e_dbm| e_dbm.data_to_h }
       render json: events

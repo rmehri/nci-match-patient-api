@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   end
 
   controller :patients do
-    get 'timeline' => :timeline
+    get 'timeline' => :dashboard_timeline
 
     get 'patients' => :patient_list
     get "patients/:patientid" => :patient
@@ -27,4 +27,10 @@ Rails.application.routes.draw do
   controller :services do
     post "trigger" => :trigger
   end
+
+  controller :dashboard do
+    get "dashboard/pendingVariantReports/:type" => :pending_variant_reports
+    get "dashboard/pendingAssignmentReports" => :pending_assignment_reports
+  end
+  
 end
