@@ -4,7 +4,11 @@ class DashboardController < ApplicationController
   # GET /dashboard/pendingVariantReports/:type
   def pending_variant_reports
     begin
-      render status: 200, json: '{"test":"test"}'
+      type = params[:type].to_s.upcase
+      dbm = NciMatchPatientModels::VariantReport.find_by({"status" => "PENDING", "variant_report_type" => type}).collect {|r| r}
+      AppLogger.log_debug(self.class.name, "Got #{dbm.length} variant reports of type [#{type}]")
+      reports = dbm.map { |x| x.data_to_h }
+      render json: reports
     rescue => error
       standard_error_message(error.message)
     end
@@ -13,7 +17,10 @@ class DashboardController < ApplicationController
   # GET /dashboard/pendingAssignmentReports
   def pending_assignment_reports
     begin
-      render status: 200, json: '{"test":"test"}'
+      dbm = NciMatchPatientModels::Assignment.find_by({"status" => "PENDING"}).collect {|r| r}
+      AppLogger.log_debug(self.class.name, "Got #{dbm.length} assignment reports")
+      reports = dbm.map { |x| x.data_to_h }
+      render json: reports
     rescue => error
       standard_error_message(error.message)
     end
