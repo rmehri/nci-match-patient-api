@@ -10,7 +10,6 @@ class PatientsController < ApplicationController
     end
   end
 
-
   # GET /timeline
   def dashboard_timeline
     render_event_data
@@ -110,7 +109,9 @@ class PatientsController < ApplicationController
 
   def render_event_data
     begin
-      events_dbm = NciMatchPatientModels::Event.scan().collect {|r| r}
+
+      events_dbm = NciMatchPatientModels::Event.query_top 10
+
       AppLogger.log_debug(self.class.name, "Got #{events_dbm.count} events for dashboard") if !events_dbm.nil?
       events = events_dbm.map { |e_dbm| e_dbm.data_to_h }
       render json: events
