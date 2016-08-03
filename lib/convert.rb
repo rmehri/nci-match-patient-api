@@ -83,23 +83,6 @@ module Convert
         variants_ui = to_ui_variants_by_variant_type(variants_dbm_for_report)
         variant_report_ui['variants'] = variants_ui
 
-        total_mois = 0
-        total_amois = 0
-        total_confirmed_mois = 0
-        total_confirmed_amoi = 0
-
-        variants_dbm_for_report.each do | variant_dbm |
-          total_mois += 1
-          total_amois += 1 if variant_dbm.is_amois
-          total_confirmed_mois += 1 if (variant_dbm.confirmed)
-          total_confirmed_amois +=1 if (variant_dbm.confirmed && variant_dbm.is_amois)
-        end
-
-        variant_report_ui['total_mois']  = total_mois
-        variant_report_ui['total_amois']  = total_amois
-        variant_report_ui['total_confirmed_mois']  = total_confirmed_mois
-        variant_report_ui['total_confirmed_amois']  = total_confirmed_amoi
-
         variant_reports_ui.push(variant_report_ui)
       end
 
