@@ -29,12 +29,23 @@ class DashboardController < ApplicationController
   # GET /dashboard/patientStatistics
   def patient_statistics
     begin
-      stats = '{ 
-  "number_of_patients": "14",
-  "number_of_screened_patients": "12",
-  "number_of_patients_with_treatment": "11"
-}'
+      dbm = NciMatchPatientModels::Patient.find_by().collect {|r| r}
+      AppLogger.log_debug(self.class.name, "Got #{dbm.length} patients")
+      totalPatients = dbm.length
+      patientsOnTreatmentArm = dbm.count { |x| x.current_status == 'ON_TREATMENT_ARM' }
+
+      dbm = NciMatchPatientModels::VariantReport.find_by({"status" => "CONFIRMED", "variant_report_type" => "TISSUE"}).collect {|x| x.patient_id}.uniq
+      AppLogger.log_debug(self.class.name, "Got #{dbm.length} variant reports with status='CONFIRMED' and variant_report_type='TISSUE'")
+      confirmedVrPatients = dbm.length
+
+      stats = { 
+        "number_of_patients" => totalPatients.to_s,
+        "number_of_patients_on_treatment_arm" => patientsOnTreatmentArm.to_s,
+        "number_of_patients_with_confirmed_variant_report" => confirmedVrPatients.to_s
+      }
+
       render json: stats
+
     rescue => error
       standard_error_message(error.message)
     end
@@ -43,13 +54,26 @@ class DashboardController < ApplicationController
   # GET /dashboard/sequencedAndConfirmedPatients
   def sequenced_and_confirmed_patients
     begin
-      stats = '{
-  "aMoiValues": [5, 10, 20, 30, 30, 50]
-}'
+
+      report_dbm = NciMatchPatientModels::VariantReport.find_by({"status" => "CONFIRMED", "variant_report_type" => "TISSUE"}).collect {|x| x}.uniq
+      AppLogger.log_debug(self.class.name, "Got #{report_dbm.length} variant reports with status='CONFIRMED' and variant_report_type='TISSUE'")
+
+      stats = {
+        "patients_with_0_amois" => report_dbm.count { |x| x.total_confirmed_amois.present? && x.total_confirmed_amois == 0}.to_s,
+        "patients_with_1_amois" => report_dbm.count { |x| x.total_confirmed_amois.present? && x.total_confirmed_amois == 1}.to_s,
+        "patients_with_2_amois" => report_dbm.count { |x| x.total_confirmed_amois.present? && x.total_confirmed_amois == 2}.to_s,
+        "patients_with_3_amois" => report_dbm.count { |x| x.total_confirmed_amois.present? && x.total_confirmed_amois == 3}.to_s,
+        "patients_with_4_amois" => report_dbm.count { |x| x.total_confirmed_amois.present? && x.total_confirmed_amois == 4}.to_s,
+        "patients_with_5_or_more_amois" =>report_dbm.count { |x| x.total_confirmed_amois.present? && x.total_confirmed_amois >= 5}.to_s
+      }
+      
       render json: stats
     rescue => error
       standard_error_message(error.message)
     end
   end
+
+
+
 
 end
