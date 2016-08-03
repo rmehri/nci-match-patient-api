@@ -29,19 +29,31 @@ class DashboardController < ApplicationController
   # GET /dashboard/patientStatistics
   def patient_statistics
     begin
-      dbm = NciMatchPatientModels::Patient.find_by().collect {|r| r}
-      AppLogger.log_debug(self.class.name, "Got #{dbm.length} patients")
-      totalPatients = dbm.length
-      patientsOnTreatmentArm = dbm.count { |x| x.current_status == 'ON_TREATMENT_ARM' }
+      patient_dbm = NciMatchPatientModels::Patient.find_by().collect {|r| r}
+      AppLogger.log_debug(self.class.name, "Got #{patient_dbm.length} patients")
+      totalPatients = patient_dbm.length
+      patientsOnTreatmentArm_dbm = patient_dbm.select {|x| x.current_status == 'ON_TREATMENT_ARM'}
+      patientsOnTreatmentArm = patientsOnTreatmentArm_dbm.length
 
-      dbm = NciMatchPatientModels::VariantReport.find_by({"status" => "CONFIRMED", "variant_report_type" => "TISSUE"}).collect {|x| x.patient_id}.uniq
-      AppLogger.log_debug(self.class.name, "Got #{dbm.length} variant reports with status='CONFIRMED' and variant_report_type='TISSUE'")
-      confirmedVrPatients = dbm.length
+      treatment_arm_accrual = Hash.new
+
+      patientsOnTreatmentArm_dbm.select { |x| x.treatment_arm.present? }.each do |x|
+        if (treatment_arm_accrual.has_key?(x.treatment_arm))
+          treatment_arm_accrual[x.treatment_arm] = treatment_arm_accrual[x.treatment_arm] + 1
+        else
+          treatment_arm_accrual[x.treatment_arm] = 1
+        end
+      end
+
+      variant_report_dbm = NciMatchPatientModels::VariantReport.find_by({"status" => "CONFIRMED", "variant_report_type" => "TISSUE"}).collect {|x| x.patient_id}.uniq
+      AppLogger.log_debug(self.class.name, "Got #{variant_report_dbm.length} variant reports with status='CONFIRMED' and variant_report_type='TISSUE'")
+      confirmedVrPatients = variant_report_dbm.length
 
       stats = { 
         "number_of_patients" => totalPatients.to_s,
         "number_of_patients_on_treatment_arm" => patientsOnTreatmentArm.to_s,
-        "number_of_patients_with_confirmed_variant_report" => confirmedVrPatients.to_s
+        "number_of_patients_with_confirmed_variant_report" => confirmedVrPatients.to_s,
+        "treatment_arm_accrual" => treatment_arm_accrual
       }
 
       render json: stats

@@ -37,17 +37,6 @@ module Convert
 
     private
 
-    # def self.to_ui_specimen_selector(dbm)
-    #   {"text" => dbm.surgical_event_id, "collected_date" => dbm.collected_date}
-    # end
-    #
-    # def self.to_ui_variant_report_selector(dbm)
-    #   {
-    #       "text" => dbm.surgical_event_id,
-    #       "variant_report_received_date" => dbm.variant_report_received_date
-    #   }
-    # end
-
     def self.to_ui_specimens(specimens_dbm, shipments_dbm)
       specimens_ui = []
 
@@ -116,7 +105,13 @@ module Convert
           "rna_bam_file_path"            => report_dbm.rna_bam_path_name,
           "rna_bai_file_path"            => report_dbm.rna_bai_path_name,
           "vcf_path"                     => report_dbm.vcf_path_name,
-          "s3_bucket"                    => report_dbm.s3_bucket
+          "s3_bucket"                    => report_dbm.s3_bucket,
+          "total_variants"               => report_dbm.total_variants,
+          "cellularity"                  => report_dbm.cellularity,
+          "total_mois"                   => report_dbm.total_mois,
+          "total_amois"                  => report_dbm.total_amois,
+          "total_confirmed_mois"         => report_dbm.total_confirmed_mois,
+          "total_confirmed_amois"        => report_dbm.total_confirmed_amois
       }
       report
     end
@@ -144,40 +139,6 @@ module Convert
             }
       variants
     end
-
-    # def self.to_ui_variant_report(reports_dbm, variants_dbm)
-    #   reports = []
-    #   reports_dbm.each do |report_dbm|
-    #     reports << {
-    #       "surgical_event_id"            => report_dbm.surgical_event_id,
-    #       "variant_report_received_date" => report_dbm.variant_report_received_date,
-    #       "patient_id"                   => report_dbm.patient_id,
-    #       "molecular_id"                 => report_dbm.molecular_id,
-    #       "analysis_id"                  => report_dbm.analysis_id,
-    #       "status"                       => report_dbm.status,
-    #       "status_date"                  => report_dbm.status_date,
-    #       "dna_bam_file_path"            => report_dbm.dna_bam_path_name,
-    #       "dna_bai_file_path"            => report_dbm.dna_bai_path_name,
-    #       "rna_bam_file_path"            => report_dbm.rna_bam_path_name,
-    #       "rna_bai_file_path"            => report_dbm.rna_bai_path_name,
-    #       "vcf_path"                     => report_dbm.vcf_path_name,
-    #       "s3_bucket"                    => report_dbm.s3_bucket,
-    #       "total_variants"               => report_dbm.total_variants,
-    #       "cellularity"                  => report_dbm.cellularity,
-    #       "total_mois"                   => report_dbm.total_mois,
-    #       "total_amois"                  => report_dbm.total_amois,
-    #       "total_confirmed_mois"         => report_dbm.total_confirmed_mois,
-    #       "total_confirmed_amois"        => report_dbm.total_confirmed_amois,
-    #       "variants"                     => {
-    #           "single_nucleitide_variants" => query_variants(variants_dbm, "single_nucleitide_variants"),
-    #           "indels"                     => query_variants(variants_dbm, "indels"),
-    #           "copyNumberVariants"         => query_variants(variants_dbm, "copyNumberVariants"),
-    #           "geneFusions"                => query_variants(variants_dbm, "geneFusions")
-    #       }
-    #     }
-    #   end
-    #
-    # end
 
     def self.query_variants(variants_dbm, variant_type)
       if (variants_dbm != nil)
