@@ -122,6 +122,7 @@ module Convert
       report = {
           "surgical_event_id"            => report_dbm.surgical_event_id,
           "variant_report_received_date" => report_dbm.variant_report_received_date,
+          "variant_report_type"          => report_dbm.variant_report_type,
           "patient_id"                   => report_dbm.patient_id,
           "molecular_id"                 => report_dbm.molecular_id,
           "analysis_id"                  => report_dbm.analysis_id,
