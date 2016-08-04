@@ -111,9 +111,14 @@ module Convert
           "total_mois"                   => report_dbm.total_mois,
           "total_amois"                  => report_dbm.total_amois,
           "total_confirmed_mois"         => report_dbm.total_confirmed_mois,
-          "total_confirmed_amois"        => report_dbm.total_confirmed_amois
+          "total_confirmed_amois"        => report_dbm.total_confirmed_amois,
+          "qc_report_url"                => get_qc_report_url(report_dbm.vcf_path_name)
       }
       report
+    end
+
+    def self.get_qc_report_url(vcf_path_name)
+      return nil
     end
 
     def self.to_ui_variants_by_variant_type(variants_dbm)
@@ -122,15 +127,13 @@ module Convert
 
       variants = {
           "snvs_and_indels"            => variants_ui_snv.push(*variants_ui_indels),
-          "copy_number_variants"         => query_variants(variants_dbm, "copy_number_variants"),
-          "gene_fusions"                => query_variants(variants_dbm, "unified_gene_fusions")
+          "copy_number_variants"       => query_variants(variants_dbm, "copy_number_variants"),
+          "gene_fusions"               => query_variants(variants_dbm, "unified_gene_fusions")
       }
       variants
     end
 
     def self.to_ui_variants(variants_dbm)
-
-
       variants = {
                 "single_nucleitide_variants" => query_variants(variants_dbm, "single_nucleotide_variants"),
                 "indels"                     => query_variants(variants_dbm, "indels"),
