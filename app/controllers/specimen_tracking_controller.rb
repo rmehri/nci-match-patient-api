@@ -22,6 +22,9 @@ class SpecimenTrackingController < ApplicationController
           uim['collected_date'] = specimen_dbm[0].collected_date if specimen_dbm[0].collected_date.present?
           uim['received_date'] = specimen_dbm[0].received_date if specimen_dbm[0].received_date.present?
           uim['type'] = specimen_dbm[0].type if specimen_dbm[0].type.present?
+          uim['pathology_status'] = specimen_dbm[0].pathology_status if specimen_dbm[0].pathology_status.present?
+          uim['pathology_status_date'] = specimen_dbm[0].pathology_status_date if specimen_dbm[0].pathology_status_date.present?
+          
         end
       end
 
