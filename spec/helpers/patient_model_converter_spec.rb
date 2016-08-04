@@ -184,23 +184,6 @@ describe Convert do
             { :gene => 'MSCH2', :ordered_date => '2016-06-09T22:06:33+00:00', :result_date => '2016-07-09T22:06:33+00:00T', :result => 'POSITIVE' },
             { :gene => 'RB',    :ordered_date => '2016-06-09T22:06:33+00:00', :result_date => '2016-07-09T22:06:33+00:00T', :result => 'NEGATIVE' }
 
-        ],
-        :assignments => nil,
-        :specimen_shipments => [
-            {
-                :analyses => [
-                    { :analysis_id => 'MSN5678_v1_676...tyyrt4',   :status => 'Rejected',  :file_received_date => 'Sep 18, 2015, 1:08 PM GMT', :status_date => '2016-06-09T22:06:33+00:00' }
-                ]
-            },
-            {
-                # :msn => 'MSN1234', :tracking_number => '456745758776', :destination_date => '2016-05-09T22:06:33+00:00', :dna_concordance => 11.2, :dna_volume => 10, :reported_date => '2016-06-09T22:06:33+00:00', :comments => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-                :msn => 'MSN5678', :tracking_number => '675867856677', :destination_date => '2016-06-09T22:06:33+00:00', :dna_concordance => 10.2, :dna_volume => 9,  :reported_date => '2016-06-09T22:06:33+00:00',
-                :analyses => [
-                    { :analysis_id => 'MSN1234_v1_23453...jher4',  :status => 'Confirmed', :file_received_date => '2016-06-09T22:06:33+00:00', :status_date => '2016-06-09T22:06:33+00:00' },
-                    { :analysis_id => 'MSN1234_v2_2rer53...yher4', :status => 'Rejected',  :file_received_date => '2016-09-09T22:06:33+00:00', :status_date => '2016-06-09T22:06:33+00:00' }
-                ]
-            }
-
         ]
       )
     }
