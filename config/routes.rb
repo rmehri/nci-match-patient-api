@@ -34,5 +34,9 @@ Rails.application.routes.draw do
     get "dashboard/patientStatistics" => :patient_statistics
     get "dashboard/sequencedAndConfirmedPatients" => :sequenced_and_confirmed_patients
   end
+
+  controller :specimen_tracking do
+    get "specimenTracking/shipments" => :shipments
+  end
   
 end
