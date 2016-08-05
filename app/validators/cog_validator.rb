@@ -29,5 +29,20 @@ module MessageValidator
           }
       }
     end
+
+    def self.registration_schema
+      @schema = {
+          "type" => "object",
+          "required" => ["patient_id", "status", "study_id"],
+          "properties" => {
+              "patient_id" => {"type" => "string", "minLength" => 1},
+              "study_id" => {"type" => "string", "minLength" => 1,
+                             "enum" => ["APEC1621"]},
+              "step_number" => {"type" => "number"},
+              "status" => {"type" => "string", "minLength" => 1,
+                           "enum" => ["REGISTRATION"]}
+          }
+      }
+    end
    end
 end
