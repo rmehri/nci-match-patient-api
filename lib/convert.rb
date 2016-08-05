@@ -19,7 +19,6 @@ module Convert
       uiModel.documents            = patient_dbm.documents
       uiModel.message              = patient_dbm.message
 
-
       if variant_reports_dbm != nil && variant_reports_dbm.length > 0
         uiModel.variant_reports = to_ui_variant_reports(variant_reports_dbm, variants_dbm)
       end
@@ -29,7 +28,7 @@ module Convert
       end
 
       if specimens_dbm != nil && specimens_dbm.length > 0
-        uiModel.specimens = to_ui_specimens(specimens_dbm, shipments_dbm)
+        uiModel.specimens = to_ui_specimens(specimens_dbm, shipments_dbm, variant_reports_dbm)
       end
 
       return uiModel
@@ -37,7 +36,7 @@ module Convert
 
     private
 
-    def self.to_ui_specimens(specimens_dbm, shipments_dbm)
+    def self.to_ui_specimens(specimens_dbm, shipments_dbm, variant_reports_dbm)
       specimens_ui = []
 
       specimens_dbm.each do | specimen_dbm |
@@ -51,8 +50,36 @@ module Convert
           specimen_shipments_dbm = shipments_dbm
                                        .select {|v| (v.type == 'BLOOD_DNA')}
         end
+        
+        shipments_uims = []
+        
+        specimen_shipments_dbm.each do | shipment_dbm |
+          shipment_uim = shipment_dbm.data_to_h
 
-        specimen_ui['specimen_shipments'] = specimen_shipments_dbm.map { |shipment_dbm| shipment_dbm.data_to_h }
+          shipment_uim['analyses'] = variant_reports_dbm
+              .select {|vr| vr.surgical_event_id == shipment_dbm.surgical_event_id && vr.molecular_id == shipment_dbm.molecular_id }
+              .map { |vr| 
+                { 
+                  "analysis_id" => vr.analysis_id,
+                  "variant_report_received_date" => vr.variant_report_received_date,
+                  "status" => vr.status,
+                  "status_date" => vr.status_date,
+                  "comment" => vr.comment,
+                  "comment_user" => vr.comment_user,
+                  "dna_bam_path_name" => vr.dna_bam_path_name,
+                  "dna_bai_path_name" => vr.dna_bai_path_name,
+                  "rna_bam_path_name" => vr.rna_bam_path_name,
+                  "rna_bai_path_name" => vr.rna_bai_path_name,
+                  "vcf_path_name" => vr.vcf_path_name,
+                  "tsv_path_name" => vr.tsv_path_name,
+                  "qc_report_url" => get_qc_report_url(vr.tsv_path_name)
+                } 
+              } 
+
+          shipments_uims.push(shipment_uim)
+        end
+
+        specimen_ui['specimen_shipments'] = shipments_uims
         specimens_ui.push(specimen_ui)
       end
 
@@ -100,11 +127,12 @@ module Convert
           "analysis_id"                  => report_dbm.analysis_id,
           "status"                       => report_dbm.status,
           "status_date"                  => report_dbm.status_date,
-          "dna_bam_file_path"            => report_dbm.dna_bam_path_name,
-          "dna_bai_file_path"            => report_dbm.dna_bai_path_name,
-          "rna_bam_file_path"            => report_dbm.rna_bam_path_name,
-          "rna_bai_file_path"            => report_dbm.rna_bai_path_name,
-          "vcf_path"                     => report_dbm.vcf_path_name,
+          "dna_bam_path_name"            => report_dbm.dna_bam_path_name,
+          "dna_bai_path_name"            => report_dbm.dna_bai_path_name,
+          "rna_bam_path_name"            => report_dbm.rna_bam_path_name,
+          "rna_bai_path_name"            => report_dbm.rna_bai_path_name,
+          "tsv_path_name"                => report_dbm.tsv_path_name,
+          "vcf_path_name"                => report_dbm.vcf_path_name,
           "s3_bucket"                    => report_dbm.s3_bucket,
           "total_variants"               => report_dbm.total_variants,
           "cellularity"                  => report_dbm.cellularity,
@@ -112,13 +140,16 @@ module Convert
           "total_amois"                  => report_dbm.total_amois,
           "total_confirmed_mois"         => report_dbm.total_confirmed_mois,
           "total_confirmed_amois"        => report_dbm.total_confirmed_amois,
-          "qc_report_url"                => get_qc_report_url(report_dbm.vcf_path_name)
+          "qc_report_url"                => get_qc_report_url(report_dbm.tsv_path_name)
       }
       report
     end
 
-    def self.get_qc_report_url(vcf_path_name)
-      return nil
+    def self.get_qc_report_url(tsv_path_name)
+      qc_file = File.basename(tsv_path_name, ".tsv") + ".json"
+      p 'tsv_path_name = ' + tsv_path_name
+      p 'qc_file = ' + qc_file
+      return ENV["qc_report_aws_s3_bucket"] + qc_file
     end
 
     def self.to_ui_variants_by_variant_type(variants_dbm)

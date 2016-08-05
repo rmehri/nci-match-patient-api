@@ -210,7 +210,6 @@ class PatientsController < ApplicationController
   end
 
   def get_variant_reports(patient_id)
-
     variant_reports_dbm = NciMatchPatientModels::VariantReport.query_by_patient_id(patient_id, false).collect {|r| r}
 
     AppLogger.log_debug(self.class.name, "Patient [#{patient_id}] has #{variant_reports_dbm.length} variant reports")
