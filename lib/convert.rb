@@ -146,9 +146,14 @@ module Convert
     end
 
     def self.get_qc_report_url(tsv_path_name)
+      if (tsv_path_name == nil || tsv_path_name == '')
+        return nil
+      end
+
       qc_file = File.basename(tsv_path_name, ".tsv") + ".json"
       p 'tsv_path_name = ' + tsv_path_name
       p 'qc_file = ' + qc_file
+
       return ENV["qc_report_aws_s3_bucket"] + qc_file
     end
 
