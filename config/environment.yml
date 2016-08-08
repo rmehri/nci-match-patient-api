@@ -2,7 +2,7 @@ development:
   aws_dynamo_endpoint: "http://localhost:8000"
   aws_region: "us-east-1"
 
-  queue_name: "sy_patient_development"
+  queue_name: ""
 
   # dynamodb setting
   read_capacity_units: "30"
@@ -10,6 +10,8 @@ development:
 
   patient_state_api: "http://localhost:10241/"
   patient_processor: "http://localhost:10242"
+
+  qc_report_aws_s3_bucket: "https://s3.amazonaws.com/nci-match-rules/"
 
 test:
 
@@ -32,6 +34,8 @@ test:
   http_read_timeout: "120"
   http_use_ssl: "false"
 
+  qc_report_aws_s3_bucket: "https://s3.amazonaws.com/nci-match-rules/"
+
 uat:
   aws_dynamo_endpoint: "https://dynamodb.us-east-1.amazonaws.com"
   aws_region: "us-east-1"
@@ -46,6 +50,8 @@ uat:
   patient_state_api: "http://pedmatch.org:10241/"
   patient_processor: "http://localhost:10242"
 
+  qc_report_aws_s3_bucket: "https://s3.amazonaws.com/nci-match-rules/"
+
 production:
   aws_dynamo_endpoint: "https://dynamodb.us-east-1.amazonaws.com"
   aws_region: "us-east-1"
@@ -59,3 +65,5 @@ production:
 
   patient_state_api: "http://pedmatch.org:10241/"
   patient_processor: "http://localhost:10242"
+
+  qc_report_aws_s3_bucket: "https://s3.amazonaws.com/nci-match-rules/"
