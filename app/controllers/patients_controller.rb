@@ -15,6 +15,11 @@ class PatientsController < ApplicationController
     render_event_data
   end
 
+  # GET /patients/1/pendingItems
+  def pending_items
+    render_pendging_items params[:patientid]
+  end
+
   # GET /patients/1/timeline
   def timeline
     render_event_patient_data params[:patientid]
@@ -116,6 +121,42 @@ class PatientsController < ApplicationController
       events = events_dbm.map { |e_dbm| e_dbm.data_to_h }
       render json: events
 
+    rescue => error
+      standard_error_message(error.message)
+    end
+  end
+
+  def render_pendging_items(patientid)
+    begin
+      pending_items = []      
+
+      variant_report_dbms = NciMatchPatientModels::VariantReport.find_by({"status" => "PENDING", "patient_id" => params[:patientid]}).collect {|r| r}
+      AppLogger.log_debug(self.class.name, "Got #{variant_report_dbms.length} variant reports for patient [#{params[:patientid]}]")
+
+      variant_report_dbms.collect { |x| x }.each do |variant_report_dbm|
+        pending_items.push ({
+            "action_type" => variant_report_dbm.variant_report_type == 'TISSUE' ? 'pending_tissue_variant_report' : 'pending_blood_variant_report',
+            "title" => variant_report_dbm.variant_report_type == 'TISSUE' ? 'Pending Tissue Variant Report' : 'Pending Blood Variant Report',
+            "molecular_id" => variant_report_dbm.molecular_id,
+            "analysis_id" => variant_report_dbm.analysis_id,
+            "created_date" => variant_report_dbm.status_date.to_s
+        })
+      end
+
+      assignment_report_dbms = NciMatchPatientModels::Assignment.find_by({"status" => "PENDING", "patient_id" => params[:patientid]}).collect {|r| r}
+      AppLogger.log_debug(self.class.name, "Got #{assignment_report_dbms.length} assignment reports for patient [#{params[:patientid]}]")
+
+      assignment_report_dbms.collect { |x| x }.each do |assignment_report_dbm|
+        pending_items.push ({
+            "action_type" => 'pending_assignment_report',
+            "title" => 'Pending Assignment Report',
+            "molecular_id" => assignment_report_dbm.molecular_id,
+            "analysis_id" => assignment_report_dbm.analysis_id,
+            "created_date" => assignment_report_dbm.status_date.to_s
+        })
+      end
+
+      render json: pending_items
     rescue => error
       standard_error_message(error.message)
     end

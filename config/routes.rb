@@ -5,10 +5,10 @@ Rails.application.routes.draw do
 
   controller :patients do
     get 'timeline' => :dashboard_timeline
-
     get 'patients' => :patient_list
     get "patients/:patientid" => :patient
     get "patients/:patientid/timeline" => :timeline
+    get "patients/:patientid/pendingItems" => :pending_items
     get "patients/:patientid/sampleHistory/:sampleid" => :sample
     get "patients/:patientid/qcVariantReport/:sampleid/:type" => :qc_variant_report
 
