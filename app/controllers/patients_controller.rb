@@ -49,20 +49,30 @@ class PatientsController < ApplicationController
   def variant_status
     begin
       input_data = get_post_data
-      response_json = PatientProcessor.run_service("/confirm_variant", input_data)
 
-      AppLogger.log(self.class.name, "\nResponse from Patient Process: #{response_json}")
-      standard_success_message(JSON.parse(response_json)['message'])
+      result = ConfirmResult.from_json input_data
+
+      p result.to_h
+
+      # response_json = PatientProcessor.run_service("/confirm_variant", input_data)
+
+      # AppLogger.log(self.class.name, "\nResponse from Patient Processor: #{response_json}")
+      # standard_success_message(JSON.parse(response_json)['message'])
 
     rescue => error
       standard_error_message(error.message)
     end
-
   end
 
   # PUT /patients/:patientid/variantReportStatus
   def variant_report_status
-    render status: 200, json: '{"test":"test"}'
+    begin
+      input_data = get_post_data
+      result = ConfirmResult.from_json input_data
+      p result.to_h
+    rescue => error
+      standard_error_message(error.message)
+    end
   end
 
   # POST /patients/:patientid/assignmentConfirmation
