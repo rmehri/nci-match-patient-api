@@ -183,7 +183,7 @@ module Convert
       if (variants_dbm != nil)
         variants_dbm
             .select {|v| v.variant_type == variant_type}
-            .map { |v| v.data_to_h }
+            .map { |v| v.to_h }
       else
         []
       end
