@@ -4,7 +4,7 @@ describe ConfirmResult do
   def getTestable
     testable = ConfirmResult.new
     testable.confirmed = true
-    testable.comments = 'Some Comments'
+    testable.comment = 'Some Comments'
     return testable
   end
 
@@ -12,17 +12,17 @@ describe ConfirmResult do
     testable = getTestable
 
     expect(testable.confirmed).to eq(true)
-    expect(testable.comments).to eq('Some Comments')
+    expect(testable.comment).to eq('Some Comments')
   end
 
   it "can convert from json" do
-    json_string = '{"confirmed":"true","comments":"Some Comments"}';
+    json_string = '{"confirmed":"true","comment":"Some Comments"}';
 
     model = ConfirmResult.from_json json_string
 
     expect(model).to_not eq nil
     expect(model.confirmed).to eq("true")
-    expect(model.comments).to eq('Some Comments')
+    expect(model.comment).to eq('Some Comments')
 
   end
 

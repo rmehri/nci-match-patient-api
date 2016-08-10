@@ -94,11 +94,11 @@ describe Convert do
         :surgical_event_id => "SUREVT098" + i.to_s,
         :molecular_id => "MOL098" + i.to_s,
         :analysis_id => "ANZ9876" + i.to_s,
-        :variant_id => "VAR9876" + i.to_s,
+        :identifier => "VAR9876" + i.to_s,
         :confirmed => true,
         :status_date => "2016-06-09T22:06:33+00:00",
         :comment => "Don't need this",
-        :gene_name => "gene",
+        :func_gene => "gene",
         :chromosome => "chr3",
         :position => "12345",
         :oncomine_variant_class => "Hotspot",
@@ -160,7 +160,7 @@ describe Convert do
                 { "treatment_arm" => "EAY131-Q", "treatment_arm_version" => "2015-08-06", "treatment_arm_title" => "EAY131-U (2015-08-06)", "reason" => "The patient excluded from this arm because of invasive breast carcinoma." }
             ],
             "selected" => [
-                { "treatment_arm" => "EAY131-B", "treatment_arm_version" => "2015-08-06", "treatment_arm_title" => "EAY131-U (2015-08-06)", "reason" => "The patient and treatment match on variand identifier [ABSF, DEDF]." }
+                { "treatment_arm" => "EAY131-B", "treatment_arm_version" => "2015-08-06", "treatment_arm_title" => "EAY131-U (2015-08-06)", "reason" => "The patient and treatment match on variant identifier [ABSF, DEDF]." }
             ]
         }
     }

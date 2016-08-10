@@ -128,7 +128,7 @@ class PatientsController < ApplicationController
       events_dbm = NciMatchPatientModels::Event.query_top 10
 
       AppLogger.log_debug(self.class.name, "Got #{events_dbm.count} events for dashboard") if !events_dbm.nil?
-      events = events_dbm.map { |e_dbm| e_dbm.data_to_h }
+      events = events_dbm.map { |e_dbm| e_dbm.to_h }
       render json: events
 
     rescue => error
@@ -177,7 +177,7 @@ class PatientsController < ApplicationController
       events_dbm = NciMatchPatientModels::Event.query_events_by_entity_id(patientid, false).collect {|r| r}
       AppLogger.log_debug(self.class.name, "Got #{events_dbm.count} events for patient #{patientid}") if !events_dbm.nil?
 
-      events = events_dbm.map { |e_dbm| e_dbm.data_to_h }
+      events = events_dbm.map { |e_dbm| e_dbm.to_h }
       render json: events
     rescue => error
       standard_error_message(error.message)
