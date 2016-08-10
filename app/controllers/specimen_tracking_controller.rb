@@ -5,30 +5,31 @@ class SpecimenTrackingController < ApplicationController
   def shipments
     begin
 
-      shipment_dbm = NciMatchPatientModels::Shipment.query_history
-      AppLogger.log_debug(self.class.name, "Got #{shipment_dbm.length} specimens")
+      shipment_dbms = NciMatchPatientModels::Shipment.query_history
+      AppLogger.log_debug(self.class.name, "Got #{shipment_dbms.length} specimens")
 
-      uims = []
+      shipment_uims = []
 
-      shipment_dbm.each do |x|
-        uim = x.data_to_h
-        uims.push uim
+      shipment_dbms.each do |shipment_dbm|
+        shipment_uim = shipment_dbm.to_h
+        shipment_uims.push shipment_uim
 
-        specimen_dbm = NciMatchPatientModels::Specimen.find_by({"patient_id" => x.patient_id, "surgical_event_id" => x.surgical_event_id}).collect {|r| r}
+        specimen_dbms = NciMatchPatientModels::Specimen
+          .find_by({"patient_id" => shipment_dbm.patient_id, "surgical_event_id" => shipment_dbm.surgical_event_id})
+          .collect {|r| r}
         
-        if (specimen_dbm.length > 0)
+        if (specimen_dbms.length > 0)
 
-          uim['assays'] = specimen_dbm[0].assays if specimen_dbm[0].assays.present?
-          uim['collected_date'] = specimen_dbm[0].collected_date if specimen_dbm[0].collected_date.present?
-          uim['received_date'] = specimen_dbm[0].received_date if specimen_dbm[0].received_date.present?
-          uim['type'] = specimen_dbm[0].type if specimen_dbm[0].type.present?
-          uim['pathology_status'] = specimen_dbm[0].pathology_status if specimen_dbm[0].pathology_status.present?
-          uim['pathology_status_date'] = specimen_dbm[0].pathology_status_date if specimen_dbm[0].pathology_status_date.present?
+          shipment_uim['assays'] = specimen_dbms[0].assays if specimen_dbms[0].assays.present?
+          shipment_uim['collected_date'] = specimen_dbms[0].collected_date if specimen_dbms[0].collected_date.present?
+          shipment_uim['received_date'] = specimen_dbms[0].received_date if specimen_dbms[0].received_date.present?
+          shipment_uim['pathology_status'] = specimen_dbms[0].pathology_status if specimen_dbms[0].pathology_status.present?
+          shipment_uim['pathology_status_date'] = specimen_dbms[0].pathology_status_date if specimen_dbms[0].pathology_status_date.present?
           
         end
       end
 
-      render json: uims
+      render json: shipment_uims
     rescue => error
       standard_error_message(error.message)
     end
