@@ -12,6 +12,7 @@ development:
   patient_processor: "http://localhost:10242"
 
   qc_report_aws_s3_bucket: "https://s3.amazonaws.com/nci-match-rules/"
+  s3_url: "https://s3.amazonaws.com"
 
 test:
 
