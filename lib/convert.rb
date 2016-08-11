@@ -72,7 +72,8 @@ module Convert
                   "rna_bai_path_name" => vr.rna_bai_path_name,
                   "vcf_path_name" => vr.vcf_path_name,
                   "tsv_path_name" => vr.tsv_path_name,
-                  "qc_report_url" => get_qc_report_url(vr.s3_bucket, vr.tsv_path_name)
+                  "qc_report_url" => get_qc_report_url(vr.s3_bucket, vr.tsv_path_name),
+                  "vr_chart_data_url" => get_vr_chart_url(vr.s3_bucket, vr.vcf_path_name)
                 } 
               } 
 
@@ -84,6 +85,28 @@ module Convert
       end
 
       specimens_ui
+    end
+
+    def self.get_qc_report_url(s3_bucket, tsv_path_name)
+
+      if (s3_bucket == nil || s3_bucket == '' || tsv_path_name == nil || tsv_path_name == '')
+        return nil
+      end
+
+      qc_file = File.basename(tsv_path_name, ".tsv") + ".qc_report.json"
+
+      return "#{ENV['s3_url']}/#{s3_bucket}/#{qc_file}"
+    end
+
+    def self.get_vr_chart_url(s3_bucket, tsv_path_name)
+
+      if (s3_bucket == nil || s3_bucket == '' || tsv_path_name == nil || tsv_path_name == '')
+        return nil
+      end
+
+      chart_file = File.basename(tsv_path_name, ".vcf") + ".vr_chart.json"
+
+      return "#{ENV['s3_url']}/#{s3_bucket}/#{qc_file}"
     end
 
     def self.to_ui_variant_reports(variant_reports_dbm, variants_dbm)
@@ -143,19 +166,6 @@ module Convert
           "qc_report_url"                => get_qc_report_url(report_dbm.s3_bucket, report_dbm.tsv_path_name)
       }
       report
-    end
-
-    def self.get_qc_report_url(s3_bucket, tsv_path_name)
-
-      if (s3_bucket == nil || s3_bucket == '' || tsv_path_name == nil || tsv_path_name == '')
-        return nil
-      end
-
-      qc_file = File.basename(tsv_path_name, ".tsv") + ".json"
-      p 'tsv_path_name = ' + tsv_path_name
-      p 'qc_file = ' + qc_file
-
-      return "#{ENV['s3_url']}/#{s3_bucket}/#{qc_file}"
     end
 
     def self.to_ui_variants_by_variant_type(variants_dbm)
