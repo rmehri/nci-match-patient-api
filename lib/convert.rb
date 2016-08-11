@@ -72,7 +72,7 @@ module Convert
                   "rna_bai_path_name" => vr.rna_bai_path_name,
                   "vcf_path_name" => vr.vcf_path_name,
                   "tsv_path_name" => vr.tsv_path_name,
-                  "qc_report_url" => get_qc_report_url(vr.tsv_path_name)
+                  "qc_report_url" => get_qc_report_url(vr.s3_bucket, vr.tsv_path_name)
                 } 
               } 
 
@@ -140,13 +140,14 @@ module Convert
           "total_amois"                  => report_dbm.total_amois,
           "total_confirmed_mois"         => report_dbm.total_confirmed_mois,
           "total_confirmed_amois"        => report_dbm.total_confirmed_amois,
-          "qc_report_url"                => get_qc_report_url(report_dbm.tsv_path_name)
+          "qc_report_url"                => get_qc_report_url(report_dbm.s3_bucket, report_dbm.tsv_path_name)
       }
       report
     end
 
-    def self.get_qc_report_url(tsv_path_name)
-      if (tsv_path_name == nil || tsv_path_name == '')
+    def self.get_qc_report_url(s3_bucket, tsv_path_name)
+
+      if (s3_bucket == nil || s3_bucket == '' || tsv_path_name == nil || tsv_path_name == '')
         return nil
       end
 
@@ -154,7 +155,7 @@ module Convert
       p 'tsv_path_name = ' + tsv_path_name
       p 'qc_file = ' + qc_file
 
-      return ENV["qc_report_aws_s3_bucket"] + qc_file
+      return "#{ENV['s3_url']}/#{s3_bucket}/#{qc_file}"
     end
 
     def self.to_ui_variants_by_variant_type(variants_dbm)
