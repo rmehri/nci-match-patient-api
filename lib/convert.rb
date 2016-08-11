@@ -40,7 +40,7 @@ module Convert
       specimens_ui = []
 
       specimens_dbm.each do | specimen_dbm |
-        specimen_ui = specimen_dbm.data_to_h
+        specimen_ui = specimen_dbm.to_h
 
         specimen_shipments_dbm = []
         if (specimen_dbm.type == 'TISSUE')
@@ -54,7 +54,7 @@ module Convert
         shipments_uims = []
         
         specimen_shipments_dbm.each do | shipment_dbm |
-          shipment_uim = shipment_dbm.data_to_h
+          shipment_uim = shipment_dbm.to_h
 
           shipment_uim['analyses'] = variant_reports_dbm
               .select {|vr| vr.surgical_event_id == shipment_dbm.surgical_event_id && vr.molecular_id == shipment_dbm.molecular_id }
