@@ -87,24 +87,26 @@ module Convert
       specimens_ui
     end
 
-    def self.get_qc_report_url(s3_bucket, tsv_path_name)
-
-      if (s3_bucket == nil || s3_bucket == '' || tsv_path_name == nil || tsv_path_name == '')
+    def self.get_qc_report_url(s3_bucket, file_name)
+      if (s3_bucket == nil || s3_bucket == '' || file_name == nil || file_name == '')
         return nil
       end
 
-      qc_file = File.basename(tsv_path_name, ".tsv") + ".qc_report.json"
+      qc_file = File.basename(file_name, ".tsv") + ".qc_report.json"
+
+      p 'qc_file =' + qc_file.to_s
 
       return "#{ENV['s3_url']}/#{s3_bucket}/#{qc_file}"
     end
 
-    def self.get_vr_chart_url(s3_bucket, tsv_path_name)
+    def self.get_vr_chart_url(s3_bucket, file_name)
 
-      if (s3_bucket == nil || s3_bucket == '' || tsv_path_name == nil || tsv_path_name == '')
+      if (s3_bucket == nil || s3_bucket == '' || file_name == nil || file_name == '')
         return nil
       end
 
-      chart_file = File.basename(tsv_path_name, ".vcf") + ".vr_chart.json"
+      chart_file = File.basename(file_name, ".vcf") + ".vr_chart.json"
+      p 'chart_file =' + chart_file.to_s
 
       return "#{ENV['s3_url']}/#{s3_bucket}/#{chart_file}"
     end
@@ -163,7 +165,8 @@ module Convert
           "total_amois"                  => report_dbm.total_amois,
           "total_confirmed_mois"         => report_dbm.total_confirmed_mois,
           "total_confirmed_amois"        => report_dbm.total_confirmed_amois,
-          "qc_report_url"                => get_qc_report_url(report_dbm.s3_bucket, report_dbm.tsv_path_name)
+          "qc_report_url" => get_qc_report_url(report_dbm.s3_bucket, report_dbm.tsv_path_name),
+          "vr_chart_data_url" => get_vr_chart_url(report_dbm.s3_bucket, report_dbm.vcf_path_name)
       }
       report
     end
