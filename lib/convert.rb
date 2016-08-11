@@ -106,7 +106,7 @@ module Convert
 
       chart_file = File.basename(tsv_path_name, ".vcf") + ".vr_chart.json"
 
-      return "#{ENV['s3_url']}/#{s3_bucket}/#{qc_file}"
+      return "#{ENV['s3_url']}/#{s3_bucket}/#{chart_file}"
     end
 
     def self.to_ui_variant_reports(variant_reports_dbm, variants_dbm)
