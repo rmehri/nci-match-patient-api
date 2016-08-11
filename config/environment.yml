@@ -2,7 +2,7 @@ development:
   aws_dynamo_endpoint: "http://localhost:8000"
   aws_region: "us-east-1"
 
-  queue_name: ""
+  queue_name: "patient_processor_dev_zakharovrv"
 
   # dynamodb setting
   read_capacity_units: "30"

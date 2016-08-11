@@ -66,13 +66,13 @@ module Convert
                   "status_date" => vr.status_date,
                   "comment" => vr.comment,
                   "comment_user" => vr.comment_user,
-                  "dna_bam_path_name" => vr.dna_bam_path_name,
-                  "dna_bai_path_name" => vr.dna_bai_path_name,
-                  "rna_bam_path_name" => vr.rna_bam_path_name,
-                  "rna_bai_path_name" => vr.rna_bai_path_name,
-                  "vcf_path_name" => vr.vcf_path_name,
-                  "tsv_path_name" => vr.tsv_path_name,
-                  "qc_report_url" => get_qc_report_url(vr.s3_bucket, vr.tsv_path_name),
+                  "dna_bam_path_name" => get_s3_url(vr.s3_bucket, vr.dna_bam_path_name),
+                  "dna_bai_path_name" => get_s3_url(vr.s3_bucket, vr.dna_bai_path_name),
+                  "rna_bam_path_name" => get_s3_url(vr.s3_bucket, vr.rna_bam_path_name),
+                  "rna_bai_path_name" => get_s3_url(vr.s3_bucket, vr.rna_bai_path_name),
+                  "vcf_path_name"     => get_s3_url(vr.s3_bucket, vr.vcf_path_name),
+                  "tsv_path_name"     => get_s3_url(vr.s3_bucket, vr.tsv_path_name),
+                  "qc_report_url"     => get_qc_report_url(vr.s3_bucket, vr.tsv_path_name),
                   "vr_chart_data_url" => get_vr_chart_url(vr.s3_bucket, vr.vcf_path_name)
                 } 
               } 
@@ -97,6 +97,14 @@ module Convert
       p 'qc_file =' + qc_file.to_s
 
       return "#{ENV['s3_url']}/#{s3_bucket}/#{qc_file}"
+    end
+
+    def self.get_s3_url(s3_bucket, file_name)
+      if (s3_bucket == nil || s3_bucket == '' || file_name == nil || file_name == '')
+        return nil
+      end
+
+      return "#{ENV['s3_url']}/#{s3_bucket}/#{file_name}"
     end
 
     def self.get_vr_chart_url(s3_bucket, file_name)
@@ -152,12 +160,13 @@ module Convert
           "analysis_id"                  => report_dbm.analysis_id,
           "status"                       => report_dbm.status,
           "status_date"                  => report_dbm.status_date,
-          "dna_bam_path_name"            => ENV["qc_report_aws_s3_bucket"] + report_dbm.dna_bam_path_name,
-          "dna_bai_path_name"            => ENV["qc_report_aws_s3_bucket"] + report_dbm.dna_bai_path_name,
-          "rna_bam_path_name"            => ENV["qc_report_aws_s3_bucket"] + report_dbm.rna_bam_path_name,
-          "rna_bai_path_name"            => ENV["qc_report_aws_s3_bucket"] + report_dbm.rna_bai_path_name,
-          "tsv_path_name"                => ENV["qc_report_aws_s3_bucket"] + report_dbm.tsv_path_name,
-          "vcf_path_name"                => ENV["qc_report_aws_s3_bucket"] + report_dbm.vcf_path_name,
+          "dna_bam_path_name"            => get_s3_url(report_dbm.s3_bucket, report_dbm.dna_bam_path_name),
+          "dna_bai_path_name"            => get_s3_url(report_dbm.s3_bucket, report_dbm.dna_bai_path_name),
+          "rna_bam_path_name"            => get_s3_url(report_dbm.s3_bucket, report_dbm.rna_bam_path_name),
+          "rna_bai_path_name"            => get_s3_url(report_dbm.s3_bucket, report_dbm.rna_bai_path_name),
+          "rna_bai_path_name"            => get_s3_url(report_dbm.s3_bucket, report_dbm.rna_bai_path_name),
+          "tsv_path_name"                => get_s3_url(report_dbm.s3_bucket, report_dbm.tsv_path_name),
+          "vcf_path_name"                => get_s3_url(report_dbm.s3_bucket, report_dbm.vcf_path_name),
           "s3_bucket"                    => report_dbm.s3_bucket,
           "total_variants"               => report_dbm.total_variants,
           "cellularity"                  => report_dbm.cellularity,
