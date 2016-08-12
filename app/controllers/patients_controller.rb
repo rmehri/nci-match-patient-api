@@ -81,7 +81,17 @@ class PatientsController < ApplicationController
 
   # POST /patients/:patientid/assignmentConfirmation
   def assignment_confirmation
-    render status: 200, json: '{"test":"test"}'
+    begin
+      input_data = get_post_data
+      # result = ConfirmResult.from_json input_data
+      # p result.to_h
+
+      success = validate(input_data)
+      result = PatientProcessor.run_service('/confirmAssignment', input_data)
+      standard_success_message(result)
+    rescue => error
+      standard_error_message(error.message)
+    end
   end
 
   # POST /patientStatus
@@ -259,6 +269,10 @@ class PatientsController < ApplicationController
   def validate_patient_state_no_queue(message, message_type)
 
     AppLogger.log(self.class.name, "Validating messesage of type [#{message_type}]")
+
+    ###########
+    # TODO: review
+    message_type = "Match" if message_type == 'AssignmentStatus'
 
     message_type = {message_type => message}
     p message_type
