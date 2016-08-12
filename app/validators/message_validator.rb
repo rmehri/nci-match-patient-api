@@ -17,7 +17,7 @@ module MessageValidator
   def self.get_message_type(message)
     type = 'UNKNOWN'
 
-    if (!message[:status].nil? && message[:status] == 'REGISTRATION')
+    if (!message[:status].nil? && (message[:status] == 'REGISTRATION' || message[:status] == 'ON_TREATMENT_ARM'))
       type = "Cog"
     elsif (!message[:specimen_received].nil?)
       type = "SpecimenReceived"

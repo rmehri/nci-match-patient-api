@@ -66,13 +66,16 @@ class PatientsController < ApplicationController
 
   # PUT /patients/:patientid/variantReportStatus
   def variant_report_status
+    p "================ confirming variant report"
     begin
       input_data = get_post_data
       # result = ConfirmResult.from_json input_data
       # p result.to_h
 
+      p "=========== input data: #{input_data}"
+
       success = validate(input_data)
-      result = PatientProcessor.run_service('/confirmVariantReport', input_data)
+      result = PatientProcessor.run_service('/confirmVariantReport', input_data) if success
       standard_success_message(result)
     rescue => error
       standard_error_message(error.message)
@@ -269,10 +272,6 @@ class PatientsController < ApplicationController
   def validate_patient_state_no_queue(message, message_type)
 
     AppLogger.log(self.class.name, "Validating messesage of type [#{message_type}]")
-
-    ###########
-    # TODO: review
-    message_type = "Match" if message_type == 'AssignmentStatus'
 
     message_type = {message_type => message}
     p message_type
