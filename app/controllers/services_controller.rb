@@ -8,12 +8,18 @@ class ServicesController < ApplicationController
 
     begin
       type = MessageValidator.get_message_type(message)
-      raise "Incoming message has UNKNOWN message type" if (type == 'UNKNOW')
+      raise "Incoming message has UNKNOWN message type" if (type == 'UNKNOWN')
 
       error = MessageValidator.validate_json_message(type, message)
       raise "Incoming message failed message schema validation: #{error}" if !error.nil?
 
-      status = validate_patient_state(message, type)
+
+      if (type == 'TreatmentArm')
+        status = queue_message(message, type)
+      else
+        status = validate_patient_state(message, type)
+      end
+
       raise "Incoming message failed patient state validation" if (status == false)
 
       standard_success_message("Message has been processed successfully")
@@ -28,6 +34,13 @@ class ServicesController < ApplicationController
     AppLogger.log(self.class.name, "Patient Api received message: #{json_data.to_json}")
     json_data.deep_transform_keys!(&:underscore).symbolize_keys!
     json_data
+  end
+
+  def queue_message(message, message_type)
+    queue_name = ENV['queue_name']
+    Rails.logger.debug "Patient API publishing to queue: #{queue_name}..."
+    Aws::Sqs::Publisher.publish(message, queue_name)
+    true
   end
 
   def validate_patient_state(message, message_type)
@@ -48,5 +61,7 @@ class ServicesController < ApplicationController
     Aws::Sqs::Publisher.publish(message, queue_name)
 
   end
+
+
 
 end

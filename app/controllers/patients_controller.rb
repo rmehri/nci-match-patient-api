@@ -68,8 +68,12 @@ class PatientsController < ApplicationController
   def variant_report_status
     begin
       input_data = get_post_data
-      result = ConfirmResult.from_json input_data
-      p result.to_h
+      # result = ConfirmResult.from_json input_data
+      # p result.to_h
+
+      success = validate(input_data)
+      result = PatientProcessor.run_service('/confirmVariantReport', input_data)
+      standard_success_message(result)
     rescue => error
       standard_error_message(error.message)
     end
@@ -238,6 +242,34 @@ class PatientsController < ApplicationController
     AppLogger.log_debug(self.class.name, "Patient API received message: #{json_data.to_json}")
     json_data.deep_transform_keys!(&:underscore).symbolize_keys!
     json_data
+  end
+
+  def validate(message)
+    type = MessageValidator.get_message_type(message)
+    raise "Incoming message has UNKNOWN message type" if (type == 'UNKNOWN')
+
+    error = MessageValidator.validate_json_message(type, message)
+    raise "Incoming message failed message schema validation: #{error}" if !error.nil?
+
+    status = validate_patient_state_no_queue(message, type)
+    raise "Incoming message failed patient state validation" if (status == false)
+    true
+  end
+
+  def validate_patient_state_no_queue(message, message_type)
+
+    AppLogger.log(self.class.name, "Validating messesage of type [#{message_type}]")
+
+    message_type = {message_type => message}
+    p message_type
+    result = StateMachine.validate(message_type)
+
+    if result != 'true'
+      result_hash = JSON.parse(result)
+      raise "Incoming message failed patient state validation: #{result_hash['error']}"
+    end
+
+    true
   end
 
   def validate_and_queue(*message_type)
