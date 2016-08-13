@@ -17,7 +17,7 @@ class DashboardController < ApplicationController
   # GET /dashboard/pendingAssignmentReports
   def pending_assignment_reports
     begin
-      dbm = NciMatchPatientModels::Assignment.find_by({"status" => "PENDING"}).collect {|r| r}
+      dbm = NciMatchPatientModels::Assignment.find_by({"status" => "PENDING_CONFIRMATION"}).collect {|r| r}
       AppLogger.log_debug(self.class.name, "Got #{dbm.length} assignment reports")
       reports = dbm.map { |x| x.to_h }
       render json: reports
