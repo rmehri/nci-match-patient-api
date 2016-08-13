@@ -66,6 +66,7 @@ class PatientsController < ApplicationController
 
   # PUT /patients/:patientid/variantReportStatus
   def variant_report_status
+    p "================ confirming variant report"
     begin
       input_data = get_post_data
 
@@ -80,8 +81,10 @@ class PatientsController < ApplicationController
       # result = ConfirmResult.from_json input_data
       # p result.to_h
 
+      p "=========== input data: #{input_data}"
+
       success = validate(input_data)
-      result = PatientProcessor.run_service('/confirmVariantReport', input_data)
+      result = PatientProcessor.run_service('/confirmVariantReport', input_data) if success
       standard_success_message(result)
     rescue => error
       standard_error_message(error.message)
@@ -90,7 +93,17 @@ class PatientsController < ApplicationController
 
   # POST /patients/:patientid/assignmentConfirmation
   def assignment_confirmation
-    render status: 200, json: '{"test":"test"}'
+    begin
+      input_data = get_post_data
+      # result = ConfirmResult.from_json input_data
+      # p result.to_h
+
+      success = validate(input_data)
+      result = PatientProcessor.run_service('/confirmAssignment', input_data)
+      standard_success_message(result)
+    rescue => error
+      standard_error_message(error.message)
+    end
   end
 
   # POST /patientStatus
