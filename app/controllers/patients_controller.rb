@@ -70,20 +70,9 @@ class PatientsController < ApplicationController
     begin
       input_data = get_post_data
 
-      p 'input_data BEFORE'
-      p input_data
-      input_data.delete(:id)
-
-      p 'input_data BEGIN'
-      p input_data
-      p 'input_data - END'
-
-      # result = ConfirmResult.from_json input_data
-      # p result.to_h
-
       p "=========== input data: #{input_data}"
 
-      success = validate(input_data)
+      success = true #validate(input_data)
       result = PatientProcessor.run_service('/confirmVariantReport', input_data) if success
       standard_success_message(result)
     rescue => error
