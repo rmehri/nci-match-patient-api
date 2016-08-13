@@ -68,6 +68,15 @@ class PatientsController < ApplicationController
   def variant_report_status
     begin
       input_data = get_post_data
+
+      p 'input_data BEFORE'
+      p input_data
+      input_data.delete(:id)
+
+      p 'input_data BEGIN'
+      p input_data
+      p 'input_data - END'
+
       # result = ConfirmResult.from_json input_data
       # p result.to_h
 

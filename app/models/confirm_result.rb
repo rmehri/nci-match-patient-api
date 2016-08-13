@@ -3,8 +3,9 @@ class ConfirmResult
   attr_accessor :id
   attr_accessor :patient_id
   attr_accessor :molecular_id
+  attr_accessor :analysis_id
   attr_accessor :type
-  attr_accessor :confirmed
+  attr_accessor :status
   attr_accessor :comment
   attr_accessor :comment_user
 
@@ -15,8 +16,9 @@ class ConfirmResult
     created.id = data['id']
     created.patient_id = data['patient_id']
     created.molecular_id = data['molecular_id']
+    created.analysis_id = data['analysis_id']
     created.type = data['type']
-    created.confirmed = data['confirmed']
+    created.status = data['status']
     created.comment = data['comment']
     created.comment_user = data['comment_user']
 

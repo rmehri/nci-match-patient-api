@@ -3,7 +3,7 @@ require 'json'
 describe ConfirmResult do
   def getTestable
     testable = ConfirmResult.new
-    testable.confirmed = true
+    testable.status = 'CONFIRMED'
     testable.comment = 'Some Comments'
     return testable
   end
@@ -11,17 +11,17 @@ describe ConfirmResult do
   it "can be created" do
     testable = getTestable
 
-    expect(testable.confirmed).to eq(true)
+    expect(testable.status).to eq('CONFIRMED')
     expect(testable.comment).to eq('Some Comments')
   end
 
   it "can convert from json" do
-    json_string = '{"confirmed":"true","comment":"Some Comments"}';
+    json_string = '{"status":"CONFIRMED","comment":"Some Comments"}';
 
     model = ConfirmResult.from_json json_string
 
     expect(model).to_not eq nil
-    expect(model.confirmed).to eq("true")
+    expect(model.status).to eq("CONFIRMED")
     expect(model.comment).to eq('Some Comments')
 
   end
