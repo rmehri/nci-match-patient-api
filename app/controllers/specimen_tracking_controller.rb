@@ -20,7 +20,7 @@ class SpecimenTrackingController < ApplicationController
         
         if (specimen_dbms.length > 0)
 
-          shipment_uim['assays'] = specimen_dbms[0].assays if specimen_dbms[0].assays.present?
+          shipment_uim['assays'] = specimen_dbms[0].assays if specimen_dbms[0].assays.present? if shipment_dbm.type != 'SLIDE'
           shipment_uim['collected_date'] = specimen_dbms[0].collected_date if specimen_dbms[0].collected_date.present?
           shipment_uim['received_date'] = specimen_dbms[0].received_date if specimen_dbms[0].received_date.present?
           shipment_uim['pathology_status'] = specimen_dbms[0].pathology_status if specimen_dbms[0].pathology_status.present?
