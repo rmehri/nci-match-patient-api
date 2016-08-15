@@ -36,15 +36,24 @@ class DashboardController < ApplicationController
       patientsOnTreatmentArm = patientsOnTreatmentArm_dbm.length
 
       treatment_arm_accrual = Hash.new
-
-      patientsOnTreatmentArm_dbm.select { |x| x.treatment_arm.present? }.each do |x|
-        if (treatment_arm_accrual.has_key?(x.treatment_arm))
-          treatment_arm_accrual[x.treatment_arm] = treatment_arm_accrual[x.treatment_arm] + 1
-        else
-          treatment_arm_accrual[x.treatment_arm] = 1
+      
+      patientsOnTreatmentArm_dbm.select { |x| x.respond_to?('current_assignment') }.each do |x|
+        # p x.current_assignment['assignment_logic']
+        selected = x.current_assignment['assignment_logic'].detect {|a_l| a_l['reasonCategory'] == 'SELECTED'}
+        if (selected != nil)
+          taKey = selected['treatmentArmName'] + ' (' + selected['treatmentArmStratumId'] + ', ' + selected['treatmentArmVersion'] + ')'
+          if (treatment_arm_accrual.has_key?(taKey))
+            treatment_arm_accrual[taKey] = treatment_arm_accrual[taKey].patients + 1
+          else
+            treatment_arm_accrual[taKey] = { 
+              "name" => selected['treatmentArmName'],  
+              "stratum_id" => selected['treatmentArmStratumId'],  
+              "patients" => 1
+            }
+          end
+          
         end
       end
-
       variant_report_dbm = NciMatchPatientModels::VariantReport.find_by({"status" => "CONFIRMED", "variant_report_type" => "TISSUE"}).collect {|x| x.patient_id}.uniq
       AppLogger.log_debug(self.class.name, "Got #{variant_report_dbm.length} variant reports with status='CONFIRMED' and variant_report_type='TISSUE'")
       confirmedVrPatients = variant_report_dbm.length
