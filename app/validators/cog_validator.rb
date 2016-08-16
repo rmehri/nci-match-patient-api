@@ -38,7 +38,7 @@ module MessageValidator
               "patient_id" => {"type" => "string", "minLength" => 1},
               "study_id" => {"type" => "string", "minLength" => 1,
                              "enum" => ["APEC1621"]},
-              "step_number" => {"type" => "number"},
+              "step_number" => {"type" => "number", "maximum" => 1},
               "status" => {"type" => "string", "minLength" => 1,
                            "enum" => ["REGISTRATION"]}
           }

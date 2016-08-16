@@ -7,11 +7,13 @@ module MessageValidator
   autoload :PathologyValidator,            'pathology_validator'
   autoload :VariantValidator,              'variant_validator'
   autoload :VariantReportStatusValidator,  'variant_report_status_validator'
-  autoload :TreatmentArmsValidator,         'treatment_arms_validator'
-  autoload :AssignmentStatusValidator,       'assignment_status_validator'
+  autoload :TreatmentArmsValidator,        'treatment_arms_validator'
+  autoload :AssignmentStatusValidator,     'assignment_status_validator'
+  autoload :RegistrationValidator,         'registration_validator'
 
   class << self
     cattr_reader :schema
+
   end
 
   def self.get_message_type(message)
@@ -43,6 +45,10 @@ module MessageValidator
   def self.validate_json_message(type, message_json)
     klazz = ("MessageValidator::" + type + "Validator").constantize
     begin
+      # message_validation = MessageValidator::RegistrationValidator.new.from_json(message_json.to_json)
+      # if(!message_validation.valid?)
+      #   return message_validation.errors.messages
+      # end
       JSON::Validator.validate!(klazz.schema, message_json)
       nil
     rescue => error
