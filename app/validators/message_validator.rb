@@ -45,11 +45,12 @@ module MessageValidator
   def self.validate_json_message(type, message_json)
     klazz = ("MessageValidator::" + type + "Validator").constantize
     begin
-      # message_validation = MessageValidator::RegistrationValidator.new.from_json(message_json.to_json)
-      # if(!message_validation.valid?)
-      #   return message_validation.errors.messages
-      # end
-      JSON::Validator.validate!(klazz.schema, message_json)
+      message_validation = MessageValidator::CogValidator.new.from_json(message_json.to_json)
+
+      unless message_validation.valid?
+        return message_validation.errors.messages
+      end
+      # JSON::Validator.validate!(klazz.schema, message_json)
       nil
     rescue => error
       error.message

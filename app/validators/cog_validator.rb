@@ -1,48 +1,26 @@
 module MessageValidator
-  class CogValidator
+  class CogValidator < AbstractValidator
+    include ActiveModel::Validations
 
-    def self.schema
-      @schema = {
-          "type" => "object",
-          "required" => ["patient_id", "status", "study_id"],
-          "properties" => {
-              "patient_id" => {"type" => "string", "minLength" => 1},
-              "study_id" => {"type" => "string", "minLength" => 1,
-                             "enum" => ["APEC1621"]},
-              "status" => {"type" => "string", "minLength" => 1,
-                           "enum" => ["REGISTRATION",
-                                      "PROGRESSION",
-                                      "TOXICITY",
-                                      "REGIMEN_COMPLETED",
-                                      "OFF_STUDY",
-                                      "OFF_STUDY_NOT_CONSENTED",
-                                      "OFF_STUDY_DECEASED",
-                                      "OFF_STUDY_BIOPSY_EXPIRED",
-                                      "NO_TA_AVAILABLE",
-                                      "PENDING_APPROVAL",
-                                      "COMPASSIONATE_CARE",
-                                      "ON_TREATMENT_ARM",
-                                      "TREATMENT_ARM_SUSPENDED",
-                                      "TREATMENT_ARM_CLOSED",
-                                      "NOT_ELIGIBLE",
-                                      "NOT_ENROLLING"]}
-          }
-      }
+    attr_accessor :header, :study_id, :patient_id, :step_number, :registration_date, :status, :internal_use_only
+
+    define_model_callbacks :from_json
+    after_from_json :include_correct_module
+
+    #Override
+    def from_json(json, include_root=include_root_in_json)
+      _run_from_json_callbacks do
+        super
+      end
     end
 
-    def self.registration_schema
-      @schema = {
-          "type" => "object",
-          "required" => ["patient_id", "status", "study_id"],
-          "properties" => {
-              "patient_id" => {"type" => "string", "minLength" => 1},
-              "study_id" => {"type" => "string", "minLength" => 1,
-                             "enum" => ["APEC1621"]},
-              "step_number" => {"type" => "number", "maximum" => 1},
-              "status" => {"type" => "string", "minLength" => 1,
-                           "enum" => ["REGISTRATION"]}
-          }
-      }
+    def include_correct_module
+      case @status.to_sym
+        when :REGISTRATION
+          class << self; include RegistrationValidator end
+      end
+
     end
+
    end
 end

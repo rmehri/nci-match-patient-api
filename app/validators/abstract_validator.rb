@@ -1,4 +1,5 @@
 class AbstractValidator
+  include ActiveModel::Serializers::JSON
 
   def attributes=(hash)
     hash.each do |key, value|
