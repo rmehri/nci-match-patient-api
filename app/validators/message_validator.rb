@@ -10,6 +10,7 @@ module MessageValidator
   autoload :TreatmentArmsValidator,        'treatment_arms_validator'
   autoload :AssignmentStatusValidator,     'assignment_status_validator'
   autoload :RegistrationValidator,         'registration_validator'
+  autoload :AbstractValidator,             'abstract_validator'
 
   class << self
     cattr_reader :schema
