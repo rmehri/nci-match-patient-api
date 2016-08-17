@@ -12,12 +12,12 @@ describe 'SpecimenShippedValidator behavior' do
             "study_id"=> "APEC1621",
             "patient_id"=> "3344",
             "type"=> "BLOOD_DNA",
-            "surgical_event_id"=> "3344-bsn",
             "molecular_id"=> "3344-bsn-msn",
 
             "carrier"=> "Federal Express",
             "tracking_id"=> "7956 4568 1235",
             "shipped_dttm"=> "2016-05-01T19:42:13+00:00",
+            "destination"=> "Boston",
 
             "internal_use_only"=> {
                 "stars_patient_id"=> "ABCXYZ",
@@ -48,6 +48,7 @@ describe 'SpecimenShippedValidator behavior' do
             "carrier"=> "Federal Express",
             "tracking_id"=> "7956 4568 1235",
             "shipped_dttm"=> "2016-05-01T19:42:13+00:00",
+            "destination"=> "Boston",
 
             "internal_use_only"=> {
                 "stars_patient_id"=> "ABCXYZ",
@@ -88,32 +89,30 @@ describe 'SpecimenShippedValidator behavior' do
     }.to_json
   end
 
-  # it "should get type 'SpecimenShipped' from MessageValidator" do
-  #   message = JSON.parse(good_message_blood)
-  #   message.deep_transform_keys!(&:underscore).symbolize_keys!
-  #   type = MessageValidator.get_message_type(message)
-  #   expect(type).to eq('SpecimenShipped')
-  # end
-  #
-  # it "should validate a good blood message" do
-  #   message = JSON.parse(good_message_blood)
-  #   message.deep_transform_keys!(&:underscore).symbolize_keys!
-  #   valid = JSON::Validator.validate(MessageValidator::SpecimenShippedValidator.schema, message)
-  #   expect(valid).to be_truthy
-  # end
-  #
-  # it "should validate a good tissue message" do
-  #   message = JSON.parse(good_message_tissue)
-  #   message.deep_transform_keys!(&:underscore).symbolize_keys!
-  #   valid = JSON::Validator.validate(MessageValidator::SpecimenShippedValidator.schema, message)
-  #   expect(valid).to be_truthy
-  # end
-  #
-  # it "should invalidate a bad message" do
-  #   message = JSON.parse(bad_message_unknown_type)
-  #   message.deep_transform_keys!(&:underscore).symbolize_keys!
-  #   valid = JSON::Validator.validate(MessageValidator::SpecimenShippedValidator.schema,
-  #                                    message)
-  #   expect(valid).to be_falsey
-  # end
+  it "should get type 'SpecimenShipped' from MessageValidator" do
+    message = JSON.parse(good_message_blood)
+    message.deep_transform_keys!(&:underscore).symbolize_keys!
+    type = MessageValidator.get_message_type(message)
+    expect(type).to eq('SpecimenShipped')
+  end
+
+  it "should validate a good blood message" do
+    message = JSON.parse(good_message_blood)
+    valid = MessageValidator::SpecimenShippedValidator.new.from_json(message.to_json).valid?
+    expect(valid).to be_truthy
+  end
+
+  it "should validate a good tissue message" do
+    message = JSON.parse(good_message_tissue)
+    valid = MessageValidator::SpecimenShippedValidator.new.from_json(message.to_json).valid?
+    expect(valid).to be_truthy
+  end
+
+  it "should invalidate a bad message" do
+    message = JSON.parse(bad_message_unknown_type)
+    message_validator = MessageValidator::SpecimenShippedValidator.new.from_json(message.to_json)
+    expect(message_validator.valid?).to be_falsey
+    expect(message_validator.errors.messages.to_s).to include("is not a support type")
+    expect(message_validator.errors.messages.to_s).to include("can't be blank")
+  end
 end
