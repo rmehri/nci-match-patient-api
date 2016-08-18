@@ -7,7 +7,7 @@ describe 'AssayValidator behavior' do
         "patient_id":"3344",
         "study_id": "APEC1621",
         "surgical_event_id":"3344-bsn",
-        "biomarker":"ICCPTEN",
+        "biomarker":"ICCPTENs",
         "reported_date":"2015-12-12T12:12:09.071-05:00",
         "ordered_date":"2015-12-12T12:11:09.071-05:00",
         "result":"POSITIVE"
@@ -34,16 +34,12 @@ describe 'AssayValidator behavior' do
   end
 
   it "should validate a good message" do
-    message = JSON.parse(good_message)
-    message.deep_transform_keys!(&:underscore).symbolize_keys!
-    valid = JSON::Validator.validate(MessageValidator::AssayValidator.schema, message)
-    expect(valid).to be_truthy
+    message_validation = MessageValidator::AssayValidator.new.from_json(good_message)
+    expect(message_validation.valid?).to be_truthy
   end
 
   it "should invalidate a bad message" do
-    message = JSON.parse(bad_message)
-    message.deep_transform_keys!(&:underscore).symbolize_keys!
-    valid = JSON::Validator.validate(MessageValidator::AssayValidator.schema, message)
-    expect(valid).to be_falsey
+    message_validation = MessageValidator::AssayValidator.new.from_json(bad_message)
+    expect(message_validation.valid?).to be_falsy
   end
 end

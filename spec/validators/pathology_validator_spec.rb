@@ -26,19 +26,16 @@ describe 'PathologyValidator behavior' do
     message.deep_transform_keys!(&:underscore).symbolize_keys!
     type = MessageValidator.get_message_type(message)
     expect(type).to eq('Pathology')
+
   end
 
   it "should validate a good message" do
-    message = JSON.parse(good_message)
-    message.deep_transform_keys!(&:underscore).symbolize_keys!
-    valid = JSON::Validator.validate(MessageValidator::PathologyValidator.schema, message)
-    expect(valid).to be_truthy
+    message_validation = MessageValidator::PathologyValidator.new.from_json(good_message)
+    expect(message_validation.valid?).to be_truthy
   end
 
   it "should invalidate a bad message" do
-    message = JSON.parse(bad_message)
-    message.deep_transform_keys!(&:underscore).symbolize_keys!
-    valid = JSON::Validator.validate(MessageValidator::PathologyValidator.schema, message)
-    expect(valid).to be_falsey
+    message_validation = MessageValidator::PathologyValidator.new.from_json(bad_message)
+    expect(message_validation.valid?).to be_falsy
   end
 end
