@@ -40,6 +40,11 @@ module MessageValidator
       type = "TreatmentArm"
     end
 
+    # Cog
+    # MDA
+    # NCH
+    # MATCH
+
     type
   end
 

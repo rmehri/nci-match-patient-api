@@ -31,18 +31,12 @@ describe 'VariantReportStatusValidator' do
   end
 
   it "should invalidate a bad message" do
-    message = JSON.parse(bad_message)
-    message.deep_transform_keys!(&:underscore).symbolize_keys!
-    valid = JSON::Validator.validate(MessageValidator::VariantReportStatusValidator.schema,
-                                     bad_message)
-    expect(valid).to be_falsey
+    message_validation = MessageValidator::VariantReportStatusValidator.new.from_json(bad_message)
+    expect(message_validation.valid?).to be_falsy
   end
 
   it "should validate a good message" do
-    message = JSON.parse(bad_message)
-    message.deep_transform_keys!(&:underscore).symbolize_keys!
-    valid = JSON::Validator.validate(MessageValidator::VariantReportStatusValidator.schema,
-                                     good_message)
-    expect(valid).to be_truthy
+    message_validation = MessageValidator::VariantReportStatusValidator.new.from_json(good_message)
+    expect(message_validation.valid?).to be_truthy
   end
 end

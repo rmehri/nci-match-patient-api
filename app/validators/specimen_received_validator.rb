@@ -20,6 +20,7 @@ module MessageValidator
 
     #Override
     def include_correct_module
+      p "=========== #{@patient_id}"
       case @type.to_sym
         when :BLOOD
           class << self; include BloodSpecimenReceivedValidator end

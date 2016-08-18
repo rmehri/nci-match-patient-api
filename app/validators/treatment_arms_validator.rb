@@ -1,14 +1,14 @@
 module MessageValidator
-  class TreatmentArmsValidator
-    def self.schema
-      @schema = {
-          "type" => "object",
-          "required" => ["treatment_arms"],
-          "properties" => {
-              "treatment_arms" => {"type" => "array"}
+  class TreatmentArmsValidator < AbstractValidator
+    include ActiveModel::Validations
+    include ActiveModel::Callbacks
 
-          }
-      }
-    end
+    define_model_callbacks :from_json
+    after_from_json :include_correct_module
+
+    attr_accessor :treatment_arms
+
+    validates :treatment_arms, presence: true
+
   end
 end

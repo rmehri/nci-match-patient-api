@@ -15,7 +15,7 @@ module MessageValidator
     validates :study_id, presence: true, inclusion: { in: %w(APEC1621), message: "%{value} is not a valid study_id"} # reapeated so should be its own validation
     validates :patient_id, presence: true
     validates :type, presence: true, inclusion: {in: %w(TISSUE_DNA_AND_CDNA SLIDE BLOOD_DNA), message: "%{value} is not a support type"}
-    validates :molecular_id, presence: true
+    # validates :molecular_id, presence: true
     validates :carrier, presence: true
     validates :tracking_id, presence: true
     validates :shipped_dttm, presence: true, date: {on_or_before: Date.current}
@@ -45,6 +45,7 @@ module MessageValidator
         @molecular_id = value[:molecular_id]
         @molecular_dna_id = value[:molecular_dna_id]
         @molecular_cdna_id = value[:molecular_cdna_id]
+        @slide_barcode = value[:slide_barcode]
         @type = value[:type]
         @carrier = value[:carrier]
         @tracking_id = value[:tracking_id]

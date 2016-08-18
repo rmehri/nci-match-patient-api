@@ -1,30 +1,31 @@
 module MessageValidator
-  class VariantValidator
+  class VariantValidator < AbstractValidator
+    include ActiveModel::Validations
+    include ActiveModel::Callbacks
 
-    def self.schema
-      @schema = {
-          "type" => "object",
-          "required" => ["patient_id",
-                         "molecular_id",
-                         "analysis_id",
-                         "s3_bucket_name",
-                         "tsv_file_path_name",
-                         "vcf_file_path_name",
-                         "dna_bam_file_path_name",
-                         "cdna_bam_file_path_name"
-                         ],
-          "properties" => {
-              "patient_id" => {"type" => "string", "minLength" => 1},
-              "surgical_event_id" => {"type" => "string", "minLength" => 1},
-              "molecular_id" => {"type" => "string", "minLength" => 1},
-              "analysis_id" => {"type" => "string", "minLength" => 1},
-              "s3_bucket_name" => {"type" => "string", "minLength" => 1},
-              "tsv_file_path_name" => {"type" => "string", "minLength" => 1},
-              "vcf_file_path_name" => {"type" => "string", "minLength" => 1},
-              "dna_bam_file_path_name" => {"type" => "string", "minLength" => 1},
-              "cdna_bam_file_path_name" => {"type" => "string", "minLength" => 1}
-          }
-      }
-    end
+    define_model_callbacks :from_json
+    after_from_json :include_correct_module
+
+    attr_accessor :patient_id,
+                  :molecular_id,
+                  :analysis_id,
+                  :s3_bucket_name,
+                  :tsv_file_path_name,
+                  :vcf_file_path_name,
+                  :dna_bam_file_path_name,
+                  :cdna_bam_file_path_name,
+                  :dna_bai_file_path_name,
+                  :cdna_bai_file_path_name
+
+
+    validates :patient_id, presence: true
+    validates :molecular_id, presence: true
+    validates :analysis_id, presence: true
+    validates :s3_bucket_name, presence: true
+    validates :tsv_file_path_name, presence: true
+    validates :vcf_file_path_name, presence: true
+    validates :dna_bam_file_path_name, presence: true
+    validates :cdna_bam_file_path_name, presence: true
+
   end
 end
