@@ -42,4 +42,5 @@ describe 'AssayValidator behavior' do
     message_validation = MessageValidator::AssayValidator.new.from_json(bad_message)
     expect(message_validation.valid?).to be_falsy
   end
+
 end
