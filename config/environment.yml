@@ -48,7 +48,7 @@ uat:
   write_capacity_units: "5"
 
   patient_state_api: "http://pedmatch.org:10241/"
-  patient_processor: "http://localhost:10242"
+  patient_processor: "http://uat.matchbox.nci.nih.gov:3010"
 
   s3_url: "https://s3.amazonaws.com"
 
