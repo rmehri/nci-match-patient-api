@@ -1,5 +1,5 @@
 module MessageValidator
-  class VariantValidator < AbstractValidator
+  class VariantReportValidator < AbstractValidator
     include ActiveModel::Validations
     include ActiveModel::Callbacks
 

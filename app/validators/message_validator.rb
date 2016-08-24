@@ -5,7 +5,7 @@ module MessageValidator
   autoload :CogValidator,                  'cog_validator'
   autoload :AssayValidator,                'assay_validator'
   autoload :PathologyValidator,            'pathology_validator'
-  autoload :VariantValidator,              'variant_validator'
+  autoload :VariantReportValidator, 'variant_report_validator'
   autoload :VariantReportStatusValidator,  'variant_report_status_validator'
   autoload :TreatmentArmsValidator,        'treatment_arms_validator'
   autoload :AssignmentStatusValidator,     'assignment_status_validator'
@@ -35,7 +35,7 @@ module MessageValidator
     elsif (!message[:status].nil? && (message[:status] == 'CONFIRMED' || message[:status] == 'REJECTED'))
       type = "VariantReportStatus"
     elsif (!message[:analysis_id].nil?)
-      type = "Variant"
+      type = "VariantReport"
     elsif (!message[:treatment_arms].nil?)
       type = "TreatmentArm"
     end
