@@ -20,15 +20,13 @@ module MessageValidator
   def self.get_message_type(message)
     type = 'UNKNOWN'
 
-    if (!message[:status].nil? && (message[:status] == 'REGISTRATION' || message[:status] == 'ON_TREATMENT_ARM'))
-      type = "Cog"
-    elsif (!message[:specimen_received].nil?)
+    if (!message[:specimen_received].nil?)
       type = "SpecimenReceived"
     elsif (!message[:specimen_shipped].nil?)
       type = "SpecimenShipped"
     elsif (!message[:biomarker].nil?)
       type = "Assay"
-    elsif (!message[:message].nil? && message[:message].start_with?("PATHOLOGY"))
+    elsif (!message[:type].nil? && message[:type] == 'PATHOLOGY_STATUS')
       type = "Pathology"
     elsif (!message[:status_type].nil? && message[:status_type] == 'ASSIGNMENT')
       type = "AssignmentStatus"
@@ -38,6 +36,8 @@ module MessageValidator
       type = "VariantReport"
     elsif (!message[:treatment_arms].nil?)
       type = "TreatmentArm"
+    else
+      type = "Cog"
     end
 
     # Cog
