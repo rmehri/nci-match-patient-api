@@ -19,7 +19,7 @@ module MessageValidator
     validates :carrier, presence: true
     validates :tracking_id, presence: true
     validates :shipped_dttm, presence: true, date: {on_or_before: Date.current}
-    validates :destination, presence: true
+    validates :destination, presence: true, inclusion: {in: %w(MDA MoCha), message: "%{value} is not a valid shipping destination"}
     validates :internal_use_only, presence: true
 
     #Override
