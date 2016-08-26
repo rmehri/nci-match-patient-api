@@ -18,7 +18,7 @@ module MessageValidator
     # validates :molecular_id, presence: true
     validates :carrier, presence: true
     validates :tracking_id, presence: true
-    validates :shipped_dttm, presence: true, date: {on_or_before: DateTime.current.utc}
+    validates :shipped_dttm, presence: true, date: {on_or_before: DateTime.current.utc, message: "Shipment date can't be later than #{DateTime.current.utc}"}
     validates :destination, presence: true, inclusion: {in: %w(MDA MoCha), message: "%{value} is not a valid shipping destination"}
     validates :internal_use_only, presence: true
 
