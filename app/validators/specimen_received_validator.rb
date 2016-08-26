@@ -14,8 +14,8 @@ module MessageValidator
     validates :study_id, presence: true, inclusion: { in: %w(APEC1621), message: "%{value} is not a valid study_id"} # reapeated so should be its own validation
     validates :patient_id, presence: true
     validates :type, presence: true, inclusion: {in: %w(BLOOD TISSUE), message: "%{value} is not a support type"}
-    validates :collected_date, presence: true, date: {on_or_before: Date.current}
-    validates :received_date, presence: true, date: {on_or_before: Date.current}
+    # validates :collected_date, presence: true, date: {on_or_before: DateTime.current.utc}
+    # validates :received_date, presence: true, date: {on_or_before: DateTime.current.utc}
     validates :internal_use_only, presence: true
 
     #Override
