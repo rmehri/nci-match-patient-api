@@ -7,6 +7,8 @@ describe 'AssayValidator behavior' do
         "patient_id":"3344",
         "study_id": "APEC1621",
         "surgical_event_id":"3344-bsn",
+        "case_number": "case-3377",
+        "type": "ASSAY_RESULT_REPORTED",
         "biomarker":"ICCPTENs",
         "reported_date":"2015-12-12T12:12:09.071-05:00",
         "ordered_date":"2015-12-12T12:11:09.071-05:00",

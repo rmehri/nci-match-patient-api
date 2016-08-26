@@ -6,10 +6,11 @@ module MessageValidator
     define_model_callbacks :from_json
     after_from_json :include_correct_module
 
-    attr_accessor :patient_id, :surgical_event_id, :status, :reported_date,
+    attr_accessor :patient_id, :study_id, :surgical_event_id, :status, :reported_date,
                   :case_number, :type
 
     validates :patient_id, presence: true
+    validates :study_id, presence: true, inclusion: { in: %w(APEC1621), message: "%{value} is not a valid study_id"}
     validates :surgical_event_id, presence: true
 
     validates :reported_date, presence: true

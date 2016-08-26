@@ -5,10 +5,12 @@ describe 'PathologyValidator behavior' do
   let(:good_message) do
     {
         "patient_id":"3344",
+        "study_id": "APEC1621",
         "surgical_event_id":"3344-bsn",
+        "case_number": "case-3377",
+        "type": "PATHOLOGY_STATUS",
         "reported_date":"2015-12-12T12:13:09.071-05:00",
-        "status":"Y",
-        "message":"PATHOLOGY_CONFIRMATION"
+        "status":"Y"
     }.to_json
   end
 
@@ -16,8 +18,7 @@ describe 'PathologyValidator behavior' do
     {
         "patient_id":"3344",
         "surgical_event_id":"3344-bsn",
-        "status":"Y",
-        "message":"PATHOLOGY_CONFIRMATION"
+        "status":"Y"
     }.to_json
   end
 
