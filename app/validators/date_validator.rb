@@ -9,6 +9,9 @@ class DateValidator < ActiveModel::EachValidator
     return unless value.present?
     unless options.blank?
       options.each do |key, compare_date|
+        if compare_date.is_a? Proc
+          compare_date = compare_date.call
+        end
         parsed_date = DateTime.parse(value)
         case key
           when :before
