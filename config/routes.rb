@@ -11,17 +11,19 @@ Rails.application.routes.draw do
     get "#{routing_path}/patients/timeline" => :dashboard_timeline
 
     get "#{routing_path}/patients/variant_reports" => :variant_reports
-    get "#{routing_path}/patients/assignment_reports" => :assignment_reports
+
     get "#{routing_path}/patients/specimens" => :specimens
-    get "#{routing_path}/patients/statistics" => :statistics
 
     get "#{routing_path}/patients/:patient_id" => :patient
     get "#{routing_path}/patients/:patient_id/timeline" => :timeline
 
     get "#{routing_path}/patients/:patient_id/specimens" => :patient_specimens
+
+    get "#{routing_path}/patients/variant_reports" => :variant_reports
     get "#{routing_path}/patients/:patient_id/variant_reports" => :patient_variant_reports
     get "#{routing_path}/patients/:patient_id/variant_reports/:molecular_id/:analysis_id" => :patient_variant_report
 
+    get "#{routing_path}/patients/assignment_reports" => :assignment_reports
     get "#{routing_path}/patients/:patient_id/assignment_reports" => :patient_assignment_reports
     get "#{routing_path}/patients/:patient_id/assignment_reports/:date_assigned" => :patient_assignment_report
 
@@ -37,6 +39,9 @@ Rails.application.routes.draw do
     get "#{routing_path}/patients/:patient_id/documents" => :document_list
     get "#{routing_path}/patients/:patient_id/documents/:document_id" => :document
     post "#{routing_path}/patients/:patient_id/documents" => :new_document
+
+    get "#{routing_path}/patients/statistics" => :statistics
+
   end
 
   controller :services do
@@ -44,14 +49,11 @@ Rails.application.routes.draw do
   end
 
   controller :dashboard do
-    get "dashboard/pendingVariantReports/:type" => :pending_variant_reports
-    get "dashboard/pendingAssignmentReports" => :pending_assignment_reports
-    get "dashboard/patientStatistics" => :patient_statistics
-    get "dashboard/sequencedAndConfirmedPatients" => :sequenced_and_confirmed_patients
+    get "#{routing_path}/patients/sequencedAndConfirmedPatients" => :sequenced_and_confirmed_patients
   end
 
   controller :specimen_tracking do
-    get "specimenTracking/shipments" => :shipments
+    get "#{routing_path}/patients/shipments" => :shipments
   end
   
 end

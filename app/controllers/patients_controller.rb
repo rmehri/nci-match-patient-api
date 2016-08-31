@@ -35,12 +35,30 @@ class PatientsController < ApplicationController
 
   # GET /api/v1/patients/variant_reports?status={PENDING | CONFIRMED | REJECTED}&type={TISSUE | BLOOD}
   def variant_reports
-    render status: 200, json: '{"test":"variant_reports"}'
+    begin
+      type = params[:type].to_s.upcase
+      status = params[:status].to_s.upcase
+      dbm = NciMatchPatientModels::VariantReport.find_by({"status" => status, "variant_report_type" => type}).collect {|r| r}
+      AppLogger.log_debug(self.class.name, "Got #{dbm.length} variant reports of type [#{type}]")
+      reports = dbm.map { |x| x.to_h }
+      render json: reports
+    rescue => error
+      standard_error_message(error.message)
+    end
   end
 
   # GET /api/v1/patients/assignment_reports?status={PENDING | CONFIRMED}
   def assignment_reports
-    render status: 200, json: '{"test":"assignment_reports"}'
+    status = params[:status].to_s.upcase
+
+    begin
+      dbm = NciMatchPatientModels::Assignment.find_by({"assignment_status" => status}).collect {|r| r}
+      AppLogger.log_debug(self.class.name, "Got #{dbm.length} assignment reports")
+      reports = dbm.map { |x| x.to_h }
+      render json: reports
+    rescue => error
+      standard_error_message(error.message)
+    end
   end
 
   #  GET /api/v1/patients/specimens?start_date={start_date}&end_date={end_date}
@@ -50,7 +68,48 @@ class PatientsController < ApplicationController
 
   # GET /api/v1/patients/statistics
   def statistics
-    render status: 200, json: '{"test":"statistics"}'
+    begin
+      patient_dbm = NciMatchPatientModels::Patient.find_by().collect {|r| r}
+      AppLogger.log_debug(self.class.name, "Got #{patient_dbm.length} patients")
+      totalPatients = patient_dbm.length
+      patientsOnTreatmentArm_dbm = patient_dbm.select {|x| x.current_status == 'ON_TREATMENT_ARM'}
+      patientsOnTreatmentArm = patientsOnTreatmentArm_dbm.length
+
+      treatment_arm_accrual = Hash.new
+
+      patientsOnTreatmentArm_dbm.select { |x| x.respond_to?('current_assignment') }.each do |x|
+        # p x.current_assignment['assignment_logic']
+        selected = x.current_assignment['assignment_logic'].detect {|a_l| a_l['reasonCategory'] == 'SELECTED'}
+        if (selected != nil)
+          taKey = selected['treatmentArmName'] + ' (' + selected['treatmentArmStratumId'] + ', ' + selected['treatmentArmVersion'] + ')'
+          if (treatment_arm_accrual.has_key?(taKey))
+            treatment_arm_accrual[taKey] = treatment_arm_accrual[taKey].patients + 1
+          else
+            treatment_arm_accrual[taKey] = {
+                "name" => selected['treatmentArmName'],
+                "stratum_id" => selected['treatmentArmStratumId'],
+                "patients" => 1
+            }
+          end
+
+        end
+      end
+      variant_report_dbm = NciMatchPatientModels::VariantReport.find_by({"status" => "CONFIRMED", "variant_report_type" => "TISSUE"}).collect {|x| x.patient_id}.uniq
+      AppLogger.log_debug(self.class.name, "Got #{variant_report_dbm.length} variant reports with status='CONFIRMED' and variant_report_type='TISSUE'")
+      confirmedVrPatients = variant_report_dbm.length
+
+      stats = {
+          "number_of_patients" => totalPatients.to_s,
+          "number_of_patients_on_treatment_arm" => patientsOnTreatmentArm.to_s,
+          "number_of_patients_with_confirmed_variant_report" => confirmedVrPatients.to_s,
+          "treatment_arm_accrual" => treatment_arm_accrual
+      }
+
+      render json: stats
+
+    rescue => error
+      standard_error_message(error.message)
+    end
   end
 
   # GET /api/v1/patients/amois?confirmed=true&count=true
