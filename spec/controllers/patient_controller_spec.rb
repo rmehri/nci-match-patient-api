@@ -132,9 +132,9 @@ describe PatientsController do
   end
 
   it "route to correct controller" do
-    expect(:get => "/patients").to route_to(:controller => "patients", :action => "patient_list")
-    expect(:get => "/patients/1").to route_to(:controller => "patients", :action => "patient", :patientid => "1")
-    expect(:get => "/patients/1/timeline").to route_to(:controller => "patients", :action => "timeline", :patientid => "1")
+    expect(:get => "api/v1/patients").to route_to(:controller => "patients", :action => "patient_list")
+    expect(:get => "api/v1/patients/1").to route_to(:controller => "patients", :action => "patient", :patient_id => "1")
+    expect(:get => "api/v1/patients/1/timeline").to route_to(:controller => "patients", :action => "timeline", :patient_id => "1")
   end
 
   let(:patient_list_dbm) do
@@ -148,19 +148,33 @@ describe PatientsController do
   end
 
   it "route correctly" do
-    expect(:get => "/patients").to route_to(:controller => "patients", :action => "patient_list")
-    expect(:get => "/patients/1").to route_to(:controller => "patients", :action => "patient", :patientid => "1")
-    expect(:get => "/patients/1/timeline").to route_to(:controller => "patients", :action => "timeline", :patientid => "1")
-    expect(:get => "/patients/1/sampleHistory/2").to route_to(:controller => "patients", :action => "sample", :patientid => "1", :sampleid => "2")
-    expect(:post => "/patients/1/sampleFile").to route_to(:controller => "patients", :action => "sample_file", :patientid => "1")
-    expect(:put => "/patients/1/variantStatus").to route_to(:controller => "patients", :action => "variant_status", :patientid => "1")
-    expect(:put => "/patients/1/variantReportStatus").to route_to(:controller => "patients", :action => "variant_report_status", :patientid => "1")
-    expect(:post => "/patients/1/assignmentConfirmation").to route_to(:controller => "patients", :action => "assignment_confirmation", :patientid => "1")
-    expect(:post => "/patientStatus").to route_to(:controller => "patients", :action => "patient_status")
-    expect(:get => "/patients/1/documents").to route_to(:controller => "patients", :action => "document_list", :patientid => "1")
-    expect(:get => "/patients/1/documents/2").to route_to(:controller => "patients", :action => "document", :patientid => "1", :documentid => "2")
-    expect(:post => "/patients/1/documents").to route_to(:controller => "patients", :action => "new_document", :patientid => "1")
-    expect(:get => "/patients/1/variantReportQc").to route_to(:controller => "patients", :action => "qc_variant_report", :patientid => "1")
+
+    expect(:get => "api/v1/patients/timeline").to route_to(:controller => "patients", :action => "dashboard_timeline")
+
+    expect(:get => "api/v1/patients").to route_to(:controller => "patients", :action => "patient_list")
+    expect(:get => "api/v1/patients/1").to route_to(:controller => "patients", :action => "patient", :patient_id => "1")
+    expect(:get => "api/v1/patients/1/timeline").to route_to(:controller => "patients", :action => "timeline", :patient_id => "1")
+    expect(:put => "api/v1/patients/variant/123456").to route_to(:controller => "patients", :action => "variant_status", :variant_uuid => "123456")
+    expect(:put => "api/v1/patients/1/variant_reports/mid/aid").to route_to(:controller => "patients",
+                                                                           :action => "variant_report_status",
+                                                                            :patient_id => "1", :molecular_id => "mid", :analysis_id => "aid")
+
+    expect(:put => "api/v1/patients/1/assignment_reports/6748392").to route_to(:controller => "patients",
+                                                                                :action => "assignment_confirmation",
+                                                                                :patient_id => "1", :date_assigned => "6748392")
+    expect(:get => "api/v1/patients/1/documents").to route_to(:controller => "patients", :action => "document_list", :patient_id => "1")
+    expect(:get => "api/v1/patients/1/documents/2").to route_to(:controller => "patients", :action => "document", :patient_id => "1", :document_id => "2")
+    expect(:post => "api/v1/patients/1/documents").to route_to(:controller => "patients", :action => "new_document", :patient_id => "1")
+
+    expect(:get => "api/v1/patients/1/variant_reports").to route_to(:controller => "patients", :action => "patient_variant_reports",
+                                                           :patient_id => "1")
+    expect(:get => "api/v1/patients/1/variant_reports/mid/aid").to route_to(:controller => "patients", :action => "patient_variant_report",
+                                                                            :patient_id => "1", :molecular_id => "mid", :analysis_id => "aid")
+
+    expect(:get => "api/v1/patients/1/assignment_reports").to route_to(:controller => "patients", :action => "patient_assignment_reports",
+                                                                       :patient_id => "1")
+    expect(:get => "api/v1/patients/1/assignment_reports/1234567").to route_to(:controller => "patients", :action => "patient_assignment_report",
+                                                                               :patient_id => "1", :date_assigned => "1234567")
   end
 
 
@@ -191,7 +205,7 @@ describe PatientsController do
     allow(NciMatchPatientModels::Variant).to receive(:scan).and_return([variant_dbm])
     allow(NciMatchPatientModels::Shipment).to receive(:scan).and_return([])
 
-    get :patient, :patientid => "2222"
+    get :patient, :patient_id => "2222"
 
     expect(response).to have_http_status(200)
 
@@ -203,7 +217,7 @@ describe PatientsController do
   it "GET /patients/1 should handle errors by returning status 500" do
     allow(NciMatchPatientModels::Patient).to receive(:query).and_raise("An Error")
 
-    get :patient, :patientid => "2222"
+    get :patient, :patient_id => "2222"
 
     expect(response).to have_http_status(500)
     expect(response.body).to include "message"
@@ -212,18 +226,9 @@ describe PatientsController do
   it "GET /patients/1/timeline to return json patient timeline" do
     allow(NciMatchPatientModels::Event).to receive(:query).and_return([patient_event_dbm])
 
-    get :timeline, :patientid => "1", format: :json
+    get :timeline, :patient_id => "1"
 
     expect(response).to have_http_status(200)
-
-    expect {
-      JSON.parse(response.body)
-    }.to_not raise_error
-  end
-
-  it "GET  /patients/1/sampleHistory/2" do
-    # .to route_to(:controller => "patients", :action => "sample", :patientid => "1", :sampleid => "2")
-    get :sample, :patientid => "1", sampleid: "2"
 
     expect {
       JSON.parse(response.body)
@@ -233,7 +238,7 @@ describe PatientsController do
   it "POST /patients/1/sampleFile" do
     # route_to(:controller => "patients", :action => "sample_file", :patientid => "1")
     allow(Aws::Sqs::Publisher).to receive(:publish).and_return("")
-    post :sample_file, :patientid => "1"
+    post :sample_files, :patient_id => "1"
 
     expect {
       JSON.parse(response.body)
@@ -252,6 +257,7 @@ describe PatientsController do
         "message" => "success"
     }.to_json
   end
+
   xit "PUT /patients/1/variantStatus" do
 
     allow(HTTParty::Request).to receive(:new).and_return(HTTParty::Request)
@@ -259,7 +265,7 @@ describe PatientsController do
     allow(HTTParty::Request).to receive(:perform).and_return(HTTParty::Response)
     allow(HTTParty::Response).to receive(:body).and_return(variant_status_response)
 
-    put :variant_status, variant_status_message, :patientid => "1"
+    put :variant_status, variant_status_message, :patient_id => "1"
 
     expect(response).to have_http_status(200)
     expect(response.body).to include "message"
@@ -268,16 +274,7 @@ describe PatientsController do
 
   it "PUT /patients/1/variantReportStatus" do
     # route_to(:controller => "patients", :action => "variant_report_status", :patientid => "1")
-    put :variant_report_status, :patientid => "1"
-
-    expect {
-      JSON.parse(response.body)
-    }.to_not raise_error
-  end
-
-  it "PUT /patients/1/variantReportQc" do
-    # route_to(:controller => "patients", :action => "variant_status", :patientid => "1")
-    put :qc_variant_report, :patientid => "1"
+    put :variant_reports, :patient_id => "1", :molecular_id => "mid", :analysis_id => "aid"
 
     expect {
       JSON.parse(response.body)
@@ -287,31 +284,31 @@ describe PatientsController do
   it "POST /patients/1/assignmentConfirmation" do
     # route_to(:controller => "patients", :action => "assignment_confirmation", :patientid => "1")
     allow(Aws::Sqs::Publisher).to receive(:publish).and_return("")
-    post :assignment_confirmation, :patientid => "1"
+    put :assignment_reports, :patient_id => "1", :date_assigned => "123456"
 
     expect {
       JSON.parse(response.body)
     }.to_not raise_error
   end
 
-  it "POST /patientStatus" do
-    message_body = {"status" => "Success", "error" => "some error"}
-    allow(HTTParty::Request).to receive(:new).and_return(HTTParty::Request)
-    allow(HTTParty::Response).to receive(:new).and_return(HTTParty::Response)
-    allow(HTTParty::Request).to receive(:perform).and_return(HTTParty::Response)
-    allow(HTTParty::Response).to receive(:body).and_return(message_body)
-
-    allow(Aws::Sqs::Publisher).to receive(:publish).and_return("")
-    post :patient_status, valid_test_message.to_json
-
-    expect {
-      JSON.parse(response.body)
-    }.to_not raise_error
-  end
+  # it "POST /patientStatus" do
+  #   message_body = {"status" => "Success", "error" => "some error"}
+  #   allow(HTTParty::Request).to receive(:new).and_return(HTTParty::Request)
+  #   allow(HTTParty::Response).to receive(:new).and_return(HTTParty::Response)
+  #   allow(HTTParty::Request).to receive(:perform).and_return(HTTParty::Response)
+  #   allow(HTTParty::Response).to receive(:body).and_return(message_body)
+  #
+  #   allow(Aws::Sqs::Publisher).to receive(:publish).and_return("")
+  #   post :patient_status, valid_test_message.to_json
+  #
+  #   expect {
+  #     JSON.parse(response.body)
+  #   }.to_not raise_error
+  # end
 
   it "GET  /patients/1/documents" do
     # route_to(:controller => "patients", :action => "document_list", :patientid => "1")
-    get :document_list, :patientid => "1"
+    get :document_list, :patient_id => "1"
 
     expect {
       JSON.parse(response.body)
@@ -320,7 +317,7 @@ describe PatientsController do
 
   it "GET  /patients/1/documents/2" do
     # route_to(:controller => "patients", :action => "document", :patientid => "1", :documentid => "2")
-    get :document, :patientid => "1", documentid: "2"
+    get :document, :patient_id => "1", document_id: "2"
 
     expect {
       JSON.parse(response.body)
@@ -329,7 +326,7 @@ describe PatientsController do
 
   it "POST /patients/1/documents" do
     # route_to(:controller => "patients", :action => "new_document", :patientid => "1")
-    post :new_document, :patientid => "1"
+    post :new_document, :patient_id => "1"
 
     expect {
       JSON.parse(response.body)

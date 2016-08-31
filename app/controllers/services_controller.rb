@@ -2,7 +2,7 @@
 class ServicesController < ApplicationController
   # before_action :authenticate
 
-  # POST /trigger
+  # POST /api/v1/patients/{patient_id}
   def trigger
     message = get_post_data
 

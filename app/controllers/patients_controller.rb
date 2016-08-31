@@ -17,18 +17,85 @@ class PatientsController < ApplicationController
 
   # GET /patients/1/pendingItems
   def pending_items
-    render_pendging_items params[:patientid]
+    render_pendging_items params[:patient_id]
   end
 
-  # GET /patients/1/timeline
+  # GET /api/v1/patients/1/timeline
+  # GET /api/v1/patients/timeline?num={num_events}&order={asc | desc}
   def timeline
-    render_event_patient_data params[:patientid]
+    render_event_patient_data params[:patient_id]
   end
 
-  # GET /patients/1
+  # GET /api/v1/patients/1
+  # GET /api/v1/patients?basic={true | false}&disease={disease}&gender={gender}&ethnicity={ethnicity}
   def patient
-    render_patient_data params[:patientid]
+    p "Am I here?"
+    render_patient_data params[:patient_id]
   end
+
+  # GET /api/v1/patients/variant_reports?status={PENDING | CONFIRMED | REJECTED}&type={TISSUE | BLOOD}
+  def variant_reports
+    render status: 200, json: '{"test":"variant_reports"}'
+  end
+
+  # GET /api/v1/patients/assignment_reports?status={PENDING | CONFIRMED}
+  def assignment_reports
+    render status: 200, json: '{"test":"assignment_reports"}'
+  end
+
+  #  GET /api/v1/patients/specimens?start_date={start_date}&end_date={end_date}
+  def specimens
+    render status: 200, json: '{"test":"specimens"}'
+  end
+
+  # GET /api/v1/patients/statistics
+  def statistics
+    render status: 200, json: '{"test":"statistics"}'
+  end
+
+  # GET /api/v1/patients/amois?confirmed=true&count=true
+  def amois
+    render status: 200, json: '{"test":"test"}'
+  end
+
+  # GET /api/v1/patients/{patient_id}/specimens
+  def patient_specimens
+    render status: 200, json: '{"test":"patient_specimens"}'
+  end
+
+  # GET /api/v1/patients/{patient_id}/variant_reports/{molecular_id}/{analysis_id}?filtered={true|false}
+  #  Returns one report
+  def patient_variant_report
+    render status: 200, json: '{"test":"patient_variant_report"}'
+  end
+
+  # GET /api/v1/patients/{patient_id}/variant_reports?type={BLOOD|TISSUE}&status={PENDING | CONFIRMED | REJECTED}
+  # return a list
+  def patient_variant_reports
+    render status: 200, json: '{"test":"patient_variant_reports"}'
+  end
+
+  # GET /api/v1/patients/{patient_id}/assignment_reports?status={PENDING | CONFIRMED}
+  def patient_assignment_reports
+    render status: 200, json: '{"test":"patient_assignment_reports"}'
+  end
+
+  # GET /api/v1/patients/{patient_id}/assignment_reports/{date_assigned}
+  def patient_assignment_report
+    render status: 200, json: '{"test":"patient_assignment_report"}'
+  end
+
+  # GET /api/v1/patients/{patient_id}/samples/{analysis_id}?format=zip
+  def sample_files
+    render status: 200, json: '{"test":"sample_files"}'
+  end
+
+  # GET /api/v1/patients/{patient_id}/samples/{analysis_id}/{filename}
+  def sample_file
+    render status: 200, json: '{"test":"Get sample_file"}'
+  end
+
+
 
   # GET /patients/:patientid/sampleHistory/:sampleid
   def sample
@@ -37,16 +104,19 @@ class PatientsController < ApplicationController
 
   # GET /patients/:patientid/qcVariantReport/:sampleid/:type
   def qc_variant_report
-    render status: 200, json: '{"test":"test"}'
+    render status: 200, json: '{"test":"qc_variant_report"}'
   end
 
   # POST /patients/:patientid/sampleFile
-  def sample_file
-    render status: 200, json: '{"test":"test"}'
+  def upload_sample_file
+    render status: 200, json: '{"test":"POST sample_file"}'
   end
 
-  # PUT /patients/:patientid/variantStatus
+  # PUT /api/v1/patients/{patient_id}/variant_reports/{molecular_id}/{analysis_id}/{confirm|reject}
   def variant_status
+
+    # first get {confirm|reject}
+
     begin
       input_data = get_post_data
 
@@ -81,7 +151,7 @@ class PatientsController < ApplicationController
     end
   end
 
-  # POST /patients/:patientid/assignmentConfirmation
+  # PUT /api/v1/patients/{patient_id}/assignment_reports/{date_assigned}/confirm
   def assignment_confirmation
     begin
       input_data = get_post_data
@@ -96,24 +166,30 @@ class PatientsController < ApplicationController
     end
   end
 
+  # GET /api/v1/patients/specimens/{molecular_id}/specimen_shipped
+  def specimen_shipped
+    render status: 200, json: '{"test":"specimen_shipped"}'
+  end
+
   # POST /patientStatus
   def patient_status
     process_message
   end
 
-  # GET /patients/:patientid/documents
+  # GET /api/v1/patients/{patient_id}/documents
   def document_list
-    render status: 200, json: '{"test":"test"}'
+    # return zip file by default for now
+    render status: 200, json: '{"test":"document_list"}'
   end
 
-  # GET /patients/:patientid/documents/:documentid
+  # GET /api/v1/patients/{patient_id}/documents/{document_id}?format=zip
   def document
-    render status: 200, json: '{"test":"test"}'
+    render status: 200, json: '{"test":"document"}'
   end
 
   # POST /patients/:patientid/documents
   def new_document
-    render status: 200, json: '{"test":"test"}'
+    render status: 200, json: '{"test":"new_document"}'
   end
 
 
@@ -153,6 +229,7 @@ class PatientsController < ApplicationController
   end
 
   def render_pendging_items(patientid)
+    # This should be included in patient ui model
     begin
       pending_items = []      
 

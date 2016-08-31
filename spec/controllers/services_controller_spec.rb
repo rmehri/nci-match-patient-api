@@ -29,16 +29,27 @@ describe ServicesController do
   end
 
   it "should route to correct controller" do
-    expect(:post => "trigger").to route_to(:controller => "services", :action => "trigger")
+    expect(:post => "api/v1/patients/3355").to route_to(:controller => "services", :action => "trigger", :patient_id =>"3355")
   end
 
   it "POST /trigger" do
-
-    allow(Aws::Sqs::Publisher).to receive(:publish).and_return("")
-    post :trigger, good_message
-
-    expect {
-      JSON.parse(response.body)
-    }.to_not raise_error
+    expect(:post => "api/v1/patients/1").to route_to(:controller => "services", :action => "trigger", :patient_id => "1")
   end
+
+  #   allow(Aws::Sqs::Publisher).to receive(:publish).and_return("")
+  #
+  #   # allow(Aws::Sqs::Publisher).to receive(:publish).and_return("")
+  #   # put :assignment_reports, :patient_id => "1", :date_assigned => "123456"
+  #
+  #   post :trigger, good_message
+  #   # good_message
+  #
+  #   # headers = { 'CONTENT_TYPE' => 'application/json' }
+  #   #
+  #   # post "/api/v1/patients/3355", good_message, headers
+  #
+  #   expect {
+  #     JSON.parse(response.body)
+  #   }.to_not raise_error
+  # end
 end
