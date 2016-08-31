@@ -28,7 +28,7 @@ test:
   shoryuken_delay: "30"
   shoryuken_concurrency: "30"
 
-  patient_state_api: "http://pedmatch.org:10241/"
+  patient_state_api: "http://pedmatch-int.nci.nih.gov/api/v1/state_validator/"
   patient_processor: "http://pedmatch.org:3010"
 
   http_read_timeout: "120"
@@ -47,7 +47,7 @@ uat:
   read_capacity_units: "5"
   write_capacity_units: "5"
 
-  patient_state_api: "http://pedmatch.org:10241/"
+  patient_state_api: "http://pedmatch-uat.nci.nih.gov/api/v1/state_validator/"
   patient_processor: "http://uat.matchbox.nci.nih.gov:3010"
 
   s3_url: "https://s3.amazonaws.com"
