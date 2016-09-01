@@ -8,7 +8,7 @@ development:
   read_capacity_units: "30"
   write_capacity_units: "30"
 
-  patient_state_api: "http://localhost:10241/"
+  patient_state_api: "http://localhost:10241/api/v1/"
   patient_processor: "http://localhost:3010"
 
   s3_url: "https://s3.amazonaws.com"
