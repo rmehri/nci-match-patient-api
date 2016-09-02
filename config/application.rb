@@ -20,6 +20,8 @@ module NciMatchPatientApi
   class Application < Rails::Application
     config.autoload_paths += Dir[Rails.root.join('app', 'models', '*')]
     config.autoload_paths += Dir[Rails.root.join('app', 'models', '{*/}')]
+    config.autoload_paths += Dir[Rails.root.join('app', 'controllers', '*')]
+    config.autoload_paths += Dir[Rails.root.join('app', 'controllers', '{*}')]
     config.autoload_paths += Dir[Rails.root.join('app', 'helpers', '{*/}')]
     config.autoload_paths += Dir[Rails.root.join('app', 'validators', '{*/}')]
     config.autoload_paths += Dir[Rails.root.join('lib')]

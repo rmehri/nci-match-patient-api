@@ -3,7 +3,7 @@ require 'factory_girl_rails'
 require 'aws-record'
 require 'nci_match_patient_models'
 
-describe PatientsController do
+describe V1::PatientsController do
 
   # before(:each) do
   #   setup_knock()
@@ -132,9 +132,9 @@ describe PatientsController do
   end
 
   it "route to correct controller" do
-    expect(:get => "api/v1/patients").to route_to(:controller => "patients", :action => "patient_list")
-    expect(:get => "api/v1/patients/1").to route_to(:controller => "patients", :action => "patient", :patient_id => "1")
-    expect(:get => "api/v1/patients/1/timeline").to route_to(:controller => "patients", :action => "timeline", :patient_id => "1")
+    expect(:get => "api/v1/patients").to route_to(:controller => "v1/patients", :action => "patient_list")
+    expect(:get => "api/v1/patients/1").to route_to(:controller => "v1/patients", :action => "patient", :patient_id => "1")
+    expect(:get => "api/v1/patients/1/timeline").to route_to(:controller => "v1/patients", :action => "timeline", :patient_id => "1")
   end
 
   let(:patient_list_dbm) do
@@ -149,31 +149,31 @@ describe PatientsController do
 
   it "route correctly" do
 
-    expect(:get => "api/v1/patients/timeline").to route_to(:controller => "patients", :action => "dashboard_timeline")
+    expect(:get => "api/v1/patients/timeline").to route_to(:controller => "v1/patients", :action => "dashboard_timeline")
 
-    expect(:get => "api/v1/patients").to route_to(:controller => "patients", :action => "patient_list")
-    expect(:get => "api/v1/patients/1").to route_to(:controller => "patients", :action => "patient", :patient_id => "1")
-    expect(:get => "api/v1/patients/1/timeline").to route_to(:controller => "patients", :action => "timeline", :patient_id => "1")
-    expect(:put => "api/v1/patients/variant/123456").to route_to(:controller => "patients", :action => "variant_status", :variant_uuid => "123456")
-    expect(:put => "api/v1/patients/1/variant_reports/mid/aid").to route_to(:controller => "patients",
+    expect(:get => "api/v1/patients").to route_to(:controller => "v1/patients", :action => "patient_list")
+    expect(:get => "api/v1/patients/1").to route_to(:controller => "v1/patients", :action => "patient", :patient_id => "1")
+    expect(:get => "api/v1/patients/1/timeline").to route_to(:controller => "v1/patients", :action => "timeline", :patient_id => "1")
+    expect(:put => "api/v1/patients/variant/123456").to route_to(:controller => "v1/patients", :action => "variant_status", :variant_uuid => "123456")
+    expect(:put => "api/v1/patients/1/variant_reports/mid/aid").to route_to(:controller => "v1/patients",
                                                                            :action => "variant_report_status",
                                                                             :patient_id => "1", :molecular_id => "mid", :analysis_id => "aid")
 
-    expect(:put => "api/v1/patients/1/assignment_reports/6748392").to route_to(:controller => "patients",
+    expect(:put => "api/v1/patients/1/assignment_reports/6748392").to route_to(:controller => "v1/patients",
                                                                                 :action => "assignment_confirmation",
                                                                                 :patient_id => "1", :date_assigned => "6748392")
-    expect(:get => "api/v1/patients/1/documents").to route_to(:controller => "patients", :action => "document_list", :patient_id => "1")
-    expect(:get => "api/v1/patients/1/documents/2").to route_to(:controller => "patients", :action => "document", :patient_id => "1", :document_id => "2")
-    expect(:post => "api/v1/patients/1/documents").to route_to(:controller => "patients", :action => "new_document", :patient_id => "1")
+    expect(:get => "api/v1/patients/1/documents").to route_to(:controller => "v1/patients", :action => "document_list", :patient_id => "1")
+    expect(:get => "api/v1/patients/1/documents/2").to route_to(:controller => "v1/patients", :action => "document", :patient_id => "1", :document_id => "2")
+    expect(:post => "api/v1/patients/1/documents").to route_to(:controller => "v1/patients", :action => "new_document", :patient_id => "1")
 
-    expect(:get => "api/v1/patients/1/variant_reports").to route_to(:controller => "patients", :action => "patient_variant_reports",
+    expect(:get => "api/v1/patients/1/variant_reports").to route_to(:controller => "v1/patients", :action => "variant_reports",
                                                            :patient_id => "1")
-    expect(:get => "api/v1/patients/1/variant_reports/mid/aid").to route_to(:controller => "patients", :action => "patient_variant_report",
+    expect(:get => "api/v1/patients/1/variant_reports/mid/aid").to route_to(:controller => "v1/patients", :action => "patient_variant_report",
                                                                             :patient_id => "1", :molecular_id => "mid", :analysis_id => "aid")
 
-    expect(:get => "api/v1/patients/1/assignment_reports").to route_to(:controller => "patients", :action => "patient_assignment_reports",
+    expect(:get => "api/v1/patients/1/assignment_reports").to route_to(:controller => "v1/patients", :action => "patient_assignment_reports",
                                                                        :patient_id => "1")
-    expect(:get => "api/v1/patients/1/assignment_reports/1234567").to route_to(:controller => "patients", :action => "patient_assignment_report",
+    expect(:get => "api/v1/patients/1/assignment_reports/1234567").to route_to(:controller => "v1/patients", :action => "patient_assignment_report",
                                                                                :patient_id => "1", :date_assigned => "1234567")
   end
 

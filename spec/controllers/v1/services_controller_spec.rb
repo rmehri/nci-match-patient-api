@@ -2,7 +2,7 @@ require 'rails_helper'
 require 'factory_girl_rails'
 require 'aws-record'
 
-describe ServicesController do
+describe V1::ServicesController do
 
   before(:each) do
     allow(HTTParty::Request).to receive(:new).and_return(HTTParty::Request)
@@ -29,11 +29,11 @@ describe ServicesController do
   end
 
   it "should route to correct controller" do
-    expect(:post => "api/v1/patients/3355").to route_to(:controller => "services", :action => "trigger", :patient_id =>"3355")
+    expect(:post => "api/v1/patients/3355").to route_to(:controller => "v1/services", :action => "trigger", :patient_id =>"3355")
   end
 
   it "POST /trigger" do
-    expect(:post => "api/v1/patients/1").to route_to(:controller => "services", :action => "trigger", :patient_id => "1")
+    expect(:post => "api/v1/patients/1").to route_to(:controller => "v1/services", :action => "trigger", :patient_id => "1")
   end
 
   #   allow(Aws::Sqs::Publisher).to receive(:publish).and_return("")

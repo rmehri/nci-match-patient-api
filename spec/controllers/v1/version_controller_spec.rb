@@ -6,7 +6,7 @@ require 'nci_match_patient_models'
 
 require 'aws-record/record'
 
-describe VersionController do
+describe V1::VersionController do
 
   describe "GET #version" do
 
@@ -24,7 +24,7 @@ describe VersionController do
 
     it "should route to the correct controller" do
 
-      expect(:get => "/api/v1/patients/version" ).to route_to(:controller => "version", :action => "version")
+      expect(:get => "/api/v1/patients/version" ).to route_to(:controller => "v1/version", :action => "version")
     end
 
     it "should handle an error correctly" do

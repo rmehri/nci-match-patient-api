@@ -59,21 +59,21 @@ module Convert
           shipment_uim['analyses'] = variant_reports_dbm
               .select {|vr| vr.surgical_event_id == shipment_dbm.surgical_event_id && vr.molecular_id == shipment_dbm.molecular_id }
               .map { |vr| 
-                { 
+                {
                   "analysis_id" => vr.analysis_id,
                   "variant_report_received_date" => vr.variant_report_received_date,
                   "status" => vr.status,
                   "status_date" => vr.status_date,
                   "comment" => vr.comment,
                   "comment_user" => vr.comment_user,
-                  "dna_bam_path_name" => get_s3_url(vr.s3_bucket, vr.dna_bam_path_name),
-                  "dna_bai_path_name" => get_s3_url(vr.s3_bucket, vr.dna_bai_path_name),
-                  "rna_bam_path_name" => get_s3_url(vr.s3_bucket, vr.rna_bam_path_name),
-                  "rna_bai_path_name" => get_s3_url(vr.s3_bucket, vr.rna_bai_path_name),
-                  "vcf_path_name"     => get_s3_url(vr.s3_bucket, vr.vcf_path_name),
-                  "tsv_path_name"     => get_s3_url(vr.s3_bucket, vr.tsv_path_name),
-                  "qc_report_url"     => get_qc_report_url(vr.s3_bucket, vr.tsv_path_name),
-                  "vr_chart_data_url" => get_vr_chart_url(vr.s3_bucket, vr.vcf_path_name)
+                  "dna_bam_name" => get_s3_url(vr.clia_lab, vr.molecular_id, vr.analysis_id, vr.dna_bam_name),
+                  "dna_bai_name" => get_s3_url(vr.clia_lab, vr.molecular_id, vr.analysis_id, vr.dna_bai_name),
+                  "cdna_bam_name" => get_s3_url(vr.clia_lab, vr.molecular_id, vr.analysis_id, vr.rna_bam_name),
+                  "cdna_bai_name" => get_s3_url(vr.clia_lab, vr.molecular_id, vr.analysis_id, vr.rna_bai_name),
+                  "vcf_path_name"     => get_s3_url(vr.clia_lab, vr.molecular_id, vr.analysis_id, vr.vcf_file_name),
+                  "tsv_path_name"     => get_s3_url(vr.clia_lab, vr.molecular_id, vr.analysis_id, vr.tsv_file_name),
+                  "qc_report_url"     => get_qc_report_url(vr.clia_lab, vr.molecular_id, vr.analysis_id, vr.tsv_file_name),
+                  "vr_chart_data_url" => get_vr_chart_url(vr.clia_lab, vr.molecular_id, vr.analysis_id, vr.vcf_file_name)
                 } 
               } 
 
@@ -87,8 +87,8 @@ module Convert
       specimens_ui
     end
 
-    def self.get_qc_report_url(s3_bucket, file_name)
-      if (s3_bucket == nil || s3_bucket == '' || file_name == nil || file_name == '')
+    def self.get_qc_report_url(site, molecular_id, analysis_id, file_name)
+      if (site.blank? || molecular_id.blank? || analysis_id.blank? || file_name.blank?)
         return nil
       end
 
@@ -96,27 +96,27 @@ module Convert
 
       p 'qc_file =' + qc_file.to_s
 
-      return "#{ENV['s3_url']}/#{s3_bucket}/#{qc_file}"
+      return "#{ENV['s3_url']}/#{ENV['s3_bucket']}/#{site}/#{molecular_id}/#{analysis_id}/#{qc_file}"
     end
 
-    def self.get_s3_url(s3_bucket, file_name)
-      if (s3_bucket == nil || s3_bucket == '' || file_name == nil || file_name == '')
+    def self.get_s3_url(site, molecular_id, analysis_id, file_name)
+      if (site.blank? || molecular_id.blank? || analysis_id.blank? || file_name.blank?)
         return nil
       end
 
-      return "#{ENV['s3_url']}/#{s3_bucket}/#{file_name}"
+      return "#{ENV['s3_url']}/#{ENV['s3_bucket']}/#{site}/#{molecular_id}/#{analysis_id}/#{file_name}"
     end
 
-    def self.get_vr_chart_url(s3_bucket, file_name)
+    def self.get_vr_chart_url(site, molecular_id,analysis_id, file_name)
 
-      if (s3_bucket == nil || s3_bucket == '' || file_name == nil || file_name == '')
+      if (site.blank? || molecular_id.blank? || analysis_id.blank? || file_name.blank?)
         return nil
       end
 
       chart_file = File.basename(file_name, ".vcf") + ".vr_chart.json"
       p 'chart_file =' + chart_file.to_s
 
-      return "#{ENV['s3_url']}/#{s3_bucket}/#{chart_file}"
+      return "#{ENV['s3_url']}/#{ENV['s3_bucket']}/#{site}/#{molecular_id}/#{analysis_id}/#{chart_file}"
     end
 
     def self.to_ui_variant_reports(variant_reports_dbm, variants_dbm)
@@ -150,32 +150,35 @@ module Convert
     end
 
     def self.to_ui_variant_report(report_dbm)
+      site = report_dbm.clia_lab
+      molecular_id = report_dbm.molecular_id
+      analysis_id = report_dbm.analysis_id
+
 
       report = {
           "surgical_event_id"            => report_dbm.surgical_event_id,
           "variant_report_received_date" => report_dbm.variant_report_received_date,
           "variant_report_type"          => report_dbm.variant_report_type,
           "patient_id"                   => report_dbm.patient_id,
-          "molecular_id"                 => report_dbm.molecular_id,
-          "analysis_id"                  => report_dbm.analysis_id,
+          "molecular_id"                 => molecular_id,
+          "analysis_id"                  => analysis_id,
+          "clia_lab"                     => site,
           "status"                       => report_dbm.status,
           "status_date"                  => report_dbm.status_date,
-          "dna_bam_path_name"            => get_s3_url(report_dbm.s3_bucket, report_dbm.dna_bam_path_name),
-          "dna_bai_path_name"            => get_s3_url(report_dbm.s3_bucket, report_dbm.dna_bai_path_name),
-          "rna_bam_path_name"            => get_s3_url(report_dbm.s3_bucket, report_dbm.rna_bam_path_name),
-          "rna_bai_path_name"            => get_s3_url(report_dbm.s3_bucket, report_dbm.rna_bai_path_name),
-          "rna_bai_path_name"            => get_s3_url(report_dbm.s3_bucket, report_dbm.rna_bai_path_name),
-          "tsv_path_name"                => get_s3_url(report_dbm.s3_bucket, report_dbm.tsv_path_name),
-          "vcf_path_name"                => get_s3_url(report_dbm.s3_bucket, report_dbm.vcf_path_name),
-          "s3_bucket"                    => report_dbm.s3_bucket,
+          "dna_bam_name"                => get_s3_url(site, molecular_id,analysis_id, report_dbm.dna_bam_name),
+          "dna_bai_name"                => get_s3_url(site, molecular_id,analysis_id, report_dbm.dna_bai_name),
+          "cdna_bam_name"               => get_s3_url(site, molecular_id,analysis_id, report_dbm.cdna_bam_name),
+          "cdna_bai_name"               => get_s3_url(site, molecular_id,analysis_id, report_dbm.cdna_bai_name),
+          "tsv_file_name"                => get_s3_url(site, molecular_id,analysis_id, report_dbm.tsv_file_name),
+          "vcf_file_name"                => get_s3_url(site, molecular_id,analysis_id, report_dbm.vcf_file_name),
           "total_variants"               => report_dbm.total_variants,
           "cellularity"                  => report_dbm.cellularity,
           "total_mois"                   => report_dbm.total_mois,
           "total_amois"                  => report_dbm.total_amois,
           "total_confirmed_mois"         => report_dbm.total_confirmed_mois,
           "total_confirmed_amois"        => report_dbm.total_confirmed_amois,
-          "qc_report_url" => get_qc_report_url(report_dbm.s3_bucket, report_dbm.tsv_path_name),
-          "vr_chart_data_url" => get_vr_chart_url(report_dbm.s3_bucket, report_dbm.vcf_path_name)
+          "qc_report_url" => get_qc_report_url(site, molecular_id,analysis_id, report_dbm.tsv_file_name),
+          "vr_chart_data_url" => get_vr_chart_url(site, molecular_id, analysis_id, report_dbm.vcf_file_name)
       }
       report
     end
