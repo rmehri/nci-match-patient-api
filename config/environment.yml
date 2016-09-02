@@ -12,6 +12,7 @@ development:
   patient_processor: "http://localhost:3010"
 
   s3_url: "https://s3.amazonaws.com"
+  s3_bucket: "pedmatch-dev"
 
 test:
 
@@ -35,7 +36,7 @@ test:
   http_use_ssl: "false"
 
   s3_url: "https://s3.amazonaws.com"
-
+  s3_bucket: "pedmatch-int"
 uat:
   aws_dynamo_endpoint: "https://dynamodb.us-east-1.amazonaws.com"
   aws_region: "us-east-1"
@@ -51,6 +52,7 @@ uat:
   patient_processor: "http://uat.matchbox.nci.nih.gov:3010"
 
   s3_url: "https://s3.amazonaws.com"
+  s3_bucket: "pedmatch-uat"
 
 production:
   aws_dynamo_endpoint: "https://dynamodb.us-east-1.amazonaws.com"
@@ -67,3 +69,4 @@ production:
   patient_processor: "http://localhost:10242"
 
   s3_url: "https://s3.amazonaws.com"
+  s3_bucket: "pedmatch"
