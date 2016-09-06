@@ -14,6 +14,7 @@ module V1
         raise "Incoming message failed message schema validation: #{error}" if !error.nil?
 
 
+        # TreatmentArm type should be no longer needed
         if (type == 'TreatmentArm')
           status = queue_message(message, type)
         else
@@ -45,13 +46,15 @@ module V1
 
     def validate_patient_state(message, message_type)
 
-      AppLogger.log(self.class.name, "Validting messesage of type [#{message_type}]")
+      AppLogger.log(self.class.name, "Validating messesage of type [#{message_type}]")
 
-      message_type = {message_type => message}
-      result = StateMachine.validate(message_type)
+      if (message_type == 'VariantReport' && !message[:tsv_file_name].nil?)
+        message_type = {message_type => message}
+        result = StateMachine.validate(message_type)
 
-      if result != 'true'
-        raise "Incoming message failed patient state validation: #{result}"
+        if result != 'true'
+          raise "Incoming message failed patient state validation: #{result}"
+        end
       end
 
       queue_name = ENV['queue_name']
