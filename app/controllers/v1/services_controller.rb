@@ -48,13 +48,11 @@ module V1
 
       AppLogger.log(self.class.name, "Validating messesage of type [#{message_type}]")
 
-      if (message_type == 'VariantReport' && !message[:tsv_file_name].nil?)
-        message_type = {message_type => message}
-        result = StateMachine.validate(message_type)
+      message_type = {message_type => message}
+      result = StateMachine.validate(message_type)
 
-        if result != 'true'
-          raise "Incoming message failed patient state validation: #{result}"
-        end
+      if result != 'true'
+        raise "Incoming message failed patient state validation: #{result}"
       end
 
       queue_name = ENV['queue_name']
