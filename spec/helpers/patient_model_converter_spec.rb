@@ -113,8 +113,8 @@ describe Convert do
         :rare => "?",
         :allele_frequency => "0.0344",
         :flow_alternative_allele_observation_count => "alt obs",
-        :flow_reference_allele_observation => "alt allele",
-        :reference_allele_observation => "ref allele"
+        :flow_reference_allele_observations => "alt allele",
+        :reference_allele_observations => "ref allele"
       )
     }
   end

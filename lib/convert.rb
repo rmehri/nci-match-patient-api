@@ -66,14 +66,14 @@ module Convert
                   "status_date" => vr.status_date,
                   "comment" => vr.comment,
                   "comment_user" => vr.comment_user,
-                  "dna_bam_name" => get_s3_url(vr.clia_lab, vr.molecular_id, vr.analysis_id, vr.dna_bam_name),
-                  "dna_bai_name" => get_s3_url(vr.clia_lab, vr.molecular_id, vr.analysis_id, vr.dna_bai_name),
-                  "cdna_bam_name" => get_s3_url(vr.clia_lab, vr.molecular_id, vr.analysis_id, vr.cdna_bam_name),
-                  "cdna_bai_name" => get_s3_url(vr.clia_lab, vr.molecular_id, vr.analysis_id, vr.cdna_bai_name),
-                  "vcf_path_name"     => get_s3_url(vr.clia_lab, vr.molecular_id, vr.analysis_id, vr.vcf_file_name),
-                  "tsv_path_name"     => get_s3_url(vr.clia_lab, vr.molecular_id, vr.analysis_id, vr.tsv_file_name),
-                  "qc_report_url"     => get_qc_report_url(vr.clia_lab, vr.molecular_id, vr.analysis_id, vr.tsv_file_name),
-                  "vr_chart_data_url" => get_vr_chart_url(vr.clia_lab, vr.molecular_id, vr.analysis_id, vr.vcf_file_name)
+                  "dna_bam_name" => get_s3_url(vr.site, vr.molecular_id, vr.analysis_id, vr.dna_bam_name),
+                  "dna_bai_name" => get_s3_url(vr.site, vr.molecular_id, vr.analysis_id, vr.dna_bai_name),
+                  "cdna_bam_name" => get_s3_url(vr.site, vr.molecular_id, vr.analysis_id, vr.cdna_bam_name),
+                  "cdna_bai_name" => get_s3_url(vr.site, vr.molecular_id, vr.analysis_id, vr.cdna_bai_name),
+                  "vcf_path_name"     => get_s3_url(vr.site, vr.molecular_id, vr.analysis_id, vr.vcf_file_name),
+                  "tsv_path_name"     => get_s3_url(vr.site, vr.molecular_id, vr.analysis_id, vr.tsv_file_name),
+                  "qc_report_url"     => get_qc_report_url(vr.site, vr.molecular_id, vr.analysis_id, vr.tsv_file_name),
+                  "vr_chart_data_url" => get_vr_chart_url(vr.site, vr.molecular_id, vr.analysis_id, vr.vcf_file_name)
                 } 
               } 
 
@@ -150,7 +150,7 @@ module Convert
     end
 
     def self.to_ui_variant_report(report_dbm)
-      site = report_dbm.clia_lab
+      site = report_dbm.site
       molecular_id = report_dbm.molecular_id
       analysis_id = report_dbm.analysis_id
 
@@ -173,6 +173,7 @@ module Convert
           "vcf_file_name"                => get_s3_url(site, molecular_id,analysis_id, report_dbm.vcf_file_name),
           "total_variants"               => report_dbm.total_variants,
           "cellularity"                  => report_dbm.cellularity,
+          "mapd"                         => report_dbm.mapd,
           "total_mois"                   => report_dbm.total_mois,
           "total_amois"                  => report_dbm.total_amois,
           "total_confirmed_mois"         => report_dbm.total_confirmed_mois,
@@ -190,7 +191,7 @@ module Convert
       variants = {
           "snvs_and_indels"            => variants_ui_snv.push(*variants_ui_indels),
           "copy_number_variants"       => query_variants(variants_dbm, "copy_number_variants"),
-          "gene_fusions"               => query_variants(variants_dbm, "unified_gene_fusions")
+          "gene_fusions"               => query_variants(variants_dbm, "gene_fusions")
       }
       variants
     end
@@ -200,7 +201,7 @@ module Convert
                 "single_nucleitide_variants" => query_variants(variants_dbm, "single_nucleotide_variants"),
                 "indels"                     => query_variants(variants_dbm, "indels"),
                 "copyNumberVariants"         => query_variants(variants_dbm, "copy_number_variants"),
-                "geneFusions"                => query_variants(variants_dbm, "unified_gene_fusions")
+                "geneFusions"                => query_variants(variants_dbm, "gene_fusions")
             }
       variants
     end
