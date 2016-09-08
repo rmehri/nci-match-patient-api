@@ -4,7 +4,12 @@ module V1
 
     # POST /api/v1/patients/{patient_id}
     def trigger
-      message = get_post_data
+
+      patient_id = get_patient_id_from_url
+      message = get_post_data(patient_id)
+
+
+      p "======== found patient id: #{patient_id}"
 
       begin
         type = MessageValidator.get_message_type(message)
@@ -28,11 +33,22 @@ module V1
 
     end
 
-    def get_post_data
+    def get_post_data(patient_id)
       json_data = JSON.parse(request.raw_post)
       AppLogger.log(self.class.name, "Patient Api received message: #{json_data.to_json}")
       json_data.deep_transform_keys!(&:underscore).symbolize_keys!
+
+      json_data.merge!({:patient_id => patient_id})
+
+      p "========== message after merge: #{json_data}"
       json_data
+    end
+
+    def get_patient_id_from_url
+      parts = get_url_path_segments
+      p "============== url parts: #{parts}"
+      index = parts.index("patients")
+      return parts[index+1]
     end
 
     def queue_message(message, message_type)

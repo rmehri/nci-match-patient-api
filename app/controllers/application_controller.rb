@@ -13,4 +13,8 @@ class ApplicationController < ActionController::Base
     AppLogger.log_error(self.class.name, error_message)
     render status: error_code, json: {:message => error_message}
   end
+
+  def get_url_path_segments
+    return request.fullpath.split("/")
+  end
 end
