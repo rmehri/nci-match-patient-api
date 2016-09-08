@@ -13,9 +13,7 @@ module V1
         error = MessageValidator.validate_json_message(type, message)
         raise "Incoming message failed message schema validation: #{error}" if !error.nil?
 
-
-        # TreatmentArm type should be no longer needed
-        if (type == 'TreatmentArm')
+        if (type == 'VariantReport' && message[:tsv_file_name].nil?)
           status = queue_message(message, type)
         else
           status = validate_patient_state(message, type)
