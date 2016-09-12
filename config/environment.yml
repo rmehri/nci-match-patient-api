@@ -30,7 +30,7 @@ test:
   shoryuken_concurrency: "30"
 
   patient_state_api: "https://pedmatch-int.nci.nih.gov/api/v1/state_validator/"
-  patient_processor: "https://pedmatch.org:3010"
+  patient_processor: "https://pedmatch-int.nci.nih.gov:3010"
 
   http_read_timeout: "120"
   http_use_ssl: "false"
@@ -48,8 +48,8 @@ uat:
   read_capacity_units: "5"
   write_capacity_units: "5"
 
-  patient_state_api: "http://pedmatch-uat.nci.nih.gov/api/v1/state_validator/"
-  patient_processor: "http://uat.matchbox.nci.nih.gov:3010"
+  patient_state_api: "https://pedmatch-uat.nci.nih.gov/api/v1/state_validator/"
+  patient_processor: "https://pedmatch-uat.nci.nih.gov:3010"
 
   s3_url: "https://s3.amazonaws.com"
   s3_bucket: "pedmatch-uat"
@@ -65,8 +65,8 @@ production:
   read_capacity_units: "5"
   write_capacity_units: "5"
 
-  patient_state_api: "http://pedmatch.org:10241/"
-  patient_processor: "http://localhost:10242"
+  patient_state_api: "https://pedmatch.nci.nih.gov/api/v1/state_validator/"
+  patient_processor: "https://pedmatch.nci.nih.gov:3010"
 
   s3_url: "https://s3.amazonaws.com"
   s3_bucket: "pedmatch"
