@@ -18,7 +18,7 @@ module MessageValidator
                   :cdna_bai_file_name
 
 
-    validates :site, presence: true
+    validates :site, presence: true, inclusion: {in: %w(MoCha MDA), message: "%{value} is not a valid site name"}
     validates :molecular_id, presence: true
     validates :analysis_id, presence: true
 
