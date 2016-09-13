@@ -233,7 +233,9 @@ module V1
       # first get {confirm|reject}
 
       begin
-        input_data = get_post_data
+        patient_id = get_patient_id_from_url
+        input_data = get_post_data(patient_id)
+        # input_data = get_post_data
 
         result = ConfirmResult.from_json input_data
 
@@ -249,32 +251,43 @@ module V1
       end
     end
 
-    # PUT /patients/:patientid/variantReportStatus
-    def variant_report_status
-      begin
-        p "================ confirming variant report"
-
-        input_data = get_post_data
-
-        p "=========== input data: #{input_data}"
-
-        success = true #validate(input_data)
-        result = PatientProcessor.run_service('/confirmVariantReport', input_data) if success
-        standard_success_message(result)
-      rescue => error
-        standard_error_message(error.message)
-      end
-    end
+    # # put /api/v1/patients/{patient_id}/variant_reports/{molecular_id}/{analysis_id}/{confirm|reject}
+    # def variant_report_status
+    #   begin
+    #     p "================ confirming variant report"
+    #     message = get_post_data_for_variant_report_status
+    #
+    #     type = MessageValidator.get_message_type(message)
+    #     raise "Incoming message has UNKNOWN message type" if (type == 'UNKNOWN')
+    #
+    #     error = MessageValidator.validate_json_message(type, message)
+    #     raise "Incoming message failed message schema validation: #{error}" if !error.nil?
+    #     p "=========== input data: #{message}"
+    #
+    #     success = validate_patient_state(message, type)
+    #     result = if success then 'Success' else 'Failure' end
+    #     result = PatientProcessor.run_service('/confirmVariantReport', message) if success
+    #     standard_success_message(result)
+    #   rescue => error
+    #     standard_error_message(error.message)
+    #   end
+    # end
 
     # PUT /api/v1/patients/{patient_id}/assignment_reports/{date_assigned}/confirm
     def assignment_confirmation
       begin
-        input_data = get_post_data
-        # result = ConfirmResult.from_json input_data
-        # p result.to_h
+        patient_id = get_patient_id_from_url
+        message = get_post_data(patient_id)
 
-        success = true #validate(input_data)
-        result = PatientProcessor.run_service('/confirmAssignment', input_data)
+        type = MessageValidator.get_message_type(message)
+        raise "Incoming message has UNKNOWN message type" if (type == 'UNKNOWN')
+
+        error = MessageValidator.validate_json_message(type, message)
+        raise "Incoming message failed message schema validation: #{error}" if !error.nil?
+        p "=========== input data: #{message}"
+
+        success = validate_patient_state(message, type)
+        result = PatientProcessor.run_service('/confirmAssignment', message)
         standard_success_message(result)
       rescue => error
         standard_error_message(error.message)
@@ -441,60 +454,60 @@ module V1
       render status: 400, json: {:status => "Failure", :message => "Validation failed. Please check all required fields are present"}
     end
 
-    def get_post_data
-      json_data = JSON.parse(request.raw_post)
-      AppLogger.log_debug(self.class.name, "Patient API received message: #{json_data.to_json}")
-      json_data.deep_transform_keys!(&:underscore).symbolize_keys!
-      json_data
-    end
+    # def get_post_data
+    #   json_data = JSON.parse(request.raw_post)
+    #   AppLogger.log_debug(self.class.name, "Patient API received message: #{json_data.to_json}")
+    #   json_data.deep_transform_keys!(&:underscore).symbolize_keys!
+    #   json_data
+    # end
 
-    def validate(message)
-      type = MessageValidator.get_message_type(message)
-      raise "Incoming message has UNKNOWN message type" if (type == 'UNKNOWN')
+    # def validate(message)
+    #   type = MessageValidator.get_message_type(message)
+    #   raise "Incoming message has UNKNOWN message type" if (type == 'UNKNOWN')
+    #
+    #   error = MessageValidator.validate_json_message(type, message)
+    #   raise "Incoming message failed message schema validation: #{error}" if !error.nil?
+    #
+    #   status = validate_patient_state_no_queue(message, type)
+    #   raise "Incoming message failed patient state validation" if (status == false)
+    #   true
+    # end
 
-      error = MessageValidator.validate_json_message(type, message)
-      raise "Incoming message failed message schema validation: #{error}" if !error.nil?
+    # def validate_patient_state_no_queue(message, message_type)
+    #
+    #   AppLogger.log(self.class.name, "Validating messesage of type [#{message_type}]")
+    #
+    #   message_type = {message_type => message}
+    #   p message_type
+    #   result = StateMachine.validate(message_type)
+    #
+    #   if result != 'true'
+    #     result_hash = JSON.parse(result)
+    #     raise "Incoming message failed patient state validation: #{result_hash['error']}"
+    #   end
+    #
+    #   true
+    # end
 
-      status = validate_patient_state_no_queue(message, type)
-      raise "Incoming message failed patient state validation" if (status == false)
-      true
-    end
-
-    def validate_patient_state_no_queue(message, message_type)
-
-      AppLogger.log(self.class.name, "Validating messesage of type [#{message_type}]")
-
-      message_type = {message_type => message}
-      p message_type
-      result = StateMachine.validate(message_type)
-
-      if result != 'true'
-        result_hash = JSON.parse(result)
-        raise "Incoming message failed patient state validation: #{result_hash['error']}"
-      end
-
-      true
-    end
-
-    def validate_and_queue(*message_type)
-
-      AppLogger.log_debug(self.class.name, "Message_type val: #{message_type}")
-
-      message = get_post_data
-      message_type = {message_type[-1][-1] => message}
-      Rails.logger.debug "Message type: #{message_type}"
-
-      res = StateMachine.validate(message_type)
-      Rails.logger.debug "Response from StateMachine: #{res}"
-      if res == "true"
-        queue_name = ENV['queue_name']
-        Rails.logger.debug "Patient API publishing to queue: #{queue_name}..."
-        Aws::Sqs::Publisher.publish(message, queue_name)
-        return true
-      else
-        return false
-      end
-    end
+    # def validate_and_queue(*message_type)
+    #
+    #   AppLogger.log_debug(self.class.name, "Message_type val: #{message_type}")
+    #
+    #   message = get_post_data
+    #   message_type = {message_type[-1][-1] => message}
+    #   Rails.logger.debug "Message type: #{message_type}"
+    #
+    #   res = StateMachine.validate(message_type)
+    #   Rails.logger.debug "Response from StateMachine: #{res}"
+    #   if res == "true"
+    #     queue_name = ENV['queue_name']
+    #     Rails.logger.debug "Patient API publishing to queue: #{queue_name}..."
+    #     Aws::Sqs::Publisher.publish(message, queue_name)
+    #     return true
+    #   else
+    #     return false
+    #   end
+    # end
 
     def get_variant_reports(patient_id)
       variant_reports_dbm = NciMatchPatientModels::VariantReport.query_by_patient_id(patient_id, false).collect {|r| r}

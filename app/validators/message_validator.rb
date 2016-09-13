@@ -50,6 +50,9 @@ module MessageValidator
   end
 
   def self.validate_json_message(type, message_json)
+
+    p "======= type: #{type}"
+
     klazz = ("MessageValidator::" + type + "Validator").constantize
     begin
       message_validation = klazz.new.from_json(message_json.to_json)

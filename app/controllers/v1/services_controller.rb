@@ -21,7 +21,7 @@ module V1
         if (type == 'VariantReport' && message[:tsv_file_name].nil?)
           status = queue_message(message, type)
         else
-          status = validate_patient_state(message, type)
+          status = validate_patient_state_and_queue(message, type)
         end
 
         raise "Incoming message failed patient state validation" if (status == false)
@@ -33,47 +33,70 @@ module V1
 
     end
 
-    def get_post_data(patient_id)
-      json_data = JSON.parse(request.raw_post)
-      AppLogger.log(self.class.name, "Patient Api received message: #{json_data.to_json}")
-      json_data.deep_transform_keys!(&:underscore).symbolize_keys!
+    # put /api/v1/patients/{patient_id}/variant_reports/{molecular_id}/{analysis_id}/{confirm|reject}
+    def variant_report_status
+      begin
+        p "================ confirming variant report"
+        message = get_post_data_for_variant_report_status
 
-      json_data.merge!({:patient_id => patient_id})
+        type = MessageValidator.get_message_type(message)
+        raise "Incoming message has UNKNOWN message type" if (type == 'UNKNOWN')
 
-      p "========== message after merge: #{json_data}"
-      json_data
-    end
+        error = MessageValidator.validate_json_message(type, message)
+        raise "Incoming message failed message schema validation: #{error}" if !error.nil?
+        p "=========== input data: #{message}"
 
-    def get_patient_id_from_url
-      parts = get_url_path_segments
-      p "============== url parts: #{parts}"
-      index = parts.index("patients")
-      return parts[index+1]
-    end
-
-    def queue_message(message, message_type)
-      queue_name = ENV['queue_name']
-      Rails.logger.debug "Patient API publishing to queue: #{queue_name}..."
-      Aws::Sqs::Publisher.publish(message, queue_name)
-      true
-    end
-
-    def validate_patient_state(message, message_type)
-
-      AppLogger.log(self.class.name, "Validating messesage of type [#{message_type}]")
-
-      message_type = {message_type => message}
-      result = StateMachine.validate(message_type)
-
-      if result != 'true'
-        raise "Incoming message failed patient state validation: #{result}"
+        success = validate_patient_state(message, type)
+        result = if success then 'Success' else 'Failure' end
+        result = PatientProcessor.run_service('/confirmVariantReport', message) if success
+        standard_success_message(result)
+      rescue => error
+        standard_error_message(error.message)
       end
-
-      queue_name = ENV['queue_name']
-      Rails.logger.debug "Patient API publishing to queue: #{queue_name}..."
-      Aws::Sqs::Publisher.publish(message, queue_name)
-
     end
+
+    # def get_post_data(patient_id)
+    #   json_data = JSON.parse(request.raw_post)
+    #   AppLogger.log(self.class.name, "Patient Api received message: #{json_data.to_json}")
+    #   json_data.deep_transform_keys!(&:underscore).symbolize_keys!
+    #
+    #   json_data.merge!({:patient_id => patient_id})
+    #
+    #   p "========== message after merge: #{json_data}"
+    #   json_data
+    # end
+
+    # def get_patient_id_from_url
+    #   parts = get_url_path_segments
+    #   p "============== url parts: #{parts}"
+    #   index = parts.index("patients")
+    #   patient_id = parts[index+1]
+    #   return patient_id
+    # end
+
+    # def queue_message(message, message_type)
+    #   queue_name = ENV['queue_name']
+    #   Rails.logger.debug "Patient API publishing to queue: #{queue_name}..."
+    #   Aws::Sqs::Publisher.publish(message, queue_name)
+    #   true
+    # end
+
+    # def validate_patient_state(message, message_type)
+    #
+    #   AppLogger.log(self.class.name, "Validating messesage of type [#{message_type}]")
+    #
+    #   message_type = {message_type => message}
+    #   result = StateMachine.validate(message_type)
+    #
+    #   if result != 'true'
+    #     raise "Incoming message failed patient state validation: #{result}"
+    #   end
+    #
+    #   queue_name = ENV['queue_name']
+    #   Rails.logger.debug "Patient API publishing to queue: #{queue_name}..."
+    #   Aws::Sqs::Publisher.publish(message, queue_name)
+    #
+    # end
 
   end
 end

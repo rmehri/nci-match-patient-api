@@ -34,7 +34,17 @@ describe V1::ServicesController do
 
   it "POST /trigger" do
     expect(:post => "api/v1/patients/1").to route_to(:controller => "v1/services", :action => "trigger", :patient_id => "1")
+
+    expect(:put => "api/v1/patients/1/variant_reports/mid/aid/confirm").to route_to(:controller => "v1/services",
+                                                                           :action => "variant_report_status",
+                                                                            :patient_id => "1",
+                                                                                    :molecular_id => "mid",
+                                                                                    :analysis_id => "aid",
+                                                                             :status => "confirm")
+
   end
+
+
 
   #   allow(Aws::Sqs::Publisher).to receive(:publish).and_return("")
   #

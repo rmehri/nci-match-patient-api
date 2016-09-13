@@ -4,6 +4,8 @@ class PatientProcessor
   base_uri "#{ENV['patient_processor']}"
 
   def self.run_service(service, message)
+
+    p "======== Calling patient processor service: #{service} with message: #{message}"
     begin
       result = post(service,
                     {

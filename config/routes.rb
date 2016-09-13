@@ -34,7 +34,7 @@ Rails.application.routes.draw do
       get "patients/:patient_id/samples" => :sample_files
       get "patients/:patient_id/samples/:molecular_id/:analysis_id/:file_name" => :sample_file
 
-      put "patients/:patient_id/variant_reports/:molecular_id/:analysis_id" => :variant_report_status
+      # put "patients/:patient_id/variant_reports/:molecular_id/:analysis_id/:status" => :variant_report_status
       put "patients/:patient_id/assignment_reports/:date_assigned" => :assignment_confirmation
       put "patients/variant/:variant_uuid/" => :variant_status
 
@@ -48,6 +48,7 @@ Rails.application.routes.draw do
 
     controller :services do
       post "patients/:patient_id" => :trigger
+      put "patients/:patient_id/variant_reports/:molecular_id/:analysis_id/:status" => :variant_report_status
     end
 
     # controller :dashboard do
