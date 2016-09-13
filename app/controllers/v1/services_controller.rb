@@ -57,7 +57,11 @@ module V1
     def variant_report_status
       begin
         p "================ confirming variant report"
-        message = get_post_data_for_variant_report_status
+        message = ConfirmVariantReportMessage.from_url get_url_path_segments
+        post_data = get_post_data("")
+        message['comment'] = post_data[:comment]
+        message['comment_user'] = post_data[:comment_user]
+        message.deep_transform_keys!(&:underscore).symbolize_keys!
 
         type = MessageValidator.get_message_type(message)
         raise "Incoming message has UNKNOWN message type" if (type == 'UNKNOWN')
@@ -78,8 +82,13 @@ module V1
     # PUT /api/v1/patients/{patient_id}/assignment_reports/{date_assigned}/confirm
     def assignment_confirmation
       begin
-        patient_id = get_patient_id_from_url
-        message = get_post_data(patient_id)
+
+        message = ConfirmAssignmentMessage.from_url get_url_path_segments
+        p "============ message from ConfirmAssignmentMessage: #{message}"
+        post_data = get_post_data("")
+        message['comment'] = post_data[:comment]
+        message['comment_user'] = post_data[:comment_user]
+        message.deep_transform_keys!(&:underscore).symbolize_keys!
 
         type = MessageValidator.get_message_type(message)
         raise "Incoming message has UNKNOWN message type" if (type == 'UNKNOWN')
@@ -89,55 +98,12 @@ module V1
         p "=========== input data: #{message}"
 
         success = validate_patient_state(message, type)
-        result = PatientProcessor.run_service('/confirmAssignment', message)
+        result = PatientProcessor.run_service('/confirm_assignment', message)
         standard_success_message(result)
       rescue => error
         standard_error_message(error.message)
       end
     end
-
-    # def get_post_data(patient_id)
-    #   json_data = JSON.parse(request.raw_post)
-    #   AppLogger.log(self.class.name, "Patient Api received message: #{json_data.to_json}")
-    #   json_data.deep_transform_keys!(&:underscore).symbolize_keys!
-    #
-    #   json_data.merge!({:patient_id => patient_id})
-    #
-    #   p "========== message after merge: #{json_data}"
-    #   json_data
-    # end
-
-    # def get_patient_id_from_url
-    #   parts = get_url_path_segments
-    #   p "============== url parts: #{parts}"
-    #   index = parts.index("patients")
-    #   patient_id = parts[index+1]
-    #   return patient_id
-    # end
-
-    # def queue_message(message, message_type)
-    #   queue_name = ENV['queue_name']
-    #   Rails.logger.debug "Patient API publishing to queue: #{queue_name}..."
-    #   Aws::Sqs::Publisher.publish(message, queue_name)
-    #   true
-    # end
-
-    # def validate_patient_state(message, message_type)
-    #
-    #   AppLogger.log(self.class.name, "Validating messesage of type [#{message_type}]")
-    #
-    #   message_type = {message_type => message}
-    #   result = StateMachine.validate(message_type)
-    #
-    #   if result != 'true'
-    #     raise "Incoming message failed patient state validation: #{result}"
-    #   end
-    #
-    #   queue_name = ENV['queue_name']
-    #   Rails.logger.debug "Patient API publishing to queue: #{queue_name}..."
-    #   Aws::Sqs::Publisher.publish(message, queue_name)
-    #
-    # end
 
   end
 end
