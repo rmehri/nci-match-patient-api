@@ -42,6 +42,11 @@ describe V1::ServicesController do
                                                                                     :analysis_id => "aid",
                                                                              :status => "confirm")
 
+    expect(:put => "api/v1/patients/variant/123456/goodcomment/unchecked").to route_to(:controller => "v1/services", :action => "variant_status",
+                                                                                     :variant_uuid => "123456", :comment => "goodcomment", :status => "unchecked")
+    # expect(:put => "api/v1/patients/1/assignment_reports/6748392").to route_to(:controller => "v1/patients",
+    #                                                                            :action => "assignment_confirmation",
+    #                                                                            :patient_id => "1", :date_assigned => "6748392")
   end
 
 

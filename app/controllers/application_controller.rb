@@ -40,7 +40,11 @@ class ApplicationController < ActionController::Base
     analysis_id = parts[vr_index+2]
 
     confirm = parts[vr_index+3].downcase
-    confirm = if confirm == 'confirm' then 'CONFIRMED' else 'REJECTED' end
+    if confirm == 'confirm'
+      confirm = 'CONFIRMED'
+    elsif confirm == 'reject'
+      confirm = 'REJECTED'
+    end
 
     message = {"patient_id" => patient_id, "molecular_id" => molecular_id, "analysis_id" => analysis_id, "status" => confirm}
 
@@ -52,6 +56,32 @@ class ApplicationController < ActionController::Base
     p "========== Composed vr status message: #{message}"
     message
   end
+
+  def get_post_data_for_assignment_status
+    parts = get_url_path_segments
+    p "========= part length: #{parts.length}"
+    raise "Variant report status url missing required parameter" if parts.length < 9
+
+    patient_id = parts[parts.index("patients")+1]
+    vr_index = parts.index("assignment_reports")
+    molecular_id = parts[vr_index+1]
+    analysis_id = parts[vr_index+2]
+
+    confirm = parts[vr_index+3].downcase
+    confirm = if confirm == 'confirm' then 'CONFIRMED' else confirm end
+
+    message = {"patient_id" => patient_id, "molecular_id" => molecular_id, "analysis_id" => analysis_id, "status" => confirm}
+
+    json_data = get_post_data(patient_id)
+    message["comment"] = json_data[:comment]
+    message["comment_user"] = json_data[:comment_user]
+
+    message.deep_transform_keys!(&:underscore).symbolize_keys!
+    p "========== Composed vr status message: #{message}"
+    message
+  end
+
+  # def get_token
 
   def get_patient_id_from_url
     parts = get_url_path_segments

@@ -154,11 +154,7 @@ describe V1::PatientsController do
     expect(:get => "api/v1/patients").to route_to(:controller => "v1/patients", :action => "patient_list")
     expect(:get => "api/v1/patients/1").to route_to(:controller => "v1/patients", :action => "patient", :patient_id => "1")
     expect(:get => "api/v1/patients/1/timeline").to route_to(:controller => "v1/patients", :action => "timeline", :patient_id => "1")
-    expect(:put => "api/v1/patients/variant/123456").to route_to(:controller => "v1/patients", :action => "variant_status", :variant_uuid => "123456")
 
-    expect(:put => "api/v1/patients/1/assignment_reports/6748392").to route_to(:controller => "v1/patients",
-                                                                                :action => "assignment_confirmation",
-                                                                                :patient_id => "1", :date_assigned => "6748392")
     expect(:get => "api/v1/patients/1/documents").to route_to(:controller => "v1/patients", :action => "document_list", :patient_id => "1")
     expect(:get => "api/v1/patients/1/documents/2").to route_to(:controller => "v1/patients", :action => "document", :patient_id => "1", :document_id => "2")
     expect(:post => "api/v1/patients/1/documents").to route_to(:controller => "v1/patients", :action => "new_document", :patient_id => "1")

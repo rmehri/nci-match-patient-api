@@ -227,35 +227,36 @@ module V1
       render status: 200, json: '{"test":"POST sample_file"}'
     end
 
-    # PUT /api/v1/patients/{patient_id}/variant_reports/{molecular_id}/{analysis_id}/{confirm|reject}
-    def variant_status
-
-      # first get {confirm|reject}
-
-      begin
-        patient_id = get_patient_id_from_url
-        input_data = get_post_data(patient_id)
-        # input_data = get_post_data
-
-        result = ConfirmResult.from_json input_data
-
-        p result.to_h
-
-        # response_json = PatientProcessor.run_service("/confirm_variant", input_data)
-
-        # AppLogger.log(self.class.name, "\nResponse from Patient Processor: #{response_json}")
-        # standard_success_message(JSON.parse(response_json)['message'])
-
-      rescue => error
-        standard_error_message(error.message)
-      end
-    end
-
-    # # put /api/v1/patients/{patient_id}/variant_reports/{molecular_id}/{analysis_id}/{confirm|reject}
-    # def variant_report_status
+    # # PUT /api/v1/patients/{patient_id}/variant_reports/{molecular_id}/{analysis_id}/{confirm|reject}
+    # def variant_status
+    #
+    #   # first get {confirm|reject}
+    #
     #   begin
-    #     p "================ confirming variant report"
-    #     message = get_post_data_for_variant_report_status
+    #     patient_id = get_patient_id_from_url
+    #     input_data = get_post_data(patient_id)
+    #     # input_data = get_post_data
+    #
+    #     result = ConfirmResult.from_json input_data
+    #
+    #     p result.to_h
+    #
+    #     # response_json = PatientProcessor.run_service("/confirm_variant", input_data)
+    #
+    #     # AppLogger.log(self.class.name, "\nResponse from Patient Processor: #{response_json}")
+    #     # standard_success_message(JSON.parse(response_json)['message'])
+    #
+    #   rescue => error
+    #     standard_error_message(error.message)
+    #   end
+    # end
+
+
+    # # PUT /api/v1/patients/{patient_id}/assignment_reports/{date_assigned}/confirm
+    # def assignment_confirmation
+    #   begin
+    #     patient_id = get_patient_id_from_url
+    #     message = get_post_data(patient_id)
     #
     #     type = MessageValidator.get_message_type(message)
     #     raise "Incoming message has UNKNOWN message type" if (type == 'UNKNOWN')
@@ -265,34 +266,12 @@ module V1
     #     p "=========== input data: #{message}"
     #
     #     success = validate_patient_state(message, type)
-    #     result = if success then 'Success' else 'Failure' end
-    #     result = PatientProcessor.run_service('/confirmVariantReport', message) if success
+    #     result = PatientProcessor.run_service('/confirmAssignment', message)
     #     standard_success_message(result)
     #   rescue => error
     #     standard_error_message(error.message)
     #   end
     # end
-
-    # PUT /api/v1/patients/{patient_id}/assignment_reports/{date_assigned}/confirm
-    def assignment_confirmation
-      begin
-        patient_id = get_patient_id_from_url
-        message = get_post_data(patient_id)
-
-        type = MessageValidator.get_message_type(message)
-        raise "Incoming message has UNKNOWN message type" if (type == 'UNKNOWN')
-
-        error = MessageValidator.validate_json_message(type, message)
-        raise "Incoming message failed message schema validation: #{error}" if !error.nil?
-        p "=========== input data: #{message}"
-
-        success = validate_patient_state(message, type)
-        result = PatientProcessor.run_service('/confirmAssignment', message)
-        standard_success_message(result)
-      rescue => error
-        standard_error_message(error.message)
-      end
-    end
 
     # GET /api/v1/patients/specimens/{molecular_id}/specimen_shipped
     def specimen_shipped

@@ -1,8 +1,8 @@
 require 'json'
 
-describe ConfirmResult do
+describe ConfirmVariantMessage do
   def getTestable
-    testable = ConfirmResult.new
+    testable = ConfirmVariantMessage.new
     testable.status = 'CONFIRMED'
     testable.comment = 'Some Comments'
     return testable
@@ -18,7 +18,7 @@ describe ConfirmResult do
   it "can convert from json" do
     json_string = '{"status":"CONFIRMED","comment":"Some Comments"}';
 
-    model = ConfirmResult.from_json json_string
+    model = ConfirmVariantMessage.from_json json_string
 
     expect(model).to_not eq nil
     expect(model.status).to eq("CONFIRMED")
