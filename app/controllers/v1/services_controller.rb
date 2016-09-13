@@ -33,7 +33,7 @@ module V1
 
     end
 
-    # PUT /api/v1/patients/variant/{variant_uuid}/{comment}/{checked|unchecked}
+    # PUT /api/v1/patients/variant/{variant_uuid}{checked|unchecked}
     def variant_status
 
       begin

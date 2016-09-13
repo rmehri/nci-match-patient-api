@@ -34,10 +34,6 @@ Rails.application.routes.draw do
       get "patients/:patient_id/samples" => :sample_files
       get "patients/:patient_id/samples/:molecular_id/:analysis_id/:file_name" => :sample_file
 
-      # put "patients/:patient_id/variant_reports/:molecular_id/:analysis_id/:status" => :variant_report_status
-      # put "patients/:patient_id/assignment_reports/:date_assigned" => :assignment_confirmation
-      # put "patients/variant/:variant_uuid/" => :variant_status
-
       get "patients/:patient_id/specimens/:molecular_id/specimen_shipped" => :specimen_shipped
 
       get "patients/:patient_id/documents" => :document_list
@@ -51,7 +47,7 @@ Rails.application.routes.draw do
 
       put "patients/:patient_id/variant_reports/:molecular_id/:analysis_id/:status" => :variant_report_status
       put "patients/:patient_id/assignment_reports/:date_assigned/:status" => :assignment_confirmation
-      put "patients/variant/:variant_uuid/:comment/:status" => :variant_status
+      put "patients/variant/:variant_uuid/:status" => :variant_status
     end
 
     # controller :dashboard do

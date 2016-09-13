@@ -27,15 +27,14 @@ class ConfirmVariantMessage
 
   def self.from_url(url_segments)
     start_index = url_segments.index("variant")
-    raise "Variant confirmation url has missing parameter" if url_segments.length < start_index + 3
+    raise "Variant confirmation url has missing parameter" if url_segments.length < start_index + 2
 
     id = url_segments[start_index+1]
-    comment = url_segments[start_index+2]
-    check = url_segments[start_index+3].downcase
+    check = url_segments[start_index+2].downcase
 
     raise "Unregnized checked flag in variant confirmation url" if (check != 'checked' && check != 'unchecked')
 
-    message = {"variant_uuid" => id, "comment" => comment, "status" => check}
+    message = {"variant_uuid" => id, "status" => check}
 
   end
 
