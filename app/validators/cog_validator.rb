@@ -12,7 +12,7 @@ module MessageValidator
     validates :header, presence: true
     validates :study_id, presence: true, inclusion: { in: %w(APEC1621), message: "%{value} is not a valid study_id"}
     validates :patient_id, presence: true
-    validates :status, presence: true, inclusion: { in: %w(REGISTRATION ON_TREATMENT_ARM REQUEST_ASSIGNMENT REQUEST_NO_ASSIGNMENT OFF_STUDY),
+    validates :status, presence: true, inclusion: { in: %w(REGISTRATION ON_TREATMENT_ARM REQUEST_ASSIGNMENT REQUEST_NO_ASSIGNMENT OFF_STUDY OFF_STUDY_BIOPSY_EXPIRED),
                                                     message: "%{value} is not supported COG status value"}
 
 
@@ -22,9 +22,9 @@ module MessageValidator
           class << self; include RegistrationValidator end
         when :ON_TREATMENT_ARM
           class << self; include OnTreatmentArmValidator end
-        when :OFF_STUDY
+        when :OFF_STUDY, :OFF_STUDY_BIOPSY_EXPIRED
           class << self; include OffStudyValidator end
-        when :REQUEST_ASSIGNMENT
+        when :REQUEST_ASSIGNMENT, :REQUEST_NO_ASSIGNMENT
           class << self; include RequestAssignmentValidator end
         else
           p "Cog message status is: #{@status}"
