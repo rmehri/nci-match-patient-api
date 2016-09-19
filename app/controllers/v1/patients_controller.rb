@@ -30,7 +30,6 @@ module V1
     # GET /api/v1/patients/1
     # GET /api/v1/patients?basic={true | false}&disease={disease}&gender={gender}&ethnicity={ethnicity}
     def patient
-      p "Am I here?"
       render_patient_data params[:patient_id]
     end
 
@@ -500,7 +499,9 @@ module V1
       variant_reports_dbm.each do |variant_report_dbm|
         variants = NciMatchPatientModels::Variant.find_by({"patient_id" => variant_report_dbm.patient_id,
                                                            "molecular_id" => variant_report_dbm.molecular_id,
-                                                           "analysis_id" => variant_report_dbm.analysis_id}).collect {|r| r}
+                                                           "analysis_id" => variant_report_dbm.analysis_id}).collect {|r|
+          p "======== v: #{r.to_h}"
+          r}
         variants_dbm.push(*variants)
       end
 
