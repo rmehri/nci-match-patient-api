@@ -18,11 +18,16 @@ module V1
         error = MessageValidator.validate_json_message(type, message)
         raise "Incoming message failed message schema validation: #{error}" if !error.nil?
 
-        if (type == 'VariantReport' && message[:tsv_file_name].nil?)
-          status = queue_message(message, type)
-        else
-          status = validate_patient_state_and_queue(message, type)
+        if (type == 'VariantReport')
+          shipments = NciMatchPatientModels::Shipment.find_by({"molecular_id" => message[:molecular_id]})
+          raise "Unable to find shipment with molecular id [#{message[:molecular_id]}]" if shipments.length == 0
+
+          patient_id = shipments[0].patient_id
+          message[:patient_id] = patient_id
+          p "============ patient added: #{message}"
         end
+
+        status = validate_patient_state_and_queue(message, type)
 
         raise "Incoming message failed patient state validation" if (status == false)
 

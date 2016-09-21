@@ -6,12 +6,12 @@ module MessageValidator
     define_model_callbacks :from_json
     after_from_json :include_correct_module
 
-    attr_accessor :ir_id,
+    attr_accessor :ion_reporter_id,
                   :molecular_id,
                   :analysis_id,
-                  :tsv_file_name,
+                  :tsv_file_name
 
-    validates :ir_id, presence: true
+    validates :ion_reporter_id, presence: true
     validates :molecular_id, presence: true
     validates :analysis_id, presence: true
     validates :tsv_file_name, presence: true
