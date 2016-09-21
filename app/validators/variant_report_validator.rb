@@ -7,6 +7,7 @@ module MessageValidator
     after_from_json :include_correct_module
 
     attr_accessor :ion_reporter_id,
+                  :patient_id,
                   :molecular_id,
                   :analysis_id,
                   :tsv_file_name
@@ -15,6 +16,7 @@ module MessageValidator
     validates :molecular_id, presence: true
     validates :analysis_id, presence: true
     validates :tsv_file_name, presence: true
+    validates :patient_id, presence: true
 
   end
 end
