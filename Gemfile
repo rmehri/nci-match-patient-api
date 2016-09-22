@@ -22,6 +22,7 @@ gem 'knock', '~> 1.4.2'
 gem 'auth0'
 
 gem 'wannabe_bool'
+gem 'responders'
 
 gem 'nci_match_patient_models', :git => 'git://github.com/CBIIT/nci-match-lib.git', :branch => 'master'
 

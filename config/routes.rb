@@ -58,4 +58,8 @@ Rails.application.routes.draw do
     #   get "patients/shipments" => :shipments
     # end
   end
+
+  namespace :v2 do
+    resources :patients
+  end
 end
