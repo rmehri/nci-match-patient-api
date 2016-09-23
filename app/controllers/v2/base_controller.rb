@@ -74,10 +74,16 @@ module V2
     end
 
     def build_query(params)
-      if params.length > 2
-        {table_name: @resource_name, :scan_filter => build_scan_filter(params), :conditional_operator => "AND"}
-      else
-        {table_name: @resource_name, :scan_filter => build_scan_filter(params)}
+      {
+          table_name: @resource_name,
+          :attributes_to_get => build_attributes_to_get(params),
+          :scan_filter => build_scan_filter(params.except("projections"))
+      }
+    end
+
+    def build_attributes_to_get(params)
+      if params.key?("projections")
+        return params["projections"].split(",")
       end
     end
 
