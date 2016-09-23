@@ -12,17 +12,5 @@ module V2
       parameters = params.permit(:patient_id, :registration_date, :study_id, :gender, :ethnicity, :current_step_number, :current_status, :treating_site_id, :message)
       build_query(parameters)
     end
-
-    def build_query(params)
-      {table_name: @resource_name, :scan_filter => build_scan_filter(params)}
-    end
-
-    def build_scan_filter(params)
-      query = {}
-      params.each do |key , value|
-        query.merge!(key => {:comparison_operator => "EQ", :attribute_value_list => [value]})
-      end
-      query
-    end
   end
 end
