@@ -60,6 +60,9 @@ Rails.application.routes.draw do
   end
 
   namespace :v2 do
-    resources :patients
+    resources :patients do
+      resources :variant_reports
+      resources :specimens
+    end
   end
 end

@@ -59,7 +59,7 @@ module V2
 
     # @return [String]
     def resource_name
-      @resource_name ||= self.controller_name.singularize
+      @resource_name ||= self.controller_name
     end
 
     # Only allow a trusted parameter "white list" through.
