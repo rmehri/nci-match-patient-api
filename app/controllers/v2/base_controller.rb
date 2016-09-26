@@ -77,13 +77,15 @@ module V2
       {
           table_name: @resource_name,
           :attributes_to_get => build_attributes_to_get(params),
-          :scan_filter => build_scan_filter(params.except("projections"))
+          :scan_filter => build_scan_filter(params.except("projections", "projection"))
       }
     end
 
     def build_attributes_to_get(params)
       if params.key?("projections")
         return YAML.load(params["projections"])
+      elsif params.key?("projection")
+        return params["projection"]
       end
     end
 
