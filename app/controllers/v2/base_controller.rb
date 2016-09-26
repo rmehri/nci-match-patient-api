@@ -20,7 +20,7 @@ module V2
 
     def index
       plural_resource_name = "@#{resource_name.pluralize}"
-      resources = resource_class.scan(query_params).collect { |data| data.to_h }
+      resources = resource_class.scan(query_params).collect { |data| data.to_h.compact }
       instance_variable_set(plural_resource_name, resources)
       render json: instance_variable_get(plural_resource_name)
     end
@@ -69,7 +69,7 @@ module V2
 
     # Use callbacks to share common setup or constraints between actions.
     def set_resource(resource = nil)
-      resource ||= resource_class.scan({}).collect { |data| data.to_h }
+      resource ||= resource_class.scan({}).collect { |data| data.to_h.compact }
       instance_variable_set("@#{resource_name}", resource)
     end
 
