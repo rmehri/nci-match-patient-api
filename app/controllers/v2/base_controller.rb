@@ -83,7 +83,7 @@ module V2
 
     def build_attributes_to_get(params)
       if params.key?("projections")
-        return params["projections"].split(",")
+        return YAML.load(params["projections"])
       end
     end
 
