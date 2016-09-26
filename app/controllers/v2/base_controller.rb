@@ -39,7 +39,6 @@ module V2
 
 
     private
-    # Returns the resource from the created instance variable
     # @return [Object]
     def get_resource
       instance_variable_get("@#{resource_name}")
@@ -53,23 +52,17 @@ module V2
       {}
     end
 
-    # The resource class based on the controller
     # @return [Class]
     def resource_class
       @resource_class ||= "NciMatchPatientModels::#{resource_name.classify}".constantize
     end
 
-    # The singular name for the resource class based on the controller
     # @return [String]
     def resource_name
-      @resource_name ||= self.controller_name.singularize
+      @resource_name ||= self.controller_name
     end
 
     # Only allow a trusted parameter "white list" through.
-    # If a single resource is loaded for #create or #update,
-    # then the controller for the resource must implement
-    # the method "#{resource_name}_params" to limit permitted
-    # parameters for the individual model.
     def resource_params
       @resource_params ||= self.send("#{resource_name}_params")
     end
@@ -78,6 +71,28 @@ module V2
     def set_resource(resource = nil)
       resource ||= resource_class.scan({}).collect { |data| data.to_h }
       instance_variable_set("@#{resource_name}", resource)
+    end
+
+    def build_query(params)
+      {
+          table_name: @resource_name,
+          :attributes_to_get => build_attributes_to_get(params),
+          :scan_filter => build_scan_filter(params.except("projections"))
+      }
+    end
+
+    def build_attributes_to_get(params)
+      if params.key?("projections")
+        return params["projections"].split(",")
+      end
+    end
+
+    def build_scan_filter(params)
+      query = {}
+      params.each do |key , value|
+        query.merge!(key => {:comparison_operator => "EQ", :attribute_value_list => [value]})
+      end
+      query
     end
 
   end
