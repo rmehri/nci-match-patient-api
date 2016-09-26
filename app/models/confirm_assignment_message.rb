@@ -10,12 +10,12 @@ class ConfirmAssignmentMessage
     start_index = url_segments.index("assignment_reports")
     raise "Assignment reports url is missing parameter" if url_segments.length < start_index + 2
 
-    date_generated = url_segments[start_index+1]
+    analysis_id = url_segments[start_index+1]
     confirm = url_segments[start_index+2].downcase
 
     raise "Unregnized confirm flag in assignment report confirmation url" if (confirm != 'confirm')
 
-    message = {"patient_id" => patient_id, "date_generated" => date_generated,
+    message = {"patient_id" => patient_id, "analysis_id" => analysis_id,
                "status" => "CONFIRMED", "status_type" => "ASSIGNMENT"}
 
   end

@@ -7,21 +7,13 @@ class ConfirmVariantReportMessage
     patient_id = url_segments[start_index+1]
 
     start_index = url_segments.index("variant_reports")
-    raise "Confirm variant report url is missing parameter" if url_segments.length < start_index + 3
+    raise "Confirm variant report url is missing parameter" if url_segments.length < start_index + 2
 
-    molecular_id = url_segments[start_index+1]
-    analysis_id = url_segments[start_index+2]
+    analysis_id = url_segments[start_index+1]
+    confirm = url_segments[start_index+2].downcase
+    confirm = confirm == 'confirm' ? 'CONFIRMED' : 'REJECTED'
 
-    confirm = url_segments[start_index+3].downcase
-    if confirm == 'confirm'
-      confirm = 'CONFIRMED'
-    elsif confirm == 'reject'
-      confirm = 'REJECTED'
-    else
-      raise "Unrecognized confirm|reject flag passed in confirm variant report url"
-    end
-
-    message = {"patient_id" => patient_id, "molecular_id" => molecular_id, "analysis_id" => analysis_id, "status" => confirm}
+    {"patient_id" => patient_id, "analysis_id" => analysis_id, "status" => confirm}
   end
 
 end
