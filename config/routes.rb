@@ -45,8 +45,8 @@ Rails.application.routes.draw do
     controller :services do
       post "patients/:patient_id" => :trigger
 
-      put "patients/:patient_id/variant_reports/:molecular_id/:analysis_id/:status" => :variant_report_status
-      put "patients/:patient_id/assignment_reports/:date_assigned/:status" => :assignment_confirmation
+      put "patients/:patient_id/variant_reports/:analysis_id/:status" => :variant_report_status
+      put "patients/:patient_id/assignment_reports/:analysis_id/:status" => :assignment_confirmation
       put "patients/variant/:variant_uuid/:status" => :variant_status
     end
 
@@ -60,6 +60,9 @@ Rails.application.routes.draw do
   end
 
   namespace :v2 do
-    resources :patients
+    resources :patients do
+      resources :variant_reports
+      resources :specimens
+    end
   end
 end
