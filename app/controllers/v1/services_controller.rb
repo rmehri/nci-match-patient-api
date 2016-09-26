@@ -58,7 +58,7 @@ module V1
       end
     end
 
-    # put /api/v1/patients/{patient_id}/variant_reports/{molecular_id}/{analysis_id}/{confirm|reject}
+    # put /api/v1/patients/{patient_id}/variant_reports{analysis_id}/{confirm|reject}
     def variant_report_status
       begin
         p "================ confirming variant report"

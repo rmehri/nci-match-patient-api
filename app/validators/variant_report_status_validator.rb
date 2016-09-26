@@ -7,14 +7,12 @@ module MessageValidator
     after_from_json :include_correct_module
 
     attr_accessor :patient_id,
-                  :molecular_id,
                   :analysis_id,
                   :status,
                   :comment,
                   :comment_user
 
     validates :patient_id, presence: true
-    validates :molecular_id, presence: true
     validates :analysis_id, presence: true
     validates :status, presence: true,
               inclusion: {in: %w(CONFIRMED REJECTED), message: "%{value} is not a valid variant report status value"}
