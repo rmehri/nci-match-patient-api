@@ -40,27 +40,35 @@ module V1
     end
 
     def index
-      plural_resource_name = "@#{resource_name.pluralize}"
-      resources = resource_class.scan(query_params).collect { |data| data.to_h.compact }
-      instance_variable_set(plural_resource_name, resources)
-      render json: instance_variable_get(plural_resource_name)
+      begin
+        plural_resource_name = "@#{resource_name.pluralize}"
+        resources = resource_class.scan(query_params).collect { |data| data.to_h.compact }
+        instance_variable_set(plural_resource_name, resources)
+        render json: instance_variable_get(plural_resource_name)
+      rescue => error
+        standard_error_message(error.message)
+      end
     end
 
     def show
-      render json: get_resource
+      begin
+        render json: get_resource
+      rescue => error
+        standard_error_message(error.message)
+      end
     end
 
+    #place holder
     def update
-      if get_resource.update(resource_params)
-        render :show
-      else
-        render json: get_resource.errors, status: :unprocessable_entity
-      end
+      # if get_resource.update(resource_params)
+      #   render :show
+      # else
+      #   render json: get_resource.errors, status: :unprocessable_entity
+      # end
     end
 
 
     private
-
     # @return [Object]
     def get_resource
       instance_variable_get("@#{resource_name}")
