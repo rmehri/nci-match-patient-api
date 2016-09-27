@@ -1,15 +1,36 @@
-module V2
+module V1
   class BaseController < ApplicationController
     protect_from_forgery with: :null_session
     before_action :set_resource, only: [:destroy, :show, :update]
     respond_to :json
 
     def create
-      set_resource(resource_class.new(resource_params))
-      if get_resource.save
-        render :show, status: :created
-      else
-        render json: get_resource.errors, status: :unprocessable_entity
+      begin
+        json_data = JSON.parse(request.raw_post)
+        AppLogger.log(self.class.name, "Patient Api received message: #{json_data.to_json}")
+        message = json_data.deep_transform_keys!(&:underscore).symbolize_keys
+        type = MessageValidator.get_message_type(message)
+        raise "Incoming message has UNKNOWN message type" if (type == 'UNKNOWN')
+
+        error = MessageValidator.validate_json_message(type, message)
+        raise "Incoming message failed message schema validation: #{error}" if !error.nil?
+
+        if (type == 'VariantReport')
+          shipments = NciMatchPatientModels::Shipment.find_by({"molecular_id" => message[:molecular_id]})
+          raise "Unable to find shipment with molecular id [#{message[:molecular_id]}]" if shipments.length == 0
+
+          patient_id = shipments[0].patient_id
+          message[:patient_id] = patient_id
+          p "============ patient added: #{message}"
+        end
+
+        status = validate_patient_state_and_queue(message, type)
+
+        raise "Incoming message failed patient state validation" if (status == false)
+
+        standard_success_message("Message has been processed successfully")
+      rescue => error
+        standard_error_message(error.message)
       end
     end
 
@@ -39,6 +60,7 @@ module V2
 
 
     private
+
     # @return [Object]
     def get_resource
       instance_variable_get("@#{resource_name}")
@@ -77,25 +99,25 @@ module V2
       {
           table_name: @resource_name,
           :attributes_to_get => build_attributes_to_get(params),
-          :scan_filter => build_scan_filter(params.except("projections", "projection"))
+          :scan_filter => build_scan_filter(params.except(:projections, :projection))
       }
     end
 
     def build_attributes_to_get(params)
-      if params.key?("projections")
-        return YAML.load(params["projections"])
-      elsif params.key?("projection")
-        return params["projection"]
+      if params.key?(:projections)
+        return YAML.load(params[:projections])
+      elsif params.key?(:projection)
+        return params[:projection]
       end
     end
 
     def build_scan_filter(params)
       query = {}
-      if params.key?("attribute")
-        params["attribute"].each do |value|
+      if params.key?(:attribute)
+        params[:attribute].each do |value|
           query.merge!(value => {:comparison_operator => "NOT_NULL"})
         end
-        params.delete("attribute")
+        params.delete(:attribute)
       end
       params.each do |key , value|
         query.merge!(key => {:comparison_operator => "EQ", :attribute_value_list => [value]})

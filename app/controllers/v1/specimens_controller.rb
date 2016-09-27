@@ -1,4 +1,4 @@
-module V2
+module V1
   class SpecimensController < BaseController
 
     private
