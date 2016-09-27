@@ -13,7 +13,7 @@ module V2
                                  :vcf_file_name, :tsv_file_name, :total_variants, :cellularity, :total_mois,
                                  :total_amois, :total_confirmed_mois, :total_confirmed_amois,
                                  :specimen_received_date, :clia_lab,
-                                 :projections, :projection => [], :attributes => [])
+                                 :attributes, :projections, :projection => [], :attribute => [])
       build_query(parameters)
     end
 

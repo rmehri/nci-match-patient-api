@@ -11,7 +11,7 @@ module V2
                                  :surgical_event_id, :failed_date, :study_id, :type, :collected_date,
                                  :received_date, :pathology_status, :pathology_status_date, :pathology_case_number, :variant_report_confirmed_date,
                                  :active_molecular_id, :assays,
-                                 :projections, :projection => [], :attributes => [])
+                                 :attributes, :projections, :projection => [], :attribute => [])
       build_query(parameters)
     end
   end

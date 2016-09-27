@@ -91,6 +91,12 @@ module V2
 
     def build_scan_filter(params)
       query = {}
+      if params.key?("attribute")
+        params["attribute"].each do |value|
+          query.merge!(value => {:comparison_operator => "NOT_NULL"})
+        end
+        params.delete("attribute")
+      end
       params.each do |key , value|
         query.merge!(key => {:comparison_operator => "EQ", :attribute_value_list => [value]})
       end
