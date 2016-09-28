@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       resources :assignments
       resources :variants
       resources :shipments
+      resources :specimen_events
     end
 
     resources :events
