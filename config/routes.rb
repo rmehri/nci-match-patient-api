@@ -7,9 +7,10 @@ Rails.application.routes.draw do
       resources :specimens
       resources :assignments
       resources :variants
-      resources :events
       resources :shipments
     end
+
+    resources :events
 
     controller :version do
       get "patients/version" => :version
