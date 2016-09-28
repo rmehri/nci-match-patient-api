@@ -8,7 +8,7 @@ Rails.application.routes.draw do
       resources :assignments
       resources :variants
       resources :shipments
-      resources :specimen_events
+      resources :specimen_events, only: [:index]
     end
 
     resources :events

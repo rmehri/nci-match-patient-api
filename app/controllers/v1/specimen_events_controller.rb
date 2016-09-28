@@ -1,6 +1,6 @@
 module V1
   class SpecimenEventsController < BaseController
-    before_action :set_resource, only: [:show, :index]
+    before_action :set_resource, only: [:index]
 
     #Combination of Specimen with Shipments, Events, Variant_reports
     def index
