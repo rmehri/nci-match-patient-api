@@ -5,6 +5,10 @@ Rails.application.routes.draw do
     resources :patients do
       resources :variant_reports
       resources :specimens
+      resources :assignments
+      resources :variants
+      resources :events
+      resources :shipments
     end
 
     controller :version do
