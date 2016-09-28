@@ -2,8 +2,8 @@ module V1
   class VariantReportsController < BaseController
 
     private
-    def patient_params
-      params.require(:patient_id).permit(:variant_report_received_date)
+    def variant_reports_params
+      build_query({:analysis_id => params.require(:id)})
     end
 
     def query_params

@@ -2,8 +2,8 @@ module V1
   class PatientsController < BaseController
 
     private
-    def patient_params
-      params.require(:patient_id).permit(:patient_id, :registration_date, :study_id, :gender, :ethnicity, :current_step_number, :current_status, :treating_site_id, :message)
+    def patients_params
+      build_query({:patient_id => params.require(:id)})
     end
 
     def query_params
