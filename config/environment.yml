@@ -2,7 +2,7 @@ development:
   aws_dynamo_endpoint: "http://localhost:8000"
   aws_region: "us-east-1"
 
-  queue_name: ""
+  queue_name: "ys_patient_development"
 
   # dynamodb setting
   read_capacity_units: "30"
@@ -10,6 +10,8 @@ development:
 
   patient_state_api: "http://localhost:10241/api/v1/state_validator/"
   patient_processor: "http://localhost:3010"
+  match_rule_api: "http://127.0.0.1:10250/api/v1/rules/"
+  treatment_arm_api: "localhost:10235/api/v1/treatment_arms"
 
   s3_url: "https://s3.amazonaws.com"
   s3_bucket: "pedmatch-dev"
@@ -31,9 +33,10 @@ test:
 
   patient_state_api: "https://pedmatch-int.nci.nih.gov/api/v1/state_validator/"
   patient_processor: "https://pedmatch-int.nci.nih.gov:3010"
+  match_rule_api:    "https://pedmatch-int.nci.nih.gov/api/v1/rules/"
+  treatment_arm_api: "https://pedmatch-int.nci.nih.gov/api/v1/treatment_arms"
 
   http_read_timeout: "120"
-  http_use_ssl: "false"
 
   s3_url: "https://s3.amazonaws.com"
   s3_bucket: "pedmatch-int"
@@ -50,6 +53,8 @@ uat:
 
   patient_state_api: "https://pedmatch-uat.nci.nih.gov/api/v1/state_validator/"
   patient_processor: "https://pedmatch-uat.nci.nih.gov:3010"
+  match_rule_api:    "https://pedmatch-uat.nci.nih.gov/api/v1/rules/"
+  treatment_arm_api: "https://pedmatch-uat.nci.nih.gov/api/v1/treatment_arms/"
 
   s3_url: "https://s3.amazonaws.com"
   s3_bucket: "pedmatch-uat"
