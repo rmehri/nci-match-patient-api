@@ -4,7 +4,6 @@ Rails.application.routes.draw do
 
     resources :patients do
       resources :variant_reports
-      # resources :variant_report_events
       resources :specimens
       resources :assignments
       resources :variants
@@ -14,9 +13,7 @@ Rails.application.routes.draw do
 
     resources :events
 
-    controller :version do
-      get "patients/version" => :version
-    end
+    get 'version', to: :version, controller: 'version'
 
     # controller :patients do
     #   get "patients" => :patient_list
