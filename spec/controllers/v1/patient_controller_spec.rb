@@ -134,7 +134,6 @@ describe V1::PatientsController do
   it "route to correct controller" do
     expect(:get => "api/v1/patients").to route_to(:controller => "v1/patients", :action => "index")
     expect(:get => "api/v1/patients/1").to route_to(:controller => "v1/patients", :action => "show", :id => "1")
-    expect(:get => "api/v1/events/1").to route_to(:controller => "v1/events", :action => "show", :id => "1")
   end
 
   let(:patient_list_dbm) do
@@ -148,10 +147,6 @@ describe V1::PatientsController do
   end
 
   it "route correctly" do
-
-    expect(:get => "api/v1/events").to route_to(:controller => "v1/events", :action => "index")
-    expect(:get => "api/v1/events/1").to route_to(:controller => "v1/events", :action => "show", :id => "1")
-
     expect(:get => "api/v1/patients/1/variant_reports").to route_to(:controller => "v1/variant_reports", :action => "index",
                                                            :patient_id => "1")
     expect(:get => "api/v1/patients/1/assignments").to route_to(:controller => "v1/assignments", :action => "index",
@@ -169,63 +164,41 @@ describe V1::PatientsController do
     {:valid => "false"}
   end
 
-  # it "GET /patients to return json list of patients" do
-  #   allow(NciMatchPatientModels::Patient).to receive(:scan).and_return([patient_dbm, patient_dbm])
-  #
-  #   get :patient_list, format: :json
-  #
-  #   expect(response).to have_http_status(200)
-  #
-  #   expect {
-  #     JSON.parse(response.body)
-  #   }.to_not raise_error
-  # end
+  it "GET /patients to return json list of patients" do
+    allow(NciMatchPatientModels::Patient).to receive(:scan).and_return([patient_dbm, patient_dbm])
 
-  # it "GET /patients/1 to return json patient" do
-  #   allow(NciMatchPatientModels::Patient).to receive(:query).and_return([patient_dbm])
-  #   allow(NciMatchPatientModels::Specimen).to receive(:query).and_return([specimen_dbm])
-  #   allow(NciMatchPatientModels::VariantReport).to receive(:query).and_return([variant_report_dbm])
-  #   allow(NciMatchPatientModels::Variant).to receive(:scan).and_return([variant_dbm])
-  #   allow(NciMatchPatientModels::Shipment).to receive(:scan).and_return([])
-  #
-  #   get :patient, :patient_id => "2222"
-  #
-  #   expect(response).to have_http_status(200)
-  #
-  #   expect {
-  #     JSON.parse(response.body)
-  #   }.to_not raise_error
-  # end
+    get :index, format: :json
+
+    expect(response).to have_http_status(200)
+
+    expect {
+      JSON.parse(response.body)
+    }.to_not raise_error
+  end
+
+  it "GET /patients/1 to return json patient" do
+    allow(NciMatchPatientModels::Patient).to receive(:scan).and_return([patient_dbm])
+    allow(NciMatchPatientModels::Specimen).to receive(:scan).and_return([specimen_dbm])
+    allow(NciMatchPatientModels::VariantReport).to receive(:scan).and_return([variant_report_dbm])
+    allow(NciMatchPatientModels::Variant).to receive(:scan).and_return([variant_dbm])
+    allow(NciMatchPatientModels::Shipment).to receive(:scan).and_return([])
+
+    get :show, :id => "2222"
+
+    expect(response).to have_http_status(200)
+
+    expect {
+      JSON.parse(response.body)
+    }.to_not raise_error
+  end
 
   # it "GET /patients/1 should handle errors by returning status 500" do
-  #   allow(NciMatchPatientModels::Patient).to receive(:query).and_raise("An Error")
+  #   allow(NciMatchPatientModels::Patient).to receive(:scan).and_raise("An Error")
   #
-  #   get :patient, :patient_id => "2222"
+  #   get :show, :id => "2222"
   #
   #   expect(response).to have_http_status(500)
   #   expect(response.body).to include "message"
-  # end
-  #
-  # it "GET /patients/1/timeline to return json patient timeline" do
-  #   allow(NciMatchPatientModels::Event).to receive(:query).and_return([patient_event_dbm])
-  #
-  #   get :timeline, :patient_id => "1"
-  #
-  #   expect(response).to have_http_status(200)
-  #
-  #   expect {
-  #     JSON.parse(response.body)
-  #   }.to_not raise_error
-  # end
-  #
-  # it "POST /patients/1/sampleFile" do
-  #   # route_to(:controller => "patients", :action => "sample_file", :patientid => "1")
-  #   allow(Aws::Sqs::Publisher).to receive(:publish).and_return("")
-  #   post :sample_files, :patient_id => "1"
-  #
-  #   expect {
-  #     JSON.parse(response.body)
-  #   }.to_not raise_error
   # end
 
   let(:variant_status_message) do
@@ -241,19 +214,6 @@ describe V1::PatientsController do
     }.to_json
   end
 
-  # it "PUT /patients/1/variantStatus" do
-  #
-  #   allow(HTTParty::Request).to receive(:new).and_return(HTTParty::Request)
-  #   allow(HTTParty::Response).to receive(:new).and_return(HTTParty::Response)
-  #   allow(HTTParty::Request).to receive(:perform).and_return(HTTParty::Response)
-  #   allow(HTTParty::Response).to receive(:body).and_return(variant_status_response)
-  #
-  #   put :variant_status, variant_status_message, :patient_id => "1"
-  #
-  #   expect(response).to have_http_status(200)
-  #   expect(response.body).to include "message"
-  #
-  # end
 
   # it "PUT /patients/1/variantReportStatus" do
   #   # route_to(:controller => "patients", :action => "variant_report_status", :patientid => "1")
