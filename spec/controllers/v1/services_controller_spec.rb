@@ -35,36 +35,19 @@ describe V1::ServicesController do
   it "POST /trigger" do
     expect(:post => "api/v1/patients/1").to route_to(:controller => "v1/services", :action => "trigger", :patient_id => "1")
 
-    expect(:put => "api/v1/patients/1/variant_reports/mid/aid/confirm").to route_to(:controller => "v1/services",
+    expect(:put => "api/v1/patients/1/variant_reports/aid/confirm").to route_to(:controller => "v1/services",
                                                                            :action => "variant_report_status",
                                                                             :patient_id => "1",
-                                                                                    :molecular_id => "mid",
                                                                                     :analysis_id => "aid",
                                                                              :status => "confirm")
 
     expect(:put => "api/v1/patients/variant/123456/unchecked").to route_to(:controller => "v1/services", :action => "variant_status",
                                                                                      :variant_uuid => "123456", :status => "unchecked")
-    # expect(:put => "api/v1/patients/1/assignment_reports/6748392").to route_to(:controller => "v1/patients",
-    #                                                                            :action => "assignment_confirmation",
-    #                                                                            :patient_id => "1", :date_assigned => "6748392")
+    expect(:put => "api/v1/patients/1/assignment_reports/aid/confirm").to route_to(:controller => "v1/services",
+                                                                               :action => "assignment_confirmation",
+                                                                               :patient_id => "1",
+                                                                                   :analysis_id => "aid",
+                                                                                   :status => "confirm")
   end
 
-
-
-  #   allow(Aws::Sqs::Publisher).to receive(:publish).and_return("")
-  #
-  #   # allow(Aws::Sqs::Publisher).to receive(:publish).and_return("")
-  #   # put :assignment_reports, :patient_id => "1", :date_assigned => "123456"
-  #
-  #   post :trigger, good_message
-  #   # good_message
-  #
-  #   # headers = { 'CONTENT_TYPE' => 'application/json' }
-  #   #
-  #   # post "/api/v1/patients/3355", good_message, headers
-  #
-  #   expect {
-  #     JSON.parse(response.body)
-  #   }.to_not raise_error
-  # end
 end

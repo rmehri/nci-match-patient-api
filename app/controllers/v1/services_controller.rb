@@ -84,7 +84,7 @@ module V1
       end
     end
 
-    # PUT /api/v1/patients/{patient_id}/assignment_reports/{date_assigned}/confirm
+    # PUT /api/v1/patients/{patient_id}/assignment_reports/{analysis_id}/confirm
     def assignment_confirmation
       begin
 

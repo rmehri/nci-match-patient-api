@@ -5,7 +5,6 @@ describe 'VariantReportStatusValidator' do
   let(:good_message) do
     {
         "patient_id": "3344",
-        "molecular_id": "3344-bsn-msn-2",
         "analysis_id": "job1",
         "status": "CONFIRMED",
         "comment": "some comment",
@@ -16,7 +15,6 @@ describe 'VariantReportStatusValidator' do
   let(:bad_message) do
     {
         "patient_id": "3344",
-        "molecular_id": "3344-bsn-msn-2",
         "analysis_id": "job1",
         "status": "PENDING",
         "comment": "some comment"

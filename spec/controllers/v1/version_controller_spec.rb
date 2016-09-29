@@ -22,10 +22,10 @@ describe V1::VersionController do
      expect(response).to have_http_status(200)
     end
 
-    it "should route to the correct controller" do
-
-      expect(:get => "/api/v1/patients/version" ).to route_to(:controller => "v1/version", :action => "version")
-    end
+    # it "should route to the correct controller" do
+    #
+    #   expect(:get => "/api/v1/patients/version" ).to route_to(:controller => "v1/version", :action => "version")
+    # end
 
     it "should handle an error correctly" do
       allow(NciMatchPatientApi::Application).to receive(:VERSION).and_raise("this error")
