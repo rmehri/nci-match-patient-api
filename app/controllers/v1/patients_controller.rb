@@ -7,9 +7,8 @@ module V1
     end
 
     def query_params
-      parameters = params.permit(:patient_id, :registration_date, :study_id, :gender, :ethnicity, :current_step_number, :current_status, :treating_site_id, :message,
-                                 :attributes, :projections, :projection => [], :attribute => [])
-      build_query(parameters)
+      build_query(params.permit(:patient_id, :registration_date, :study_id, :gender, :ethnicity, :current_step_number, :current_status, :treating_site_id, :message,
+                                :attributes, :projections, :projection => [], :attribute => []))
     end
   end
 end
