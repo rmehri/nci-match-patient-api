@@ -99,8 +99,12 @@ module V1
 
     # Use callbacks to share common setup or constraints between actions.
     def set_resource(resource = nil)
-      resource ||= resource_class.scan(resource_params).collect { |data| data.to_h.compact }
-      instance_variable_set("@#{resource_name}", resource)
+      begin
+        resource ||= resource_class.scan(resource_params).collect { |data| data.to_h.compact }
+        instance_variable_set("@#{resource_name}", resource)
+      rescue => error
+        standard_error_message(error.message)
+      end
     end
 
     def build_query(params)
