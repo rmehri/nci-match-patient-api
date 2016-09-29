@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
     resources :patients do
       resources :variant_reports
-      resources :variant_report_events
+      # resources :variant_report_events
       resources :specimens
       resources :assignments
       resources :variants
