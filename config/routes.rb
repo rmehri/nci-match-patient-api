@@ -6,7 +6,13 @@ Rails.application.routes.draw do
       resources :variant_reports
       resources :variant_report_events
       resources :specimens
+      resources :assignments
+      resources :variants
+      resources :shipments
+      resources :specimen_events, only: [:index]
     end
+
+    resources :events
 
     controller :version do
       get "patients/version" => :version

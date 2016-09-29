@@ -2,8 +2,8 @@ module V1
   class SpecimensController < BaseController
 
     private
-    def patient_params
-      params.require(:patient_id).permit(:sorting_key)
+    def specimens_params
+      build_query({:surgical_event_id => params.require(:id)})
     end
 
     def query_params
