@@ -4,7 +4,6 @@ Rails.application.routes.draw do
 
     resources :patients do
       resources :variant_reports
-      # resources :variant_report_events
       resources :specimens
       resources :assignments
       resources :variants
@@ -60,6 +59,8 @@ Rails.application.routes.draw do
       put "patients/:patient_id/variant_reports/:analysis_id/:status" => :variant_report_status
       put "patients/:patient_id/assignment_reports/:analysis_id/:status" => :assignment_confirmation
       put "patients/variant/:variant_uuid/:status" => :variant_status
+
+      get "shipments/:molecular_id" => :get_shipment
     end
 
     # controller :dashboard do
