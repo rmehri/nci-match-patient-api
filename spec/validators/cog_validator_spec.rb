@@ -11,7 +11,7 @@ describe 'CogValidator behavior' do
         "study_id"=> "APEC1621",
         "patient_id"=> "3344",
         "step_number"=> "1.0",
-        "registration_date"=> "2016-05-09T22:06:33+00:00",
+        "status_date"=> "2016-05-09T22:06:33+00:00",
         "status"=> "REGISTRATION",
         "internal_use_only"=> {
             "request_id"=> "4-654321",
@@ -29,7 +29,7 @@ describe 'CogValidator behavior' do
         },
         "study_id"=> "APEC1621",
         "step_number"=> "1.0",
-        "registration_date"=> "2016-05-09T22:06:33+00:00",
+        "status_date"=> "2016-05-09T22:06:33+00:00",
         "status"=> "REGISTRATION",
         "internal_use_only"=> {
             "request_id"=> "4-654321",
