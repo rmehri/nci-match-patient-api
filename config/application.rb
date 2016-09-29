@@ -24,6 +24,7 @@ module NciMatchPatientApi
     config.autoload_paths += Dir[Rails.root.join('app', 'controllers', '{*}')]
     config.autoload_paths += Dir[Rails.root.join('app', 'helpers', '{*/}')]
     config.autoload_paths += Dir[Rails.root.join('app', 'validators', '{*/}')]
+    config.autoload_paths += Dir[Rails.root.join('app', 'services', '{*/}')]
     config.autoload_paths += Dir[Rails.root.join('lib')]
 
     config.middleware.insert_before 0, "Rack::Cors" do

@@ -13,7 +13,7 @@ class VariantReportUpdater
                           treatment_arms)
 
       variant_report = JSON.parse(report)
-      variant_report.deep_transform_keys!(&:underscore).deep_symbolize_keys
+      variant_report.deep_symbolize_keys
     rescue => ex
       AppLogger.log_error(self.class.name, "Got error while getting updated variant report: #{ex.message}")
       raise ex
