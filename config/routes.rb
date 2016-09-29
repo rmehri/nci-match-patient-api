@@ -13,9 +13,7 @@ Rails.application.routes.draw do
 
     resources :events
 
-    controller :version do
-      get "patients/version" => :version
-    end
+    get 'version', to: :version, controller: 'version'
 
     # controller :patients do
     #   get "patients" => :patient_list
