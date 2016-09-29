@@ -131,11 +131,11 @@ describe V1::PatientsController do
     expect(NciMatchPatientModels::Patient.include?(Aws::Record)).to be true
   end
 
-  # it "route to correct controller" do
-  #   expect(:get => "api/v1/patients").to route_to(:controller => "v1/patients", :action => "patient_list")
-  #   expect(:get => "api/v1/patients/1").to route_to(:controller => "v1/patients", :action => "patient", :patient_id => "1")
-  #   expect(:get => "api/v1/patients/1/timeline").to route_to(:controller => "v1/patients", :action => "timeline", :patient_id => "1")
-  # end
+  it "route to correct controller" do
+    expect(:get => "api/v1/patients").to route_to(:controller => "v1/patients", :action => "index")
+    expect(:get => "api/v1/patients/1").to route_to(:controller => "v1/patients", :action => "show", :id => "1")
+    expect(:get => "api/v1/events/1").to route_to(:controller => "v1/events", :action => "show", :id => "1")
+  end
 
   let(:patient_list_dbm) do
     stub_model NciMatchPatientModels::Event,
@@ -147,26 +147,18 @@ describe V1::PatientsController do
                :event_data => {"status" => "Pending", "biopsy_sequence_number" => "B-987456"}
   end
 
-  # it "route correctly" do
-  #
-  #   expect(:get => "api/v1/patients/timeline").to route_to(:controller => "v1/patients", :action => "dashboard_timeline")
-  #
-  #   expect(:get => "api/v1/patients").to route_to(:controller => "v1/patients", :action => "patient_list")
-  #   expect(:get => "api/v1/patients/1").to route_to(:controller => "v1/patients", :action => "patient", :patient_id => "1")
-  #   expect(:get => "api/v1/patients/1/timeline").to route_to(:controller => "v1/patients", :action => "timeline", :patient_id => "1")
-  #
-  #   expect(:get => "api/v1/patients/1/documents").to route_to(:controller => "v1/patients", :action => "document_list", :patient_id => "1")
-  #   expect(:get => "api/v1/patients/1/documents/2").to route_to(:controller => "v1/patients", :action => "document", :patient_id => "1", :document_id => "2")
-  #   expect(:post => "api/v1/patients/1/documents").to route_to(:controller => "v1/patients", :action => "new_document", :patient_id => "1")
-  #
-  #   expect(:get => "api/v1/patients/1/variant_reports").to route_to(:controller => "v1/patients", :action => "variant_reports",
-  #                                                          :patient_id => "1")
-  #
-  #   expect(:get => "api/v1/patients/1/assignment_reports").to route_to(:controller => "v1/patients", :action => "patient_assignment_reports",
-  #                                                                      :patient_id => "1")
-  #   expect(:get => "api/v1/patients/1/assignment_reports/1234567").to route_to(:controller => "v1/patients", :action => "patient_assignment_report",
-  #                                                                              :patient_id => "1", :date_assigned => "1234567")
-  # end
+  it "route correctly" do
+
+    expect(:get => "api/v1/events").to route_to(:controller => "v1/events", :action => "index")
+    expect(:get => "api/v1/events/1").to route_to(:controller => "v1/events", :action => "show", :id => "1")
+
+    expect(:get => "api/v1/patients/1/variant_reports").to route_to(:controller => "v1/variant_reports", :action => "index",
+                                                           :patient_id => "1")
+    expect(:get => "api/v1/patients/1/assignments").to route_to(:controller => "v1/assignments", :action => "index",
+                                                                       :patient_id => "1")
+    expect(:get => "api/v1/patients/1/assignments/1234567").to route_to(:controller => "v1/assignments", :action => "show",
+                                                                               :patient_id => "1", :id => "1234567")
+  end
 
 
   let(:valid_test_message) do
@@ -249,19 +241,19 @@ describe V1::PatientsController do
     }.to_json
   end
 
-  xit "PUT /patients/1/variantStatus" do
-
-    allow(HTTParty::Request).to receive(:new).and_return(HTTParty::Request)
-    allow(HTTParty::Response).to receive(:new).and_return(HTTParty::Response)
-    allow(HTTParty::Request).to receive(:perform).and_return(HTTParty::Response)
-    allow(HTTParty::Response).to receive(:body).and_return(variant_status_response)
-
-    put :variant_status, variant_status_message, :patient_id => "1"
-
-    expect(response).to have_http_status(200)
-    expect(response.body).to include "message"
-
-  end
+  # it "PUT /patients/1/variantStatus" do
+  #
+  #   allow(HTTParty::Request).to receive(:new).and_return(HTTParty::Request)
+  #   allow(HTTParty::Response).to receive(:new).and_return(HTTParty::Response)
+  #   allow(HTTParty::Request).to receive(:perform).and_return(HTTParty::Response)
+  #   allow(HTTParty::Response).to receive(:body).and_return(variant_status_response)
+  #
+  #   put :variant_status, variant_status_message, :patient_id => "1"
+  #
+  #   expect(response).to have_http_status(200)
+  #   expect(response.body).to include "message"
+  #
+  # end
 
   # it "PUT /patients/1/variantReportStatus" do
   #   # route_to(:controller => "patients", :action => "variant_report_status", :patientid => "1")

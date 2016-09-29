@@ -9,7 +9,6 @@ module V1
 
     private
     def set_resource(resource = {})
-      p params
       resources = NciMatchPatientModels::Specimen.scan(resource_params).collect { |data| data.to_h.compact }
       resources.each do | resource |
         resource = embed_resources(resource) unless resource[:type] == "BLOOD"
