@@ -12,7 +12,7 @@ ENV RAILS_ENV test
 RUN gem install rails --version "$RAILS_VERSION"
 
 # Install gems 
-COPY Gemfile* .
+COPY Gemfile* $INSTALL_PATH/
 RUN gem install bundler
 RUN bundle install 
 
