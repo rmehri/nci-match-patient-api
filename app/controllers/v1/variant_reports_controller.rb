@@ -43,9 +43,5 @@ module V1
       VariantReportUpdater.new.updated_variant_report(variant_report)
     end
 
-    def query_params
-      build_query(params.permit!.except(:controller, :action))
-    end
-
   end
 end

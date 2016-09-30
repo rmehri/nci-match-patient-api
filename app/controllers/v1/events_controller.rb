@@ -6,9 +6,5 @@ module V1
       build_query({:entity_id => params.require(:id)})
     end
 
-    def query_params
-      parameters = params.permit!.except(:controller, :action)
-      build_query(parameters)
-    end
   end
 end
