@@ -29,21 +29,21 @@ describe V1::ServicesController do
   end
 
   it "should route to correct controller" do
-    expect(:post => "api/v1/patients/3355").to route_to(:controller => "v1/services", :action => "trigger", :patient_id =>"3355")
+    expect(:post => "api/v1/patient/patients/3355").to route_to(:controller => "v1/services", :action => "trigger", :patient_id =>"3355")
   end
 
   it "POST /trigger" do
-    expect(:post => "api/v1/patients/1").to route_to(:controller => "v1/services", :action => "trigger", :patient_id => "1")
+    expect(:post => "api/v1/patient/patients/1").to route_to(:controller => "v1/services", :action => "trigger", :patient_id => "1")
 
-    expect(:put => "api/v1/patients/1/variant_reports/aid/confirm").to route_to(:controller => "v1/services",
+    expect(:put => "api/v1/patient/patients/1/variant_reports/aid/confirm").to route_to(:controller => "v1/services",
                                                                            :action => "variant_report_status",
                                                                             :patient_id => "1",
                                                                                     :analysis_id => "aid",
                                                                              :status => "confirm")
 
-    expect(:put => "api/v1/patients/variant/123456/unchecked").to route_to(:controller => "v1/services", :action => "variant_status",
+    expect(:put => "api/v1/patient/patients/variant/123456/unchecked").to route_to(:controller => "v1/services", :action => "variant_status",
                                                                                      :variant_uuid => "123456", :status => "unchecked")
-    expect(:put => "api/v1/patients/1/assignment_reports/aid/confirm").to route_to(:controller => "v1/services",
+    expect(:put => "api/v1/patient/patients/1/assignment_reports/aid/confirm").to route_to(:controller => "v1/services",
                                                                                :action => "assignment_confirmation",
                                                                                :patient_id => "1",
                                                                                    :analysis_id => "aid",
