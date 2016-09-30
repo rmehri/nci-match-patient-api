@@ -18,9 +18,9 @@ module Convert
     private
 
     def self.update_statistics(variant_report, variants_db)
-      variant_report[:total_conirmed_mois] = variants_db.select {|v| v[:confirmed] == true}.length
+      variant_report[:total_confirmed_mois] = variants_db.select {|v| v[:confirmed] == true}.length
       variant_report[:total_amois] = variants_db.select {|v| v[:amois].length > 0}.length
-      variant_report[:total_conirmed_amois] = variants_db.select {|v| v[:confirmed] == true && v[:amois].length > 0}.length
+      variant_report[:total_confirmed_amois] = variants_db.select {|v| v[:confirmed] == true && v[:amois].length > 0}.length
     end
 
     def self.get_snv_indels(variants_db)
@@ -47,7 +47,6 @@ module Convert
       if (variants != nil)
         selected = variants
             .select {|v| v[:variant_type] == variant_type}
-        puts "=========== selected: #{selected.to_json}"
         selected
       else
         []
