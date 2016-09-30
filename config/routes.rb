@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       collection do
         get 'version', controller: 'version', action: :version
         get 'statistics', controller: 'statistics', action: :patient_statistics
+        get 'amois', controller: 'statistics', action: :sequenced_and_confirmed_patients
         resources :events
         resources :variant_reports
         resources :variants

@@ -45,5 +45,26 @@ module V1
       end
     end
 
+    def sequenced_and_confirmed_patients
+        begin
+          report_dbm = NciMatchPatientModels::VariantReport.find_by({"status" => "CONFIRMED", "variant_report_type" => "TISSUE"}).collect {|x| x}.uniq
+          AppLogger.log_debug(self.class.name, "Got #{report_dbm.length} variant reports with status='CONFIRMED' and variant_report_type='TISSUE'")
+
+          stats = {
+              "amois" => [
+                  report_dbm.count { |x| x.total_confirmed_amois.present? && x.total_confirmed_amois == 0},
+                  report_dbm.count { |x| x.total_confirmed_amois.present? && x.total_confirmed_amois == 1},
+                  report_dbm.count { |x| x.total_confirmed_amois.present? && x.total_confirmed_amois == 2},
+                  report_dbm.count { |x| x.total_confirmed_amois.present? && x.total_confirmed_amois == 3},
+                  report_dbm.count { |x| x.total_confirmed_amois.present? && x.total_confirmed_amois == 4},
+                  report_dbm.count { |x| x.total_confirmed_amois.present? && x.total_confirmed_amois >= 5}
+              ]
+          }
+
+          render json: stats
+        rescue => error
+          standard_error_message(error.message)
+        end
+      end
   end
 end
