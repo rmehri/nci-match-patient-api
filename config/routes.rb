@@ -1,8 +1,12 @@
 Rails.application.routes.draw do
 
-  scope '/api/v1/patient', module: 'v1' do
+  scope '/api/v1', module: 'v1' do
 
     resources :patients do
+      collection do
+        get 'version', to: :version, controller: 'version'
+        resources :events
+      end
       resources :variant_reports
       resources :specimens
       resources :assignments
@@ -10,10 +14,6 @@ Rails.application.routes.draw do
       resources :shipments
       resources :specimen_events, only: [:index]
     end
-
-    resources :events
-
-    get 'version', to: :version, controller: 'version'
 
     # controller :patients do
     #   get "patients" => :patient_list
