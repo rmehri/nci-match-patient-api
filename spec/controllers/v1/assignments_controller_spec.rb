@@ -10,7 +10,7 @@ describe V1::AssignmentsController do
   end
 
   it 'should route correctly' do
-    expect(:get => "api/v1/patients/3366/assignments?analysis_id=job1").to route_to(:controller => "v1/assignments",
+    expect(:get => "api/v1/patients/assignments?analysis_id=job1&patient_id=3366").to route_to(:controller => "v1/assignments",
                                                                                               :action => "index",
                                                                                               :patient_id => "3366",
                                                                                               :analysis_id => "job1")

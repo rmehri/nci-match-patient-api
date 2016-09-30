@@ -74,14 +74,7 @@ describe V1::PatientsController do
                :event_data => {"status" => "Pending", "biopsy_sequence_number" => "B-987456"}
   end
 
-  it "route correctly" do
-    expect(:get => "api/v1/patients/1/variant_reports").to route_to(:controller => "v1/variant_reports", :action => "index",
-                                                           :patient_id => "1")
-    expect(:get => "api/v1/patients/1/assignments").to route_to(:controller => "v1/assignments", :action => "index",
-                                                                       :patient_id => "1")
-    expect(:get => "api/v1/patients/1/assignments/1234567").to route_to(:controller => "v1/assignments", :action => "show",
-                                                                               :patient_id => "1", :id => "1234567")
-  end
+  it "route correctly"
 
 
   it "GET /patients to return json list of patients" do

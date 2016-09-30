@@ -4,13 +4,13 @@ Rails.application.routes.draw do
 
     resources :patients do
       collection do
-        get 'version', to: :version, controller: 'version'
+        get 'version', controller: 'version', action: :version
         resources :events
+        resources :variant_reports
+        resources :variants
+        resources :assignments
       end
-      resources :variant_reports
       resources :specimens
-      resources :assignments
-      resources :variants
       resources :shipments
       resources :specimen_events, only: [:index]
     end
