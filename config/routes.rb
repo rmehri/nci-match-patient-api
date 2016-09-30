@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  scope '/api/v1', module: 'v1' do
+  scope '/api/v1/patient', module: 'v1' do
 
     resources :patients do
       resources :variant_reports

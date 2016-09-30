@@ -60,8 +60,8 @@ describe V1::PatientsController do
   end
 
   it "route to correct controller" do
-    expect(:get => "api/v1/patients").to route_to(:controller => "v1/patients", :action => "index")
-    expect(:get => "api/v1/patients/1").to route_to(:controller => "v1/patients", :action => "show", :id => "1")
+    expect(:get => "api/v1/patient/patients").to route_to(:controller => "v1/patients", :action => "index")
+    expect(:get => "api/v1/patient/patients/1").to route_to(:controller => "v1/patients", :action => "show", :id => "1")
   end
 
   let(:patient_list_dbm) do
@@ -75,11 +75,11 @@ describe V1::PatientsController do
   end
 
   it "route correctly" do
-    expect(:get => "api/v1/patients/1/variant_reports").to route_to(:controller => "v1/variant_reports", :action => "index",
+    expect(:get => "api/v1/patient/patients/1/variant_reports").to route_to(:controller => "v1/variant_reports", :action => "index",
                                                            :patient_id => "1")
-    expect(:get => "api/v1/patients/1/assignments").to route_to(:controller => "v1/assignments", :action => "index",
+    expect(:get => "api/v1/patient/patients/1/assignments").to route_to(:controller => "v1/assignments", :action => "index",
                                                                        :patient_id => "1")
-    expect(:get => "api/v1/patients/1/assignments/1234567").to route_to(:controller => "v1/assignments", :action => "show",
+    expect(:get => "api/v1/patient/patients/1/assignments/1234567").to route_to(:controller => "v1/assignments", :action => "show",
                                                                                :patient_id => "1", :id => "1234567")
   end
 
