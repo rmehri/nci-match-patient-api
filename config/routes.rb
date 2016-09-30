@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     resources :patients do
       collection do
         get 'version', controller: 'version', action: :version
+        get 'statistics', controller: 'statistics', action: :patient_statistics
         resources :events
         resources :variant_reports
         resources :variants
