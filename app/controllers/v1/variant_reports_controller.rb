@@ -43,10 +43,6 @@ module V1
       VariantReportUpdater.new.updated_variant_report(variant_report)
     end
 
-    def variant_report_events_params
-      params.require(:patient_id).permit(:patient_id, :analysis_id)
-    end
-
     def query_params
       parameters = params.permit(:patient_id, :variant_report_received_date, :variant_report_type,
                                  :molecular_id, :analysis_id, :status, :status_date, :comment,
