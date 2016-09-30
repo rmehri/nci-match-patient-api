@@ -7,8 +7,7 @@ module V1
     end
 
     def query_params
-      parameters = params.permit(:entity_id, :event_date, :event_type, :event_message, :event_data,
-                                 :attributes, :projections, :projection => [], :attribute => [])
+      parameters = params.permit!.except(:controller, :action)
       build_query(parameters)
     end
   end

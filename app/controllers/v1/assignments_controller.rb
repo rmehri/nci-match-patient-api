@@ -37,12 +37,7 @@ module V1
     end
 
     def query_params
-      parameters = params.permit(:patient_id, :assignment_date, :study_id, :status, :status_date, :comment, :comment_user,
-                                 :report_status, :patient,
-                                 :treatment_assignment_results, :step_number, :sent_to_cog_date, :received_from_cog_date,
-                                 :cog_assignment_date, :molecular_id, :analysis_id, :selected_treatment_arm,
-                                 :attributes, :projections, :projection => [], :attribute => [])
-      build_query(parameters)
+      build_query(params.permit!.except(:controller, :action))
     end
 
   end

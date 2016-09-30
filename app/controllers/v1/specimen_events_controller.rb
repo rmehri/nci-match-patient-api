@@ -28,8 +28,7 @@ module V1
     end
 
     def query_params
-      parameters = params.permit!.except(:controller, :action)
-      build_query(parameters)
+      build_query(params.permit!.except(:controller, :action))
     end
   end
 end

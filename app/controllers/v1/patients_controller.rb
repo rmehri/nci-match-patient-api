@@ -7,10 +7,7 @@ module V1
     end
 
     def query_params
-      # TODO IS listing every field really required?
-      build_query(params.permit(:patient_id, :registration_date, :study_id, :gender, :ethnicity,
-                                :current_step_number, :current_status, :treating_site_id, :message,
-                                :attributes, :projections, :projection => [], :attribute => []))
+      build_query(params.permit!.except(:controller, :action))
     end
   end
 end
