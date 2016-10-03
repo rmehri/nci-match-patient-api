@@ -11,9 +11,9 @@ Rails.application.routes.draw do
         resources :variant_reports
         resources :variants
         resources :assignments
+        resources :shipments
       end
       resources :specimens
-      resources :shipments
       resources :specimen_events, only: [:index]
     end
 
