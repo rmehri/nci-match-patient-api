@@ -2,18 +2,14 @@ Rails.application.routes.draw do
 
   scope '/api/v1', module: 'v1' do
 
-    resources :patients do
+    resources :patients, only: [:show, :index, :create] do
       collection do
         get 'version', controller: 'version', action: :version
         get 'statistics', controller: 'statistics', action: :patient_statistics
         get 'amois', controller: 'statistics', action: :sequenced_and_confirmed_patients
-        resources :events
-        resources :variant_reports
-        resources :variants
-        resources :assignments
-        resources :shipments
+        resources :events , :variant_reports, :variants, :assignments, :shipments, only: [:show, :index]
       end
-      resources :specimens
+      resources :specimens, only: [:show, :index]
       resources :specimen_events, only: [:index]
     end
 

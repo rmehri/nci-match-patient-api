@@ -34,11 +34,6 @@ module V1
       end
     end
 
-    #place holder
-    def destroy
-
-    end
-
     def index
       begin
         plural_resource_name = "@#{resource_name.pluralize}"
@@ -59,14 +54,14 @@ module V1
     end
 
     #place holder
-    def update
-      # if get_resource.update(resource_params)
-      #   render :show
-      # else
-      #   render json: get_resource.errors, status: :unprocessable_entity
-      # end
+    def destroy
+      render json: nil, status: 200
     end
 
+    #place holder
+    def update
+      render json: nil, status: 200
+    end
 
     private
     # @return [Object]

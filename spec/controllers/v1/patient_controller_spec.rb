@@ -3,7 +3,7 @@ require 'factory_girl_rails'
 require 'aws-record'
 require 'nci_match_patient_models'
 
-describe V1::PatientsController do
+describe V1::PatientsController, :type => :controller do
 
   # before(:each) do
   #   setup_knock()
@@ -74,9 +74,6 @@ describe V1::PatientsController do
                :event_data => {"status" => "Pending", "biopsy_sequence_number" => "B-987456"}
   end
 
-  it "route correctly"
-
-
   it "GET /patients to return json list of patients" do
     allow(NciMatchPatientModels::Patient).to receive(:scan).and_return([patient_dbm, patient_dbm])
 
@@ -134,6 +131,12 @@ describe V1::PatientsController do
     }.to_not raise_error
   end
 
+  it '#update should throw an route error' do
+    expect { patch :update, :id => 1}.to raise_error(ActionController::UrlGenerationError)
+  end
 
+  it '#delete should throw an route error' do
+    expect { delete :destroy, :id => 1}.to raise_error(ActionController::UrlGenerationError)
+  end
 
 end

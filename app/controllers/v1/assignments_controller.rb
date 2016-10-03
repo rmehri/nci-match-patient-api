@@ -3,7 +3,6 @@ module V1
 
     def index
       begin
-
         plural_resource_name = "@#{resource_name.pluralize}"
 
         assignments_ui = []
@@ -15,7 +14,6 @@ module V1
         end
 
         instance_variable_set(plural_resource_name, assignments_ui)
-        instance_variable_get(plural_resource_name)
 
         render json: instance_variable_get(plural_resource_name)
       rescue => error
