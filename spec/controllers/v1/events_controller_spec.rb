@@ -23,4 +23,14 @@ describe V1::EventsController do
     expect { delete :destroy, :id => 1}.to raise_error(ActionController::UrlGenerationError)
   end
 
+  # describe "should build a valid query" do
+  #
+  #   it "contain the correct key" do
+  #     controller.stub_const("params", {:id => "3344"})
+  #     event_controller = V1::EventsController.new
+  #     p event_controller.send(:events_params)
+  #   end
+  #
+  # end
+
 end

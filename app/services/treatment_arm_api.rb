@@ -2,7 +2,7 @@
 class TreatmentArmApi
   include HTTParty
 
-  base_uri ENV["treatment_arm_api"]
+  base_uri Rails.configuration.environment["treatment_arm_api"]
 
   def self.get_treatment_arms
     AppLogger.log(self.class.name, "Getting updated treatment arms from Treatment Arm Api...")

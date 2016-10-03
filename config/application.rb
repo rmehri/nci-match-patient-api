@@ -34,14 +34,7 @@ module NciMatchPatientApi
       end
     end
 
-    config.before_configuration do
-      env_file = Rails.root.join('config', 'environment.yml')
-      if File.exists?(env_file)
-        YAML.load_file(env_file)[Rails.env].each do |key, value|
-          ENV[key.to_s] = value.to_s.sub("{:ENV:USER}", ENV["USER"].to_s) #TODO:RZ: Extract this into a helper to parse out environment vars
-        end
-      end
-    end
+    config.environment = config_for(:environment)
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers

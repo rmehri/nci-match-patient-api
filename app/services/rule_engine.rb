@@ -2,7 +2,7 @@
 class RuleEngine
   include HTTParty
 
-  base_uri ENV["match_rule_api"]
+  base_uri Rails.configuration.environment["match_rule_api"]
 
   def self.get_mois(patient_id, ion_reporter_id, molecular_id, analysis_id, tsv_name, treatment_arms)
 
