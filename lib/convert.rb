@@ -96,7 +96,7 @@ module Convert
 
       p 'qc_file =' + qc_file.to_s
 
-      return "#{ENV['s3_url']}/#{ENV['s3_bucket']}/#{ion_reporter_id}/#{molecular_id}/#{analysis_id}/#{qc_file}"
+      return "#{Rails.configuration.environment.fetch('s3_url')}/#{Rails.configuration.environment.fetch('s3_bucket')}/#{ion_reporter_id}/#{molecular_id}/#{analysis_id}/#{qc_file}"
     end
 
     def self.get_s3_url(ion_reporter_id, molecular_id, analysis_id, file_name)
@@ -104,7 +104,7 @@ module Convert
         return nil
       end
 
-      return "#{ENV['s3_url']}/#{ENV['s3_bucket']}/#{ion_reporter_id}/#{molecular_id}/#{analysis_id}/#{file_name}"
+      return "#{Rails.configuration.environment.fetch('s3_url')}/#{Rails.configuration.environment.fetch('s3_bucket')}/#{ion_reporter_id}/#{molecular_id}/#{analysis_id}/#{file_name}"
     end
 
     def self.get_vr_chart_url(ion_reporter_id, molecular_id,analysis_id, file_name)
@@ -116,7 +116,7 @@ module Convert
       chart_file = File.basename(file_name, ".vcf") + ".vr_chart.json"
       p 'chart_file =' + chart_file.to_s
 
-      return "#{ENV['s3_url']}/#{ENV['s3_bucket']}/#{ion_reporter_id}/#{molecular_id}/#{analysis_id}/#{chart_file}"
+      return "#{Rails.configuration.environment.fetch('s3_url')}/#{Rails.configuration.environment.fetch('s3_bucket')}/#{ion_reporter_id}/#{molecular_id}/#{analysis_id}/#{chart_file}"
     end
 
     def self.to_ui_variant_reports(variant_reports_dbm, variants_dbm)

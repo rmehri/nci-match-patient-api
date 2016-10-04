@@ -31,8 +31,8 @@ module ModelConfig
   def self.ensure_table(table)
 
     if (!table.table_exists?)
-      read_capacity_units =  ENV['read_capacity_units'].to_i
-      write_capacity_units = ENV['write_capacity_units'].to_i
+      read_capacity_units =  Rails.configuration.environment.fetch('read_capacity_units').to_i
+      write_capacity_units = Rails.configuration.environment.fetch('write_capacity_units').to_i
 
       migration = Aws::Record::TableMigration.new(table)
       migration.create!(provisioned_throughput: { read_capacity_units: read_capacity_units,

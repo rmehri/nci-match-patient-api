@@ -1,6 +1,6 @@
 class StateMachine
   include HTTParty
-  base_uri "#{ENV['patient_state_api']}"
+  base_uri "#{Rails.configuration.environment.fetch('patient_state_api')}"
 
   def self.validate(message)
     begin

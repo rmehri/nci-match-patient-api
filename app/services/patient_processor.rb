@@ -1,7 +1,7 @@
 
 class PatientProcessor
   include HTTParty
-  base_uri "#{ENV['patient_processor']}"
+  base_uri "#{Rails.configuration.environment.fetch('patient_processor')}"
 
   def self.run_service(service, message)
 

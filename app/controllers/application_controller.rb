@@ -38,7 +38,7 @@ class ApplicationController < ActionController::Base
   end
 
   def queue_message(message, message_type)
-    queue_name = ENV['queue_name']
+    queue_name = Rails.configuration.environment.fetch('queue_name')
     Rails.logger.debug "Patient API publishing to queue: #{queue_name}..."
     Aws::Sqs::Publisher.publish(message, queue_name)
     true
@@ -69,7 +69,7 @@ class ApplicationController < ActionController::Base
       raise "Incoming message failed patient state validation: #{result}"
     end
 
-    queue_name = ENV['queue_name']
+    queue_name = Rails.configuration.environment.fetch('queue_name')
     Rails.logger.debug "Patient API publishing to queue: #{queue_name}..."
     Aws::Sqs::Publisher.publish(message, queue_name)
 
