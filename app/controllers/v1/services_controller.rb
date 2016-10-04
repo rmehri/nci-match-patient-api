@@ -8,15 +8,9 @@ module V1
       patient_id = get_patient_id_from_url
       message = get_post_data(patient_id)
 
-
-      p "======== found patient id: #{patient_id}"
-
       begin
         type = MessageValidator.get_message_type(message)
         raise "Incoming message has UNKNOWN message type" if (type == 'UNKNOWN')
-
-        error = MessageValidator.validate_json_message(type, message)
-        raise "Incoming message failed message schema validation: #{error}" if !error.nil?
 
         if (type == 'VariantReport')
           shipments = NciMatchPatientModels::Shipment.find_by({"molecular_id" => message[:molecular_id]})
@@ -26,6 +20,9 @@ module V1
           message[:patient_id] = patient_id
           p "============ patient added: #{message}"
         end
+
+        error = MessageValidator.validate_json_message(type, message)
+        raise "Incoming message failed message schema validation: #{error}" if !error.nil?
 
         status = validate_patient_state_and_queue(message, type)
 
