@@ -33,8 +33,7 @@ module NciMatchPatientApi
         resource '*', :headers => :any, :methods => [:get, :post, :put, :options]
       end
     end
-
-    config.environment = config_for(:environment)
+    config.environment = Rails.application.config_for(:environment)
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
