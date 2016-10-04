@@ -2,7 +2,7 @@ development:
   aws_dynamo_endpoint: "http://localhost:8000"
   aws_region: "us-east-1"
 
-  queue_name: <%= ENV["QUEUE_NAME="] %>
+  queue_name: <%= ENV["PATIENT_QUEUE_NAME="] %>
 
   # dynamodb setting
   read_capacity_units: "30"
