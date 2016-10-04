@@ -1,5 +1,5 @@
 module V1
-  class VersionController < ApplicationController
+  class VersionsController < ApplicationController
 
     def version
       begin

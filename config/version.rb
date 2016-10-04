@@ -3,7 +3,7 @@ module NciMatchPatientApi
     attr_reader :VERSION
 
     def VERSION
-      @VERSION ||= "0.0.1"
+      @VERSION ||= "1.0.0"
     end
   end
 end

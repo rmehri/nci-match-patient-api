@@ -6,7 +6,7 @@ require 'nci_match_patient_models'
 
 require 'aws-record/record'
 
-describe V1::VersionController do
+describe V1::VersionsController do
 
   describe "GET #version" do
 
