@@ -107,12 +107,5 @@ module V1
       end
     end
 
-    def get_shipment
-      molecular_id = params[:molecular_id]
-      shipments = NciMatchPatientModels::Shipment.find_by({"molecular_id" => molecular_id}).collect { |data| data.to_h.compact }
-
-      render :json => shipments.to_json, :status => 200
-    end
-
   end
 end

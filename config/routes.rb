@@ -56,7 +56,6 @@ Rails.application.routes.draw do
       put "patients/:patient_id/assignment_reports/:analysis_id/:status" => :assignment_confirmation
       put "patients/variant/:variant_uuid/:status" => :variant_status
 
-      get "shipments/:molecular_id" => :get_shipment
     end
 
     # controller :dashboard do
