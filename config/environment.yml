@@ -22,7 +22,7 @@ test:
   aws_region_dynamo: "us-east-1"
   aws_region: "us-east-1"
 
-  queue_name: <%= ENV["QUEUE_NAME="] %>
+  queue_name: 'patient_queue'
 
   # dynamodb setting
   read_capacity_units: "5"
@@ -45,7 +45,7 @@ uat:
   aws_region: "us-east-1"
 
   #Constructed queue name: "patient_processor"
-  queue_name: <%= ENV["QUEUE_NAME="] %>
+  queue_name: 'patient_queue'
 
   # dynamodb setting
   read_capacity_units: "5"
@@ -64,7 +64,7 @@ production:
   aws_region: "us-east-1"
 
   #Constructed queue name: "patient_processor"
-  queue_name: <%= ENV["QUEUE_NAME="] %>
+  queue_name: 'patient_queue'
 
   # dynamodb setting
   read_capacity_units: "5"
