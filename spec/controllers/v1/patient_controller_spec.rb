@@ -118,18 +118,18 @@ describe V1::PatientsController, :type => :controller do
     expect(controller.send(:query_params)).not_to include(:random)
   end
 
-  it 'should return an assignment report based on analysis id' do
-    assignment = NciMatchPatientModels::Assignment.new
-    allow(NciMatchPatientModels::Assignment).to receive(:scan).and_return([assignment])
-
-    get :show, :id => "2222"
-
-    expect(response).to have_http_status(200)
-
-    expect {
-      JSON.parse(response.body)
-    }.to_not raise_error
-  end
+  # it 'should return an assignment report based on analysis id' do
+  #   assignment = NciMatchPatientModels::Assignment.new
+  #   allow(NciMatchPatientModels::Assignment).to receive(:scan).and_return([assignment])
+  #
+  #   get :show, :id => "2222"
+  #
+  #   expect(response).to have_http_status(200)
+  #
+  #   expect {
+  #     JSON.parse(response.body)
+  #   }.to_not raise_error
+  # end
 
   it '#update should throw an route error' do
     expect { patch :update, :id => 1}.to raise_error(ActionController::UrlGenerationError)

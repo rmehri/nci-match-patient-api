@@ -21,7 +21,7 @@ module V1
 
           patient_id = shipments[0].patient_id
           message[:patient_id] = patient_id
-          p "============ patient added: #{message}"
+          AppLogger.log_error(self.class.name, "============ patient added: #{message}")
         end
 
         status = validate_patient_state_and_queue(message, type)
