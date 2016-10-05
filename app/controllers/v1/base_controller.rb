@@ -47,6 +47,10 @@ module V1
 
     def show
       begin
+
+        obj = get_resource.first
+        return standard_error_message("Resource not found", 404) if obj.blank?
+
         render json: get_resource.first
       rescue => error
         standard_error_message(error.message)
