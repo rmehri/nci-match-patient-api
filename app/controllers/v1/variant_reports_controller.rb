@@ -1,25 +1,17 @@
 module V1
   class VariantReportsController < BaseController
 
-    def index
+    def show
       begin
 
-        plural_resource_name = "@#{resource_name.pluralize}"
+        variant_report = get_resource.first.to_h
+        return standard_error_message("No record found", 404) if variant_report.blank?
 
-        variant_reports_ui = []
+        variants = get_variants(variant_report[:analysis_id])
+        amois = get_amois(variant_report)
+        variant_report = Convert::VariantReportDbModel.to_ui_model(variant_report, variants, amois)
 
-        variant_reports = get_variant_report
-        variant_reports.each do | variant_report|
-          variants = get_variants(variant_report[:analysis_id])
-          amois = get_amois(variant_report)
-          variant_report = Convert::VariantReportDbModel.to_ui_model(variant_report, variants, amois)
-          variant_reports_ui.push(variant_report)
-        end
-
-        instance_variable_set(plural_resource_name, variant_reports_ui)
-        instance_variable_get(plural_resource_name)
-
-        render json: instance_variable_get(plural_resource_name)
+        render json: variant_report
       rescue => error
         standard_error_message(error.message)
       end
@@ -27,19 +19,16 @@ module V1
 
     private
 
-    def get_variant_report
-      variant_reports = NciMatchPatientModels::VariantReport.scan(query_params).collect { |data| data.to_h.compact }
-      raise "Patient doesn't have a variant report matching parameters [#{params}]" if variant_reports.length == 0
-
-      variant_reports
-    end
-
     def get_variants(analysis_id)
       NciMatchPatientModels::Variant.scan(build_query({:analysis_id => analysis_id})).collect { |data| data.to_h.compact }
     end
 
     def get_amois(variant_report)
       VariantReportUpdater.new.updated_variant_report(variant_report)
+    end
+
+    def variant_reports_params
+      build_query({:analysis_id => params.require(:id)})
     end
 
   end
