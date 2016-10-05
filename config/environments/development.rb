@@ -33,7 +33,8 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   # Enable stdout logger
-  # config.logger = Logger.new(STDOUT)
+  config.logger = Logger.new(STDOUT)
   # Set log level
-  # config.log_level = :INFO
+  config.log_level = :INFO
+  config.log_tags = [ :host, :subdomain, :uuid ]
 end

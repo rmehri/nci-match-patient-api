@@ -47,7 +47,7 @@ module V1
 
     def show
       begin
-        render json: get_resource
+        render json: get_resource.first
       rescue => error
         standard_error_message(error.message)
       end

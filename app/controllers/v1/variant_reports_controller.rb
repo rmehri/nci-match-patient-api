@@ -12,7 +12,6 @@ module V1
         variant_reports.each do | variant_report|
           variants = get_variants(variant_report[:analysis_id])
           amois = get_amois(variant_report)
-
           variant_report = Convert::VariantReportDbModel.to_ui_model(variant_report, variants, amois)
           variant_reports_ui.push(variant_report)
         end
