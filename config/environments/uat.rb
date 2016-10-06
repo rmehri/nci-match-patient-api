@@ -2,10 +2,10 @@ Rails.application.configure do
 # Settings specified here will take precedence over those in config/application.rb.
 
   # Enable stdout logger
-  config.logger = Logger.new(STDOUT)
+  # config.logger = Logger.new(STDOUT)
   # Set log level
   config.log_level = :WARN
-  config.log_tags = [ :host, :subdomain, :uuid ]
+  # config.log_tags = [ :host, :subdomain, :uuid ]
 
 # Code is not reloaded between requests.
   config.cache_classes = true
@@ -78,5 +78,5 @@ Rails.application.configure do
   # config.autoflush_log = false
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
+  # config.log_formatter = ::Logger::Formatter.new
 end

@@ -7,7 +7,7 @@ module V1
     def create
       begin
         json_data = JSON.parse(request.raw_post)
-        AppLogger.log(self.class.name, "Patient Api received message: #{json_data.to_json}")
+        logger.info "Patient Api received message: #{json_data.to_json}"
         message = json_data.deep_transform_keys!(&:underscore).symbolize_keys
         type = MessageValidator.get_message_type(message)
         raise "Incoming message has UNKNOWN message type" if (type == 'UNKNOWN')
@@ -21,7 +21,7 @@ module V1
 
           patient_id = shipments[0].patient_id
           message[:patient_id] = patient_id
-          AppLogger.log_error(self.class.name, "============ patient added: #{message}")
+          logger.info "============ patient added: #{message}"
         end
 
         status = validate_patient_state_and_queue(message, type)

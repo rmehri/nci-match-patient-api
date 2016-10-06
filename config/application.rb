@@ -27,6 +27,11 @@ module NciMatchPatientApi
     config.autoload_paths += Dir[Rails.root.join('app', 'services', '{*/}')]
     config.autoload_paths += Dir[Rails.root.join('lib')]
 
+    config.logger = Logger.new(STDOUT)
+    config.logger.formatter = proc do |severity, datetime, progname, msg|
+      "[#{datetime.strftime("%B %d %H:%M:%S")}] [#{$$}] [#{severity}] [#{Rails.application.class.parent_name}], #{msg}\n"
+    end
+
     config.middleware.insert_before 0, "Rack::Cors" do
       allow do
         origins '*'
