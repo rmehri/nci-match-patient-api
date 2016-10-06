@@ -4,6 +4,8 @@ module V1
     def show
       begin
 
+        p "======== resource_name: #{resource_name}"
+
         variant_report = get_resource.first.to_h
         return standard_error_message("No record found", 404) if variant_report.blank?
 

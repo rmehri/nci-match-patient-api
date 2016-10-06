@@ -30,5 +30,9 @@ module V1
       assays
     end
 
+    def assignments_params
+      build_query({:analysis_id => params.require(:id)})
+    end
+
   end
 end

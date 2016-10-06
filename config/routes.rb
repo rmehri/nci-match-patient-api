@@ -11,6 +11,8 @@ Rails.application.routes.draw do
       end
       resources :specimens, only: [:show, :index]
       resources :specimen_events, only: [:index]
+
+      resources :qc_variant_reports, only: [:show]
     end
 
     # controller :patients do
