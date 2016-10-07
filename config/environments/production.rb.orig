@@ -1,10 +1,10 @@
 Rails.application.configure do
-# Settings specified here will take precedence over those in config/application.rb.
+  # Settings specified here will take precedence over those in config/application.rb.
 
-# Enable stdout logger
-# config.logger = Logger.new(STDOUT)
-# Set log level
-  config.log_level = :WARN
+  # Enable stdout logger
+  # config.logger = Logger.new(STDOUT)
+  # Set log level
+  config.log_level = :ERROR
   # config.log_tags = [ :host, :subdomain, :uuid ]
 
   # Code is not reloaded between requests.
@@ -15,7 +15,7 @@ Rails.application.configure do
   # and those relying on copy on write to perform better.
   # Rake tasks automatically ignore this option for performance.
   # making false as eager_load doesn't play well with Knock -jv
-  config.eager_load = false
+  config.eager_load = true
 
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local       = false
@@ -49,7 +49,7 @@ Rails.application.configure do
   # config.force_ssl = true
 
   # Set to :debug to see everything in the log.
-  config.log_level = :info
+  config.log_level = :INFO
 
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]
@@ -74,9 +74,9 @@ Rails.application.configure do
   # Send deprecation notices to registered listeners.
   config.active_support.deprecation = :notify
 
-# Disable automatic flushing of the log to improve performance.
-# config.autoflush_log = false
+  # Disable automatic flushing of the log to improve performance.
+  # config.autoflush_log = false
 
-# Use default logging formatter so that PID and timestamp are not suppressed.
-# config.log_formatter = ::Logger::Formatter.new
+  # Use default logging formatter so that PID and timestamp are not suppressed.
+  # config.log_formatter = ::Logger::Formatter.new
 end
