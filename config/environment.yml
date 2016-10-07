@@ -72,6 +72,8 @@ production:
 
   patient_state_api: "https://pedmatch.nci.nih.gov/api/v1/state_validator/"
   patient_processor: "https://pedmatch.nci.nih.gov:3010"
+  match_rule_api:    "https://pedmatch.nci.nih.gov/api/v1/rules/"
+  treatment_arm_api: "https://pedmatch.nci.nih.gov/api/v1/treatment_arms/"
 
   s3_url: "https://s3.amazonaws.com"
   s3_bucket: "pedmatch"
