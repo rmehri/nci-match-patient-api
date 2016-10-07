@@ -1,6 +1,7 @@
 
 module V1
   class QcVariantReportsController < BaseController
+    before_action :set_resource, only: [:show]
 
     def show
       begin
