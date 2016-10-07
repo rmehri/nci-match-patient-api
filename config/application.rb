@@ -38,8 +38,6 @@ module NciMatchPatientApi
     end
     config.environment = Rails.application.config_for(:environment)
 
-    Rails.configuration.environment.fetch('queue_name').blank? raise "Please set your environment queue name for the project before running" if Rails.env.development?
-
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
