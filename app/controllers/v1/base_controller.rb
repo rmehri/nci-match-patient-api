@@ -18,10 +18,6 @@ module V1
         if (type == 'VariantReport')
           shipments = NciMatchPatientModels::Shipment.find_by({"molecular_id" => message[:molecular_id]})
           raise "Unable to find shipment with molecular id [#{message[:molecular_id]}]" if shipments.length == 0
-
-          patient_id = shipments[0].patient_id
-          message[:patient_id] = patient_id
-          logger.info "============ patient added: #{message}"
         end
 
         status = validate_patient_state_and_queue(message, type)

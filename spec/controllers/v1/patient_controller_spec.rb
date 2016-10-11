@@ -131,6 +131,76 @@ describe V1::PatientsController, :type => :controller do
   #   }.to_not raise_error
   # end
 
+
+
+  it "#create should accept registration message" do
+    registration_message = {
+        "header": {
+            "msg_guid": "0f8fad5b-d9cb-469f-al65-80067728950e",
+            "msg_dttm": "2016-05-09T22:06:33+00:00"
+        },
+        "study_id": "APEC1621",
+        "patient_id": "3366",
+        "step_number": "1.0",
+        "status_date": "2016-05-09T22:06:33+00:00",
+        "status": "REGISTRATION",
+        "internal_use_only": {
+            "request_id": "4-654321",
+            "environment": "4",
+            "request": "REGISTRATION for patient_id 2222"
+        }
+    }
+    allow(StateMachine).to receive(:validate).and_return('true')
+    allow(Aws::Sqs::Publisher).to receive(:publish).and_return(true)
+    expect(post :create, registration_message.to_json).to have_http_status(200)
+  end
+  it "#create should fail validation for registration message" do
+    registration_message = {
+        "header": {
+            "msg_guid": "0f8fad5b-d9cb-469f-al65-80067728950e",
+            "msg_dttm": "2016-05-09T22:06:33+00:00"
+        },
+        "study_id": "APEC1621",
+        "patient_id": "3366",
+        "step_number": "1.0",
+        "status_date": "2016-05-09T22:06:33+00:00",
+        "status": "REGISTRATION",
+    }
+    expect(post :create, registration_message.to_json).to have_http_status(500)
+  end
+
+  it "#create variant report throw error when patient doesnt have variant report that matches" do
+    variant_message = {
+        "patient_id": "3344",
+        "ion_reporter_id": "MoCha",
+        "molecular_id": "3366-bsn-msn-2",
+        "analysis_id": "job1",
+        "tsv_file_name": "3366.tsv"
+    }
+    allow(StateMachine).to receive(:validate).and_return('true')
+    allow(NciMatchPatientModels::Shipment).to receive(:find_by).and_return([])
+    allow(Aws::Sqs::Publisher).to receive(:publish).and_return(true)
+    expect(post :create, variant_message.to_json).to have_http_status(500)
+  end
+
+  it "#create variant report success when all data is present" do
+    variant_message = {
+        "patient_id": "3344",
+        "ion_reporter_id": "MoCha",
+        "molecular_id": "3366-bsn-msn-2",
+        "analysis_id": "job1",
+        "tsv_file_name": "3366.tsv"
+    }
+    allow(StateMachine).to receive(:validate).and_return('true')
+    allow(NciMatchPatientModels::Shipment).to receive(:find_by).and_return([{:random => "data"}])
+    allow(Aws::Sqs::Publisher).to receive(:publish).and_return(true)
+    expect(post :create, variant_message.to_json).to have_http_status(200)
+  end
+
+  it "#create should throw error when message is unknown" do
+    expect(post :create, {"unknown": "unknown"}.to_json).to have_http_status(500)
+  end
+
   it '#update should throw an route error' do
     expect { patch :update, :id => 1}.to raise_error(ActionController::UrlGenerationError)
   end

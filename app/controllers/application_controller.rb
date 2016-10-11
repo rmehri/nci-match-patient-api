@@ -14,29 +14,6 @@ class ApplicationController < ActionController::Base
     render status: error_code, json: {:message => error_message}
   end
 
-  def get_url_path_segments
-    return request.fullpath.split("/")
-  end
-
-  def get_post_data(patient_id)
-    json_data = JSON.parse(request.raw_post)
-    logger.info "Patient Api received message: #{json_data.to_json}"
-    json_data.deep_transform_keys!(&:underscore).symbolize_keys!
-
-    json_data.merge!({:patient_id => patient_id})
-
-    logger.info "========== message after merge: #{json_data}"
-    json_data
-  end
-
-  def get_patient_id_from_url
-    parts = get_url_path_segments
-    logger.info "============== url parts: #{parts}"
-    index = parts.index("patients")
-    patient_id = parts[index+1]
-    return patient_id
-  end
-
   def queue_message(message, message_type)
     queue_name = Rails.configuration.environment.fetch('queue_name')
     logger.debug "Patient API publishing to queue: #{queue_name}..."
