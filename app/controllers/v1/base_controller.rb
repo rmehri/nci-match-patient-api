@@ -55,12 +55,12 @@ module V1
 
     #place holder
     def destroy
-      render json: nil, status: 200
+      # render json: nil, status: 200
     end
 
     #place holder
     def update
-      render json: nil, status: 200
+      # render json: nil, status: 200
     end
 
     private
