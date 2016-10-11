@@ -9,3 +9,5 @@ tmp*
 codeclimate*
 spec*
 .rspec*
+Gemfile.lock
+log/*
