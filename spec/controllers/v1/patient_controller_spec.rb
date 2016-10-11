@@ -169,20 +169,6 @@ describe V1::PatientsController, :type => :controller do
     expect(post :create, registration_message.to_json).to have_http_status(500)
   end
 
-  it "#create variant report throw error when patient doesnt have variant report that matches" do
-    variant_message = {
-        "patient_id": "3344",
-        "ion_reporter_id": "MoCha",
-        "molecular_id": "3366-bsn-msn-2",
-        "analysis_id": "job1",
-        "tsv_file_name": "3366.tsv"
-    }
-    allow(StateMachine).to receive(:validate).and_return('true')
-    allow(NciMatchPatientModels::Shipment).to receive(:find_by).and_return([])
-    allow(Aws::Sqs::Publisher).to receive(:publish).and_return(true)
-    expect(post :create, variant_message.to_json).to have_http_status(500)
-  end
-
   it "#create variant report success when all data is present" do
     variant_message = {
         "patient_id": "3344",
