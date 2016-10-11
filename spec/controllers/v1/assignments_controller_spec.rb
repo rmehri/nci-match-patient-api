@@ -21,6 +21,14 @@ describe V1::AssignmentsController do
     expect( get :show, :id => "3366").to have_http_status(404)
   end
 
+  it 'GET #index should return correctly' do
+    allow(NciMatchPatientModels::Assignment).to receive(:scan).and_return([{:patient => "3366" ,:surgical_event_id => "1111", :treatment_assignment_results => []}])
+    allow(NciMatchPatientModels::Specimen).to receive(:scan).and_return([])
+    get :index
+    expect(response.body).not_to be_empty
+    expect(response).to have_http_status(200)
+  end
+
   it 'GET #show' do
     expect(:get => "api/v1/patients/assignments/1").to route_to(:controller => "v1/assignments", :action => "show", :id => "1")
   end

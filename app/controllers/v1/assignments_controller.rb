@@ -7,7 +7,7 @@ module V1
         assignments_ui = []
         get_resource.each do | assignment |
           assays = find_assays(assignment[:surgical_event_id]) unless assignment[:surgical_event_id].blank?
-          assignments_ui.push(Convert::AssignmentDbModel.to_ui(assignment, assays))
+          assignments_ui.push(Convert::AssignmentDbModel.to_ui(assignment, assays)) unless assignment.blank?
         end
         instance_variable_set("@#{resource_name}", assignments_ui)
         render json: instance_variable_get("@#{resource_name}")
