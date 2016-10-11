@@ -1,21 +1,17 @@
 module V1
   class AssignmentsController < BaseController
+    before_action :resource_scan, only: [:index]
 
     def index
       begin
-        plural_resource_name = "@#{resource_name.pluralize}"
-
         assignments_ui = []
-        assignments = resource_class.scan(query_params).collect { |data| data.to_h.compact }
-
+        assignments = get_resource
         assignments.each do | assignment |
           assays = find_assays(assignment[:surgical_event_id])
           assignments_ui.push(Convert::AssignmentDbModel.to_ui(assignment, assays))
         end
-
-        instance_variable_set(plural_resource_name, assignments_ui)
-
-        render json: instance_variable_get(plural_resource_name)
+        instance_variable_set("@#{resource_name}", assignments_ui)
+        render json: instance_variable_get("@#{resource_name}")
       rescue => error
         standard_error_message(error.message)
       end

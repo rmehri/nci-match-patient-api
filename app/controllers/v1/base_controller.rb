@@ -43,10 +43,7 @@ module V1
 
     def show
       begin
-
-        obj = get_resource.first
-        return standard_error_message("Resource not found", 404) if obj.blank?
-
+        return standard_error_message("Resource not found", 404) if get_resource.first.blank?
         render json: get_resource.first
       rescue => error
         standard_error_message(error.message)
@@ -93,9 +90,16 @@ module V1
     end
 
     # Use callbacks to share common setup or constraints between actions.
+    # Uses resource_params for action
     def set_resource(resource = nil)
+       resource ||= resource_scan(resource_params)
+    end
+
+    # Use callbacks to share common setup
+    # Pass params for action
+    def resource_scan(params = {})
       begin
-        resource ||= resource_class.scan(resource_params).collect { |data| data.to_h.compact }
+        resource ||= resource_class.scan(params).collect{ |data| data.to_h.compact }
         instance_variable_set("@#{resource_name}", resource)
       rescue => error
         standard_error_message(error.message)

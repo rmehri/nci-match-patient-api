@@ -5,6 +5,5 @@ module V1
     def patients_params
       build_query({:patient_id => params.require(:id)})
     end
-
   end
 end
