@@ -5,9 +5,8 @@ module V1
     def index
       begin
         assignments_ui = []
-        assignments = get_resource
-        assignments.each do | assignment |
-          assays = find_assays(assignment[:surgical_event_id])
+        get_resource.each do | assignment |
+          assays = find_assays(assignment[:surgical_event_id]) unless assignment[:surgical_event_id].blank?
           assignments_ui.push(Convert::AssignmentDbModel.to_ui(assignment, assays))
         end
         instance_variable_set("@#{resource_name}", assignments_ui)

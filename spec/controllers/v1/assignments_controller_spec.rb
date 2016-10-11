@@ -10,20 +10,15 @@ describe V1::AssignmentsController do
   end
 
 
-  it 'should return an assignment report based on analysis id' do
-    # assignment = NciMatchPatientModels::Assignment.new
-    # specimen = NciMatchPatientModels::Specimen.new
-    # specimen.assays = {}
-    #
-    # allow(NciMatchPatientModels::Assignment).to receive(:scan).and_return([assignment])
-    #
-    # get :show, :id => "2222"
-    #
-    # expect(response).to have_http_status(200)
-    #
-    # expect {
-    #   JSON.parse(response.body)
-    # }.to_not raise_error
+  it 'GET #index should return empty when nothing is found' do
+    allow(NciMatchPatientModels::Assignment).to receive(:scan).and_return([])
+    get :index
+    expect(response.body).to eq("[]")
+    expect(response).to have_http_status(200)
+  end
+
+  it 'GET #show should return error message when empty' do
+    expect( get :show, :id => "3366").to have_http_status(404)
   end
 
   it 'GET #show' do
