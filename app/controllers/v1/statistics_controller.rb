@@ -13,7 +13,7 @@ module V1
         render json: {
             :number_of_patients => patient_dbm.length.to_s,
             :number_of_patients_on_treatment_arm => patientsOnTreatmentArm_dbm.length.to_s,
-            :number_of_patients_with_confirmed_variant_report => NciMatchPatientModels::VariantReport.find_by({"status" => "CONFIRMED", "variant_report_type" => "TISSUE"}).collect {|x| x}.uniq.length.to_s,
+            :number_of_patients_with_confirmed_variant_report => NciMatchPatientModels::VariantReport.find_by({"status" => "CONFIRMED", "variant_report_type" => "TISSUE"}).length.to_s,
             :treatment_arm_accrual => treatment_arm_accrual
         }
 
