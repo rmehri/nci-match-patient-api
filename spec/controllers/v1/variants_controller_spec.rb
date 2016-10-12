@@ -11,6 +11,8 @@ describe V1::VariantsController do
     expect(:get => "api/v1/patients/variants").to route_to(:controller => "v1/variants", :action => "index")
   end
 
+
+
   it 'POST #create' do
     expect { post :create, :id => 1}.to raise_error(ActionController::UrlGenerationError)
   end
