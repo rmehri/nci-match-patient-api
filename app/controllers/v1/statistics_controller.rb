@@ -5,6 +5,7 @@ module V1
       begin
         patient_dbm = NciMatchPatientModels::Patient.find_by().collect {|r| r.to_h.deep_symbolize_keys}
         AppLogger.log_debug(self.class.name, "Got #{patient_dbm.length} patients")
+        # patients_on_treatment_arm = NciMatchPatientModels::Patient.find_by({"current_status" => "ON_TREATMENT_ARM", "current_assignment.status" => "CONFIRMED"})
         patientsOnTreatmentArm_dbm = patient_dbm.select {|x| x[:current_status] == 'ON_TREATMENT_ARM'}
 
         treatment_arm_accrual = build_treatment_arm_accrual(patientsOnTreatmentArm_dbm)
@@ -23,17 +24,17 @@ module V1
 
     def sequenced_and_confirmed_patients
         begin
-          report_dbm = NciMatchPatientModels::VariantReport.find_by({"status" => "CONFIRMED", "variant_report_type" => "TISSUE"}).collect {|x| x}.uniq
+          report_dbm = NciMatchPatientModels::VariantReport.find_by({"status" => "CONFIRMED", "variant_report_type" => "TISSUE"}).collect {|x| x.to_h}.uniq
           AppLogger.log_debug(self.class.name, "Got #{report_dbm.length} variant reports with status='CONFIRMED' and variant_report_type='TISSUE'")
 
           render json: {
               :amois => [
-                  report_dbm.count { |x| x.total_confirmed_amois.present? && x.total_confirmed_amois == 0},
-                  report_dbm.count { |x| x.total_confirmed_amois.present? && x.total_confirmed_amois == 1},
-                  report_dbm.count { |x| x.total_confirmed_amois.present? && x.total_confirmed_amois == 2},
-                  report_dbm.count { |x| x.total_confirmed_amois.present? && x.total_confirmed_amois == 3},
-                  report_dbm.count { |x| x.total_confirmed_amois.present? && x.total_confirmed_amois == 4},
-                  report_dbm.count { |x| x.total_confirmed_amois.present? && x.total_confirmed_amois >= 5}
+                  report_dbm.count { |x| x[:total_confirmed_amois].present? && x[:total_confirmed_amois] == 0},
+                  report_dbm.count { |x| x[:total_confirmed_amois].present? && x[:total_confirmed_amois] == 1},
+                  report_dbm.count { |x| x[:total_confirmed_amois].present? && x[:total_confirmed_amois] == 2},
+                  report_dbm.count { |x| x[:total_confirmed_amois].present? && x[:total_confirmed_amois] == 3},
+                  report_dbm.count { |x| x[:total_confirmed_amois].present? && x[:total_confirmed_amois] == 4},
+                  report_dbm.count { |x| x[:total_confirmed_amois].present? && x[:total_confirmed_amois] >= 5}
               ]
           }
         rescue => error

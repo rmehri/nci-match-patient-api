@@ -19,6 +19,25 @@ describe V1::StatisticsController do
     expect(data[:number_of_patients_with_confirmed_variant_report]).to eq("1")
   end
 
+  it 'GET #amois without data' do
+    allow(NciMatchPatientModels::VariantReport).to receive(:find_by).and_return([])
+    get :sequenced_and_confirmed_patients
+    expect(response).to have_http_status(200)
+    expect(response.body).not_to be_empty
+  end
+
+  it 'GET #amois with data' do
+    allow(NciMatchPatientModels::VariantReport).to receive(:find_by).and_return([{:total_confirmed_amois => 0},
+                                                                                 {:total_confirmed_amois => 1},
+                                                                                 {:total_confirmed_amois => 2},
+                                                                                 {:total_confirmed_amois => 3},
+                                                                                 {:total_confirmed_amois => 4},
+                                                                                 {:total_confirmed_amois => 5}])
+    get :sequenced_and_confirmed_patients
+    expect(response).to have_http_status(200)
+    expect(JSON.parse(response.body)["amois"]).to eq([1, 1, 1, 1, 1, 1])
+  end
+
   it 'GET #show' do
     expect { post :show, :id => 1}.to raise_error(ActionController::UrlGenerationError)
   end
