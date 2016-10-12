@@ -7,23 +7,7 @@ module V1
         AppLogger.log_debug(self.class.name, "Got #{patient_dbm.length} patients")
         patientsOnTreatmentArm_dbm = patient_dbm.select {|x| x.current_status == 'ON_TREATMENT_ARM'}
 
-        treatment_arm_accrual = Hash.new
-
-        patientsOnTreatmentArm_dbm.select { |x| x.respond_to?(:current_assignment) }.each do |x|
-          selected = x.current_assignment[:selected_treatment_arm]
-          if (!selected.blank?)
-            taKey = selected[:treatment_arm_id] + ' (' + selected[:stratum_id] + ', ' + selected[:version] + ')'
-            if (treatment_arm_accrual.has_key?(taKey))
-              treatment_arm_accrual[taKey] = treatment_arm_accrual[taKey].patients + 1
-            else
-              treatment_arm_accrual[taKey] = {
-                  "name" => selected[:treatment_arm_id],
-                  "stratum_id" => selected[:stratum_id],
-                  "patients" => 1
-              }
-            end
-          end
-        end
+        treatment_arm_accrual = build_treatment_arm_accrual(patientsOnTreatmentArm_dbm)
 
         variant_report_dbm = NciMatchPatientModels::VariantReport.find_by({"status" => "CONFIRMED", "variant_report_type" => "TISSUE"}).collect {|x| x.patient_id}.uniq
         AppLogger.log_debug(self.class.name, "Got #{variant_report_dbm.length} variant reports with status='CONFIRMED' and variant_report_type='TISSUE'")
@@ -60,6 +44,27 @@ module V1
         rescue => error
           standard_error_message(error.message)
         end
+    end
+
+
+    private
+    def build_treatment_arm_accrual(patients_on_treatment_arm = {})
+      treatment_arm_accrual = {}
+      patients_on_treatment_arm.select{ |x| x.respond_to?(:current_assignment) }.each do | patient |
+        Hash(patient.current_assignment[:selected_treatment_arm]).each do | selected_arm |
+          taKey = selected[:treatment_arm_id] + ' (' + selected[:stratum_id] + ', ' + selected[:version] + ')'
+          if (treatment_arm_accrual.has_key?(taKey))
+            treatment_arm_accrual[taKey] = treatment_arm_accrual[taKey].patients + 1
+          else
+            treatment_arm_accrual[taKey] = {
+                "name" => selected[:treatment_arm_id],
+                "stratum_id" => selected[:stratum_id],
+                "patients" => 1
+            }
+          end
+        end
       end
+      treatment_arm_accrual
+    end
   end
 end
