@@ -17,3 +17,4 @@ aws dynamodb list-tables --endpoint-url ${URL}
 
 aws dynamodb delete-table --endpoint-url ${URL} --table-name treatment_arm
 aws dynamodb delete-table --endpoint-url ${URL} --table-name treatment_arm_patient
+aws dynamodb delete-table --endpoint-url ${URL} --table-name treatment_arm_assignment_event
