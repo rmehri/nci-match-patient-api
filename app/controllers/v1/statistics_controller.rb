@@ -3,9 +3,9 @@ module V1
 
     def patient_statistics
       begin
-        patient_dbm = NciMatchPatientModels::Patient.find_by().collect {|r| r}
+        patient_dbm = NciMatchPatientModels::Patient.find_by().collect {|r| r.to_h}
         AppLogger.log_debug(self.class.name, "Got #{patient_dbm.length} patients")
-        patientsOnTreatmentArm_dbm = patient_dbm.select {|x| x.current_status == 'ON_TREATMENT_ARM'}
+        patientsOnTreatmentArm_dbm = patient_dbm.select {|x| x[:current_status] == 'ON_TREATMENT_ARM'}
 
         treatment_arm_accrual = build_treatment_arm_accrual(patientsOnTreatmentArm_dbm)
 
