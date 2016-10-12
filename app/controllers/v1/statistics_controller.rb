@@ -29,8 +29,8 @@ module V1
           report_dbm = NciMatchPatientModels::VariantReport.find_by({"status" => "CONFIRMED", "variant_report_type" => "TISSUE"}).collect {|x| x}.uniq
           AppLogger.log_debug(self.class.name, "Got #{report_dbm.length} variant reports with status='CONFIRMED' and variant_report_type='TISSUE'")
 
-          stats = {
-              "amois" => [
+          render json: {
+              :amois => [
                   report_dbm.count { |x| x.total_confirmed_amois.present? && x.total_confirmed_amois == 0},
                   report_dbm.count { |x| x.total_confirmed_amois.present? && x.total_confirmed_amois == 1},
                   report_dbm.count { |x| x.total_confirmed_amois.present? && x.total_confirmed_amois == 2},
@@ -39,8 +39,6 @@ module V1
                   report_dbm.count { |x| x.total_confirmed_amois.present? && x.total_confirmed_amois >= 5}
               ]
           }
-
-          render json: stats
         rescue => error
           standard_error_message(error.message)
         end
@@ -50,16 +48,16 @@ module V1
     private
     def build_treatment_arm_accrual(patients_on_treatment_arm = {})
       treatment_arm_accrual = {}
-      patients_on_treatment_arm.select{ |x| x.respond_to?(:current_assignment) }.each do | patient |
+      Hash(patients_on_treatment_arm).select{ |x| x.has_key?(:current_assignment) }.each do | patient |
         Hash(patient.current_assignment[:selected_treatment_arm]).each do | selected_arm |
           taKey = selected[:treatment_arm_id] + ' (' + selected[:stratum_id] + ', ' + selected[:version] + ')'
           if (treatment_arm_accrual.has_key?(taKey))
             treatment_arm_accrual[taKey] = treatment_arm_accrual[taKey].patients + 1
           else
             treatment_arm_accrual[taKey] = {
-                "name" => selected[:treatment_arm_id],
-                "stratum_id" => selected[:stratum_id],
-                "patients" => 1
+                :name => selected[:treatment_arm_id],
+                :stratum_id => selected[:stratum_id],
+                :patients => 1
             }
           end
         end
