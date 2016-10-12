@@ -1,5 +1,10 @@
 describe V1::StatisticsController do
 
+  it 'GET #statistics no data' do
+    get :patient_statistics
+
+  end
+
   it 'GET #show' do
     expect { post :show, :id => 1}.to raise_error(ActionController::UrlGenerationError)
   end

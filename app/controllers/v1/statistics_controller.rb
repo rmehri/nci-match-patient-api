@@ -3,7 +3,7 @@ module V1
 
     def patient_statistics
       begin
-        patient_dbm = NciMatchPatientModels::Patient.find_by().collect {|r| r.to_h}
+        patient_dbm = NciMatchPatientModels::Patient.find_by().collect {|r| r.to_h.deep_symbolize_keys}
         AppLogger.log_debug(self.class.name, "Got #{patient_dbm.length} patients")
         patientsOnTreatmentArm_dbm = patient_dbm.select {|x| x[:current_status] == 'ON_TREATMENT_ARM'}
 
@@ -45,18 +45,20 @@ module V1
     private
     def build_treatment_arm_accrual(patients_on_treatment_arm = {})
       treatment_arm_accrual = {}
-      patients_on_treatment_arm.select{ |x| x.has_key?(:current_assignment) }.each do | patient |
-        Hash(patient.current_assignment[:selected_treatment_arm]).each do | selected_arm |
-          taKey = selected[:treatment_arm_id] + ' (' + selected[:stratum_id] + ', ' + selected[:version] + ')'
-          if (treatment_arm_accrual.has_key?(taKey))
-            treatment_arm_accrual[taKey] = treatment_arm_accrual[taKey].patients + 1
-          else
-            treatment_arm_accrual[taKey] = {
-                :name => selected[:treatment_arm_id],
-                :stratum_id => selected[:stratum_id],
-                :patients => 1
-            }
-          end
+      patients_on_treatment_arm.select!{|patient| patient.has_key?(:current_assignment)}
+      patients_on_treatment_arm.select!{|patient| patient[:current_assignment].has_key?(:selected_treatment_arm)}
+      patients_on_treatment_arm.each do | patient |
+        taKey = patient[:current_assignment][:selected_treatment_arm][:treatment_arm_id] +
+            ' (' + patient[:current_assignment][:selected_treatment_arm][:stratum_id] +
+            ', ' + patient[:current_assignment][:selected_treatment_arm][:version] + ')'
+        if treatment_arm_accrual.has_key?(taKey)
+          treatment_arm_accrual[taKey] = treatment_arm_accrual[taKey][:patients] + 1
+        else
+          treatment_arm_accrual[taKey] = {
+                    :name => patient[:current_assignment][:selected_treatment_arm][:treatment_arm_id],
+                    :stratum_id => patient[:current_assignment][:selected_treatment_arm][:stratum_id],
+                    :patients => 1
+                }
         end
       end
       treatment_arm_accrual
