@@ -61,22 +61,26 @@ module V1
 
     private
     def build_treatment_arm_accrual(patients_assignments = {})
-      treatment_arm_accrual = {}
-      patients_assignments.each do |assignment|
-        if(assignment.has_key?(:selected_treatment_arm))
-          taKey = assignment[:selected_treatment_arm][:treatment_arm_id] + ' (' + assignment[:selected_treatment_arm][:stratum_id] + ', ' + assignment[:selected_treatment_arm][:version] + ')'
-          if(treatment_arm_accrual).has_key?(taKey)
-            treatment_arm_accrual[taKey] = treatment_arm_accrual[taKey][:patients] + 1
-          else
-            treatment_arm_accrual[taKey] = {
-                          :name => assignment[:selected_treatment_arm][:treatment_arm_id],
-                          :stratum_id => assignment[:selected_treatment_arm][:stratum_id],
-                          :patients => 1
-                      }
+      begin
+        treatment_arm_accrual = {}
+        patients_assignments.each do |assignment|
+          if(assignment.has_key?(:selected_treatment_arm))
+            taKey = assignment[:selected_treatment_arm][:treatment_arm_id] + ' (' + assignment[:selected_treatment_arm][:stratum_id] + ', ' + assignment[:selected_treatment_arm][:version] + ')'
+            if(treatment_arm_accrual).has_key?(taKey)
+              treatment_arm_accrual[taKey] = treatment_arm_accrual[taKey][:patients] + 1
+            else
+              treatment_arm_accrual[taKey] = {
+                  :name => assignment[:selected_treatment_arm][:treatment_arm_id],
+                  :stratum_id => assignment[:selected_treatment_arm][:stratum_id],
+                  :patients => 1
+              }
+            end
           end
         end
+        treatment_arm_accrual
+      rescue => error
+        standard_error_message(error)
       end
-      treatment_arm_accrual
     end
   end
 end
