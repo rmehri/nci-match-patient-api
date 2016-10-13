@@ -9,7 +9,7 @@ describe V1::StatisticsController do
   end
 
   it 'GET #statistics with data' do
-    allow(NciMatchPatientModels::Patient).to receive(:find_by).and_return([{:patient_id => "test123" ,:current_status => "ON_TREATMENT_ARM", :current_assignment => {:selected_treatment_arm => {:treatment_arm_id => "random", :stratum_id => "123", :version => "2015"}}}])
+    allow(NciMatchPatientModels::Patient).to receive(:scan).and_return([{:patient_id => "test123" ,:current_status => "ON_TREATMENT_ARM", :current_assignment => {:selected_treatment_arm => {:treatment_arm_id => "random", :stratum_id => "123", :version => "2015"}}}])
     allow(NciMatchPatientModels::VariantReport).to receive(:find_by).and_return([{}])
     get :patient_statistics
     expect(response).to have_http_status(200)
