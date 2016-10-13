@@ -66,7 +66,7 @@ module V1
     # to permit additional parameters to search on
     # @return [Hash]
     def query_params
-      build_query(params.permit!.except(:controller, :action))
+      build_query(params.permit!.except(:controller, :action, :num, :order))
     end
 
     # @return [Class]
