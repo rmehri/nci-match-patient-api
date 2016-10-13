@@ -9,6 +9,7 @@ Rails.application.routes.draw do
         get 'amois', controller: 'statistics', action: :sequenced_and_confirmed_patients
         resources :events , :variant_reports, :variants, :assignments, :shipments, only: [:show, :index]
       end
+      resources :action_items, only: [:index]
       resources :specimens, only: [:show, :index]
       resources :specimen_events, only: [:index]
 
