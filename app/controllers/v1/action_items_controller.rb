@@ -9,8 +9,8 @@ module V1
 
     private
     def set_resource(resources = {})
-      resources = NciMatchPatientModels::VariantReport.scan(resource_params).collect{ |record| record.to_h.compact }
-      resources += NciMatchPatientModels::Assignment.scan(resource_params).collect{ | record | record.to_h.compact }
+      resources = NciMatchPatientModels::VariantReport.scan(resource_params).collect{ |record| build_model(record.to_h.compact) }
+      resources += NciMatchPatientModels::Assignment.scan(resource_params).collect{ | record | build_model(record.to_h.compact) }
       instance_variable_set("@#{resource_name}", resources)
     end
 
@@ -26,7 +26,6 @@ module V1
           :analysis_id => record[:analysis_id],
           :created_date => record[:status_date]
       }
-
     end
 
   end
