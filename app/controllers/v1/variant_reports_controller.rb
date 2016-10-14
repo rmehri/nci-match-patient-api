@@ -7,6 +7,8 @@ module V1
         variant_report = get_resource.first.to_h
         return standard_error_message("No record found", 404) if variant_report.blank?
 
+        puts "========== variant report: #{variant_report.to_json}"
+
         variants = get_variants(variant_report[:analysis_id])
         amois = get_amois(variant_report)
         variant_report = Convert::VariantReportDbModel.to_ui_model(variant_report, variants, amois)
