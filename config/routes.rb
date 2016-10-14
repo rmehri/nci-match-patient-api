@@ -10,6 +10,8 @@ Rails.application.routes.draw do
         resources :events , :variant_reports, :variants, :assignments, :shipments, only: [:show, :index]
       end
       resources :action_items, only: [:index]
+      resources :treatment_arm_history, only: [:index]
+
       resources :specimens, only: [:show, :index]
       resources :specimen_events, only: [:index]
 
