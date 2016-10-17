@@ -10,7 +10,7 @@ module V1
     private
     def set_resource(resources = {})
       resources = NciMatchPatientModels::VariantReport.scan(resource_params).collect{ |record| build_model(record.to_h.compact) }
-      resources += NciMatchPatientModels::Assignment.scan(resource_params).collect{ | record | build_model(record.to_h.compact) }
+      resources += NciMatchPatientModels::Assignment.scan(resource_params).collect{ | record | build_model(record.to_h.compact, "assignment") }
       instance_variable_set("@#{resource_name}", resources)
     end
 
@@ -21,7 +21,7 @@ module V1
 
     def build_model(record, type = 'variant_report')
       {
-          :action_type => "PENDING_#{record[:variant_report_type].upcase}_#{type.upcase}",
+          :action_type => "PENDING_#{type.upcase}",
           :molecular_id => record[:molecular_id],
           :analysis_id => record[:analysis_id],
           :created_date => record[:status_date]
