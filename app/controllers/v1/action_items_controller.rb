@@ -21,7 +21,7 @@ module V1
 
     def build_model(record, type = 'variant_report')
       {
-          :action_type => "PENDING_#{record[:variant_report_type]}_#{type}",
+          :action_type => "PENDING_#{record[:variant_report_type].upcase}_#{type.upcase}",
           :molecular_id => record[:molecular_id],
           :analysis_id => record[:analysis_id],
           :created_date => record[:status_date]
