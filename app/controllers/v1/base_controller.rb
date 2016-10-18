@@ -95,7 +95,7 @@ module V1
     def resource_scan(params = {})
       begin
         resource ||= resource_class.scan(params).collect{ |data| data.to_h.compact }
-        instance_variable_set("@#{resource_name}", resource)
+        instance_variable_set("@#{resource_name}", resource ||= [])
       rescue => error
         standard_error_message(error.message)
       end
