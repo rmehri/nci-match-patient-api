@@ -20,7 +20,7 @@ module V1
     end
 
     def build_treatment_arms_history_model(record = {})
-      record.deep_symbolize_keys
+      record.deep_symbolize_keys!
       {
           :treatment_arm_id => record[:selected_treatment_arm][:treatment_arm_id],
           :stratum_id => record[:selected_treatment_arm][:stratum_id],

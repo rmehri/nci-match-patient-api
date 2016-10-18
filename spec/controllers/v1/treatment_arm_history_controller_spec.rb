@@ -2,6 +2,7 @@ describe V1::TreatmentArmHistoryController, :type => :controller do
 
 
   describe "should return a valid data set" do
+
     it "single set" do
       allow(NciMatchPatientModels::Assignment).to receive(:scan).and_return([{:cog_assignment_date => Date.current ,:step_number => 1.1 ,
                                                                               :selected_treatment_arm => {:treatment_arm_id => "ABC", :version => "123", :stratum_id => "A", :reason => "Just because"}}])
