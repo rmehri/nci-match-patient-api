@@ -12,7 +12,7 @@ describe 'SpecimenReceivedValidator behavior' do
             "study_id"=> "APEC1621",
             "patient_id"=> "3344",
             "type"=> "BLOOD",
-            "collected_dttm"=> "2016-04-25T14:17:11+00:00",
+            "collection_dttm"=> "2016-04-25T14:17:11+00:00",
             "received_dttm"=> "2016-04-25T15:17:11+00:00",
             "internal_use_only"=> {
                 "stars_patient_id"=> "ABCXYZ",
@@ -36,7 +36,7 @@ describe 'SpecimenReceivedValidator behavior' do
             "study_id"=> "APEC1621",
             "surgical_event_id"=> "3344-bsn",
             "type"=> "TISSUE",
-            "collected_dttm"=> "2016-04-25T15:17:11+00:00",
+            "collection_dttm"=> "2016-04-25T15:17:11+00:00",
 
             "received_dttm"=> "2016-04-25T16:17:11+00:00",
             "internal_use_only"=> {
@@ -61,7 +61,7 @@ describe 'SpecimenReceivedValidator behavior' do
             "study_id"=> "APEC1621",
             "surgical_event_id"=> "",
             "type"=> "TISSUE",
-            "collected_dttm"=> "2016-04-25T15:17:11+00:00",
+            "collection_dttm"=> "2016-04-25T15:17:11+00:00",
 
             "received_dttm"=> "2016-04-25T16:17:11+00:00",
             "internal_use_only"=> {
@@ -86,7 +86,7 @@ describe 'SpecimenReceivedValidator behavior' do
             "study_id"=> "APEC1621",
             "surgical_event_id"=> "3344-bsn",
             "type"=> "BAD_TYPE",
-            "collected_dttm"=> "2016-04-25T15:17:11+00:00",
+            "collection_dttm"=> "2016-04-25T15:17:11+00:00",
 
             "received_dttm"=> "2016-04-25T16:17:11+00:00",
             "internal_use_only"=> {
