@@ -18,12 +18,7 @@ module V1
 
     def embed_resources(resource ={})
       resource[:specimen_shipments] = NciMatchPatientModels::Shipment.scan(build_query({:surgical_event_id => resource[:surgical_event_id]})).collect { |data| data.to_h.compact }
-      resource[:specimen_shipments].each do | shipment |
-        shipment[:analyses] = NciMatchPatientModels::VariantReport.scan(build_query({:molecular_id => shipment[:molecular_id]})).collect { |data| data.to_h.compact }
-      end
-      resource[:assignment_report_status] = NciMatchPatientModels::Assignment.scan(build_query({:patient_id => resource[:patient_id], :projection => [:status, :status_date]}))
-                                                .collect{|data| data.to_h.compact}.sort_by!{|record| record[:status_date]}.first
-      resource[:variant_report_status] = "PENDING"
+      resource[:specimen_shipments].collect{ | shipment | shipment[:analyses] = NciMatchPatientModels::VariantReport.scan(build_query({:molecular_id => shipment[:molecular_id]})).collect { |data| data.to_h.compact }}
     end
 
     def specimen_events_params
