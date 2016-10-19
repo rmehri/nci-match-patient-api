@@ -18,7 +18,7 @@ module V1
 
     def embed_resources(resource ={})
       resource[:specimen_shipments] = NciMatchPatientModels::Shipment.scan(build_query({:surgical_event_id => resource[:surgical_event_id]})).collect { |data| data.to_h.compact }
-      resource[:specimen_shipments].collect{ | shipment | shipment[:analyses] = NciMatchPatientModels::Assignment.scan(build_query({:molecular_id => shipment[:molecular_id]})).collect { |data| data.to_h.compact }}
+      resource[:specimen_shipments].collect{ | shipment | shipment[:analyses] = NciMatchPatientModels::Assignment.scan(build_query({:molecular_id => shipment[:molecular_id]})).first.to_h }
     end
 
     def specimen_events_params
