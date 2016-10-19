@@ -19,14 +19,15 @@ module V1
     def embed_resources(resource ={})
       resource[:specimen_shipments] = NciMatchPatientModels::Shipment.scan(build_query({:surgical_event_id => resource[:surgical_event_id]})).collect { |data| data.to_h.compact }
       resource[:specimen_shipments].collect do | shipment |
-        shipment[:analyses] = NciMatchPatientModels::Assignment.scan(build_query({:molecular_id => shipment[:molecular_id],
-                                                                                  :projection => [:analysis_id, :status,
-                                                                                                  :status_date, :comment_user,
-                                                                                                  :comment]})).collect{|record| record.to_h.compact; record[:assignment_report_status] = record.delete(:status) }
-        shipment[:analyses] += NciMatchPatientModels::VariantReport.scan(build_query({:molecular_id => shipment[:molecular_id],
+        shipment[:analyses] = NciMatchPatientModels::Assignment.scan(build_query({:molecular_id => shipment[:molecular_id], :projection => [:analysis_id, :status, :status_date, :comment_user,:comment]})).collect{|record| record.to_h.compact}
+        shipment[:analyses].collect{|record| record[:assignment_report_status] = record.delete(:status)}
+        analyses = NciMatchPatientModels::VariantReport.scan(build_query({:molecular_id => shipment[:molecular_id],
                                                                                      :projection => [:variant_report_received_date, :dna_bam_path_name, :dna_bai_path_name,
                                                                                                      :vcf_path_name, :rna_bam_path_name, :rna_bai_path_name, :tsv_path_name,
-                                                                                                     :status ,:qc_report_url, :vr_chart_data_url]})).collect{|record| record.to_h.compact; record[:variant_report_status] = record.delete(:status) }
+                                                                                                     :status ,:qc_report_url, :vr_chart_data_url]})).collect{|record| record.to_h.compact }
+        analyses.collect{ |record | record[:variant_report_status] = record.delete(:status)}
+        shipment[:analyses] += analyses
+
       end
     end
 
