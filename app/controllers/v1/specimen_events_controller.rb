@@ -21,6 +21,9 @@ module V1
       resource[:specimen_shipments].each do | shipment |
         shipment[:analyses] = NciMatchPatientModels::VariantReport.scan(build_query({:molecular_id => shipment[:molecular_id]})).collect { |data| data.to_h.compact }
       end
+      resource[:assignment_report_status] = NciMatchPatientModels::Assignment.scan(build_query({:patient_id => resource[:patient_id], :projection => [:status, :status_date]}))
+                                                .collect{|data| data.to_h.compact}.sort_by!{|record| record[:status_date]}.first
+      resource[:variant_report_status] = "PENDING"
     end
 
     def specimen_events_params
