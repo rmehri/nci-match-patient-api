@@ -1,15 +1,19 @@
 module V1
   class AssignmentsController < BaseController
-    before_action :resource_scan, only: [:index]
+    # before_action :set_resource, only: [:index]
 
     def index
       begin
         assignments_ui = []
-        get_resource.each do | assignment |
+
+        assignments = resource_scan(params)
+        assignments.each do | assignment |
           assays = find_assays(assignment[:surgical_event_id]) unless assignment[:surgical_event_id].blank?
           assignments_ui.push(Convert::AssignmentDbModel.to_ui(assignment, assays)) unless assignment.blank?
         end
+
         instance_variable_set("@#{resource_name}", assignments_ui)
+
         render json: instance_variable_get("@#{resource_name}")
       rescue => error
         standard_error_message(error.message)
@@ -27,6 +31,12 @@ module V1
 
     def assignments_params
       build_query({:analysis_id => params.require(:id)})
+    end
+
+    def resource_scan(params = {})
+
+      NciMatchPatientModels::Assignment.find_by({:analysis_id => params[:analysis_id]}).collect{ |data| data.to_h.compact}
+
     end
 
   end
