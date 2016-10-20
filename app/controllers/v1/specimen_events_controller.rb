@@ -34,7 +34,7 @@ module V1
     end
 
     def build_variant_report_analyses_model(variant_report)
-      variant_report ||= {}
+      (variant_report.blank?) ? {} :
       {
           :analysis_id => variant_report[:analysis_id],
           :variant_report_status => variant_report[:status],
@@ -51,7 +51,7 @@ module V1
     end
 
     def build_analyses_assignment_model(assignment)
-      assignment ||= {}
+      (assignment.blank?) ? {} :
       {
           :analysis_id => assignment[:analysis_id],
           :assignment_report_status => assignment[:status],
