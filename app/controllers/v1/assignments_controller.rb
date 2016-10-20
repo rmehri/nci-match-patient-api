@@ -7,6 +7,7 @@ module V1
         assignments_ui = []
 
         assignments = resource_scan(params)
+
         assignments.each do | assignment |
           assays = find_assays(assignment[:surgical_event_id]) unless assignment[:surgical_event_id].blank?
           assignments_ui.push(Convert::AssignmentDbModel.to_ui(assignment, assays)) unless assignment.blank?
@@ -34,8 +35,8 @@ module V1
     end
 
     def resource_scan(params = {})
-
-      NciMatchPatientModels::Assignment.find_by({:analysis_id => params[:analysis_id]}).collect{ |data| data.to_h.compact}
+      assignments = NciMatchPatientModels::Assignment.find_by({:analysis_id => params[:analysis_id]}).collect{ |data| data.to_h.compact}
+      sorted = assignments.sort_by {| assignment| assignment[:assignment_date]}.reverse
 
     end
 
