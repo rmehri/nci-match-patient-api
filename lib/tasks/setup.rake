@@ -5,24 +5,45 @@ namespace :setup do
     add_env_variables(Rails.root.join('config', 'secrets.yml'))
   end
 
+  desc 'List all table names in environment DB'
+  task :list_tables => :before do
+    p list_tables
+  end
+
+  desc 'Creates table for API'
   task :create_table, [:name] => :before do | t, args |
     args.to_a.each do | arg |
       create_table("NciMatchPatientModels::#{arg.camelize}".constantize)
     end
   end
 
+  desc 'Deletes all tables unless [tablename] is specified'
   task :delete_table, [:name] => :before do | t, args |
+    args = list_tables unless !args.to_a.blank?
     args.to_a.each do | arg |
-      delete_table("NciMatchPatientModels::#{arg.camelize}".constantize)
+      begin
+        delete_table("NciMatchPatientModels::#{arg.camelize}".constantize)
+      rescue => NameError
+        p "NciMatchPatientModels::#{arg.camelize} doesn't exist..make sure you have the right api"
+      end
     end
   end
 
+  desc 'Clears all table data unless [tablename] is specified'
   task :clear_table, [:name] => :before do | t, args |
+    args = list_tables unless !args.to_a.blank?
     args.to_a.each do | arg |
-      clear_table("NciMatchPatientModels::#{arg.camelize}".constantize)
+      begin
+        clear_table("NciMatchPatientModels::#{arg.camelize}".constantize)
+      rescue => NameError
+        p "NciMatchPatientModels::#{arg.camelize} doesn't exist..make sure you have the right api"
+      end
     end
   end
 
+  def list_tables
+    get_client(Aws::DynamoDB::Client).list_tables({}).table_names
+  end
 
   def add_env_variables(env_file)
     if File.exists?(env_file)
@@ -34,8 +55,7 @@ namespace :setup do
 
   def delete_table(model_class)
     if (model_class.table_exists?)
-      migration = Aws::Record::TableMigration.new(model_class,
-                                                  {:client => get_client(Aws::DynamoDB::Client)})
+      migration = Aws::Record::TableMigration.new(model_class, {:client => get_client(Aws::DynamoDB::Client)})
       migration.delete!
     else
       p "Table #{model_class.table_name} doesn't exists....skipping"
@@ -54,8 +74,7 @@ namespace :setup do
 
   def create_table(model_class)
     if (!model_class.table_exists?)
-      migration = Aws::Record::TableMigration.new(model_class,
-                                                  {:client => get_client(Aws::DynamoDB::Client)})
+      migration = Aws::Record::TableMigration.new(model_class, {:client => get_client(Aws::DynamoDB::Client)})
       migration.create!(
           provisioned_throughput: {
               read_capacity_units: Rails.configuration.environment.fetch("read_capacity_units").to_i,
