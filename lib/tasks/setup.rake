@@ -7,19 +7,19 @@ namespace :setup do
 
   task :create_table, [:name] => :before do | t, args |
     args.to_a.each do | arg |
-      create_table("NciMatchPatientModels::#{arg.capitalize}".constantize)
+      create_table("NciMatchPatientModels::#{arg.camelize}".constantize)
     end
   end
 
   task :delete_table, [:name] => :before do | t, args |
     args.to_a.each do | arg |
-      delete_table("NciMatchPatientModels::#{arg.capitalize}".constantize)
+      delete_table("NciMatchPatientModels::#{arg.camelize}".constantize)
     end
   end
 
   task :clear_table, [:name] => :before do | t, args |
     args.to_a.each do | arg |
-      clear_table("NciMatchPatientModels::#{arg.capitalize}".constantize)
+      clear_table("NciMatchPatientModels::#{arg.camelize}".constantize)
     end
   end
 
