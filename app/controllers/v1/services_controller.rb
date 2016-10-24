@@ -39,7 +39,6 @@ module V1
     def variant_status
 
       begin
-
         message = ConfirmVariantMessage.from_url get_url_path_segments
         post_data = get_post_data("")
         message['comment'] = post_data[:comment]
