@@ -31,6 +31,7 @@ module V1
           assignment_found = false
           assignments.each do | assignment |
             if(variant_report[:analysis_id] == assignment[:analysis_id])
+              assignment_found = true
               shipment[:analyses] += [build_variant_report_analyses_model(variant_report).merge(build_analyses_assignment_model(assignment))]
               break
             end
