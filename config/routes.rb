@@ -6,7 +6,7 @@ Rails.application.routes.draw do
       collection do
         get 'version', controller: 'versions', action: :version
         get 'statistics', controller: 'statistics', action: :patient_statistics
-        get 'pending_view', controller: 'pending_view', action: :pending_view
+        get 'pending_items', controller: 'pending_view', action: :pending_view
         get 'amois', controller: 'statistics', action: :sequenced_and_confirmed_patients
         resources :events , :variant_reports, :variants, :assignments, :shipments, only: [:show, :index]
       end
