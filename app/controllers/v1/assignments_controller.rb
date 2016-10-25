@@ -35,7 +35,6 @@ module V1
 
         assignments.each do | assignment |
           assays = find_assays(assignment[:surgical_event_id]) unless assignment[:surgical_event_id].blank?
-          #projections fail because of the converter! -jv
           assignments_ui.push(Convert::AssignmentDbModel.to_ui(assignment, assays)) unless assignment.blank?
         end
 
