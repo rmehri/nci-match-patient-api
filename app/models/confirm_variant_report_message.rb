@@ -12,7 +12,7 @@ class ConfirmVariantReportMessage
     analysis_id = url_segments[start_index+1]
     confirm = url_segments[start_index+2].downcase
 
-    raise "Variant report update action can only be \'confirm' or 'reject'" if confirm != 'confirm' && confirm != 'reject'
+    raise "Variant report update action can only be 'confirm' or 'reject'" if confirm != 'confirm' && confirm != 'reject'
 
     confirm = confirm == 'confirm' ? 'CONFIRMED' : 'REJECTED'
 
