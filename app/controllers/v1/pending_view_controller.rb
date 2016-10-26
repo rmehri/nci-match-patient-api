@@ -3,23 +3,21 @@ module V1
     def pending_view
       begin
 
-        p "============== Getting pending view"
         variant_reports = NciMatchPatientModels::VariantReport.find_by({:status => 'PENDING'})
 
         tissue_reports = []
-        blood_reports = []
         assignments = []
         variant_reports.each do | variant_report |
+          next if variant_report.variant_report_type == 'BLOOD'
+
           data = {:patient_id => variant_report.patient_id,
                   :molecular_id => variant_report.molecular_id,
                   :analysis_id => variant_report.analysis_id,
                   :ion_reporter_id => variant_report.ion_reporter_id,
                   :variant_report_received_date => variant_report.variant_report_received_date}
-          data[:diseases] = get_patient_diseases(variant_report.patient_id)
           data[:specimen_received_date] = get_specimen_received_date(variant_report.patient_id,
                                                                      variant_report.variant_report_type)
-          tissue_reports.push(data) if variant_report.variant_report_type == 'TISSUE'
-          blood_reports.push(data) if variant_report.variant_report_type == 'BLOOD'
+          tissue_reports.push(data)
         end
 
 
@@ -29,13 +27,12 @@ module V1
                   :molecular_id => assignment_report.molecular_id,
                   :analysis_id => assignment_report.analysis_id,
                   :assignment_date => assignment_report.assignment_date}
-          data[:diseases] = get_patient_diseases(assignment_report.patient_id)
+          data[:disease] = get_patient_diseases(assignment_report.patient_id)
           data[:treatment_arm_title] = format_treatment_arm_title(assignment_report.selected_treatment_arm)
           assignments.push(data)
         end
 
         pending_view = {:tissue_variant_reports => tissue_reports,
-                        :blood_variant_reports => blood_reports,
                         :assignment_reports => assignments}
 
         render json: pending_view.to_json
@@ -53,18 +50,26 @@ module V1
     end
 
     def get_specimen_received_date(patient_id, type)
+      specimen = nil
       if type == 'TISSUE'
         specimen = NciMatchPatientModels::Specimen.query_latest_tissue_specimen_by_patient_id(patient_id)
       else
         specimen = NciMatchPatientModels::Specimen.query_latest_blood_specimen_by_patient_id(patient_id)
       end
 
-      specimen.received_date
+      if !specimen.nil? then specimen.received_date else "" end
     end
 
     def get_patient_diseases(patient_id)
       patient = NciMatchPatientModels::Patient.query_patient_by_id(patient_id)
-      patient.diseases
+      disease_names = ""
+      return disease_names if patient.diseases.blank?
+
+      patient.diseases.each do |disease|
+        disease.deep_symbolize_keys!
+        disease_names = if disease_names.length == 0 then disease[:disease_name] else "#{disease_names}, #{disease[:disease_name]}" end
+      end
+      disease_names
     end
 
   end
