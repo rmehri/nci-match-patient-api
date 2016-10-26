@@ -3,7 +3,9 @@ module V1
 
     private
     def specimens_params
-      build_query({:surgical_event_id => params.require(:id)})
+      params.require(:id)
+      params[:surgical_event_id] = params.delete(:id)
+      build_query(params.except(:action, :controller))
     end
 
   end

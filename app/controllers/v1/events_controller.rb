@@ -13,7 +13,9 @@ module V1
 
     private
     def events_params
-      build_query({:entity_id => params.require(:id)})
+      params.require(:id)
+      params[:entity_id] = params.delete(:id)
+      build_query(params.except(:action, :controller))
     end
 
   end

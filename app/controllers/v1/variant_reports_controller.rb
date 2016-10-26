@@ -28,7 +28,9 @@ module V1
     end
 
     def variant_reports_params
-      build_query({:analysis_id => params.require(:id)})
+      params.require(:id)
+      params[:analysis_id] = params.delete(:id)
+      build_query(params.except(:action, :controller))
     end
 
   end
