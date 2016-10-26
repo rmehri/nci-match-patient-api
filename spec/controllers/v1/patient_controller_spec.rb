@@ -109,7 +109,7 @@ describe V1::PatientsController, :type => :controller do
 
   it "GET /patients/1 only allow specified params to be queried" do
     get :show, :id => "23413"
-    expect(controller.params[:id]).not_to be_nil
+    expect(controller.params[:patient_id]).not_to be_nil
   end
 
   it "GET /patients remove params that aren't allowed" do

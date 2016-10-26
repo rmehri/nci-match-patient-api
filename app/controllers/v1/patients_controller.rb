@@ -3,7 +3,9 @@ module V1
 
     private
     def patients_params
-      build_query({:patient_id => params.require(:id)})
+      params.require(:id)
+      params[:patient_id] = params.delete(:id)
+      build_query(params.except(:action, :controller))
     end
   end
 end
