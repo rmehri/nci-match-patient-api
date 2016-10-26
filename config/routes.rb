@@ -57,6 +57,7 @@ Rails.application.routes.draw do
 
     controller :services do
       post "patients/:patient_id" => :trigger
+      post "patients/variant_report/:molecular_id" => :variant_report_uploaded
 
       put "patients/:patient_id/variant_reports/:analysis_id/:status" => :variant_report_status
       put "patients/:patient_id/assignment_reports/:analysis_id/:status" => :assignment_confirmation

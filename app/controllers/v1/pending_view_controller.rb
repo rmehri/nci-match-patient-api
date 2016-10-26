@@ -28,7 +28,7 @@ module V1
                   :analysis_id => assignment_report.analysis_id,
                   :assignment_date => assignment_report.assignment_date}
           data[:disease] = get_patient_diseases(assignment_report.patient_id)
-          data[:treatment_arm_title] = format_treatment_arm_title(assignment_report.selected_treatment_arm)
+          data = add_treatment_arm_fields(data, assignment_report.selected_treatment_arm)
           assignments.push(data)
         end
 
@@ -42,11 +42,15 @@ module V1
       end
     end
 
-    def format_treatment_arm_title(selected_treatment_arm)
-      return "" if selected_treatment_arm.blank?
+    def add_treatment_arm_fields(data_hash, selected_treatment_arm)
+      return if selected_treatment_arm.blank?
 
       selected_treatment_arm.deep_symbolize_keys!
-      "#{selected_treatment_arm[:treatment_arm_id]} (#{selected_treatment_arm[:stratum_id]}, #{selected_treatment_arm[:version]})"
+      data_hash[:treatment_arm_title] = "#{selected_treatment_arm[:treatment_arm_id]} (#{selected_treatment_arm[:stratum_id]}, #{selected_treatment_arm[:version]})"
+      data_hash[:treatment_arm_id] = selected_treatment_arm[:treatment_arm_id]
+      data_hash[:treatment_arm_stratum_id] = selected_treatment_arm[:stratum_id]
+      data_hash[:treatment_arm_version] = selected_treatment_arm[:version]
+      data_hash
     end
 
     def get_specimen_received_date(patient_id, type)

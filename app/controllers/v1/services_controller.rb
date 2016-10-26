@@ -35,6 +35,32 @@ module V1
 
     end
 
+    def variant_report_uploaded
+      message = get_post_data("")
+
+      begin
+        type = MessageValidator.get_message_type(message)
+        raise "Incoming message has UNKNOWN message type" if (type == 'UNKNOWN')
+
+        shipments = NciMatchPatientModels::Shipment.find_by({"molecular_id" => message[:molecular_id]})
+        raise "Unable to find shipment with molecular id [#{message[:molecular_id]}]" if shipments.length == 0
+
+        patient_id = shipments[0].patient_id
+        message[:patient_id] = patient_id
+
+        error = MessageValidator.validate_json_message(type, message)
+        raise "Incoming message failed message schema validation: #{error}" if !error.nil?
+
+        status = validate_patient_state_and_queue(message, type)
+
+        raise "Incoming message failed patient state validation" if (status == false)
+
+        standard_success_message("Message has been processed successfully")
+      rescue => error
+        standard_error_message(error.message)
+      end
+    end
+
     # PUT /api/v1/patients/variant/{variant_uuid}{checked|unchecked}
     def variant_status
 
