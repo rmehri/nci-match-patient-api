@@ -4,6 +4,8 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.6'
 gem 'sass-rails', '~> 5.0'
 
+gem 'newrelic_rpm'
+
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
