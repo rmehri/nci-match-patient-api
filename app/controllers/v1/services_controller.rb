@@ -47,7 +47,13 @@ module V1
         response_json = PatientProcessor.run_service("/confirm_variant", message)
 
         AppLogger.log(self.class.name, "\nResponse from Patient Processor: #{response_json}")
-        standard_success_message(JSON.parse(response_json)['message'])
+
+        message_in_response = JSON.parse(response_json)['message']
+        if (message_in_response.include? "Error")
+          standard_error_message(message_in_response)
+        else
+          standard_success_message(message_in_response)
+        end
 
       rescue => error
         standard_error_message(error.message)
