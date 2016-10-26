@@ -25,20 +25,16 @@ module V1
                                                                                                      :vcf_path_name, :rna_bam_path_name, :rna_bai_path_name, :tsv_path_name,
                                                                                                      :status ,:qc_report_url, :vr_chart_data_url]})).collect{|record| record.to_h.compact }
         assignments.sort_by!{ |record| record[:assignment_date]}
-        #This has to be refactored! -jv
         shipment[:analyses] = []
         variant_reports.each do | variant_report |
-          assignment_found = false
+          analyses_assignment = Hash.new
           assignments.each do | assignment |
             if(variant_report[:analysis_id] == assignment[:analysis_id])
-              assignment_found = true
-              shipment[:analyses] += [build_variant_report_analyses_model(variant_report).merge(build_analyses_assignment_model(assignment))]
+              analyses_assignment = build_analyses_assignment_model(assignment)
               break
             end
           end
-          if (!assignment_found)
-            shipment[:analyses] += [build_variant_report_analyses_model(variant_report)]
-          end
+          shipment[:analyses] += [build_variant_report_analyses_model(variant_report).merge(analyses_assignment)]
         end
       end
     end
