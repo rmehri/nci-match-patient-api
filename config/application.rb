@@ -38,6 +38,8 @@ module NciMatchPatientApi
     end
     config.environment = Rails.application.config_for(:environment)
 
+    config.exceptions_app = self.routes
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.

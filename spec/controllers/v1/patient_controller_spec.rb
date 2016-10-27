@@ -99,12 +99,9 @@ describe V1::PatientsController, :type => :controller do
   end
 
   it "GET /patients/1 should handle errors by returning status 500" do
-    allow(NciMatchPatientModels::Patient).to receive(:scan).and_raise("An Error")
+    allow(NciMatchPatientModels::Patient).to receive(:scan).and_raise("Valid Error")
 
-    get :show, :id => "2222"
-
-    expect(response).to have_http_status(500)
-    expect(response.body).to include "message"
+    expect{get :show, :id => "2222"}.to raise_error(RuntimeError)
   end
 
   it "GET /patients/1 only allow specified params to be queried" do

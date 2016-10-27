@@ -9,6 +9,10 @@ Rails.application.routes.draw do
         get 'pending_items', controller: 'pending_view', action: :pending_view
         get 'amois', controller: 'statistics', action: :sequenced_and_confirmed_patients
         resources :events , :variant_reports, :variants, :assignments, :shipments, only: [:show, :index]
+
+        %w(404 422 500).each do |code|
+          get code, controller: 'errors', action: :show, :code => code
+        end
       end
       resources :action_items, only: [:index]
       resources :treatment_arm_history, only: [:index]
@@ -17,6 +21,7 @@ Rails.application.routes.draw do
       resources :specimen_events, only: [:index]
 
       resources :qc_variant_reports, only: [:show]
+
     end
 
     # controller :patients do
