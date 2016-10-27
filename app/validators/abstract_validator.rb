@@ -14,7 +14,11 @@ class AbstractValidator
 
   def attributes=(hash)
     hash.each do |key, value|
-      send("#{key}=", value)
+      begin
+        send("#{key}=", value)
+      rescue => error
+        next
+      end
     end
   end
 
