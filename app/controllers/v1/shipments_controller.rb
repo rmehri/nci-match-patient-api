@@ -5,7 +5,7 @@ module V1
     def shipments_params
       params.require(:id)
       params[:molecular_id] = params.delete(:id)
-      build_query({:molecular_id => params.require(:id)})
+      build_query(params.except(:action, :controller))
     end
 
   end
