@@ -8,10 +8,9 @@ describe 'AssayValidator behavior' do
         "study_id": "APEC1621",
         "surgical_event_id":"3344-bsn",
         "case_number": "case-3377",
-        "type": "ASSAY_RESULT_REPORTED",
+        "type": "RESULT",
         "biomarker":"ICCPTENs",
         "reported_date":"2015-12-12T12:12:09.071-05:00",
-        "ordered_date":"2015-12-12T12:11:09.071-05:00",
         "result":"POSITIVE"
     }.to_json
   end
@@ -22,7 +21,6 @@ describe 'AssayValidator behavior' do
         "study_id": "APEC1621",
         "surgical_event_id":"3344-bsn",
         "reported_date":"2015-12-12T12:12:09.071-05:00",
-        "ordered_date":"2015-12-12T12:11:09.071-05:00",
         "result":"POSITIVE"
     }.to_json
 
