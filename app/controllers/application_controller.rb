@@ -9,9 +9,8 @@ class ApplicationController < ActionController::Base
   end
 
   def standard_error_message(error_message, error_code=500)
-
     logger.error error_message
-    render status: error_code, json: {:message => error_message}
+    redirect_to controller: 'patients', action: 'show', id: error_code, status: error_code
   end
 
   def get_url_path_segments

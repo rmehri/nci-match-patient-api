@@ -1,0 +1,15 @@
+module V1
+  class ErrorsController < ApplicationController
+
+    def show
+      render :nothing => true, :status => status_code
+    end
+
+
+    protected
+    def status_code
+      params[:code] || 500
+    end
+
+  end
+end

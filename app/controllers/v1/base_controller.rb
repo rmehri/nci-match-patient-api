@@ -21,7 +21,7 @@ module V1
 
         standard_success_message("Message has been processed successfully")
       rescue => error
-        standard_error_message(error.message)
+        standard_error_message(error)
       end
     end
 
@@ -31,17 +31,16 @@ module V1
         resources = resource_class.scan(query_params).collect { |data| data.to_h.compact }
         instance_variable_set(plural_resource_name, resources)
         render json: instance_variable_get(plural_resource_name)
-      rescue => error
-        standard_error_message(error.message)
+      rescue Aws::DynamoDB::Errors::ServiceError => error
+        standard_error_message(error)
       end
     end
 
     def show
       begin
-        return standard_error_message("Resource not found", 404) if get_resource.first.blank?
-        render json: get_resource.first
-      rescue => error
-        standard_error_message(error.message)
+        render json: get_resource.first || []
+      rescue Aws::DynamoDB::Errors::ServiceError => error
+        standard_error_message(error)
       end
     end
 
@@ -96,8 +95,8 @@ module V1
       begin
         resource ||= resource_class.scan(params).collect{ |data| data.to_h.compact }
         instance_variable_set("@#{resource_name}", resource ||= [])
-      rescue => error
-        standard_error_message(error.message)
+      rescue Aws::DynamoDB::Errors::ServiceError => error
+        standard_error_message(error)
       end
     end
 
