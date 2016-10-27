@@ -22,11 +22,13 @@ module V1
 
 
         assignment_reports = NciMatchPatientModels::Assignment.find_by({:status => 'PENDING'})
+
         assignment_reports.each do | assignment_report|
           data = {:patient_id => assignment_report.patient_id,
                   :molecular_id => assignment_report.molecular_id,
                   :analysis_id => assignment_report.analysis_id,
                   :assignment_date => assignment_report.assignment_date}
+
           data[:disease] = get_patient_diseases(assignment_report.patient_id)
           data = add_treatment_arm_fields(data, assignment_report.selected_treatment_arm)
           assignments.push(data)
@@ -43,7 +45,7 @@ module V1
     end
 
     def add_treatment_arm_fields(data_hash, selected_treatment_arm)
-      return if selected_treatment_arm.blank?
+      return data_hash if selected_treatment_arm.blank?
 
       selected_treatment_arm.deep_symbolize_keys!
       data_hash[:treatment_arm_title] = "#{selected_treatment_arm[:treatment_arm_id]} (#{selected_treatment_arm[:stratum_id]}, #{selected_treatment_arm[:version]})"
