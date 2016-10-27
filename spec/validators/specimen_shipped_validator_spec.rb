@@ -17,13 +17,13 @@ describe 'SpecimenShippedValidator behavior' do
             "carrier"=> "Federal Express",
             "tracking_id"=> "7956 4568 1235",
             "shipped_dttm"=> "2016-05-01T19:42:13+00:00",
-            "destination"=> "MDA",
+            "destination"=> "MDA"
+        },
 
-            "internal_use_only"=> {
-                "stars_patient_id"=> "ABCXYZ",
-                "stars_specimen_id_cdna"=> "ABCXYZ-0BJ64F",
-                "stars_specimen_id_dna"=> "ABCXYZ-0BJ64B"
-            }
+        "internal_use_only"=> {
+            "stars_patient_id"=> "ABCXYZ",
+            "stars_specimen_id_cdna"=> "ABCXYZ-0BJ64F",
+            "stars_specimen_id_dna"=> "ABCXYZ-0BJ64B"
         }
     }.to_json
   end
@@ -48,13 +48,13 @@ describe 'SpecimenShippedValidator behavior' do
             "carrier"=> "Federal Express",
             "tracking_id"=> "7956 4568 1235",
             "shipped_dttm"=> "2016-05-01T19:42:13+00:00",
-            "destination"=> "MoCha",
+            "destination"=> "MoCha"
+        },
 
-            "internal_use_only"=> {
-                "stars_patient_id"=> "ABCXYZ",
-                "stars_specimen_id_cdna"=> "ABCXYZ-0BJ64F",
-                "stars_specimen_id_dna"=> "ABCXYZ-0BJ64B"
-            }
+        "internal_use_only"=> {
+            "stars_patient_id"=> "ABCXYZ",
+            "stars_specimen_id_cdna"=> "ABCXYZ-0BJ64F",
+            "stars_specimen_id_dna"=> "ABCXYZ-0BJ64B"
         }
     }.to_json
   end
@@ -78,13 +78,13 @@ describe 'SpecimenShippedValidator behavior' do
 
             "carrier"=> "Federal Express",
             "tracking_id"=> "7956 4568 1235",
-            "shipped_dttm"=> "2016-05-01T19:42:13+00:00",
+            "shipped_dttm"=> "2016-05-01T19:42:13+00:00"
+        },
 
-            "internal_use_only"=> {
-                "stars_patient_id"=> "ABCXYZ",
-                "stars_specimen_id_cdna"=> "ABCXYZ-0BJ64F",
-                "stars_specimen_id_dna"=> "ABCXYZ-0BJ64B"
-            }
+        "internal_use_only"=> {
+            "stars_patient_id"=> "ABCXYZ",
+            "stars_specimen_id_cdna"=> "ABCXYZ-0BJ64F",
+            "stars_specimen_id_dna"=> "ABCXYZ-0BJ64B"
         }
     }.to_json
   end

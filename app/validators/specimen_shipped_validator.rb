@@ -50,7 +50,7 @@ module MessageValidator
         @tracking_id = value[:tracking_id]
         @shipped_dttm = value[:shipped_dttm]
         @destination = value[:destination]
-        @internal_use_only = value[:internal_use_only]
+        # @internal_use_only = value[:internal_use_only]
 
       end
     end

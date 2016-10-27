@@ -38,9 +38,9 @@ module MessageValidator
         @study_id = value[:study_id]
         @surgical_event_id = value[:surgical_event_id]
         @type = value[:type]
-        @collected_date = value[:collection_dttm]
+        @collected_date = value[:collection_dt]
         @received_date = value[:received_dttm]
-        @internal_use_only = value[:internal_use_only]
+        # @internal_use_only = value[:internal_use_only]
       end
     end
 

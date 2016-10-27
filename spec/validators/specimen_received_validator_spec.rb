@@ -12,15 +12,15 @@ describe 'SpecimenReceivedValidator behavior' do
             "study_id"=> "APEC1621",
             "patient_id"=> "3344",
             "type"=> "BLOOD",
-            "collection_dttm"=> "2016-04-25T14:17:11+00:00",
+            "collection_dt"=> "2016-04-25",
+            "received_dttm"=> "2016-04-25T15:17:11+00:00"
+        },
+        "internal_use_only"=> {
+            "stars_patient_id"=> "ABCXYZ",
+            "stars_specimen_id"=> "ABCXYZ-0AK64L",
+            "stars_specimen_type"=> "Blood Fresh",
             "received_dttm"=> "2016-04-25T15:17:11+00:00",
-            "internal_use_only"=> {
-                "stars_patient_id"=> "ABCXYZ",
-                "stars_specimen_id"=> "ABCXYZ-0AK64L",
-                "stars_specimen_type"=> "Blood Fresh",
-                "received_dttm"=> "2016-04-25T15:17:11+00:00",
-                "qc_dttm"=> "2016-04-25T16:21:34+00:00"
-            }
+            "qc_dttm"=> "2016-04-25T16:21:34+00:00"
         }
     }.to_json
   end
@@ -36,16 +36,16 @@ describe 'SpecimenReceivedValidator behavior' do
             "study_id"=> "APEC1621",
             "surgical_event_id"=> "3344-bsn",
             "type"=> "TISSUE",
-            "collection_dttm"=> "2016-04-25T15:17:11+00:00",
+            "collection_dt"=> "2016-04-25",
 
-            "received_dttm"=> "2016-04-25T16:17:11+00:00",
-            "internal_use_only"=> {
-                "stars_patient_id"=> "ABCXYZ",
-                "stars_specimen_id"=> "ABCXYZ-0AK64M",
-                "stars_specimen_type"=> "Paraffin Block Primary",
-                "received_ts"=> "2016-04-25T15:17:11+00:00",
-                "qc_ts"=> "2016-04-25T16:21:34+00:00"
-            }
+            "received_dttm"=> "2016-04-25T16:17:11+00:00"
+        },
+        "internal_use_only"=> {
+            "stars_patient_id"=> "ABCXYZ",
+            "stars_specimen_id"=> "ABCXYZ-0AK64M",
+            "stars_specimen_type"=> "Paraffin Block Primary",
+            "received_ts"=> "2016-04-25T15:17:11+00:00",
+            "qc_ts"=> "2016-04-25T16:21:34+00:00"
         }
     }.to_json
   end
@@ -61,16 +61,16 @@ describe 'SpecimenReceivedValidator behavior' do
             "study_id"=> "APEC1621",
             "surgical_event_id"=> "",
             "type"=> "TISSUE",
-            "collection_dttm"=> "2016-04-25T15:17:11+00:00",
+            "collection_dt"=> "2016-04-25",
 
-            "received_dttm"=> "2016-04-25T16:17:11+00:00",
-            "internal_use_only"=> {
-                "stars_patient_id"=> "ABCXYZ",
-                "stars_specimen_id"=> "ABCXYZ-0AK64M",
-                "stars_specimen_type"=> "Paraffin Block Primary",
-                "received_ts"=> "2016-04-25T15:17:11+00:00",
-                "qc_ts"=> "2016-04-25T16:21:34+00:00"
-            }
+            "received_dttm"=> "2016-04-25T16:17:11+00:00"
+        },
+        "internal_use_only"=> {
+            "stars_patient_id"=> "ABCXYZ",
+            "stars_specimen_id"=> "ABCXYZ-0AK64M",
+            "stars_specimen_type"=> "Paraffin Block Primary",
+            "received_ts"=> "2016-04-25T15:17:11+00:00",
+            "qc_ts"=> "2016-04-25T16:21:34+00:00"
         }
     }.to_json
   end
@@ -86,16 +86,16 @@ describe 'SpecimenReceivedValidator behavior' do
             "study_id"=> "APEC1621",
             "surgical_event_id"=> "3344-bsn",
             "type"=> "BAD_TYPE",
-            "collection_dttm"=> "2016-04-25T15:17:11+00:00",
+            "collection_dt"=> "2016-04-25",
 
-            "received_dttm"=> "2016-04-25T16:17:11+00:00",
-            "internal_use_only"=> {
-                "stars_patient_id"=> "ABCXYZ",
-                "stars_specimen_id"=> "ABCXYZ-0AK64M",
-                "stars_specimen_type"=> "Paraffin Block Primary",
-                "received_ts"=> "2016-04-25T15:17:11+00:00",
-                "qc_ts"=> "2016-04-25T16:21:34+00:00"
-            }
+            "received_dttm"=> "2016-04-25T16:17:11+00:00"
+        },
+        "internal_use_only"=> {
+            "stars_patient_id"=> "ABCXYZ",
+            "stars_specimen_id"=> "ABCXYZ-0AK64M",
+            "stars_specimen_type"=> "Paraffin Block Primary",
+            "received_ts"=> "2016-04-25T15:17:11+00:00",
+            "qc_ts"=> "2016-04-25T16:21:34+00:00"
         }
     }.to_json
   end
