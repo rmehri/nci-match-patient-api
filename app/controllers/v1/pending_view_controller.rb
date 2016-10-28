@@ -29,7 +29,7 @@ module V1
                   :assignment_date => assignment_report.assignment_date}
 
           data[:disease] = get_patient_diseases(assignment_report.patient_id)
-          data = add_treatment_arm_fields(data, assignment_report.selected_treatment_arm)
+          data = ApplicationHelper.merge_treatment_arm_fields(data, assignment_report.selected_treatment_arm)
           assignments.push(data)
         end
 
@@ -41,17 +41,6 @@ module V1
       rescue => error
         standard_error_message(error)
       end
-    end
-
-    def add_treatment_arm_fields(data_hash, selected_treatment_arm)
-      return data_hash if selected_treatment_arm.blank?
-
-      selected_treatment_arm.deep_symbolize_keys!
-      data_hash[:treatment_arm_title] = "#{selected_treatment_arm[:treatment_arm_id]} (#{selected_treatment_arm[:stratum_id]}, #{selected_treatment_arm[:version]})"
-      data_hash[:treatment_arm_id] = selected_treatment_arm[:treatment_arm_id]
-      data_hash[:treatment_arm_stratum_id] = selected_treatment_arm[:stratum_id]
-      data_hash[:treatment_arm_version] = selected_treatment_arm[:version]
-      data_hash
     end
 
     def get_specimen_received_date(patient_id, type)
@@ -67,14 +56,7 @@ module V1
 
     def get_patient_diseases(patient_id)
       patient = NciMatchPatientModels::Patient.query_patient_by_id(patient_id)
-      disease_names = ""
-      return disease_names if patient.diseases.blank?
-
-      patient.diseases.each do |disease|
-        disease.deep_symbolize_keys!
-        disease_names = if disease_names.length == 0 then disease[:disease_name] else "#{disease_names}, #{disease[:disease_name]}" end
-      end
-      disease_names
+      ApplicationHelper.format_disease_names(patient.diseases)
     end
 
   end

@@ -8,25 +8,23 @@ module V1
 
         patients = []
         resources.each do | patient |
-          patient.deep_symbolize_keys!
-          if (!patient[:current_assignment].blank?)
-            if !patient[:current_assignment][:selected_treatment_arm].blank?
-              patient[:treatment_arm_title] = format_treatment_arm_title(patient[:current_assignment][:selected_treatment_arm])
-            end
-
-            patient.delete(:current_assignment)
-          end
-
-          if (!patient[:diseases].blank?)
-            patient[:disease_name] = format_disease_names(patient[:diseases])
-            patient.delete(:diseases)
-          end
-
+          patient = format_fields(patient)
           patients.push(patient)
         end
 
         instance_variable_set(plural_resource_name, patients)
         render json: instance_variable_get(plural_resource_name)
+      rescue Aws::DynamoDB::Errors::ServiceError => error
+        standard_error_message(error)
+      end
+    end
+
+    def show
+      begin
+        patient = get_resource.first
+        return standard_error_message("Resource not found", 404) if patient.blank?
+
+        render json: format_fields(patient)
       rescue Aws::DynamoDB::Errors::ServiceError => error
         standard_error_message(error)
       end
@@ -39,17 +37,22 @@ module V1
       build_query(params.except(:action, :controller))
     end
 
-    def format_treatment_arm_title(treatment_arm_hash)
-      "#{treatment_arm_hash[:treatment_arm_id]} (#{treatment_arm_hash[:stratum_id]}, #{treatment_arm_hash[:version]})"
-    end
+    def format_fields(patient)
+      patient.deep_symbolize_keys!
+      if (!patient[:current_assignment].blank?)
+        if !patient[:current_assignment][:selected_treatment_arm].blank?
+          ApplicationHelper.merge_treatment_arm_fields(patient, patient[:current_assignment][:selected_treatment_arm])
+        end
 
-    def format_disease_names(diseases)
-      disease_names = ""
-      diseases.each do | disease |
-        disease_names = if disease_names.length == 0 then disease[:disease_name] else "#{disease_names}, #{disease[:disease_name]}" end
+        patient.delete(:current_assignment)
       end
 
-      disease_names
+      if (!patient[:diseases].blank?)
+        patient[:disease_name] = ApplicationHelper.format_disease_names(patient[:diseases])
+      end
+
+      patient
     end
+
   end
 end
