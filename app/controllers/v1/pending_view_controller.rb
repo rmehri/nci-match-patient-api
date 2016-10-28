@@ -9,7 +9,6 @@ module V1
         assignments = []
         variant_reports.each do | variant_report |
           next if variant_report.variant_report_type == 'BLOOD'
-
           data = {:patient_id => variant_report.patient_id,
                   :molecular_id => variant_report.molecular_id,
                   :analysis_id => variant_report.analysis_id,
