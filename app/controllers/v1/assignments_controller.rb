@@ -6,6 +6,7 @@ module V1
         assignments_ui = []
 
         assignments = resource_class.scan(query_params).collect { |data| data.to_h.compact }
+        assignments = assignments.sort_by{| assignment | assignment[:assignment_date]}.reverse
 
         assignments.each do | assignment |
           assays = find_assays(assignment[:surgical_event_id]) unless assignment[:surgical_event_id].blank?
