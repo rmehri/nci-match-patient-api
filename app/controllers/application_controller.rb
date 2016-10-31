@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
 
   def standard_error_message(error_message, error_code=500)
     logger.error error_message
-    redirect_to controller: 'errors', action: 'show', id: error_code, error_message: error_message
+    redirect_to controller: 'errors', action: 'show', id: error_code, error_message: error_message, status: error_code
   end
 
   def get_url_path_segments
