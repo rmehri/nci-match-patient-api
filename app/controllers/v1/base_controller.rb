@@ -38,9 +38,15 @@ module V1
 
     def show
       begin
-        render json: get_resource.first || []
+        resource = get_resource.first
+        if resource.nil?
+          standard_error_message("Resource not found", 404)
+        else
+          render json: get_resource.first
+        end
+
       rescue Aws::DynamoDB::Errors::ServiceError => error
-        standard_error_message(error)
+        standard_error_message(error.message)
       end
     end
 
