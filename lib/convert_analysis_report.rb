@@ -12,10 +12,14 @@ module Convert
 
       if (!patient[:current_assignment].blank?)
         if (!patient[:current_assignment][:selected_treatment_arm].blank?)
-          ApplicationHelper.merge_treatment_arm_fields(patient, patient[:current_assignment][:selected_treatment_arm])
+          selected_ta = patient[:current_assignment][:selected_treatment_arm]
+          selected_ta[:treatment_arm_title] = ApplicationHelper.format_treatment_arm_title(selected_ta)
+
+          patient[:current_assignment] = selected_ta
+          # ApplicationHelper.merge_treatment_arm_fields(patient, patient[:current_assignment][:selected_treatment_arm])
         end
 
-        patient.delete(:current_assignment)
+        # patient.delete(:current_assignment)
       end
 
       patient.delete(:active_tissue_specimen) if !patient[:active_tissue_specimen].nil?

@@ -41,10 +41,12 @@ module V1
       patient.deep_symbolize_keys!
       if (!patient[:current_assignment].blank?)
         if !patient[:current_assignment][:selected_treatment_arm].blank?
-          ApplicationHelper.merge_treatment_arm_fields(patient, patient[:current_assignment][:selected_treatment_arm])
+          selected_ta = patient[:current_assignment][:selected_treatment_arm]
+          selected_ta[:treatment_arm_title] = ApplicationHelper.format_treatment_arm_title(selected_ta)
+
+          patient[:current_assignment] = selected_ta
         end
 
-        patient.delete(:current_assignment)
       end
 
       if (!patient[:diseases].blank?)
