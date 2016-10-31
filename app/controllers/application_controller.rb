@@ -1,4 +1,10 @@
 class ApplicationController < ActionController::Base
+
+  rescue_from Aws::DynamoDB::Errors::ServiceError, with: :not_found
+  rescue_from Exception, with: :not_found
+  rescue_from ActionController::RoutingError, with: :not_found
+
+
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   # protect_from_forgery with: :exception
@@ -10,7 +16,8 @@ class ApplicationController < ActionController::Base
 
   def standard_error_message(error_message, error_code=500)
     logger.error error_message
-    redirect_to controller: 'errors', action: 'show', id: error_code, error_message: error_message, status: error_code
+    render :json => {:message => error_message}
+    # redirect_to controller: 'errors', action: 'show', id: error_code, error_message: error_message, status: error_code
   end
 
   def get_url_path_segments

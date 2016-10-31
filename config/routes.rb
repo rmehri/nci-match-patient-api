@@ -11,7 +11,7 @@ Rails.application.routes.draw do
         get 'amois', controller: 'statistics', action: :sequenced_and_confirmed_patients
         resources :events , :variant_reports, :variants, :assignments, :shipments, only: [:show, :index]
 
-        resources :errors, only: [:show]
+        # resources :errors, only: [:show]
       end
       resources :action_items, only: [:index]
       resources :treatment_arm_history, only: [:index]
@@ -77,4 +77,5 @@ Rails.application.routes.draw do
     #   get "patients/shipments" => :shipments
     # end
   end
+  match "*path", to: "errors#raise_not_found", via: :all
 end
