@@ -11,9 +11,7 @@ Rails.application.routes.draw do
         get 'amois', controller: 'statistics', action: :sequenced_and_confirmed_patients
         resources :events , :variant_reports, :variants, :assignments, :shipments, only: [:show, :index]
 
-        %w(404 422 500).each do |code|
-          get code, controller: 'errors', action: :show, :code => code
-        end
+        resources :errors, only: [:show]
       end
       resources :action_items, only: [:index]
       resources :treatment_arm_history, only: [:index]
