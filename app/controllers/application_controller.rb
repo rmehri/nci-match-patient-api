@@ -10,14 +10,35 @@ class ApplicationController < ActionController::Base
   # protect_from_forgery with: :exception
 
   protected
+
+  def raise_not_found
+    raise ActionController::RoutingError.new("No route matches #{params[:unmatched_route]}")
+  end
+
+  def not_found
+    respond_to do |format|
+      format.html { render :json => {:message => "ResourceNotFound", :status => 404}, :layout => false, :status => :not_found }
+      format.xml { head :not_found }
+      format.any { head :not_found }
+    end
+  end
+
+  def error
+    respond_to do |format|
+      format.html { render :file => "#{Rails.root}/public/500", :layout => false, :status => :error }
+      format.xml { head :not_found }
+      format.any { head :not_found }
+    end
+  end
+
+
   def standard_success_message(message)
     render :json => {:message => message}, :status => 200
   end
 
   def standard_error_message(error_message, error_code=500)
     logger.error error_message
-    render :json => {:message => error_message}
-    # redirect_to controller: 'errors', action: 'show', id: error_code, error_message: error_message, status: error_code
+    render :json => {:message => error_message, status => error_code}, :status => error_code
   end
 
   def get_url_path_segments
