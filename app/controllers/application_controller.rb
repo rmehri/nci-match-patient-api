@@ -1,8 +1,8 @@
 class ApplicationController < ActionController::Base
 
-  rescue_from Aws::DynamoDB::Errors::ServiceError, with: :not_found
-  rescue_from Exception, with: :not_found
-  rescue_from ActionController::RoutingError, with: :not_found
+  # rescue_from Aws::DynamoDB::Errors::ServiceError, with: :not_found
+  # rescue_from Exception, with: :not_found
+  # rescue_from ActionController::RoutingError, with: :not_found
 
 
   # Prevent CSRF attacks by raising an exception.
