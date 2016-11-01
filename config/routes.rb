@@ -12,6 +12,7 @@ Rails.application.routes.draw do
         get 'analysis_report', controller: 'analysis_report', action: :analysis_view
         get 'amois', controller: 'statistics', action: :sequenced_and_confirmed_patients
         resources :events , :variant_reports, :variants, :assignments, :shipments, only: [:show, :index]
+        resources :patient_limbos, only: [:index]
       end
       resources :action_items, only: [:index]
       resources :treatment_arm_history, only: [:index]
