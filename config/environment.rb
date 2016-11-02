@@ -6,6 +6,7 @@ require 'aws/s3/s3_reader'
 require 'convert_variant_report'
 require 'convert_assignment'
 require 'convert_analysis_report'
+require 'convert_analysis_amoi_report'
 
 # Initialize the Rails application.
 Rails.application.initialize!

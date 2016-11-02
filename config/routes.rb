@@ -10,6 +10,7 @@ Rails.application.routes.draw do
         get 'statistics', controller: 'statistics', action: :patient_statistics
         get 'pending_items', controller: 'pending_view', action: :pending_view
         get 'analysis_report', controller: 'analysis_report', action: :analysis_view
+        get 'analysis_report_amois', controller: 'analysis_report', action: :amois_update
         get 'amois', controller: 'statistics', action: :sequenced_and_confirmed_patients
         resources :events , :variant_reports, :variants, :assignments, :shipments, only: [:show, :index]
         resources :patient_limbos, only: [:index]
