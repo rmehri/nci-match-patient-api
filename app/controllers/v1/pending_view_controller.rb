@@ -12,6 +12,7 @@ module V1
           data = {:patient_id => variant_report.patient_id,
                   :molecular_id => variant_report.molecular_id,
                   :analysis_id => variant_report.analysis_id,
+                  :surgical_event_id => variant_report.surgical_event_id,
                   :ion_reporter_id => variant_report.ion_reporter_id,
                   :variant_report_received_date => variant_report.variant_report_received_date}
           data[:specimen_received_date] = get_specimen_received_date(variant_report.patient_id,
@@ -26,6 +27,7 @@ module V1
           data = {:patient_id => assignment_report.patient_id,
                   :molecular_id => assignment_report.molecular_id,
                   :analysis_id => assignment_report.analysis_id,
+                  :surgical_event_id => assignment_report.surgical_event_id,
                   :assignment_date => assignment_report.assignment_date}
 
           data[:disease] = get_patient_diseases(assignment_report.patient_id)
