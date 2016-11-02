@@ -24,7 +24,7 @@ module V1
                                                                                      :projection => [:analysis_id, :variant_report_received_date, :dna_bam_path_name, :dna_bai_path_name,
                                                                                                      :vcf_path_name, :rna_bam_path_name, :rna_bai_path_name, :tsv_path_name,
                                                                                                      :status ,:qc_report_url, :vr_chart_data_url]})).collect{|record| record.to_h.compact }
-        assignments.sort_by!{ |record| record[:assignment_date]}
+        assignments = assignments.sort_by{ |record| record[:assignment_date]}.reverse
         shipment[:analyses] = []
         variant_reports.each do | variant_report |
           analyses_assignment = Hash.new
