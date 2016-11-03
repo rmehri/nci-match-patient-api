@@ -5,6 +5,14 @@ namespace :setup do
     add_env_variables(Rails.root.join('config', 'secrets.yml'))
   end
 
+  desc 'Loads json into specified table'
+  task :load_date, [:table_name, :file] => :before do | t, args |
+    model = "NciMatchPatientModels::#{args.table_name.camelize}".constantize
+    data = File.read(args.file)
+    data = JSON.parse(data).deep_symbolize_keys!
+    model.new(data).save!
+  end
+
   desc 'List all table names in environment DB'
   task :list_tables => :before do
     p list_tables
