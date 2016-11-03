@@ -16,7 +16,7 @@ module V1
 
 
     def action_items_params
-      build_query({:patient_id => params.require(:patient_id), :status => 'PENDING', :variant_report_type => 'TISSUE'})
+      build_index_query({:patient_id => params.require(:patient_id), :status => 'PENDING', :variant_report_type => 'TISSUE'})
     end
 
     def build_model(record, type = 'variant_report')

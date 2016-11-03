@@ -17,10 +17,10 @@ module V1
     end
 
     def embed_resources(resource ={})
-      resource[:specimen_shipments] = NciMatchPatientModels::Shipment.scan(build_query({:surgical_event_id => resource[:surgical_event_id]})).collect { |data| data.to_h.compact }
+      resource[:specimen_shipments] = NciMatchPatientModels::Shipment.scan(build_index_query({:surgical_event_id => resource[:surgical_event_id]})).collect { |data| data.to_h.compact }
       resource[:specimen_shipments].collect do | shipment |
-        assignments = NciMatchPatientModels::Assignment.scan(build_query({:molecular_id => shipment[:molecular_id], :projection => [:analysis_id, :status, :status_date, :comment_user,:comment]})).collect{|record| record.to_h.compact}
-        variant_reports = NciMatchPatientModels::VariantReport.scan(build_query({:molecular_id => shipment[:molecular_id],
+        assignments = NciMatchPatientModels::Assignment.scan(build_index_query({:molecular_id => shipment[:molecular_id], :projection => [:analysis_id, :status, :status_date, :comment_user,:comment]})).collect{|record| record.to_h.compact}
+        variant_reports = NciMatchPatientModels::VariantReport.scan(build_index_query({:molecular_id => shipment[:molecular_id],
                                                                                      :projection => [:analysis_id, :variant_report_received_date, :dna_bam_path_name, :dna_bai_path_name,
                                                                                                      :vcf_path_name, :rna_bam_path_name, :rna_bai_path_name, :tsv_path_name,
                                                                                                      :status ,:qc_report_url, :vr_chart_data_url]})).collect{|record| record.to_h.compact }
@@ -40,7 +40,7 @@ module V1
     end
 
     def specimen_events_params
-      build_query({:patient_id => params.require(:patient_id)})
+      build_index_query({:patient_id => params.require(:patient_id)})
     end
 
     def build_variant_report_analyses_model(variant_report)

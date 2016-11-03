@@ -24,15 +24,14 @@ module V1
     private
     def find_assays(surgical_event_id)
       assays = []
-      specimens = NciMatchPatientModels::Specimen.scan(build_query({:surgical_event_id => surgical_event_id})).collect { |data| data.to_h.compact }
+      specimens = NciMatchPatientModels::Specimen.scan(build_index_query({:surgical_event_id => surgical_event_id})).collect { |data| data.to_h.compact }
       assays = specimens[0][:assays] if specimens.length > 0
       assays
     end
 
     def assignments_params
       params.require(:id)
-      params[:analysis_id] = params.delete(:id)
-      build_query(params.except(:action, :controller))
+      build_show_query(params.except(:action, :controller), :analysis_id)
     end
 
   end

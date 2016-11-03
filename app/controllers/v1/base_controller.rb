@@ -38,13 +38,11 @@ module V1
 
     def show
       begin
-        resource = get_resource.first
-        if resource.nil?
+        if get_resource.nil?
           standard_error_message("Resource not found", 404)
         else
-          render json: get_resource.first
+          render json: get_resource
         end
-
       rescue Aws::DynamoDB::Errors::ServiceError => error
         standard_error_message(error.message)
       end
@@ -71,7 +69,7 @@ module V1
     # to permit additional parameters to search on
     # @return [Hash]
     def query_params
-      build_query(params.permit!.except(:controller, :action, :num, :order))
+      build_index_query(params.permit!.except(:controller, :action, :num, :order))
     end
 
     # @return [Class]
@@ -92,7 +90,8 @@ module V1
     # Use callbacks to share common setup or constraints between actions.
     # Uses resource_params for action
     def set_resource(resource = nil)
-       resource ||= resource_scan(resource_params)
+      resource ||= resource_class.query(resource_params).first.to_h.compact
+      instance_variable_set("@#{resource_name}", resource)
     end
 
     # Use callbacks to share common setup
@@ -106,11 +105,22 @@ module V1
       end
     end
 
-    def build_query(params)
+    def build_index_query(params)
       {
-          table_name: @resource_name,
+          :table_name => @resource_name,
           :attributes_to_get => build_attributes_to_get(params),
           :scan_filter => build_scan_filter(params.except(:projections, :projection))
+      }
+    end
+
+    def build_show_query(params, key="")
+      {
+          table_name: @resource_name,
+          key_conditions: {
+              key => {attribute_value_list: [params[:id]], comparison_operator: "EQ"}
+          },
+          :attributes_to_get => build_attributes_to_get(params),
+          :query_filter => build_scan_filter(params.except(:projections, :projection, :id))
       }
     end
 

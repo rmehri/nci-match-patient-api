@@ -32,7 +32,7 @@ module V1
     def qc_variant_reports_params
       params.require(:id)
       params[:analysis_id] = params.delete(:id)
-      build_query(params.except(:action, :controller))
+      build_index_query(params.except(:action, :controller))
     end
   end
 end

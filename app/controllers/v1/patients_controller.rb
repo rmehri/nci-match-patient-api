@@ -19,23 +19,10 @@ module V1
       end
     end
 
-    def show
-      begin
-        patient = get_resource.first
-        return standard_error_message("Resource not found", 404) if patient.blank?
-
-        render json: format_fields(patient)
-      rescue Aws::DynamoDB::Errors::ServiceError => error
-        standard_error_message(error)
-      end
-    end
-
     private
     def patients_params
-      # build_query({:patient_id => params.require(:id)})
       params.require(:id)
-      params[:patient_id] = params.delete(:id)
-      build_query(params.except(:action, :controller))
+      build_show_query(params.except(:action, :controller), :patient_id)
     end
 
     def format_fields(patient)

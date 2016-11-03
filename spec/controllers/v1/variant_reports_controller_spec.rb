@@ -19,7 +19,7 @@ describe V1::VariantReportsController do
   end
 
   it 'GET #show no data found' do
-    allow(NciMatchPatientModels::VariantReport).to receive(:scan).and_return([])
+    allow(NciMatchPatientModels::VariantReport).to receive(:query).and_return([])
     expect(get :show, :id => "3366").to have_http_status(404)
   end
 

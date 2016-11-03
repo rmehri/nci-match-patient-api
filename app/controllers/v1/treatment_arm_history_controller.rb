@@ -14,7 +14,7 @@ module V1
     end
 
     def treatment_arm_history_params
-      build_query({:patient_id => params.require(:patient_id),
+      build_index_query({:patient_id => params.require(:patient_id),
                    :projection => ['selected_treatment_arm', 'step_number', 'cog_assignment_date'],
                    :attribute => ['selected_treatment_arm', 'step_number', 'cog_assignment_date']})
     end
