@@ -38,7 +38,7 @@ class ApplicationController < ActionController::Base
 
   def standard_error_message(error_message, error_code=500)
     logger.error error_message
-    render :json => {:message => error_message, status => error_code}, :status => error_code
+    render :json => {:message => error_message}, :status => error_code
   end
 
   def get_url_path_segments
