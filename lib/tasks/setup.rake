@@ -6,10 +6,9 @@ namespace :setup do
   end
 
   desc 'Loads json into specified table'
-  task :load_date, [:table_name, :file] => :before do | t, args |
+  task :load_data, [:table_name, :file] => :before do | t, args |
     model = "NciMatchPatientModels::#{args.table_name.camelize}".constantize
-    data = File.read(args.file)
-    data = JSON.parse(data).deep_symbolize_keys!
+    data = JSON.parse(File.read(args.file)).deep_symbolize_keys!
     model.new(data).save!
   end
 
