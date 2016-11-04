@@ -3,17 +3,17 @@ module V1
     def analysis_view
       begin
         patient = NciMatchPatientModels::Patient.query_patient_by_id(params[:patient_id])
-        rails "Patient not found" if patient.blank?
+        raise "Patient [#{params[:patient_id]}] not found" if patient.blank?
 
-        variant_report_hash = NciMatchPatientModelExtensions::VariantReportExtension.compose_variant_report({:patient_id => params[:patient_id],
-                                                                                                             :analysis_id => params[:analysis_id]})
+        variant_report_hash = NciMatchPatientModelExtensions::VariantReportExtension.compose_variant_report(params[:patient_id], params[:analysis_id])
+        raise "Variant report with analysis_id [#{params[:analysis_id]}] not found" if variant_report_hash.blank?
 
         assignments = NciMatchPatientModels::Assignment.query_by_patient_id(params[:patient_id], false).collect { |data| data.to_h.compact }
         assignments = assignments.sort_by{| assignment | assignment[:assignment_date]}.reverse
 
         assignments_with_assays = []
         assignments.each do | assignment |
-          assays = find_assays(assignment[:surgical_event_id]) unless assignment[:surgical_event_id].blank?
+          assays = find_assays(assignment[:surgical_event_id])
           assignments_with_assays.push(Convert::AssignmentDbModel.to_ui(assignment, assays)) unless assignment.blank?
         end
 
@@ -34,9 +34,9 @@ module V1
         variant_report = NciMatchPatientModels::VariantReport.query_by_analysis_id(params[:patient_id], params[:analysis_id])
         return standard_error_message("No record found", 404) if variant_report.blank?
 
-        amois = get_amois(variant_report.to_h.deep_symbolize_keys!)
-
-        match_amoi_with_uuid(amois)
+        variant_report_hash = variant_report.to_h
+        amois = get_amois(variant_report_hash.deep_symbolize_keys!)
+        match_amois_with_uuid(variant_report_hash, amois)
 
         render json: Convert::AmoisRuleModel.to_ui_model(amois).to_json
       rescue => error
@@ -60,19 +60,23 @@ module V1
       VariantReportUpdater.new.updated_variant_report(variant_report)
     end
 
-    def match_amoi_with_uuid(amois)
-      find_amoi_uuid(amois[:snv_indels])
-      find_amoi_uuid(amois[:copy_number_variants])
-      find_amoi_uuid(amois[:gene_fusions])
+    def match_amois_with_uuid(variant_report, amois)
+      find_amoi_uuid(variant_report, amois[:snv_indels])
+      find_amoi_uuid(variant_report, amois[:copy_number_variants])
+      find_amoi_uuid(variant_report, amois[:gene_fusions])
 
     end
 
-    def find_amoi_uuid(amois)
+    def find_amoi_uuid(variant_report, amois)
       amois.each do | amoi |
-        query_hash = {:variant_type => amoi[:variant_type]}
+        query_hash = {:patient_id => variant_report[:patient_id],
+                      :molecular_id => variant_report[:molecular_id],
+                      :analysis_id => variant_report[:analysis_id],
+                      :variant_type => amoi[:variant_type]}
+
+        query_hash[:surgical_event_id] = variant_report[:surgical_event_id] if variant_report[:surgical_event_id].blank?
         query_hash[:identifier] = amoi[:idenfitier] if !amoi[:idenfitier].blank?
-        query_hash[:chromosome] = amoi[:chromosome] if !amoi[:chromosome].blank?
-        query_hash[:func_gene] = amoi[:chromosome] if !amoi[:func_gene].blank?
+        query_hash[:func_gene] = amoi[:func_gene] if !amoi[:func_gene].blank?
         query_hash[:chromosome] = amoi[:chromosome] if !amoi[:chromosome].blank?
         query_hash[:position] = amoi[:position] if !amoi[:position].blank?
         query_hash[:reference] = amoi[:reference] if !amoi[:reference].blank?

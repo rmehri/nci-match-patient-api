@@ -3,8 +3,6 @@ module Convert
     def self.to_ui(assignment_db, assays)
       begin
         assignment = assignment_db.deep_symbolize_keys
-
-        puts "=========================== assignment: #{assignment}"
         assignment_results = assignment[:treatment_assignment_results]
 
         if (!assignment_results.nil?)

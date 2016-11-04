@@ -3,6 +3,7 @@ class VariantReportUpdater
   attr_accessor :patient_id, :ion_reportter_id, :molecular_id, :analysis_id, :tsv_file_name
 
   def updated_variant_report(variant_report)
+
     begin
       treatment_arms = TreatmentArmApi.get_treatment_arms
       report = RuleEngine.get_mois(variant_report[:patient_id],
