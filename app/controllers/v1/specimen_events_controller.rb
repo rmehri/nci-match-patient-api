@@ -9,11 +9,15 @@ module V1
 
     private
     def set_resource(resource = {})
-      resources = NciMatchPatientModels::Specimen.scan(resource_params).collect { |data| data.to_h.compact }
+      tissue_specimens = []
       blood_shipment_resources = {}
+
+      resources = NciMatchPatientModels::Specimen.scan(resource_params).collect { |data| data.to_h.compact }
+
       resources.each do | resource |
         if (resource[:specimen_type] == 'TISSUE')
-          resource = embed_resources(resource) if (resource[:specimen_type] == 'TISSUE')
+          resource = embed_resources(resource)
+          tissue_specimens.push(resource)
         else
           embed_blood_specimens(resource, blood_shipment_resources)
           embed_blood_shipment_resources(resource, blood_shipment_resources)
@@ -21,8 +25,9 @@ module V1
 
       end
 
+      blood_shipment_resources[:tissue_specimens] = tissue_specimens
       resources.push(blood_shipment_resources) if !blood_shipment_resources.blank?
-      instance_variable_set("@#{resource_name}", resources)
+      instance_variable_set("@#{resource_name}", blood_shipment_resources)
     end
 
     def embed_resources(resource ={})
@@ -47,6 +52,7 @@ module V1
         end
       end
 
+      resource
     end
 
     def embed_blood_specimens(resource, blood_shipment_resources)

@@ -13,7 +13,7 @@ describe V1::SpecimenEventsController do
   it 'GET #index should return something' do
     get :index, :patient_id => "1234"
     expect(response).to have_http_status(200)
-    expect(response.body).to eq("[]")
+    expect(response.body).to eq("{\"tissue_specimens\":[]}")
   end
 
   it 'GET #index with actual data TISSUE' do
