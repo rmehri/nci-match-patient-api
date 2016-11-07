@@ -13,26 +13,31 @@ describe V1::QcVariantReportsController do
     expect(get :show, :patient_id => "3366", :id => "1" ).to have_http_status(404)
   end
 
-  # it 'GET #show 404 error' do
-  #   variant_report = NciMatchPatientModels::VariantReport.new
-  #   variant_report.patient_id = "3366"
-  #   variant_report.variant_report_received_date = "2016-09-12"
-  #
-  #
-  #   allow(NciMatchPatientModels::VariantReport).to receive(:new).and_return(variant_report)
-  #   allow(NciMatchPatientModels::VariantReport).to receive(:query).and_return([variant_report])
-  #   allow(Aws::S3::S3Reader).to receive(:read).and_return("BLAH BLAH")
-  #   expect( get :show, :patient_id => "3366", :id => "1").to have_http_status(500)
-  # end
+  it 'GET #show 500 error' do
+    variant_report = NciMatchPatientModels::VariantReport.new
+    variant_report.patient_id = "3366"
+    variant_report.variant_report_received_date = "2016-09-12"
+    variant_report.analysis_id = "1"
+    variant_report.molecular_id = "2"
 
-  # it 'GET #show correctly' do
-  #   variant_report = NciMatchPatientModels::VariantReport.new
-  #   variant_report.patient_id = "3366"
-  #   variant_report.variant_report_received_date = "2016-09-12"
-  #   allow(NciMatchPatientModels::VariantReport).to receive(:query_by_analysis_id).and_return(variant_report)
-  #   allow(Aws::S3::S3Reader).to receive(:read).and_return("BLAH BLAH")
-  #   expect( get :show, :patient_id => "3366", :id => "1").to have_http_status(200)
-  # end
+    allow(NciMatchPatientModels::VariantReport).to receive(:query).and_return([variant_report])
+    allow(Aws::S3::S3Reader).to receive(:read).and_return({:patient_id => "3366"})
+    expect( get :show, :patient_id => "3366", :id => "1").to have_http_status(500)
+  end
+
+  it 'GET #show correctly' do
+    variant_report = NciMatchPatientModels::VariantReport.new
+    variant_report.patient_id = "3366"
+    variant_report.variant_report_received_date = "2016-09-12"
+    variant_report.analysis_id = "1"
+    variant_report.molecular_id = "2"
+    variant_report.ion_reporter_id = "3"
+    variant_report.tsv_file_name = "4.tsv"
+
+    allow(NciMatchPatientModels::VariantReport).to receive(:query).and_return([variant_report])
+    allow(Aws::S3::S3Reader).to receive(:read).and_return({:patient_id => "3366"})
+    expect( get :show, :patient_id => "3366", :id => "1").to have_http_status(200)
+  end
 
   it 'should not route' do
     expect { get :index, :patient_id => "3366", :id => "1"}.to raise_error(ActionController::UrlGenerationError)
