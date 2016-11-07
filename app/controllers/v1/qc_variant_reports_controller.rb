@@ -7,9 +7,8 @@ module V1
       begin
 
         variant_report = get_resource
-        puts "================= variant report nil? #{variant_report.nil?}"
         return standard_error_message("Resource not found", 404) if variant_report.blank?
-
+        
         render json: Aws::S3::S3Reader.read(Rails.configuration.environment.fetch('s3_bucket'),
                                             get_s3_file_path(variant_report.to_h.compact))
 

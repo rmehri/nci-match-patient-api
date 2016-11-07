@@ -3,10 +3,10 @@ module V1
     def analysis_view
       begin
         patient = NciMatchPatientModels::Patient.query_patient_by_id(params[:patient_id])
-        raise "Patient [#{params[:patient_id]}] not found" if patient.blank?
+        return standard_error_message("Patient [#{params[:patient_id]}] not found", 404) if patient.blank?
 
         variant_report_hash = NciMatchPatientModelExtensions::VariantReportExtension.compose_variant_report(params[:patient_id], params[:analysis_id])
-        raise "Variant report with analysis_id [#{params[:analysis_id]}] not found" if variant_report_hash.blank?
+        return standard_error_message("Variant report with analysis_id [#{params[:analysis_id]}] not found", 404) if variant_report_hash.blank?
 
         assignments = NciMatchPatientModels::Assignment.query_by_patient_id(params[:patient_id], false).collect { |data| data.to_h.compact }
         assignments = assignments.sort_by{| assignment | assignment[:assignment_date]}.reverse
@@ -68,6 +68,8 @@ module V1
     end
 
     def find_amoi_uuid(variant_report, amois)
+      return if amois.blank?
+
       amois.each do | amoi |
         query_hash = {:patient_id => variant_report[:patient_id],
                       :molecular_id => variant_report[:molecular_id],
@@ -84,8 +86,8 @@ module V1
         query_hash[:position] = amoi[:position] if !amoi[:position].blank?
 
         variants = NciMatchPatientModels::Variant.find_by(query_hash).collect { |data| data.to_h.compact }
+
         if (variants.length > 0)
-          puts "=============== va match: #{variants[0]}"
           amoi[:uuid] = variants[0][:uuid]
         end
       end

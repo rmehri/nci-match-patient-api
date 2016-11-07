@@ -4,7 +4,6 @@ module Convert
       return {} if amois_from_rule.blank?
 
       amois_from_rule.deep_symbolize_keys!
-
       snv_indel_amois = amois_only(amois_from_rule[:snv_indels])
       cnv_amois = amois_only(amois_from_rule[:copy_number_variants])
       fusion_amois = amois_only(amois_from_rule[:gene_fusions])
