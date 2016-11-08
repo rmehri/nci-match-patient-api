@@ -18,7 +18,7 @@ describe V1::AnalysisReportController do
     allow(NciMatchPatientModelExtensions::VariantReportExtension).to receive(:query).and_return(nil)
 
     get :analysis_view, :patient_id => "3366", :analysis_id => "1"
-    expect(response).to have_http_status(404)
+    expect(response).to have_http_status(500)
   end
 
 
