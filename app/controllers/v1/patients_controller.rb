@@ -19,6 +19,17 @@ module V1
       end
     end
 
+    def show
+      begin
+        patient = get_resource
+        return standard_error_message("Resource not found", 404) if patient.nil?
+
+        render json: format_fields(patient)
+      rescue Aws::DynamoDB::Errors::ServiceError => error
+        standard_error_message(error)
+      end
+    end
+
     private
     def patients_params
       params.require(:id)
