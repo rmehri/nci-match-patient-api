@@ -35,10 +35,10 @@ module V1
         return standard_error_message("No record found", 404) if variant_report.blank?
 
         variant_report_hash = variant_report.to_h
-        amois = get_amois(variant_report_hash.deep_symbolize_keys!)
-        match_amois_with_uuid(variant_report_hash, amois)
+        mois = get_amois(variant_report_hash.deep_symbolize_keys!)
+        match_amois_with_uuid(variant_report_hash, mois)
 
-        render json: Convert::AmoisRuleModel.to_ui_model(amois).to_json
+        render json: Convert::AmoisRuleModel.to_ui_model(mois).to_json
       rescue => error
         standard_error_message(error.message)
       end
@@ -60,37 +60,40 @@ module V1
       VariantReportUpdater.new.updated_variant_report(variant_report)
     end
 
-    def match_amois_with_uuid(variant_report, amois)
-      find_amoi_uuid(variant_report, amois[:snv_indels])
-      find_amoi_uuid(variant_report, amois[:copy_number_variants])
-      find_amoi_uuid(variant_report, amois[:gene_fusions])
+    def match_amois_with_uuid(variant_report, mois)
+      find_amoi_uuid(variant_report, mois[:snv_indels])
+      find_amoi_uuid(variant_report, mois[:copy_number_variants])
+      find_amoi_uuid(variant_report, mois[:gene_fusions])
 
     end
 
-    def find_amoi_uuid(variant_report, amois)
-      return if amois.blank?
+    def find_amoi_uuid(variant_report, mois)
+      return if mois.blank?
 
-      amois.each do | amoi |
+      mois.each do | moi |
+        next if moi[:mois].blank?
+
         query_hash = {:patient_id => variant_report[:patient_id],
                       :molecular_id => variant_report[:molecular_id],
                       :analysis_id => variant_report[:analysis_id],
-                      :variant_type => amoi[:variant_type]}
+                      :variant_type => moi[:variant_type]}
 
         query_hash[:surgical_event_id] = variant_report[:surgical_event_id] if variant_report[:surgical_event_id].blank?
-        query_hash[:identifier] = amoi[:idenfitier] if !amoi[:idenfitier].blank?
-        query_hash[:func_gene] = amoi[:func_gene] if !amoi[:func_gene].blank?
-        query_hash[:chromosome] = amoi[:chromosome] if !amoi[:chromosome].blank?
-        query_hash[:position] = amoi[:position] if !amoi[:position].blank?
-        query_hash[:reference] = amoi[:reference] if !amoi[:reference].blank?
-        query_hash[:alternative] = amoi[:alternative] if !amoi[:alternative].blank?
-        query_hash[:position] = amoi[:position] if !amoi[:position].blank?
+        query_hash[:identifier] = moi[:idenfitier] if !moi[:idenfitier].blank?
+        query_hash[:func_gene] = moi[:func_gene] if !moi[:func_gene].blank?
+        query_hash[:chromosome] = moi[:chromosome] if !moi[:chromosome].blank?
+        query_hash[:position] = moi[:position] if !moi[:position].blank?
+        query_hash[:reference] = moi[:reference] if !moi[:reference].blank?
+        query_hash[:alternative] = moi[:alternative] if !moi[:alternative].blank?
+        query_hash[:position] = moi[:position] if !moi[:position].blank?
 
         variants = NciMatchPatientModels::Variant.find_by(query_hash).collect { |data| data.to_h.compact }
 
         if (variants.length > 0)
-          amoi[:uuid] = variants[0][:uuid]
+          moi[:uuid] = variants[0][:uuid]
         end
       end
+
     end
   end
 end

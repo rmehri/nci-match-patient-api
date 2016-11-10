@@ -11,8 +11,18 @@ module Aws
         resource.get({}).body.read
       end
 
-      def self.download(bucket_name, path_to_file)
+      def self.get_file_set(bucket_name, path_to_file)
+        object_summaries = self.s3_client.bucket(bucket_name).objects(prefix: path_to_file)
+        file_set = []
+        object_summaries.each do | object_summary |
+          file_set.push({:file_path_name => object_summary.key,
+                         :public_url => object_summary.public_url({}),
+                         :file_size => object_summary.size,
+                         :last_modified => object_summary.last_modified})
 
+        end
+
+        file_set
       end
 
       def self.s3_client

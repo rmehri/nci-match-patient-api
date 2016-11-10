@@ -34,7 +34,7 @@ module V1
       resource[:specimen_shipments].collect do | shipment |
         assignments = NciMatchPatientModels::Assignment.scan(build_index_query({:molecular_id => shipment[:molecular_id], :projection => [:analysis_id, :status, :status_date, :comment_user,:comment]})).collect{|record| record.to_h.compact}
         variant_reports = NciMatchPatientModels::VariantReport.scan(build_index_query({:molecular_id => shipment[:molecular_id],
-                                                                                       :projection => [:analysis_id, :variant_report_received_date, :dna_bam_path_name, :dna_bai_path_name,
+                                                                                       :projection => [:ion_reporter_id, :molecular_id, :analysis_id, :variant_report_received_date, :dna_bam_path_name, :dna_bai_path_name,
                                                                                                        :vcf_path_name, :rna_bam_path_name, :rna_bai_path_name, :tsv_file_name,
                                                                                                        :status ,:qc_report_url, :vr_chart_data_url]})).collect{|record| record.to_h.compact }
         assignments = assignments.sort_by{ |record| record[:assignment_date]}.reverse
@@ -79,20 +79,52 @@ module V1
     end
 
     def build_variant_report_analyses_model(variant_report)
-      (variant_report.blank?) ? {} :
-      {
-          :analysis_id => variant_report[:analysis_id],
-          :variant_report_status => variant_report[:status],
-          :variant_report_received_date => variant_report[:variant_report_received_date],
-          :dna_bam_path_name => variant_report[:dna_bam_path_name],
-          :dna_bai_path_name => variant_report[:dna_bai_path_name],
-          :vcf_path_name => variant_report[:vcf_path_name],
-          :rna_bam_path_name => variant_report[:rna_bam_path_name],
-          :rna_bai_path_name => variant_report[:rna_bai_path_name],
-          :tsv_path_name => variant_report[:tsv_file_name],
-          :qc_report_url => variant_report[:qc_report_url],
-          :vr_chart_data_url => variant_report[:vr_chart_data_url]
-      }
+      return {} if variant_report.blank?
+
+      report = {:ion_reporter_id => variant_report[:ion_reporter_id],
+                :molecular_id => variant_report[:molecular_id],
+                :analysis_id => variant_report[:analysis_id],
+                :variant_report_status => variant_report[:status],
+                :variant_report_received_date => variant_report[:variant_report_received_date]
+        }
+
+      add_download_links(report)
+    end
+
+    def add_download_links(variant_report)
+      s3_file_folder = "#{variant_report[:ion_reporter_id]}/#{variant_report[:molecular_id]}/#{variant_report[:analysis_id]}/"
+      files = Aws::S3::S3Reader.get_file_set(Rails.configuration.environment.fetch('s3_bucket'), s3_file_folder)
+
+      add_vcf_link(variant_report, files)
+      add_bam_links(variant_report, files)
+      add_bai_links(variant_report, files)
+
+      variant_report
+    end
+
+    def add_bai_links(variant_report, files)
+      targets = files.select { |f| f[:file_path_name].end_with? ".bai"}
+      return if targets.length == 0
+
+      targets = targets.sort_by{|target| target[:size]}
+      variant_report[:dna_bai_path_name] = targets[0][:public_url]
+      variant_report[:rna_bai_path_name] = targets[1][:public_url] if targets.length > 1
+    end
+
+    def add_bam_links(variant_report, files)
+      targets = files.select { |f| f[:file_path_name].end_with? ".bam"}
+      return if targets.length == 0
+
+      targets = targets.sort_by{|target| target[:size]}
+      variant_report[:dna_bam_path_name] = targets[0][:public_url]
+      variant_report[:rna_bam_path_name] = targets[1][:public_url] if targets.length > 1
+    end
+
+    def add_vcf_link(variant_report, files)
+
+      targets = files.select { |f| f[:file_path_name].end_with? ".vcf"}
+      return if targets.length == 0
+      variant_report[:vcf_path_name] = targets[0][:public_url]
     end
 
     def build_analyses_assignment_model(assignment)
