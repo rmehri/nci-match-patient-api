@@ -42,9 +42,6 @@ describe 'SpecimenShippedValidator behavior' do
             "surgical_event_id"=> "3344-bsn",
             "molecular_id"=> "3344-bsn-msn",
 
-            "molecular_dna_id"=> "00012D",
-            "molecular_cdna_id"=> "00012C",
-
             "carrier"=> "Federal Express",
             "tracking_id"=> "7956 4568 1235",
             "shipped_dttm"=> "2016-05-01T19:42:13+00:00",

@@ -8,7 +8,7 @@ module MessageValidator
 
     attr_accessor :header, :msg_guid, :msg_dttm, :specimen_shipped, :patient_id, :type,
                   :study_id, :surgical_event_id, :internal_use_only, :slide_barcode, :destination,
-                  :molecular_id, :molecular_dna_id, :molecular_cdna_id, :carrier, :tracking_id, :shipped_dttm
+                  :molecular_id, :carrier, :tracking_id, :shipped_dttm
 
 
     validates :header, presence: true
@@ -42,8 +42,8 @@ module MessageValidator
         @study_id = value[:study_id]
         @surgical_event_id = value[:surgical_event_id]
         @molecular_id = value[:molecular_id]
-        @molecular_dna_id = value[:molecular_dna_id]
-        @molecular_cdna_id = value[:molecular_cdna_id]
+        # @molecular_dna_id = value[:molecular_dna_id]
+        # @molecular_cdna_id = value[:molecular_cdna_id]
         @slide_barcode = value[:slide_barcode]
         @type = value[:type]
         @carrier = value[:carrier]
