@@ -2,6 +2,8 @@
 class ConfirmAssignmentMessage
   def self.from_url(url_segments)
 
+    puts "url_segments: #{url_segments}"
+
     start_index = url_segments.index("patients")
     raise "Assignment reports url is missing patient id" if url_segments.length < start_index + 1
 

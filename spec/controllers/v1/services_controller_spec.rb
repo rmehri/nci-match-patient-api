@@ -28,12 +28,20 @@ describe V1::ServicesController do
     }.to_json
   end
 
+  # it "should process a registration message" do
+  #   # post "api/v1/patients/1", good_message
+  #
+  #   expect(post "api/v1/patients/1", good_message).to have_http_status(200)
+  # end
+
+
   it "should route to correct controller" do
     expect(:post => "api/v1/patients/3355").to route_to(:controller => "v1/services", :action => "trigger", :patient_id =>"3355")
   end
 
   it "POST /trigger" do
     expect(:post => "api/v1/patients/1").to route_to(:controller => "v1/services", :action => "trigger", :patient_id => "1")
+    expect(:post => "api/v1/patients/variant_report/1").to route_to(:controller => "v1/services", :action => "variant_report_uploaded", :molecular_id => "1")
 
     expect(:put => "api/v1/patients/1/variant_reports/aid/confirm").to route_to(:controller => "v1/services",
                                                                            :action => "variant_report_status",
