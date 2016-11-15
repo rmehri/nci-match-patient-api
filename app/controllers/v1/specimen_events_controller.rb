@@ -107,8 +107,8 @@ module V1
       return if targets.length == 0
 
       targets = targets.sort_by{|target| target[:size]}
-      variant_report[:dna_bai_path_name] = targets[0][:public_url]
-      variant_report[:rna_bai_path_name] = targets[1][:public_url] if targets.length > 1
+      variant_report[:dna_bai_path_name] = targets[0][:file_path_name]
+      variant_report[:rna_bai_path_name] = targets[1][:file_path_name] if targets.length > 1
     end
 
     def add_bam_links(variant_report, files)
@@ -116,15 +116,15 @@ module V1
       return if targets.length == 0
 
       targets = targets.sort_by{|target| target[:size]}
-      variant_report[:dna_bam_path_name] = targets[0][:public_url]
-      variant_report[:rna_bam_path_name] = targets[1][:public_url] if targets.length > 1
+      variant_report[:dna_bam_path_name] = targets[0][:file_path_name]
+      variant_report[:rna_bam_path_name] = targets[1][:file_path_name] if targets.length > 1
     end
 
     def add_vcf_link(variant_report, files)
 
       targets = files.select { |f| f[:file_path_name].end_with? ".vcf"}
       return if targets.length == 0
-      variant_report[:vcf_path_name] = targets[0][:public_url]
+      variant_report[:vcf_path_name] = targets[0][:file_path_name]
     end
 
     def build_analyses_assignment_model(assignment)
@@ -134,7 +134,7 @@ module V1
           :assignment_report_status => assignment[:status],
           :status_date => assignment[:status_date],
           :comment_user => assignment[:comment_user],
-          :comment => assignment[:comment],
+          :comment => assignment[:comment]
       }
     end
 
