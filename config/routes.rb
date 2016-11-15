@@ -22,6 +22,7 @@ Rails.application.routes.draw do
       resources :specimen_events, only: [:index]
 
       resources :qc_variant_reports, only: [:show]
+      resources :variant_file_download, only: [:show]
 
     end
 
