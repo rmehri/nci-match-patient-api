@@ -11,6 +11,14 @@ module Aws
         resource.get({}).body.read
       end
 
+      def self.get_presigned_url(bucket_name, path_to_file)
+
+        resource = self.s3_client.bucket(bucket_name).object(path_to_file)
+        raise "Specified resource path or name does not exist" if !resource.exists?
+
+        resource.presigned_url(:get, expires_in: 20.minutes)
+      end
+
       def self.get_file_set(bucket_name, path_to_file)
         object_summaries = self.s3_client.bucket(bucket_name).objects(prefix: path_to_file)
         file_set = []
