@@ -4,7 +4,6 @@ Rails.application.routes.draw do
 
 
     resources :patients, only: [:show, :index, :create] do
-      # match "*any", to: "errors#raise_not_found", via: :all
       collection do
         get 'version', controller: 'versions', action: :version
         get 'statistics', controller: 'statistics', action: :patient_statistics
@@ -35,6 +34,6 @@ Rails.application.routes.draw do
       put "patients/variant/:variant_uuid/:status" => :variant_status
 
     end
-
+    match "*path", to: 'errors#not_acceptable', via: :all
   end
 end

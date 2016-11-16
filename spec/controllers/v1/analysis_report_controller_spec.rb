@@ -1,26 +1,5 @@
 describe V1::AnalysisReportController do
 
-  it 'should return 404 because patient does not exist' do
-    patient = NciMatchPatientModels::Patient.new
-    patient.patient_id = "3366"
-    patient.registration_date = DateTime.current.getutc().to_s
-    allow(NciMatchPatientModels::Patient).to receive(:query).and_return([])
-    get :analysis_view
-    expect(response).to have_http_status(404)
-  end
-
-  it 'should return 404 because variant report does not exist' do
-    patient = NciMatchPatientModels::Patient.new
-    patient.patient_id = "3366"
-    patient.registration_date = DateTime.current.getutc().to_s
-
-    allow(NciMatchPatientModels::Patient).to receive(:query).and_return([patient])
-    allow(NciMatchPatientModelExtensions::VariantReportExtension).to receive(:query).and_return(nil)
-
-    get :analysis_view, :patient_id => "3366", :analysis_id => "1"
-    expect(response).to have_http_status(404)
-  end
-
 
   it 'should return variant report with assignment' do
     patient = NciMatchPatientModels::Patient.new
@@ -116,11 +95,11 @@ describe V1::AnalysisReportController do
 
   end
 
-  it 'throws error because patient does not exist' do
-    allow(NciMatchPatientModels::Patient).to receive(:query).and_return([])
-    get :analysis_view
-    expect(response).to have_http_status(404)
-  end
+  # it 'throws error because patient does not exist' do
+  #   allow(NciMatchPatientModels::Patient).to receive(:query).and_return([])
+  #   get :analysis_view
+  #   expect(response).to have_http_status(404)
+  # end
 
   it 'GET #show' do
     expect { post :show, :id => 1}.to raise_error(ActionController::UrlGenerationError)

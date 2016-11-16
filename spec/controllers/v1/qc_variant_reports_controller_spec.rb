@@ -9,11 +9,11 @@ describe V1::QcVariantReportsController do
                                                                                       :id => "analysis123")
   end
 
-  it 'GET #show 404 error' do
-    expect(get :show, :patient_id => "3366", :id => "1" ).to have_http_status(404)
+  it 'GET #show 500 error' do
+    expect(get :show, :patient_id => "123", :id => "1" ).to have_http_status(500)
   end
 
-  it 'GET #show 500 error' do
+  it 'GET #show 200 code' do
     variant_report = NciMatchPatientModels::VariantReport.new
     variant_report.patient_id = "3366"
     variant_report.variant_report_received_date = "2016-09-12"
@@ -22,7 +22,7 @@ describe V1::QcVariantReportsController do
 
     allow(NciMatchPatientModels::VariantReport).to receive(:query).and_return([variant_report])
     allow(Aws::S3::S3Reader).to receive(:read).and_return({:patient_id => "3366"})
-    expect( get :show, :patient_id => "3366", :id => "1").to have_http_status(500)
+    expect( get :show, :patient_id => "3366", :id => "1").to have_http_status(200)
   end
 
   it 'GET #show correctly' do

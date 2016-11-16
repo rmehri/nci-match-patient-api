@@ -1,8 +1,10 @@
 class ApplicationController < ActionController::Base
 
-  # rescue_from Aws::DynamoDB::Errors::ServiceError, with: :not_found
-  # rescue_from Exception, with: :not_found
-  # rescue_from ActionController::RoutingError, with: :not_found
+  rescue_from Aws::DynamoDB::Errors::ServiceError, with: :not_found
+  rescue_from StandardError, with: :not_found
+  rescue_from ActionController::RoutingError, with: :not_acceptable
+  rescue_from NameError, with: :internal_server_error
+  rescue_from RuntimeError, with: :internal_server_error
 
 
   # Prevent CSRF attacks by raising an exception.
@@ -11,26 +13,26 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  def raise_not_found
-    raise ActionController::RoutingError.new("No route matches #{params[:unmatched_route]}")
-  end
-
   def not_found
     respond_to do |format|
-      format.html { render :json => {:message => "ResourceNotFound", :status => 404}, :layout => false, :status => :not_found }
-      format.xml { head :not_found }
+      format.json { render :json => {:message => "Resource Not Found"}, :layout => false, :status => :not_found }
       format.any { head :not_found }
     end
   end
 
-  def error
+  def not_acceptable
     respond_to do |format|
-      format.html { render :file => "#{Rails.root}/public/500", :layout => false, :status => :error }
-      format.xml { head :not_found }
-      format.any { head :not_found }
+      format.json { render :json => {:message => "Not Acceptable"}, :layout => false, :status => :not_acceptable }
+      format.any { head :not_acceptable }
     end
   end
 
+  def internal_server_error
+    respond_to do |format|
+      format.json { render :json => {:message => "Internal Server Error"}, :layout => false, :status => :internal_server_error }
+      format.any { head :internal_server_error }
+    end
+  end
 
   def standard_success_message(message)
     render :json => {:message => message}, :status => 200
@@ -38,7 +40,6 @@ class ApplicationController < ActionController::Base
 
   def standard_error_message(error_message, error_code=500)
     logger.error error_message
-    render :json => {:message => error_message}, :status => error_code
   end
 
   def get_url_path_segments

@@ -19,7 +19,7 @@ describe V1::SpecimenEventsController do
   it 'GET #index should return a proper json with data' do
     specimen = NciMatchPatientModels::Specimen.new
     specimen.patient_id = "3366"
-    specimen.specimen_type = 'TISSUE'
+    specimen.type = 'TISSUE'
     specimen.surgical_event_id = 'surg_123'
     allow(NciMatchPatientModels::Specimen).to receive(:scan).and_return([specimen])
 

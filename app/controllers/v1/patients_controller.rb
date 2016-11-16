@@ -2,32 +2,22 @@ module V1
   class PatientsController < BaseController
 
     def index
-      begin
-        plural_resource_name = "@#{resource_name.pluralize}"
-        resources = resource_class.scan(query_params).collect { |data| data.to_h.compact }
+      plural_resource_name = "@#{resource_name.pluralize}"
+      resources = resource_class.scan(query_params).collect { |data| data.to_h.compact }
 
-        patients = []
-        resources.each do | patient |
-          patient = format_fields(patient)
-          patients.push(patient)
-        end
-
-        instance_variable_set(plural_resource_name, patients)
-        render json: instance_variable_get(plural_resource_name)
-      rescue Aws::DynamoDB::Errors::ServiceError => error
-        standard_error_message(error)
+      patients = []
+      resources.each do | patient |
+        patient = format_fields(patient)
+        patients.push(patient)
       end
+
+      instance_variable_set(plural_resource_name, patients)
+      render json: instance_variable_get(plural_resource_name)
     end
 
     def show
-      begin
-        patient = get_resource
-        return standard_error_message("Resource not found", 404) if patient.nil?
-
-        render json: format_fields(patient)
-      rescue Aws::DynamoDB::Errors::ServiceError => error
-        standard_error_message(error)
-      end
+      patient = get_resource
+      render json: format_fields(patient)
     end
 
     private

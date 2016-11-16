@@ -151,6 +151,7 @@ describe V1::PatientsController, :type => :controller do
     allow(Aws::Sqs::Publisher).to receive(:publish).and_return(true)
     expect(post :create, registration_message.to_json).to have_http_status(200)
   end
+
   it "#create should fail validation for registration message" do
     registration_message = {
         "header": {
@@ -163,7 +164,8 @@ describe V1::PatientsController, :type => :controller do
         "status_date": "2016-05-09T22:06:33+00:00",
         "status": "REGISTRATION",
     }
-    expect(post :create, registration_message.to_json).to have_http_status(500)
+    post :create, registration_message.to_json
+    expect(response).to have_http_status(500)
   end
 
   it "#create variant report success when all data is present" do

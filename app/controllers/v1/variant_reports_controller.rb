@@ -3,9 +3,9 @@ module V1
     before_action :set_resource, only: [:show]
 
     def show
-      begin
+      # begin
         variant_report = get_resource.first.to_h
-        return standard_error_message("No record found", 404) if variant_report.blank?
+        raise StandardError if variant_report.blank?
 
         variants = get_variants(variant_report[:analysis_id])
 
@@ -13,9 +13,9 @@ module V1
         variant_report = Convert::VariantReportDbModel.to_ui_model(variant_report, variants, amois)
 
         render json: variant_report
-      rescue => error
-        standard_error_message(error.message)
-      end
+      # rescue => error
+      #   standard_error_message(error.message)
+      # end
     end
 
     private

@@ -1,12 +1,9 @@
 module V1
   class AnalysisReportController < ApplicationController
     def analysis_view
-      begin
         patient = NciMatchPatientModels::Patient.query_patient_by_id(params[:patient_id])
-        return standard_error_message("Patient [#{params[:patient_id]}] not found", 404) if patient.blank?
 
         variant_report_hash = NciMatchPatientModelExtensions::VariantReportExtension.compose_variant_report(params[:patient_id], params[:analysis_id])
-        return standard_error_message("Variant report with analysis_id [#{params[:analysis_id]}] not found", 404) if variant_report_hash.blank?
 
         assignments = NciMatchPatientModels::Assignment.query_by_patient_id(params[:patient_id], false).collect { |data| data.to_h.compact }
         assignments = assignments.sort_by{| assignment | assignment[:assignment_date]}.reverse
@@ -16,32 +13,19 @@ module V1
           assays = find_assays(assignment[:surgical_event_id])
           assignments_with_assays.push(Convert::AssignmentDbModel.to_ui(assignment, assays)) unless assignment.blank?
         end
-
         analysis_report = Convert::AnalysisReportDbModel.to_ui_model(patient.to_h.compact, variant_report_hash, assignments_with_assays)
-
         render json: analysis_report.to_json
-
-      rescue => exception
-        standard_error_message(exception.message)
-      end
     end
 
     def amois_update
-      begin
-
         raise "Patient_id and analysis_id are required" if params[:patient_id].nil? || params[:analysis_id].nil?
-
         variant_report = NciMatchPatientModels::VariantReport.query_by_analysis_id(params[:patient_id], params[:analysis_id])
-        return standard_error_message("No record found", 404) if variant_report.blank?
 
         variant_report_hash = variant_report.to_h
         mois = get_amois(variant_report_hash.deep_symbolize_keys!)
         match_amois_with_uuid(variant_report_hash, mois)
 
         render json: Convert::AmoisRuleModel.to_ui_model(mois).to_json
-      rescue => error
-        standard_error_message(error.message)
-      end
     end
 
     private

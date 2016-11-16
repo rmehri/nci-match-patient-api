@@ -5,47 +5,31 @@ module V1
     respond_to :json
 
     def create
-      begin
-        json_data = JSON.parse(request.raw_post)
-        logger.info "Patient Api received message: #{json_data.to_json}"
-        message = json_data.deep_transform_keys!(&:underscore).symbolize_keys
-        type = MessageValidator.get_message_type(message)
-        raise "Incoming message has UNKNOWN message type" if (type == 'UNKNOWN')
+      json_data = JSON.parse(request.raw_post)
+      logger.info "Patient Api received message: #{json_data.to_json}"
+      message = json_data.deep_transform_keys!(&:underscore).symbolize_keys
+      type = MessageValidator.get_message_type(message)
+      raise "Incoming message has UNKNOWN message type" if (type == 'UNKNOWN')
 
-        error = MessageValidator.validate_json_message(type, message)
-        raise "Incoming message failed message schema validation: #{error}" if !error.nil?
+      error = MessageValidator.validate_json_message(type, message)
+      raise "Incoming message failed message schema validation: #{error}" if !error.nil?
 
-        status = validate_patient_state_and_queue(message, type)
+      status = validate_patient_state_and_queue(message, type)
 
-        raise "Incoming message failed patient state validation" if (status == false)
+      raise "Incoming message failed patient state validation" if (status == false)
 
-        standard_success_message("Message has been processed successfully")
-      rescue => error
-        standard_error_message(error)
-      end
+      standard_success_message("Message has been processed successfully")
     end
 
     def index
-      begin
-        plural_resource_name = "@#{resource_name.pluralize}"
-        resources = resource_class.scan(query_params).collect { |data| data.to_h.compact }
-        instance_variable_set(plural_resource_name, resources)
-        render json: instance_variable_get(plural_resource_name)
-      rescue Aws::DynamoDB::Errors::ServiceError => error
-        standard_error_message(error)
-      end
+      plural_resource_name = "@#{resource_name.pluralize}"
+      resources = resource_class.scan(query_params).collect { |data| data.to_h.compact }
+      instance_variable_set(plural_resource_name, resources)
+      render json: instance_variable_get(plural_resource_name)
     end
 
     def show
-      begin
-        if get_resource.nil?
-          standard_error_message("Resource not found", 404)
-        else
-          render json: get_resource
-        end
-      rescue Aws::DynamoDB::Errors::ServiceError => error
-        standard_error_message(error.message)
-      end
+      render json: get_resource
     end
 
     #place holder
@@ -97,12 +81,8 @@ module V1
     # Use callbacks to share common setup
     # Pass params for action
     def resource_scan(params = {})
-      begin
-        resource ||= resource_class.scan(params).collect{ |data| data.to_h.compact }
-        instance_variable_set("@#{resource_name}", resource ||= [])
-      rescue Aws::DynamoDB::Errors::ServiceError => error
-        standard_error_message(error)
-      end
+      resource ||= resource_class.scan(params).collect{ |data| data.to_h.compact }
+      instance_variable_set("@#{resource_name}", resource ||= [])
     end
 
     def build_index_query(params)
