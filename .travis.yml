@@ -8,8 +8,6 @@ services:
 language: ruby
 rvm:
   - 2.3.1
-# before_install:
-#before_script:
 script:
   - RAILS_ENV=test bundle exec rspec spec/
 after_success:
@@ -22,12 +20,10 @@ after_success:
   - docker run -it --rm -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION=us-east-1 silintl/ecs-deploy 
     --cluster PedMatch-IntTest-Backend --service-name PedMatch-nci-match-patient-api-INTTEST 
     -i matchbox/nci-match-patient-api:latest
-#Trigger Travis bdd tests
+  #Trigger Travis bdd tests
   - curl -s -X POST -H "Content-Type:application/json" -H "Accept:application/json" -H "Travis-API-Version:3" -H "Authorization:token $TRAVIS_TOKEN" -d "{\"request\":{\"message\":\"Triggered by nci-match-patient-api $TRAVIS_COMMIT\", \"branch\":\"master\", \"config\":{\"env\":{\"matrix\":[\"TRIGGER_REPO=nci-match-patient-api;CUC_TAG=@patients\"]}}}}" https://api.travis-ci.org/repo/CBIIT%2Fnci-uMatch-bddtests/requests
-#after_script:
 notifications:
-  slack:
-    secure: iWEoDxHvZuFuTQHm0pZxHfyBr/QzV/yzzPWOTx8blvNNupSxxjVV1r5bv+8gQAV2evuH0H/ixQ/0OmwY1pwH7+BWoTujO49iUFW2XnYZlGkKgjQKmJzCO2zuZtGFnT6JKCrUJMEv5Hhk+CNNdi304H7BV/KqxoFyQxKah5os+ZtipybBHmzaVmspvbb9fJB4X6SpcXI/KylqguevSQBWj74oGMmEtwj87hKMc5aW4vpGTGnceNmpY7QFudDmKufvkFhV3fStA5hj3Ce7B6zPehhNEZejAJ6a7dmv29RCR/OeMkG/VQrgaw9+l+3iGU40AdaiVa3WsMIqBwwnhCSxUwNe91KlNeUJ2faIC/o39vvom177D0ABejVHnp4RlCViWbiysdT+w8dw2mQQdPGl+o4iGlBAcRA+vlFKXMGpbOGcz4IPMNO7qfF2wueL7/pEjExmoQgIeuRvZEd58AHhm+WlqejSYhyRJ+xDqoeG0wppb8xoHuQsapi/f26Lh+ulyItsV0EOLxavfruAiNwAlBBxphyWHNar26LZtb0AsJ2FkU+Ikj5h0jFOY9LVyZCN0shDUmunqBgEtTTMAGYAVvBUAiVeqPG3NCG5yXbZ1xZARiBZEWQbhnUxhzMysvmoJTo1NQIbxB+nONH6tsSuHoxaPllSJaC3KU9lJbe9fO4=
+  slack: clinicalbiomed:gRp5LqKElNOjUUMPLlq4qC1j
 addons:
   code_climate:
-        repo_token: 38f7a026c777334223f638f462414677c4b27c45b5503fa2edf52a54e9bfdf55
+    repo_token: 38f7a026c777334223f638f462414677c4b27c45b5503fa2edf52a54e9bfdf55
