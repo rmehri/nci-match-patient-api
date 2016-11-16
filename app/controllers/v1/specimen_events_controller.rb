@@ -15,7 +15,7 @@ module V1
       resources = NciMatchPatientModels::Specimen.scan(resource_params).collect { |data| data.to_h.compact }
 
       resources.each do | resource |
-        if (resource[:type] == 'TISSUE')
+        if (resource[:specimen_type] == 'TISSUE')
           resource = embed_resources(resource)
           tissue_specimens.push(resource)
         else
