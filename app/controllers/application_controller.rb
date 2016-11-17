@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   def render_error(status, exception)
     logger.error status.to_s +  " " + exception.to_s
     respond_to do |format|
-      format.all { render nothing: true, status: status }
+      format.all { head status }
     end
   end
 
