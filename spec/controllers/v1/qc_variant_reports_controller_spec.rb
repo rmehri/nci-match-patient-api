@@ -9,8 +9,8 @@ describe V1::QcVariantReportsController do
                                                                                       :id => "analysis123")
   end
 
-  it 'GET #show 500 error' do
-    expect(get :show, :patient_id => "123", :id => "1" ).to have_http_status(500)
+  it 'GET #show 404 error' do
+    expect(get :show, :patient_id => "123", :id => "1" ).to have_http_status(404)
   end
 
   it 'GET #show 200 code' do

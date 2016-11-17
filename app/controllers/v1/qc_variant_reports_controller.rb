@@ -4,14 +4,10 @@ module V1
     before_action :set_resource, only: [:show]
 
     def show
-      begin
-        variant_report = get_resource
-        render json: Aws::S3::S3Reader.read(Rails.configuration.environment.fetch('s3_bucket'),
+      variant_report = get_resource
+      raise Errors::ResourceNotFound if get_resource.blank?
+      render json: Aws::S3::S3Reader.read(Rails.configuration.environment.fetch('s3_bucket'),
                                             get_s3_file_path(variant_report))
-      rescue => error
-        standard_error_message(error)
-        raise NameError
-      end
     end
 
     private

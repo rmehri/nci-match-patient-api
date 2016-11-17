@@ -2,15 +2,8 @@ module V1
   class ShipmentsController < BaseController
 
     def show
-      begin
-        if get_resource.blank?
-          standard_error_message("Resource not found", 404)
-        else
-          render json: get_resource.first
-        end
-      rescue Aws::DynamoDB::Errors::ServiceError => error
-        standard_error_message(error.message)
-      end
+      raise Errors::ResourceNotFound if get_resource.blank?
+      render json: get_resource.first
     end
     private
 

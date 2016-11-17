@@ -29,6 +29,7 @@ module V1
     end
 
     def show
+      raise Errors::ResourceNotFound if get_resource.blank?
       render json: get_resource
     end
 

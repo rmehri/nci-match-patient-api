@@ -3,19 +3,14 @@ module V1
     before_action :set_resource, only: [:show]
 
     def show
-      # begin
-        variant_report = get_resource.first.to_h
-        raise Errors::ResourceNotFound if variant_report.blank?
+      variant_report = get_resource.first.to_h
+      raise Errors::ResourceNotFound if variant_report.blank?
 
-        variants = get_variants(variant_report[:analysis_id])
+      variants = get_variants(variant_report[:analysis_id])
 
-        amois = get_amois(variant_report)
-        variant_report = Convert::VariantReportDbModel.to_ui_model(variant_report, variants, amois)
-
-        render json: variant_report
-      # rescue => error
-      #   standard_error_message(error.message)
-      # end
+      amois = get_amois(variant_report)
+      variant_report = Convert::VariantReportDbModel.to_ui_model(variant_report, variants, amois)
+      render json: variant_report
     end
 
     private
