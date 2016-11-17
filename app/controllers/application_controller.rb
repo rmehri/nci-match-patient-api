@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
 
-  rescue_from Aws::DynamoDB::Errors::ServiceError, StandardError, with: lambda { | exception | render_error(:not_found, exception)}
+  rescue_from Aws::DynamoDB::Errors::ServiceError, Errors::ResourceNotFound, with: lambda { | exception | render_error(:not_found, exception)}
   rescue_from ActionController::RoutingError, with: lambda { |exception| render_error(:bad_request, exception) }
   rescue_from NameError, RuntimeError, with: lambda { |exception| render_error(:internal_server_error, exception) }
 

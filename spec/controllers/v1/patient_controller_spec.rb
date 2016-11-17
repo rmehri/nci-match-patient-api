@@ -87,7 +87,7 @@ describe V1::PatientsController, :type => :controller do
   end
 
   it "GET /patients/1 to return json patient" do
-    allow(NciMatchPatientModels::Patient).to receive(:scan).and_return([patient_dbm])
+    allow(NciMatchPatientModels::Patient).to receive(:query).and_return([patient_dbm])
 
     get :show, :id => "2222"
 
@@ -101,7 +101,7 @@ describe V1::PatientsController, :type => :controller do
   it "GET /patients/1 should handle errors by returning status 500" do
     allow(NciMatchPatientModels::Patient).to receive(:scan).and_raise("Valid Error")
 
-    expect(get :show, :id => "2222").to have_http_status(200)
+    expect(get :show, :id => "2222").to have_http_status(404)
   end
 
   it "GET /patients/1 only allow specified params to be queried" do

@@ -5,7 +5,7 @@ module V1
     def show
       # begin
         variant_report = get_resource.first.to_h
-        raise StandardError if variant_report.blank?
+        raise Errors::ResourceNotFound if variant_report.blank?
 
         variants = get_variants(variant_report[:analysis_id])
 
