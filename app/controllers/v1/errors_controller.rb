@@ -1,10 +1,10 @@
 module V1
   class ErrorsController < ApplicationController
 
-    def not_acceptable
+    def bad_request
       respond_to do |format|
-        format.json { render :json => {:message => "Not Acceptable"}, :layout => false, :status => :not_acceptable }
-        format.any { head :not_acceptable }
+        format.json { render :json => {:message => "Bad Request"}, :layout => false, :status => :bad_request }
+        format.any { head :bad_request }
       end
     end
 

@@ -34,6 +34,6 @@ Rails.application.routes.draw do
       put "patients/variant/:variant_uuid/:status" => :variant_status
 
     end
-    match "*path", to: 'errors#not_acceptable', via: :all
+    match "*path", to: 'errors#bad_request', via: :all
   end
 end

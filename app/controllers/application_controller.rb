@@ -1,10 +1,8 @@
 class ApplicationController < ActionController::Base
 
-  rescue_from Aws::DynamoDB::Errors::ServiceError, with: :not_found
-  rescue_from StandardError, with: :not_found
-  rescue_from ActionController::RoutingError, with: :not_acceptable
-  rescue_from NameError, with: :internal_server_error
-  rescue_from RuntimeError, with: :internal_server_error
+  rescue_from Aws::DynamoDB::Errors::ServiceError, StandardError, with: lambda { | exception | render_error(:not_found, exception)}
+  rescue_from ActionController::RoutingError, with: lambda { |exception| render_error(:bad_request, exception) }
+  rescue_from NameError, RuntimeError, with: lambda { |exception| render_error(:internal_server_error, exception) }
 
 
   # Prevent CSRF attacks by raising an exception.
@@ -13,24 +11,10 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  def not_found
+  def render_error(status, exception)
+    logger.error status.to_s +  " " + exception.to_s
     respond_to do |format|
-      format.json { render :json => {:message => "Resource Not Found"}, :layout => false, :status => :not_found }
-      format.any { head :not_found }
-    end
-  end
-
-  def not_acceptable
-    respond_to do |format|
-      format.json { render :json => {:message => "Not Acceptable"}, :layout => false, :status => :not_acceptable }
-      format.any { head :not_acceptable }
-    end
-  end
-
-  def internal_server_error
-    respond_to do |format|
-      format.json { render :json => {:message => "Internal Server Error"}, :layout => false, :status => :internal_server_error }
-      format.any { head :internal_server_error }
+      format.all { render nothing: true, status: status }
     end
   end
 
