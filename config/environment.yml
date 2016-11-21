@@ -1,6 +1,11 @@
-development:
-  aws_dynamo_endpoint: "http://localhost:8000"
+common: &defaults
   aws_region: "us-east-1"
+  s3_url: "https://s3.amazonaws.com"
+
+
+development:
+  <<: *defaults
+  aws_dynamo_endpoint: "http://localhost:8000"
 
   queue_name: <%= ENV["PATIENT_QUEUE_NAME="] %>
 
@@ -13,23 +18,16 @@ development:
   match_rule_api: "http://127.0.0.1:10250/api/v1/rules/"
   treatment_arm_api: "localhost:10235/api/v1/treatment_arms"
 
-  s3_url: "https://s3.amazonaws.com"
   s3_bucket: "pedmatch-dev"
 
 test:
-
+  <<: *defaults
   aws_dynamo_endpoint: "https://dynamodb.us-east-1.amazonaws.com"
-  aws_region_dynamo: "us-east-1"
-  aws_region: "us-east-1"
-
   queue_name: 'patient_queue'
 
   # dynamodb setting
   read_capacity_units: "5"
   write_capacity_units: "5"
-
-  shoryuken_delay: "30"
-  shoryuken_concurrency: "30"
 
   patient_state_api: "https://pedmatch-int.nci.nih.gov/api/v1/state_validator/"
   patient_processor: "https://pedmatch-int.nci.nih.gov:3010"
@@ -38,12 +36,10 @@ test:
 
   http_read_timeout: "120"
 
-  s3_url: "https://s3.amazonaws.com"
   s3_bucket: "pedmatch-int"
 uat:
+  <<: *defaults
   aws_dynamo_endpoint: "https://dynamodb.us-east-1.amazonaws.com"
-  aws_region: "us-east-1"
-
   #Constructed queue name: "patient_processor"
   queue_name: 'patient_queue'
 
@@ -56,12 +52,11 @@ uat:
   match_rule_api:    "https://pedmatch-uat.nci.nih.gov/api/v1/rules/"
   treatment_arm_api: "https://pedmatch-uat.nci.nih.gov/api/v1/treatment_arms/"
 
-  s3_url: "https://s3.amazonaws.com"
   s3_bucket: "pedmatch-uat"
 
 production:
+  <<: *defaults
   aws_dynamo_endpoint: "https://dynamodb.us-east-1.amazonaws.com"
-  aws_region: "us-east-1"
 
   #Constructed queue name: "patient_processor"
   queue_name: 'patient_queue'
@@ -75,5 +70,4 @@ production:
   match_rule_api:    "https://pedmatch.nci.nih.gov/api/v1/rules/"
   treatment_arm_api: "https://pedmatch.nci.nih.gov/api/v1/treatment_arms/"
 
-  s3_url: "https://s3.amazonaws.com"
   s3_bucket: "pedmatch"
