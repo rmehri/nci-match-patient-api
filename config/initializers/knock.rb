@@ -1,59 +1,13 @@
-require 'base64'
-require 'auth0'
+require 'jwt'
+require 'knock'
 
 Knock.setup do |config|
-
-  def getUsers(user_id)
-    auth0 = Auth0Client.new(
-        :client_id => Rails.application.secrets.auth0_client_id,
-        :client_secret => Rails.application.secrets.auth0_client_secret,
-        :domain => Rails.application.secrets.auth0_domain,
-        :api_version => "1"
-    )
-    auth0.get_users.each {| user | user.key(user_id) }
-  end
-
-  ## User handle attribute
-  ## ---------------------
-  ##
-  ## The attribute used to uniquely identify a user.
-  ##
-  ## Default:
-  # config.handle_attr = :email
-
-  ## Current user retrieval from handle when signing in
-  ## --------------------------------------------------
-  ##
-  ## This is where you can configure how to retrieve the current user when
-  ## signing in.
-  ##
-  ## Knock uses the `handle_attr` variable to retrieve the handle from the
-  ## AuthTokenController parameters. It also uses the same variable to enforce
-  ## permitted values in the controller.
-  ##
-  ## You must raise ActiveRecord::RecordNotFound if the resource cannot be retrieved.
-  ##
-  ## Default:
-  # config.current_user_from_handle = -> (handle) { User.find_by! Knock.handle_attr => handle }
-
-  ## Current user retrieval when validating token
-  ## --------------------------------------------
-  ##
-  ## This is how you can tell Knock how to retrieve the current_user.
-  ## By default, it assumes you have a model called `User` and that
-  ## the user_id is stored in the 'sub' claim.
-  ##
-  ## You must raise ActiveRecord::RecordNotFound if the resource cannot be retrieved.
-  ##
-  ## Default:
-  config.current_user_from_token = -> (claims) { getUsers(claims['sub']) }
-  # config.current_user_from_token = -> (claims) { User.find claims['sub'] }
-
 
   ## Expiration claim
   ## ----------------
   ##
-  ## How long before a token is expired.
+  ## How long before a token is expired. If nil is provided, token will
+  ## last forever.
   ##
   ## Default:
   # config.token_lifetime = 1.day
@@ -88,12 +42,7 @@ Knock.setup do |config|
   # config.token_secret_signature_key = -> { Rails.application.secrets.secret_key_base }
 
   ## If using Auth0, uncomment the line below
-  # config.token_secret_signature_key = -> { JWT.base64url_decode Rails.application.secrets.auth0_client_secret }
-  config.token_secret_signature_key = -> {
-    secret = Rails.application.secrets.auth0_client_secret
-    secret += '=' * (4 - secret.length.modulo(4))
-    Base64.decode64(secret.tr('-_', '+/'))
-  }
+  config.token_secret_signature_key = -> { JWT.base64url_decode Rails.application.secrets.auth0_client_secret }
 
   ## Public key
   ## ----------
@@ -102,4 +51,13 @@ Knock.setup do |config|
   ##
   ## Default:
   # config.token_public_key = nil
+
+  ## Exception Class
+  ## ---------------
+  ##
+  ## Configure the exception to be used when user cannot be found.
+  ##
+  ## Default:
+  config.not_found_exception_class_name = 'Errors::ResourceNotFound'
+
 end

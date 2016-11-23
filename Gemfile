@@ -21,8 +21,7 @@ gem 'aws-sdk-rails'
 gem 'aws-record', '>= 1.0.0.pre.8'
 gem 'json-schema'
 
-gem 'knock', '~> 1.4.2'
-gem 'auth0'
+gem 'knock', '~> 2.0'
 
 gem 'wannabe_bool'
 gem 'responders'
