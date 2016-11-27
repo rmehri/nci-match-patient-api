@@ -2,8 +2,11 @@ class ApplicationController < ActionController::Base
   include Knock::Authenticable
 
   rescue_from Aws::DynamoDB::Errors::ServiceError, Errors::ResourceNotFound, with: lambda { | exception | render_error(:not_found, exception)}
+  rescue_from Errors::RequestForbidden, with: lambda { | exception | render_error_with_message(:forbidden, exception)}
+
   rescue_from ActionController::RoutingError, with: lambda { |exception| render_error(:bad_request, exception) }
   rescue_from NameError, RuntimeError, with: lambda { |exception| render_error(:internal_server_error, exception) }
+
 
 
   # Prevent CSRF attacks by raising an exception.
@@ -15,12 +18,17 @@ class ApplicationController < ActionController::Base
   def render_error(status, exception)
     logger.error status.to_s +  " " + exception.to_s
     respond_to do |format|
-      format.all { head status }
+      format.all { head status}
     end
   end
 
-  def standard_success_message(message)
-    render :json => {:message => message}, :status => 200
+  def render_error_with_message(status, exception)
+    logger.error status.to_s +  " " + exception.to_s
+    render :json => {:message => exception}, :status => status
+  end
+
+  def standard_success_message(message, status_code=200)
+    render :json => {:message => message}, :status => status_code
   end
 
   def standard_error_message(error_message, error_code=500)
@@ -59,29 +67,19 @@ class ApplicationController < ActionController::Base
   end
 
   def validate_patient_state(message, message_type)
-
-    logger.info "Validating messesage of type [#{message_type}]"
-
+    AppLogger.log(self.class.name, "Validating messesage of type [#{message_type}]")
     message_type = {message_type => message}
     result = StateMachine.validate(message_type)
 
-    if result != 'true'
-      raise "Incoming message failed patient state validation: #{result}"
-    end
-
-    true
+    raise Errors::RequestForbidden, "Incoming message failed patient state validation: #{result}" if result != 'true'
   end
 
   def validate_patient_state_and_queue(message, message_type)
-
     AppLogger.log(self.class.name, "Validating messesage of type [#{message_type}]")
 
     message_type = {message_type => message}
     result = StateMachine.validate(message_type)
-
-    if result != 'true'
-      raise "Incoming message failed patient state validation: #{result}"
-    end
+    raise Errors::RequestForbidden, "Incoming message failed patient state validation: #{result}" if result != 'true'
 
     queue_name = Rails.configuration.environment.fetch('queue_name')
     logger.debug "Patient API publishing to queue: #{queue_name}..."
