@@ -8,7 +8,7 @@ module V1
 
     private
     def set_resource(resource = {})
-      resources = NciMatchPatientModels::Patient.scan({:attributes_to_get => ["active_tissue_specimen", "patient_id", "current_status", "diseases"],
+      resources = NciMatchPatientModels::Patient.scan({:attributes_to_get => ["active_tissue_specimen", "patient_id", "current_status", "diseases", "message"],
                                                        :scan_filter => {"current_status" => {:comparison_operator => "IN", :attribute_value_list =>["AWAITING_PATIENT_DATA",
                                                                                                                                                     "AWAITING_TREATMENT_ARM_STATUS"]},
                                                        "active_tissue_specimen" => {:comparison_operator => "NOT_NULL"}}}).collect { |data| data.to_h.compact.deep_symbolize_keys! }
