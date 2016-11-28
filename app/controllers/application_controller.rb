@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   include Knock::Authenticable
 
+  before_action :authenticate_user
+
   rescue_from Aws::DynamoDB::Errors::ServiceError, Errors::ResourceNotFound, with: lambda { | exception | render_error(:not_found, exception)}
   rescue_from Errors::RequestForbidden, with: lambda { | exception | render_error_with_message(:forbidden, exception)}
 

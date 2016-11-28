@@ -22,6 +22,7 @@ gem 'aws-record', '>= 1.0.0.pre.8'
 gem 'json-schema'
 
 gem 'knock', '~> 2.0'
+# gem 'auth0'
 
 gem 'wannabe_bool'
 gem 'responders'

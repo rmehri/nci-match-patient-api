@@ -1,8 +1,5 @@
 Rails.application.routes.draw do
-
   scope '/api/v1', module: 'v1' do
-
-
     resources :patients, only: [:show, :index, :create] do
       collection do
         get 'version', controller: 'versions', action: :version
