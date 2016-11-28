@@ -9,5 +9,4 @@ describe User, :type => :model do
     expect(User.respond_to?(:has_secure_password)).to eq(true)
   end
 
-
 end
