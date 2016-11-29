@@ -1,5 +1,6 @@
 module V1
   class AnalysisReportController < ApplicationController
+    before_action :authenticate_user
     def analysis_view
         patient = NciMatchPatientModels::Patient.query_patient_by_id(params[:patient_id])
 
