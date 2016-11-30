@@ -4,18 +4,18 @@ module V1
 
     def show
       variant_report = get_resource.first.to_h
-      raise Errors::ResourceNotFound if variant_report.blank?
 
       variants = get_variants(variant_report[:analysis_id])
 
       amois = get_amois(variant_report)
       variant_report = Convert::VariantReportDbModel.to_ui_model(variant_report, variants, amois)
-      render json: variant_report
+      render json: variant_report.compact
     end
 
     private
     def set_resource(resource = {})
-      resources = NciMatchPatientModels::VariantReport.scan(resource_params).collect { |data| data.to_h.compact }
+      resources = NciMatchPatientModels::VariantReport.scan(resource_params).collect { |data| data.to_h }
+      raise Errors::ResourceNotFound if resources.blank?
       instance_variable_set("@#{resource_name}", resources)
     end
 

@@ -1,7 +1,7 @@
 module V1
   class BaseController < ApplicationController
     protect_from_forgery with: :null_session
-    before_action :authenticate_user
+    before_action :authenticate_user #, :get_role
     before_action :set_resource, only: [:destroy, :show, :update]
     respond_to :json
 
@@ -24,14 +24,13 @@ module V1
 
     def index
       plural_resource_name = "@#{resource_name.pluralize}"
-      resources = resource_class.scan(query_params).collect { |data| data.to_h.compact }
+      resources = resource_class.scan(query_params).collect { |data| data.to_h }
       instance_variable_set(plural_resource_name, resources)
       render json: instance_variable_get(plural_resource_name)
     end
 
     def show
-      raise Errors::ResourceNotFound if get_resource.blank?
-      render json: get_resource
+      render json: get_resource.compact
     end
 
     #place holder
@@ -45,6 +44,17 @@ module V1
     end
 
     private
+
+    def get_role
+      # data = HTTParty.post('https://ncimatch.auth0.com/tokeninfo',
+      #                      :body => {
+      #                          :id_token => token.to_s
+      #                      }.to_json,
+      #                      :headers => { 'Content-Type' => 'application/json' } )
+      # p data.parsed_response["app_metadata"]["roles"]
+      # p token
+    end
+
     # @return [Object]
     def get_resource
       instance_variable_get("@#{resource_name}")
@@ -76,7 +86,8 @@ module V1
     # Use callbacks to share common setup or constraints between actions.
     # Uses resource_params for action
     def set_resource(resource = nil)
-      resource ||= resource_class.query(resource_params).first.to_h.compact
+      resource ||= resource_class.query(resource_params).first.to_h
+      raise Errors::ResourceNotFound if resource.blank?
       instance_variable_set("@#{resource_name}", resource)
     end
 

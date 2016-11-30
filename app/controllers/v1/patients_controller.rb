@@ -16,8 +16,7 @@ module V1
     end
 
     def show
-      patient = get_resource
-      raise Errors::ResourceNotFound if patient.blank?
+      patient = get_resource.compact
       render json: format_fields(patient)
     end
 

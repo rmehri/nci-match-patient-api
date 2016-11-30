@@ -2,8 +2,7 @@ module V1
   class ShipmentsController < BaseController
 
     def show
-      raise Errors::ResourceNotFound if get_resource.blank?
-      render json: get_resource.first
+      render json: get_resource.first.compact
     end
     private
 

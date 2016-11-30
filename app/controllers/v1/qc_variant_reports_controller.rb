@@ -4,8 +4,7 @@ module V1
     before_action :set_resource, only: [:show]
 
     def show
-      variant_report = get_resource
-      raise Errors::ResourceNotFound if get_resource.blank?
+      variant_report = get_resource.compact
       render json: Aws::S3::S3Reader.read(Rails.configuration.environment.fetch('s3_bucket'),
                                             get_s3_file_path(variant_report))
     end
@@ -22,7 +21,8 @@ module V1
     end
 
     def set_resource(resource = {})
-      resource = NciMatchPatientModels::VariantReport.query_by_analysis_id(params[:patient_id], params[:id]).to_h.compact
+      resource = NciMatchPatientModels::VariantReport.query_by_analysis_id(params[:patient_id], params[:id]).to_h
+      raise Errors::ResourceNotFound if resource.blank?
       instance_variable_set("@#{resource_name}", resource)
     end
 
