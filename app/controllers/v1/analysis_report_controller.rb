@@ -5,6 +5,7 @@ module V1
         patient = NciMatchPatientModels::Patient.query_patient_by_id(params[:patient_id])
 
         variant_report_hash = NciMatchPatientModelExtensions::VariantReportExtension.compose_variant_report(params[:patient_id], params[:analysis_id])
+        VariantReportHelper.add_download_links(variant_report_hash)
 
         assignments = NciMatchPatientModels::Assignment.query_by_patient_id(params[:patient_id], false).collect { |data| data.to_h.compact }
         assignments = assignments.sort_by{| assignment | assignment[:assignment_date]}.reverse
