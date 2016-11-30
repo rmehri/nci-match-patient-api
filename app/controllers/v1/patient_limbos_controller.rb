@@ -8,14 +8,31 @@ module V1
 
     private
     def set_resource(resource = {})
-      non_target_statuses = ["REGISTRATION", "ON_TREATMENT_ARM", "REQUEST_NO_ASSIGNMENT", "OFF_STUDY", "OFF_STUDY_BIOPSY_EXPIRED"]
-      resources = NciMatchPatientModels::Patient.scan({:attributes_to_get => ["active_tissue_specimen", "patient_id", "current_status", "diseases", "message"],
-                                                       :scan_filter => {
-                                                       "active_tissue_specimen" => {:comparison_operator => "NOT_NULL"}}}).collect { |data| data.to_h.compact.deep_symbolize_keys! }
+      # non_target_statuses = ["REGISTRATION", "ON_TREATMENT_ARM", "REQUEST_ASSIGNMENT", "REQUEST_NO_ASSIGNMENT", "OFF_STUDY", "OFF_STUDY_BIOPSY_EXPIRED"]
+      # resources = NciMatchPatientModels::Patient.scan({:attributes_to_get => ["active_tissue_specimen", "patient_id", "current_status", "diseases", "message"],
+      #                                                  :scan_filter => {
+      #                                                  "active_tissue_specimen" => {:comparison_operator => "NOT_NULL"}}}).collect { |data| data.to_h.compact.deep_symbolize_keys! }
+      #
+      # resources.collect{ |resource| (Date.current - Date.parse(resource[:active_tissue_specimen][:specimen_collected_date])).to_i >= 2 }
+      # resources.collect{ |resource| (!(non_target_statuses.include? (resource[:current_status])))}
 
-      resources.collect{ |resource| (Date.current - Date.parse(resource[:active_tissue_specimen][:specimen_collected_date])).to_i >= 2 }
-      resources.collect{ |resource| (!(non_target_statuses.include? (resource[:current_status])))}
+      target_statuses = ["TISSUE_SPECIMEN_RECEIVED",
+                         "TISSUE_NUCLEIC_ACID_SHIPPED",
+                         "TISSUE_SLIDE_SPECIMEN_SHIPPED",
+                         "ASSAY_RESULTS_RECEIVED",
+                         "TISSUE_VARIANT_REPORT_RECEIVED",
+                         "TISSUE_VARIANT_REPORT_CONFIRMED",
+                         "TISSUE_VARIANT_REPORT_REJECTED",
+                         "PENDING_CONFIRMATION",
+                         "PENDING_APPROVAL",
+                         "AWAITING_PATIENT_DATA",
+                         "AWAITING_TREATMENT_ARM_STATUS"]
 
+      resources = NciMatchPatientModels::Patient.scan({:attributes_to_get => ["active_tissue_specimen", "patient_id", "current_status", "diseases"],
+                                                       :scan_filter => {"current_status" => {:comparison_operator => "IN", :attribute_value_list => target_statuses},
+                                                                        "active_tissue_specimen" => {:comparison_operator => "NOT_NULL"}}}).collect { |data| data.to_h.compact.deep_symbolize_keys! }
+
+      resources.collect{ |resource| (Date.current - Date.parse(resource[:active_tissue_specimen][:specimen_collected_date])).to_i >= 7 }
       resources.uniq!{ |resource| resource[:patient_id] }
       generate_messages(resources)
       instance_variable_set("@#{resource_name}", resources)
