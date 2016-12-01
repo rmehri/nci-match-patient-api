@@ -1,6 +1,6 @@
 module V1
   class PendingViewController < ApplicationController
-    before_action :authenticate_user
+    # before_action :authenticate_user
     def pending_view
       begin
 
