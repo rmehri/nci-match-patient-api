@@ -52,8 +52,6 @@ module V1
           messages << "No confirmed variant report"
         end
 
-        puts "============= patient: #{patient}"
-
         if (!patient[:message].nil?)
           messages << patient[:message]
         end

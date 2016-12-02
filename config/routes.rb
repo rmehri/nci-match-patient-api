@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 
       resources :specimens, only: [:show, :index]
       resources :specimen_events, only: [:index]
+      resources :analysis_report, only: [:show]
 
       resources :qc_variant_reports, only: [:show]
       resources :variant_file_download, only: [:show]
