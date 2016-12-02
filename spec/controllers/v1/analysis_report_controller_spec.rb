@@ -45,15 +45,6 @@ describe V1::AnalysisReportController do
     expect(response).to have_http_status(200)
   end
 
-  it 'throws error because patient does not exist' do
-    allow(NciMatchPatientModels::Patient).to receive(:query).and_return([])
-    get :show, :patient_id => "3366", :id => "1"
-    expect(response).to have_http_status(404)
-  end
-
-  it 'GET #show' do
-    expect { post :show, :id => 1}.to raise_error(ActionController::UrlGenerationError)
-  end
   it 'GET #index' do
     expect { get :index }.to raise_error(ActionController::UrlGenerationError)
   end

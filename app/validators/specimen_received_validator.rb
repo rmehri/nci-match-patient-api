@@ -14,13 +14,12 @@ module MessageValidator
     validates :study_id, presence: true, inclusion: { in: %w(APEC1621), message: "%{value} is not a valid study_id"} # reapeated so should be its own validation
     validates :patient_id, presence: true
     validates :type, presence: true, inclusion: {in: %w(BLOOD TISSUE), message: "%{value} is not a support type"}
-    validates :collected_date, presence: true, date: {on_or_before: lambda {DateTime.current.utc} }
-    validates :received_date, presence: true, date: {on_or_before: lambda {DateTime.current.utc} }
+    validates :collected_date, presence: true
+    validates :received_date, presence: true
     validates :internal_use_only, presence: true
 
     #Override
     def include_correct_module
-      p "=========== #{@patient_id}"
       case @type.to_sym
         when :BLOOD
           class << self; include BloodSpecimenReceivedValidator end
@@ -40,7 +39,6 @@ module MessageValidator
         @type = value[:type]
         @collected_date = value[:collection_dt]
         @received_date = value[:received_dttm]
-        # @internal_use_only = value[:internal_use_only]
       end
     end
 

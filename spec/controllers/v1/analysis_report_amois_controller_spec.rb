@@ -1,6 +1,11 @@
 describe V1::AnalysisReportAmoisController do
 
   it 'should return updated variant report with amois' do
+    patient = NciMatchPatientModels::Patient.new
+    patient.patient_id = "3366"
+    patient.registration_date = "2016"
+    allow(NciMatchPatientModels::Patient).to receive(:query).and_return([patient])
+
     variant_report = NciMatchPatientModels::VariantReport.new
     variant_report.patient_id = "3366"
     variant_report.variant_report_received_date = DateTime.current.getutc().to_s
@@ -41,24 +46,14 @@ describe V1::AnalysisReportAmoisController do
 
     allow(NciMatchPatientModels::Variant).to receive(:scan).and_return([variant2])
 
-    get :show, :patient_id => "3366", :id => "an-1234"
-    expect(response).to have_http_status(200)
+    expect( get :show, :patient_id => "3366", :id => "an-1234").to have_http_status(200)
+
 
     report = JSON.parse(response.body).deep_symbolize_keys
     expect(report[:gene_fusions].length).to eq(1)
-    # expect(report[:gene_fusions][0][:uuid]).to eq("random2")
 
   end
 
-  # it 'throws error because patient does not exist' do
-  #   allow(NciMatchPatientModels::Patient).to receive(:query).and_return([])
-  #   get :analysis_view
-  #   expect(response).to have_http_status(404)
-  # end
-
-  it 'GET #show' do
-    expect { post :show, :id => 1}.to raise_error(ActionController::UrlGenerationError)
-  end
   it 'GET #index' do
     expect { get :index }.to raise_error(ActionController::UrlGenerationError)
   end
