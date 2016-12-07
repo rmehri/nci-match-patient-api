@@ -6,11 +6,11 @@ module MessageValidator
   autoload :OffStudyValidator,             'off_study_validator'
   autoload :AssayValidator,                'assay_validator'
   autoload :PathologyValidator,            'pathology_validator'
-  autoload :VariantReportValidator, 'variant_report_validator'
+  autoload :VariantReportValidator,        'variant_report_validator'
   autoload :VariantReportStatusValidator,  'variant_report_status_validator'
   autoload :TreatmentArmsValidator,        'treatment_arms_validator'
   autoload :AssignmentStatusValidator,     'assignment_status_validator'
-  autoload :RegistrationValidator,         'registration_validator'
+  # autoload :RegistrationValidator,         'registration_validator'
   autoload :AbstractValidator,             'abstract_validator'
 
   class << self

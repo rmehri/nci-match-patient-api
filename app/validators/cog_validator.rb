@@ -19,13 +19,13 @@ module MessageValidator
     def include_correct_module
       case @status.to_sym
         when :REGISTRATION
-          self.class.send(:include, RegistrationValidator)
+          class << self; include RegistrationValidator; end
         when :ON_TREATMENT_ARM
-          self.class.send(:include, OnTreatmentArmValidator)
+          class << self; include OnTreatmentArmValidator; end
         when :OFF_STUDY, :OFF_STUDY_BIOPSY_EXPIRED
-          self.class.send(:include, OffStudyValidator)
+          class << self; include OffStudyValidator; end
         when :REQUEST_ASSIGNMENT, :REQUEST_NO_ASSIGNMENT
-          self.class.send(:include, RequestAssignmentValidator)
+          class << self; include RequestAssignmentValidator; end
         else
           p "Cog message status is: #{@status}"
       end
