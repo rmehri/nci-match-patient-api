@@ -12,7 +12,7 @@ module MessageValidator
     validates :study_id, presence: true, inclusion: { in: %w(APEC1621), message: "%{value} is not a valid study_id"} # reapeated so should be its own validation
     validates :patient_id, presence: true
     validates :surgical_event_id, presence: true
-    validates :biomarker, presence: true, inclusion: {in: %w(ICCPTENs ICCMLH1s), message: "%{value} is not a valid biomarker"}
+    validates :biomarker, presence: true, inclusion: {in: %w(ICCPTENs ICCBAF47s), message: "%{value} is not a valid biomarker"}
 
     validates :reported_date, presence: true, date: {on_or_before: lambda {DateTime.current.utc}}
     validates :result, presence: true, inclusion: {in: %w(POSITIVE NEGATIVE INDETERMINATE), message: "%{value} is not a valid assay result"}
