@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'rails', '5.0.0.1'
 gem 'sass-rails', '~> 5.0'
 
-gem 'newrelic_rpm', '(3.17.1.326'
+gem 'newrelic_rpm', '3.17.1.326'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails', '4.2.1'
