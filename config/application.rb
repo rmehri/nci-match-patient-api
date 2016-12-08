@@ -37,6 +37,7 @@ module NciMatchPatientApi
       end
     end
     config.environment = Rails.application.config_for(:environment)
+    config.assay = Rails.application.config_for(:assay)
 
     config.exceptions_app = self.routes
 
