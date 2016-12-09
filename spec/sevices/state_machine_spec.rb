@@ -34,4 +34,13 @@ describe StateMachine do
     res = StateMachine.validate(invalid_message)
     expect(res).to eq(error_body)
   end
+
+  it "valid token and pass it in header" do
+    message_body = {"status" => "Success", "error" => "some error"}
+    allow(HTTParty::Request).to receive(:new).and_return(HTTParty::Request)
+    allow(HTTParty::Response).to receive(:new).and_return(HTTParty::Response)
+    allow(HTTParty::Request).to receive(:perform).and_return(HTTParty::Response)
+    allow(HTTParty::Response).to receive(:body).and_return(message_body)
+    expect(StateMachine.validate(valid_message, "JWTTOKEN")).to eq(message_body)
+  end
 end

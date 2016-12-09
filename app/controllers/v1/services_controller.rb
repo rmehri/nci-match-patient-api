@@ -60,7 +60,7 @@ module V1
         message['comment'] = post_data[:comment]
         message['comment_user'] = post_data[:comment_user]
 
-        response_json = PatientProcessor.run_service("/confirm_variant", message)
+        response_json = PatientProcessor.run_service("/confirm_variant", message, token)
 
         AppLogger.log(self.class.name, "\nResponse from Patient Processor: #{response_json}")
 
@@ -91,7 +91,7 @@ module V1
       raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{error}" if !error.nil?
 
       validate_patient_state(message, type)
-      result = PatientProcessor.run_service('/confirmVariantReport', message)
+      result = PatientProcessor.run_service('/confirmVariantReport', message, token)
       standard_success_message(result)
     end
 
@@ -112,7 +112,7 @@ module V1
       p "=========== input data: #{message}"
 
       validate_patient_state(message, type)
-      result = PatientProcessor.run_service('/confirm_assignment', message)
+      result = PatientProcessor.run_service('/confirm_assignment', message, token)
       standard_success_message(result)
     end
 

@@ -68,7 +68,7 @@ class ApplicationController < ActionController::Base
   def validate_patient_state(message, message_type)
     AppLogger.log(self.class.name, "Validating messesage of type [#{message_type}]")
     message_type = {message_type => message}
-    result = StateMachine.validate(message_type)
+    result = StateMachine.validate(message_type, token)
 
     raise Errors::RequestForbidden, "Incoming message failed patient state validation: #{result}" if result != 'true'
   end
@@ -77,7 +77,7 @@ class ApplicationController < ActionController::Base
     AppLogger.log(self.class.name, "Validating messesage of type [#{message_type}]")
 
     message_type = {message_type => message}
-    result = StateMachine.validate(message_type)
+    result = StateMachine.validate(message_type, token)
     raise Errors::RequestForbidden, "Incoming message failed patient state validation: #{result}" if result != 'true'
 
     queue_name = Rails.configuration.environment.fetch('queue_name')

@@ -1,0 +1,17 @@
+common: &default
+  ICCPTENs:
+   start_date: "Nov 12 2012"
+   end_date: "Dec 31 2016"
+  ICCBAF47s:
+   start_date: "Nov 12 2014"
+   end_date: "Dec 31 2017"
+
+
+development:
+  <<: *default
+test:
+  <<: *default
+uat:
+  <<: *default
+production:
+  <<: *default
