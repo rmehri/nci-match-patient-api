@@ -8,17 +8,29 @@ services:
 language: ruby
 rvm:
   - 2.3.1
+before_install:
+  #Set up Docker exports
+  - export AUTHOR=`git --no-pager show -s --format='%an <%ae>'`
+  - export DATE=`TZ=America/New_York date "+%m-%d-%y-%H%M"`
+  - export DOCKER_IMAGE="matchbox/nci-match-patient-api"
+  - echo "TravisBuild=$TRAVIS_BUILD_NUMBER" > build_number.html &&
+        echo "Commit=$TRAVIS_COMMIT" >> build_number.html       &&
+        echo "TravisJob=$TRAVIS_JOB_ID" >> build_number.html    &&
+        echo "Author=$AUTHOR" >> build_number.html              &&
+        echo "BuildTime=$DATE" >> build_number.html             &&
+        echo "Docker=$DOCKER_IMAGE:$DATE" >> build_number.html
+  - cat ./build_number.html
 script:
   - RAILS_ENV=test bundle exec rspec spec/
   #Build Docker image
-  - export DATE=`TZ=America/New_York date "+%m-%d-%y-%H%M"`
-  - export DOCKER_IMAGE="matchbox/nci-match-patient-api"
   - docker build -t $DOCKER_IMAGE:$DATE -t $DOCKER_IMAGE:latest .
-  - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-  - docker push $DOCKER_IMAGE # Pushes both date and latest
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  # - docker run -it --rm -e "RAILS_ENV=test" $DOCKER_IMAGE:$DATE 
+  #     bundle exec rspec spec/
 after_success:
   - bundle exec codeclimate-test-reporter
   - docker images
+  - docker push $DOCKER_IMAGE # Pushes both date and latest
   #Deploy to AWS IntTest
   - docker run -it --rm -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
     -e AWS_DEFAULT_REGION=us-east-1 silintl/ecs-deploy
