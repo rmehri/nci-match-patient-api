@@ -40,13 +40,7 @@ module V1
           messages << "Variant report missing"
         end
 
-        if (active_tissue_specimen[:ICCBAF47s].nil?)
-            messages << "BAF47 assay result missing"
-        end
-
-        if (active_tissue_specimen[:ICCPTENs].nil?)
-          messages << "PTEN assay result missing"
-        end
+        add_assay_messages(active_tissue_specimen, messages)
 
         if (active_tissue_specimen[:variant_report_status].nil? || active_tissue_specimen[:variant_report_status] != 'CONFIRMED')
           messages << "No confirmed variant report"
@@ -66,5 +60,16 @@ module V1
 
     end
 
+    def add_assay_messages(active_tissue_specimen, messages)
+      Rails.configuration.assay.collect do |k, v|
+        if (Date.parse(v["start_date"]) <= Date.current) && (Date.current <= Date.parse(v["end_date"]))
+          if (active_tissue_specimen[k.to_sym].nil?)
+            messages << "#{k.to_s} assay result missing"
+          end
+        end
+      end
+
+    end
   end
+
 end
