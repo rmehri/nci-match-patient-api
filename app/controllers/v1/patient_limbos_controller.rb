@@ -40,8 +40,8 @@ module V1
           messages << "Variant report missing"
         end
 
-        if (active_tissue_specimen[:ICCMLH1s].nil?)
-            messages << "MLH1 assay result missing"
+        if (active_tissue_specimen[:ICCBAF47s].nil?)
+            messages << "BAF47 assay result missing"
         end
 
         if (active_tissue_specimen[:ICCPTENs].nil?)
