@@ -48,9 +48,9 @@ describe V1::AnalysisReportAmoisController do
 
     expect( get :show, :patient_id => "3366", :id => "an-1234").to have_http_status(200)
 
-
     report = JSON.parse(response.body).deep_symbolize_keys
     expect(report[:gene_fusions].length).to eq(1)
+    expect(report[:gene_fusions][0][:uuid]).to eq("random2")
 
   end
 
