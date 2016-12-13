@@ -7,7 +7,7 @@ Rails.application.routes.draw do
         get 'pending_items', controller: 'pending_view', action: :pending_view
         get 'amois', controller: 'statistics', action: :sequenced_and_confirmed_patients
         resources :events , :variant_reports, :variants, :assignments, :shipments, only: [:show, :index]
-        resources :patient_limbos, only: [:index]
+        resources :patient_limbos, :specimens, only: [:index]
       end
       resources :action_items, only: [:index]
       resources :treatment_arm_history, only: [:index]
