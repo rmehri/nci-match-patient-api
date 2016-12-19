@@ -55,6 +55,9 @@ class ApplicationController < ActionController::Base
     logger.info "============== url parts: #{parts}"
     index = parts.index("patients")
     patient_id = parts[index+1]
+    end_index = patient_id.index("?")
+    patient_id = (!end_index.nil? && end_index.to_i > 0) ? patient_id[0..end_index-1] : patient_id
+
     return patient_id
   end
 
@@ -75,6 +78,8 @@ class ApplicationController < ActionController::Base
 
   def validate_patient_state_and_queue(message, message_type)
     AppLogger.log(self.class.name, "Validating messesage of type [#{message_type}]")
+
+    p "============== token: #{token}"
 
     message_type = {message_type => message}
     result = StateMachine.validate(message_type, token)
