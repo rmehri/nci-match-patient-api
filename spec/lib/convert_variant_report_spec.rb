@@ -46,7 +46,6 @@ describe Convert::VariantReportDbModel do
                :uuid => "23232323232",
                :patient_id => 'PAT123',
                :variant_type => "fusion",
-               :variant_type => "fusion",
                :surgical_event_id => "3366-bsn",
                :molecular_id => "3366-bsn-msn-2",
                :analysis_id => "job1",
