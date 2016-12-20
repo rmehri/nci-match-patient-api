@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
   def render_error(status, exception)
     logger.error status.to_s +  " " + exception.to_s
     respond_to do |format|
-      format.all { head status}
+      format.all { head status, :message => exception.message}
     end
   end
 

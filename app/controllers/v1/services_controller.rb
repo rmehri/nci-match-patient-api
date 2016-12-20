@@ -1,6 +1,6 @@
 module V1
   class ServicesController < ApplicationController
-    before_action :authenticate_user
+    # before_action :authenticate_user
 
     # POST /api/v1/patients/{patient_id}
     def trigger
