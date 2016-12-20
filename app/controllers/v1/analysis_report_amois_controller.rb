@@ -1,6 +1,7 @@
 module V1
   class AnalysisReportAmoisController < BaseController
     # before_action :authenticate_user
+    # include Knock::Authenticable
 
     def show
       render json: instance_variable_get("@#{resource_name}")
@@ -19,7 +20,8 @@ module V1
     end
 
     def get_amois(variant_report)
-      VariantReportUpdater.new.updated_variant_report(variant_report)
+      puts "=========== in analysis report get amois: #{token}"
+      VariantReportUpdater.new.updated_variant_report(variant_report, token)
     end
 
     def match_amois_with_uuid(variant_report, mois)

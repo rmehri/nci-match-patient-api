@@ -1,6 +1,7 @@
 module V1
   class VariantReportsController < BaseController
     before_action :set_resource, only: [:show]
+    # include Knock::Authenticable
 
     def show
       variant_report = get_resource.first.to_h
@@ -24,7 +25,8 @@ module V1
     end
 
     def get_amois(variant_report)
-      VariantReportUpdater.new.updated_variant_report(variant_report)
+      puts "========== in get_amois: #{token}"
+      VariantReportUpdater.new.updated_variant_report(variant_report, token)
     end
 
     def variant_reports_params

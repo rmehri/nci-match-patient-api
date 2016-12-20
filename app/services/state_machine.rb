@@ -11,6 +11,7 @@ class StateMachine
                     })
       result.body
     rescue Error => error
+      p "=================== are we here: #{error}"
       AppLogger.log(self.class.name, "Exception while calling State Api /patientMessage")
       raise error
     end

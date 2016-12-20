@@ -4,7 +4,7 @@ class RuleEngine
 
   base_uri Rails.configuration.environment.fetch("match_rule_api")
 
-  def self.get_mois(patient_id, ion_reporter_id, molecular_id, analysis_id, tsv_name, treatment_arms)
+  def self.get_mois(patient_id, ion_reporter_id, molecular_id, analysis_id, tsv_name, treatment_arms, token="")
 
     tsv_file_name = File.basename(tsv_name, ".tsv")
     service_url = base_uri + "/variant_report/#{patient_id}/#{ion_reporter_id}/#{molecular_id}/#{analysis_id}/#{tsv_file_name}?filtered=true"
@@ -14,7 +14,7 @@ class RuleEngine
     begin
       options = {
           body: treatment_arms,
-          headers: { 'Content-Type' => 'application/json' }
+          headers: { 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{token}"}
       }
 
       response = post(service_url, options)
