@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
 
   def render_error_with_message(status, exception)
     logger.error status.to_s +  " " + exception.to_s
-    render :json => {:message => exception}, :status => status
+    render :json => {:message => exception.message}, :status => status
   end
 
   def standard_success_message(message, status_code=200)
