@@ -32,7 +32,7 @@ module V1
     def embed_resources(resource ={})
       resource[:specimen_shipments] = NciMatchPatientModels::Shipment.scan(build_index_query({:surgical_event_id => resource[:surgical_event_id]})).collect { |data| data.to_h.compact }
       resource[:specimen_shipments].collect do | shipment |
-        assignments = NciMatchPatientModels::Assignment.scan(build_index_query({:molecular_id => shipment[:molecular_id], :projection => [:analysis_id, :status, :status_date, :comment_user,:comment]})).collect{|record| record.to_h.compact}
+        assignments = NciMatchPatientModels::Assignment.scan(build_index_query({:molecular_id => shipment[:molecular_id], :projection => [:analysis_id, :status, :status_date, :uuid, :comment_user,:comment]})).collect{|record| record.to_h.compact}
         variant_reports = NciMatchPatientModels::VariantReport.scan(build_index_query({:molecular_id => shipment[:molecular_id],
                                                                                        :projection => [:ion_reporter_id, :molecular_id, :analysis_id, :variant_report_received_date, :dna_bam_path_name, :dna_bai_path_name,
                                                                                                        :vcf_path_name, :rna_bam_path_name, :rna_bai_path_name, :tsv_file_name,
@@ -98,7 +98,8 @@ module V1
           :assignment_report_status => assignment[:status],
           :status_date => assignment[:status_date],
           :comment_user => assignment[:comment_user],
-          :comment => assignment[:comment]
+          :comment => assignment[:comment],
+          :assignment_uuid => assignment[:uuid]
       }
     end
 
