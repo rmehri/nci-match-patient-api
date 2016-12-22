@@ -5,6 +5,9 @@ common: &default
   ICCBAF47s:
    start_date: "Nov 12 2014"
    end_date: "Dec 31 2017"
+  ICCBRG1s:
+     start_date: "Nov 12 2014"
+     end_date: "Dec 31 2017"
 
 
 development:
