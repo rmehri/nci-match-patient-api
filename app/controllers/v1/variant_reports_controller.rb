@@ -5,7 +5,7 @@ module V1
 
     def show
       variant_report = get_resource.first.to_h
-      cnvs = variant_report[:copy_number_variant_genes]
+      cnvs = variant_report[:copy_number_variant_genes] || []
       cnvs.each do | cnv |
        new_vals = [ ]
        cnv['values'].each do | val |
