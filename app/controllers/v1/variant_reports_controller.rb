@@ -5,7 +5,14 @@ module V1
 
     def show
       variant_report = get_resource.first.to_h
-
+      cnvs = variant_report[:copy_number_variant_genes]
+      cnvs.each do | cnv |
+       new_vals = [ ]
+       cnv['values'].each do | val |
+         new_vals << val.to_f
+       end
+       cnv['values'] = new_vals
+     end
 
       # variants = get_variants(variant_report[:analysis_id])
 
