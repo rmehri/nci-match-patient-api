@@ -1,7 +1,6 @@
 module V1
 
   class AnalysisReportController < BaseController
-    # before_action :authenticate_user
 
     def show
 
@@ -9,6 +8,37 @@ module V1
     end
 
     private
+    def is_variant_report_reviewer
+      return false if current_user.nil?
+      puts "================== current user: #{current_user["roles"]}"
+      required_roles = ["SYSTEM", "ADMIN", "MDA_VARIANT_REPORT_REVIEWER", "MOCHA_VARIANT_REPORT_REVIEWER"]
+
+      roles = current_user["roles"]
+      return false if roles.blank?
+
+      roles.each do |role|
+        p "========== role: #{role}"
+        return true if required_roles.include? role
+      end
+
+      false
+    end
+
+    def is_assignment_reviewer
+      required_roles = ["SYSTEM", "ADMIN", "ASSIGNMENT_REPORT_REVIEWER"]
+
+      return false if current_user.nil?
+
+      roles = current_user["roles"]
+      return false if roles.blank?
+
+      roles.each do |role|
+        return true if required_roles.include? role
+      end
+
+      false
+    end
+
     def set_resource(resource = {})
 
       patient = NciMatchPatientModels::Patient.query_patient_by_id(params[:patient_id])
@@ -17,6 +47,8 @@ module V1
       variant_report_hash = NciMatchPatientModelExtensions::VariantReportExtension.compose_variant_report(params[:patient_id], params[:id])
       raise Errors::ResourceNotFound if variant_report_hash.blank?
 
+      variant_report_hash[:editable] = is_variant_report_reviewer
+
       VariantReportHelper.add_download_links(variant_report_hash)
 
       assignments = NciMatchPatientModels::Assignment.query_by_patient_id(params[:patient_id], false).collect { |data| data.to_h.compact }
@@ -24,6 +56,7 @@ module V1
 
       assignments_with_assays = []
       assignments.each do | assignment |
+        assignment[:editable] = is_assignment_reviewer
         assays = find_assays(assignment[:surgical_event_id])
         assignments_with_assays.push(Convert::AssignmentDbModel.to_ui(assignment, assays)) unless assignment.blank?
       end
