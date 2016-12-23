@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
 
   rescue_from Aws::DynamoDB::Errors::ServiceError, Errors::ResourceNotFound, with: lambda { | exception | render_error(:not_found, exception)}
   rescue_from Errors::RequestForbidden, with: lambda { | exception | render_error_with_message(:forbidden, exception)}
+  rescue_from Errors::Unauthorized, with: lambda { | exception | render_error_with_message(:unauthorized, exception)}
 
   rescue_from ActionController::RoutingError, with: lambda { |exception| render_error(:bad_request, exception) }
   rescue_from NameError, RuntimeError, with: lambda { |exception| render_error(:internal_server_error, exception) }
@@ -80,6 +81,7 @@ class ApplicationController < ActionController::Base
     AppLogger.log(self.class.name, "Validating messesage of type [#{message_type}]")
 
     message_type = {message_type => message}
+    p "================= token: "
     result = StateMachine.validate(message_type, token)
 
     raise Errors::RequestForbidden, "Incoming message failed patient state validation: #{result}" if result != 'true'
