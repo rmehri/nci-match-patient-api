@@ -6,10 +6,11 @@ module V1
     def show
       variant_report = get_resource.first.to_h
 
-      variants = get_variants(variant_report[:analysis_id])
 
-      amois = get_amois(variant_report)
-      variant_report = Convert::VariantReportDbModel.to_ui_model(variant_report, variants, amois)
+      # variants = get_variants(variant_report[:analysis_id])
+
+      # amois = get_amois(variant_report)
+      # variant_report = Convert::VariantReportDbModel.to_ui_model(variant_report, variants, amois)
       render json: variant_report.compact
     end
 
