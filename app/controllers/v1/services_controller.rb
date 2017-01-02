@@ -1,10 +1,11 @@
 module V1
   class ServicesController < ApplicationController
     before_action :authenticate_user
-
+    #Role based
+    # load_and_authorize_resource :class => "NciMatchPatientModels::Patient"
 
     # before_action :check_user_role
-
+    #
     # def check_user_role
     #   puts "================== current user: #{current_user["roles"]}"
     #   required_roles = ["SYSTEM", "ADMIN"]

@@ -19,7 +19,7 @@ gem 'aws-sdk', '2.6.34'
 gem 'aws-sdk-rails', '1.0.1'
 gem 'aws-record', '>= 1.0.0.pre.8'
 gem 'json-schema', '2.7.0'
-
+gem 'cancan'
 gem 'knock', '2.0'
 
 gem 'wannabe_bool', '0.6.0'
