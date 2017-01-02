@@ -1,23 +1,25 @@
 module V1
   class ServicesController < ApplicationController
     before_action :authenticate_user
-    before_action :check_user_role
 
-    def check_user_role
-      puts "================== current user: #{current_user["roles"]}"
-      required_roles = ["SYSTEM", "ADMIN"]
-      roles = current_user["roles"]
-      raise Errors::Unauthorized, "User is unauthorized to send this message" if roles.blank?
 
-      got_role = false
-      roles.each do |role|
-        p "========== role: #{role}"
-        got_role = required_roles.include? role
-      end
+    # before_action :check_user_role
 
-      raise Errors::Unauthorized, "User is unauthorized to send this message" if !got_role
-
-    end
+    # def check_user_role
+    #   puts "================== current user: #{current_user["roles"]}"
+    #   required_roles = ["SYSTEM", "ADMIN"]
+    #   roles = current_user["roles"]
+    #   raise Errors::Unauthorized, "User is unauthorized to send this message" if roles.blank?
+    #
+    #   got_role = false
+    #   roles.each do |role|
+    #     p "========== role: #{role}"
+    #     got_role = required_roles.include? role
+    #   end
+    #
+    #   raise Errors::Unauthorized, "User is unauthorized to send this message" if !got_role
+    #
+    # end
 
     # POST /api/v1/patients/{patient_id}
     def trigger
