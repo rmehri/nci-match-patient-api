@@ -2,29 +2,25 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    user.deep_symbolize_keys
-    case user[:roles]
-      when :ADMIN
-        can :manage, :all
-      when :SYSTEM
-        can :manage, :all
-      when :PATIENT_MESSAGE_SENDER
-        can :manage, :all
-      when :SPECIMEN_MESSAGE_SENDER
-        can :manage, :all
-      when :ASSAY_MESSAGE_SENDER
-        can :manage, :all
-      when :VARIANT_REPORT_SENDER
-        can :manage, :all
-      when :MOCHA_VARIANT_REPORT_REVIEWER
-        can :manage, :all
-      when :MDA_VARIANT_REPORT_REVIEWER
-        can :manage, :all
-      when :ASSIGNMENT_REPORT_REVIEWER
-        can :manage, :all
-      else
-        can :manage, :none
+    user.deep_symbolize_keys!
+    list_of_methods = []
+    user[:roles].each do | role |
+      case role.to_sym
+        when :ADMIN
+          list_of_methods << :manage
+        when :SYSTEM
+          can :manage, :all
+        when :PATIENT_MESSAGE_SENDER, :SPECIMEN_MESSAGE_SENDER, :ASSAY_MESSAGE_SENDER, :VARIANT_REPORT_SENDER
+          list_of_methods << :trigger
+        when :MOCHA_VARIANT_REPORT_REVIEWER, :MDA_VARIANT_REPORT_REVIEWER
+          list_of_methods << :variant_report_status
+        when :ASSIGNMENT_REPORT_REVIEWER
+          list_of_methods << :assignment_confirmation
+        else
+          can :manage, :none
+      end
     end
+    can list_of_methods, :all
     #
     # The first argument to `can` is the action you are giving the user
     # permission to do.

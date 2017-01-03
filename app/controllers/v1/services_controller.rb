@@ -1,30 +1,10 @@
 module V1
   class ServicesController < ApplicationController
     before_action :authenticate_user
-    #Role based
-    # load_and_authorize_resource :class => "NciMatchPatientModels::Patient"
-
-    # before_action :check_user_role
-    #
-    # def check_user_role
-    #   puts "================== current user: #{current_user["roles"]}"
-    #   required_roles = ["SYSTEM", "ADMIN"]
-    #   roles = current_user["roles"]
-    #   raise Errors::Unauthorized, "User is unauthorized to send this message" if roles.blank?
-    #
-    #   got_role = false
-    #   roles.each do |role|
-    #     p "========== role: #{role}"
-    #     got_role = required_roles.include? role
-    #   end
-    #
-    #   raise Errors::Unauthorized, "User is unauthorized to send this message" if !got_role
-    #
-    # end
+    # load_and_authorize_resource :class => "NciMatchPatientModels"
 
     # POST /api/v1/patients/{patient_id}
     def trigger
-
       puts "================== current user: #{current_user.to_json}"
       patient_id = get_patient_id_from_url
       message = get_post_data(patient_id)
