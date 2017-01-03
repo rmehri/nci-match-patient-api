@@ -14,11 +14,7 @@ module V1
        cnv['values'] = new_vals
      end
 
-      # variants = get_variants(variant_report[:analysis_id])
-
-      # amois = get_amois(variant_report)
-      # variant_report = Convert::VariantReportDbModel.to_ui_model(variant_report, variants, amois)
-      render json: variant_report.compact
+     render json: variant_report.compact
     end
 
     private
@@ -26,15 +22,6 @@ module V1
       resources = NciMatchPatientModels::VariantReport.scan(resource_params).collect { |data| data.to_h }
       raise Errors::ResourceNotFound if resources.blank?
       instance_variable_set("@#{resource_name}", resources)
-    end
-
-    def get_variants(analysis_id)
-      NciMatchPatientModels::Variant.scan(build_index_query({:analysis_id => analysis_id})).collect { |data| data.to_h.compact }
-    end
-
-    def get_amois(variant_report)
-      puts "========== in get_amois: #{token}"
-      VariantReportUpdater.new.updated_variant_report(variant_report, token)
     end
 
     def variant_reports_params
