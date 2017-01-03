@@ -5,39 +5,43 @@ class Ability
     user.deep_symbolize_keys!
     list_of_methods = []
     user[:roles].each do | role |
-      case role.to_sym
-        when :ADMIN
-          list_of_methods << :manage
-        when :SYSTEM
-          can :manage, :all
-        when :PATIENT_MESSAGE_SENDER, :SPECIMEN_MESSAGE_SENDER, :ASSAY_MESSAGE_SENDER, :VARIANT_REPORT_SENDER
-          list_of_methods << :trigger
-        when :MOCHA_VARIANT_REPORT_REVIEWER, :MDA_VARIANT_REPORT_REVIEWER
-          list_of_methods << :variant_report_status
-        when :ASSIGNMENT_REPORT_REVIEWER
-          list_of_methods << :assignment_confirmation
-        else
-          can :manage, :none
+      begin
+        self.class.send(:include, role.downcase.classify.constantize)
+      rescue NameError => error
+        can :manage, :none
       end
+      list_of_methods << self.get_methods
     end
     can list_of_methods, :all
-    #
-    # The first argument to `can` is the action you are giving the user
-    # permission to do.
-    # If you pass :manage it will apply to every action. Other common actions
-    # here are :read, :create, :update and :destroy.
-    #
-    # The second argument is the resource the user can perform the action on.
-    # If you pass :all it will apply to every resource. Otherwise pass a Ruby
-    # class of the resource.
-    #
-    # The third argument is an optional hash of conditions to further filter the
-    # objects.
-    # For example, here the user can only update published articles.
-    #
-    #   can :update, Article, :published => true
-    #
-    # See the wiki for details:
-    # https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities
   end
 end
+
+module Admin
+  def get_methods
+    :manage
+  end
+end
+
+module PatientMessageSender
+  def get_methods
+    :trigger
+  end
+end
+
+module MochaVariantReportReviewer
+  def get_methods
+    :variant_report_status
+  end
+end
+
+module AssignmentReportReviewer
+  def get_methods
+    :assignment_confirmation
+  end
+end
+
+module System extend Admin; end
+module SpecimenMessageSender extend PatientMessageSender; end
+module AssayMessageSender extend PatientMessageSender; end
+module VariantReportSender extend PatientMessageSender; end
+module MdaVariantReportReviewer extend MochaVariantReportReviewer; end
