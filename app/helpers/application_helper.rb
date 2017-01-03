@@ -29,4 +29,18 @@ module ApplicationHelper
 
     disease_names
   end
+
+  def self.has_role(required_roles, current_user)
+    return false if current_user.nil? || !(current_user.is_a? Hash)
+
+    roles = current_user["roles"]
+    return false if roles.blank?
+
+    roles.each do |role|
+      p "========== role: #{role}"
+      return true if required_roles.include? role
+    end
+
+    false
+  end
 end
