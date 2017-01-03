@@ -7,7 +7,7 @@ class Ability
     user[:roles].each do | role |
       begin
         self.class.send(:include, role.downcase.classify.constantize)
-      rescue NameError => error
+      rescue NameError
         can :manage, :none
       end
       list_of_methods << self.get_methods
