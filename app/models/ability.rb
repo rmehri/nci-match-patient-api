@@ -3,9 +3,24 @@ class Ability
 
   def initialize(user)
     user.deep_symbolize_keys
-    # user = Guest.new if user[:roles].blank? # guest user (not logged in)
     case user[:roles]
-      when :admin
+      when :ADMIN
+        can :manage, :all
+      when :SYSTEM
+        can :manage, :all
+      when :PATIENT_MESSAGE_SENDER
+        can :manage, :all
+      when :SPECIMEN_MESSAGE_SENDER
+        can :manage, :all
+      when :ASSAY_MESSAGE_SENDER
+        can :manage, :all
+      when :VARIANT_REPORT_SENDER
+        can :manage, :all
+      when :MOCHA_VARIANT_REPORT_REVIEWER
+        can :manage, :all
+      when :MDA_VARIANT_REPORT_REVIEWER
+        can :manage, :all
+      when :ASSIGNMENT_REPORT_REVIEWER
         can :manage, :all
       else
         can :manage, :none
