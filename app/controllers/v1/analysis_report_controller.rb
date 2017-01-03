@@ -9,34 +9,14 @@ module V1
 
     private
     def is_variant_report_reviewer
-      return false if current_user.nil?
-      puts "================== current user: #{current_user["roles"]}"
       required_roles = ["SYSTEM", "ADMIN", "MDA_VARIANT_REPORT_REVIEWER", "MOCHA_VARIANT_REPORT_REVIEWER"]
+      ApplicationHelper.has_role(required_roles, current_user)
 
-      roles = current_user["roles"]
-      return false if roles.blank?
-
-      roles.each do |role|
-        p "========== role: #{role}"
-        return true if required_roles.include? role
-      end
-
-      false
     end
 
     def is_assignment_reviewer
       required_roles = ["SYSTEM", "ADMIN", "ASSIGNMENT_REPORT_REVIEWER"]
-
-      return false if current_user.nil?
-
-      roles = current_user["roles"]
-      return false if roles.blank?
-
-      roles.each do |role|
-        return true if required_roles.include? role
-      end
-
-      false
+      ApplicationHelper.has_role(required_roles, current_user)
     end
 
     def set_resource(resource = {})
