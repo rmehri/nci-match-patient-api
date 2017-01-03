@@ -10,6 +10,7 @@ module V1
     private
     def is_variant_report_reviewer
       required_roles = ["SYSTEM", "ADMIN", "MDA_VARIANT_REPORT_REVIEWER", "MOCHA_VARIANT_REPORT_REVIEWER"]
+      puts "============ user token: #{current_user}"
       ApplicationHelper.has_role(required_roles, current_user)
 
     end
