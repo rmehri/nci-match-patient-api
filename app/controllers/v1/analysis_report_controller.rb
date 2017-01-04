@@ -3,14 +3,13 @@ module V1
   class AnalysisReportController < BaseController
 
     def show
-
       render json: instance_variable_get("@#{resource_name}")
     end
 
     private
     def is_variant_report_reviewer
+      # temp solution
       required_roles = ["SYSTEM", "ADMIN", "MDA_VARIANT_REPORT_REVIEWER", "MOCHA_VARIANT_REPORT_REVIEWER"]
-      puts "============ user token: #{current_user}"
       ApplicationHelper.has_role(required_roles, current_user)
 
     end
@@ -28,7 +27,7 @@ module V1
       variant_report_hash = NciMatchPatientModelExtensions::VariantReportExtension.compose_variant_report(params[:patient_id], params[:id])
       raise Errors::ResourceNotFound if variant_report_hash.blank?
 
-      variant_report_hash[:editable] = is_variant_report_reviewer
+      variant_report_hash[:editable] = is_variant_report_reviewer && variant_report_hash[:status] != "CONFIRMED"
 
       VariantReportHelper.add_download_links(variant_report_hash)
 
@@ -37,7 +36,7 @@ module V1
 
       assignments_with_assays = []
       assignments.each do | assignment |
-        assignment[:editable] = is_assignment_reviewer
+        assignment[:editable] = is_assignment_reviewer && assignment[:status] != "CONFIRMED"
         assays = find_assays(assignment[:surgical_event_id])
         assignments_with_assays.push(Convert::AssignmentDbModel.to_ui(assignment, assays)) unless assignment.blank?
       end

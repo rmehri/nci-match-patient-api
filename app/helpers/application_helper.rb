@@ -31,9 +31,14 @@ module ApplicationHelper
   end
 
   def self.has_role(required_roles, current_user)
+    puts "============= h: #{current_user}"
     return false if current_user.nil? || !(current_user.is_a? Hash)
 
-    roles = current_user["roles"]
+    return false if (current_user["app_metadata"].blank? || current_user["app_metadata"]["authorization"].blank?)
+
+    roles = current_user["app_metadata"]["authorization"]
+    roles = roles["roles"]
+    puts "=============== roles: #{roles}"
     return false if roles.blank?
 
     roles.each do |role|

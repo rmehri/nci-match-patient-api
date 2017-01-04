@@ -20,7 +20,6 @@ module V1
     end
 
     def get_amois(variant_report)
-      puts "=========== in analysis report get amois: #{token}"
       VariantReportUpdater.new.updated_variant_report(variant_report, token)
     end
 
