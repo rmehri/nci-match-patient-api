@@ -3,9 +3,10 @@ class Ability
 
   def initialize(user = {})
     user.deep_symbolize_keys!
-    user.store(:roles, []) unless user.include?(:roles)
+    user = user.dig(:app_metadata, :authorization, :roles)
+    user ||= []
     accessible_methods = []
-    user[:roles].each do | role |
+    user.each do | role |
       begin
         accessible_methods << role.downcase.classify.constantize.get_methods
       rescue NameError
