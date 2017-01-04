@@ -1,47 +1,71 @@
 class Ability
   include CanCan::Ability
 
-  def initialize(user)
+  def initialize(user = {})
     user.deep_symbolize_keys!
-    list_of_methods = []
+    user.store(:roles, []) unless user.include?(:roles)
+    accessible_methods = []
     user[:roles].each do | role |
       begin
-        self.class.send(:include, role.downcase.classify.constantize)
+        accessible_methods << role.downcase.classify.constantize.get_methods
       rescue NameError
-        can :manage, :none
+        accessible_methods = []
       end
-      list_of_methods << self.get_methods
     end
-    can list_of_methods, :all
+    can accessible_methods, :all
   end
 end
 
 module Admin
-  def get_methods
-    :manage
+  module ClassMethods
+    def get_methods
+      :manage
+    end
+  end
+  extend ClassMethods
+  def self.included(base)
+    base.extend( ClassMethods )
   end
 end
 
 module PatientMessageSender
-  def get_methods
-    :trigger
+  module ClassMethods
+    def get_methods
+      :trigger
+    end
+  end
+  extend ClassMethods
+  def self.included(base)
+    base.extend( ClassMethods )
   end
 end
 
 module MochaVariantReportReviewer
-  def get_methods
-    :variant_report_status
+  module ClassMethods
+    def get_methods
+      :variant_report_status
+    end
+  end
+  extend ClassMethods
+  def self.included(base)
+    base.extend( ClassMethods )
   end
 end
 
 module AssignmentReportReviewer
-  def get_methods
-    :assignment_confirmation
+  module ClassMethods
+    def get_methods
+      :assignment_confirmation
+    end
+  end
+  extend ClassMethods
+  def self.included(base)
+    base.extend( ClassMethods )
   end
 end
 
-module System extend Admin; end
-module SpecimenMessageSender extend PatientMessageSender; end
-module AssayMessageSender extend PatientMessageSender; end
-module VariantReportSender extend PatientMessageSender; end
-module MdaVariantReportReviewer extend MochaVariantReportReviewer; end
+module System include Admin; end
+module SpecimenMessageSender include PatientMessageSender; end
+module AssayMessageSender include PatientMessageSender; end
+module VariantReportSender include PatientMessageSender; end
+module MdaVariantReportReviewer include MochaVariantReportReviewer; end
