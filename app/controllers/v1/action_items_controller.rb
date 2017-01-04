@@ -28,8 +28,9 @@ module V1
         molecular_id: record[:molecular_id],
         analysis_id: record[:analysis_id],
         created_date: record[:status_date],
-        uuid: record[:uuid]
+        assignment_uuid: record[:uuid]
       }
     end
   end
 end
+
