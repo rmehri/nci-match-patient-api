@@ -1,20 +1,25 @@
 class Ability
   include CanCan::Ability
 
+  attr_reader :methods
+
   def initialize(user = {})
     user.deep_symbolize_keys!
-    user = user.dig(:app_metadata, :authorization, :roles)
-    user ||= []
-    accessible_methods = []
+    user = user.dig(:roles) || []
     user.each do | role |
       begin
-        accessible_methods << role.downcase.classify.constantize.get_methods
+        methods << role.downcase.classify.constantize.get_methods
       rescue NameError
-        accessible_methods = []
+        methods = []
       end
     end
-    can accessible_methods, :all
+    can methods, :all
   end
+
+  def methods
+    @methods ||= []
+  end
+
 end
 
 module Admin
