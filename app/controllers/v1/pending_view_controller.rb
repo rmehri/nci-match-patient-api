@@ -30,7 +30,8 @@ module V1
                   :molecular_id => assignment_report.molecular_id,
                   :analysis_id => assignment_report.analysis_id,
                   :surgical_event_id => assignment_report.surgical_event_id,
-                  :assignment_date => assignment_report.assignment_date}
+                  :assignment_date => assignment_report.assignment_date,
+                  :assignment_uuid => assignment_report.uuid}
 
           data[:disease] = get_patient_diseases(assignment_report.patient_id)
           data = ApplicationHelper.merge_treatment_arm_fields(data, assignment_report.selected_treatment_arm)
