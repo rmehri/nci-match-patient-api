@@ -1,7 +1,7 @@
 module V1
   class ServicesController < ApplicationController
     before_action :authenticate_user
-    # load_and_authorize_resource :class => "NciMatchPatientModels"
+    load_and_authorize_resource :class => "NciMatchPatientModels"
 
     # POST /api/v1/patients/{patient_id}
     def trigger
