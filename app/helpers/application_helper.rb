@@ -31,17 +31,13 @@ module ApplicationHelper
   end
 
   def self.has_role(required_roles, current_user)
-    puts "============= h: #{current_user}"
+    p "========= her1"
     return false if current_user.nil? || !(current_user.is_a? Hash)
+    p "========= her2"
+    return false if current_user["roles"].blank?
+    p "========= her13"
 
-    return false if (current_user["app_metadata"].blank? || current_user["app_metadata"]["authorization"].blank?)
-
-    roles = current_user["app_metadata"]["authorization"]
-    roles = roles["roles"]
-    puts "=============== roles: #{roles}"
-    return false if roles.blank?
-
-    roles.each do |role|
+    current_user["roles"].each do |role|
       p "========== role: #{role}"
       return true if required_roles.include? role
     end
