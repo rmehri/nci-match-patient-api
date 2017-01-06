@@ -31,14 +31,12 @@ module ApplicationHelper
   end
 
   def self.has_role(required_roles, current_user)
-    p "========= her1"
     return false if current_user.nil? || !(current_user.is_a? Hash)
-    p "========= her2"
-    return false if current_user["roles"].blank?
-    p "========= her13"
 
-    current_user["roles"].each do |role|
-      p "========== role: #{role}"
+    current_user.deep_symbolize_keys!
+    return false if current_user[:roles].blank?
+
+    current_user[:roles].each do |role|
       return true if required_roles.include? role
     end
 
