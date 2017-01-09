@@ -9,7 +9,7 @@ module V1
           arr = str.split('=', 2)
           hash.store(arr[0], arr[1])
         end
-        @version = NciMatchPatientApi::Application.VERSION
+        @version = NciMatchPatientApi::Application.version
         @rails_version = Rails::VERSION::STRING
         @ruby_version = RUBY_VERSION
         @running_on = hash['Commit'].present? ? hash['Commit'] : ''

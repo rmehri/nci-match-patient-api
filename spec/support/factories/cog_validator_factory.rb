@@ -1,4 +1,4 @@
-#FactoryGirl for CogValidator
+# FactoryGirl for CogValidator
 
 FactoryGirl.define do
   factory :good_message_registration, class: MessageValidator::CogValidator do

@@ -1,7 +1,7 @@
 module V1
   class ServicesController < ApplicationController
     before_action :authenticate_user
-    load_and_authorize_resource :class => "NciMatchPatientModels"
+    load_and_authorize_resource class: "NciMatchPatientModels"
 
     # POST /api/v1/patients/{patient_id}
     def trigger
@@ -10,7 +10,7 @@ module V1
       message = get_post_data(patient_id)
 
       type = MessageValidator.get_message_type(message)
-      raise Errors::RequestForbidden, "Incoming message has UNKNOWN message type" if (type == 'UNKNOWN')
+      raise Errors::RequestForbidden, 'Incoming message has UNKNOWN message type' if (type == 'UNKNOWN')
 
       if (type == 'VariantReport')
         shipments = NciMatchPatientModels::Shipment.find_by({"molecular_id" => message[:molecular_id]})
@@ -21,11 +21,11 @@ module V1
       end
 
       error = MessageValidator.validate_json_message(type, message)
-      raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{error}" if !error.nil?
+      raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{error}" unless error.nil?
 
       validate_patient_state_and_queue(message, type)
 
-      standard_success_message("Message has been processed successfully", 202)
+      standard_success_message('Message has been processed successfully', 202)
 
     end
 
@@ -33,7 +33,7 @@ module V1
       message = get_post_data("")
 
       type = MessageValidator.get_message_type(message)
-      raise Errors::RequestForbidden, "Incoming message has UNKNOWN message type" if (type == 'UNKNOWN')
+      raise Errors::RequestForbidden, 'Incoming message has UNKNOWN message type' if (type == 'UNKNOWN')
 
       shipments = NciMatchPatientModels::Shipment.find_by({"molecular_id" => message[:molecular_id]})
       raise Errors::RequestForbidden, "Unable to find shipment with molecular id [#{message[:molecular_id]}]" if shipments.length == 0
@@ -42,13 +42,13 @@ module V1
       message[:patient_id] = patient_id
 
       error = MessageValidator.validate_json_message(type, message)
-      raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{error}" if !error.nil?
+      raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{error}" unless error.nil?
 
       status = validate_patient_state_and_queue(message, type)
 
-      raise Errors::RequestForbidden, "Incoming message failed patient state validation" if (status == false)
+      raise Errors::RequestForbidden, 'Incoming message failed patient state validation' if status == false
 
-      standard_success_message("Message has been processed successfully", 202)
+      standard_success_message('Message has been processed successfully', 202)
 
     end
 
@@ -86,10 +86,10 @@ module V1
       message.deep_transform_keys!(&:underscore).symbolize_keys!
 
       type = MessageValidator.get_message_type(message)
-      raise Errors::RequestForbidden, "Incoming message has UNKNOWN message type" if (type == 'UNKNOWN')
+      raise Errors::RequestForbidden, "Incoming message has UNKNOWN message type" if type == 'UNKNOWN'
 
       error = MessageValidator.validate_json_message(type, message)
-      raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{error}" if !error.nil?
+      raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{error}" unless error.nil?
 
       validate_patient_state(message, type)
       result = PatientProcessor.run_service('/confirmVariantReport', message, token)
@@ -106,16 +106,15 @@ module V1
       message.deep_transform_keys!(&:underscore).symbolize_keys!
 
       type = MessageValidator.get_message_type(message)
-      raise Errors::RequestForbidden, "Incoming message has UNKNOWN message type" if (type == 'UNKNOWN')
+      raise Errors::RequestForbidden, "Incoming message has UNKNOWN message type" if type == 'UNKNOWN'
 
       error = MessageValidator.validate_json_message(type, message)
-      raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{error}" if !error.nil?
+      raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{error}" unless error.nil?
       p "=========== input data: #{message}"
 
       validate_patient_state(message, type)
       result = PatientProcessor.run_service('/confirm_assignment', message, token)
       standard_success_message(result)
     end
-
   end
 end

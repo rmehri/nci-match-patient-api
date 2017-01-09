@@ -21,6 +21,7 @@ module V1
     end
 
     private
+
     def patients_params
       params.require(:id)
       build_show_query(params.except(:action, :controller), :patient_id)
@@ -28,8 +29,8 @@ module V1
 
     def format_fields(patient)
       patient.deep_symbolize_keys!
-      if (!patient[:current_assignment].blank?)
-        if !patient[:current_assignment][:selected_treatment_arm].blank?
+      unless patient[:current_assignment].blank?
+        unless patient[:current_assignment][:selected_treatment_arm].blank?
           selected_ta = patient[:current_assignment][:selected_treatment_arm]
           selected_ta[:treatment_arm_title] = ApplicationHelper.format_treatment_arm_title(selected_ta)
 
@@ -38,12 +39,10 @@ module V1
 
       end
 
-      if (!patient[:diseases].blank?)
+      unless patient[:diseases].blank?
         patient[:disease_name] = ApplicationHelper.format_disease_names(patient[:diseases])
       end
-
       patient
     end
-
   end
 end
