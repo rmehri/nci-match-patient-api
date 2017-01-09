@@ -45,7 +45,7 @@ module Convert
     end
 
     def self.get_typed_variants(variants, variant_type)
-      if (variants != nil)
+      if variants != nil
         selected = variants
             .select {|v| v[:variant_type] == variant_type}
         selected
@@ -61,7 +61,7 @@ module Convert
     end
 
     def self.get_amois(db_variant, rule_variants)
-      if (!rule_variants.blank?)
+      if !rule_variants.blank?
         selected = rule_variants
             .select {|v|
           v[:variant_type] == db_variant[:variant_type] &&

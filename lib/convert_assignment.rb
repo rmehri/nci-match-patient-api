@@ -5,12 +5,14 @@ module Convert
         assignment = assignment_db.deep_symbolize_keys
         assignment_results = assignment[:treatment_assignment_results]
 
-        if (!assignment_results.nil?)
+        unless assignment_results.nil?
           assignment_logic = {}
           assignment_results.each do |assignment_result|
-            ta = {:treatment_arm_id => assignment_result[:treatment_arm_id],
-                  :stratum_id => assignment_result[:stratum_id],
-                  :version => assignment_result[:version]}
+            ta = {
+                   treatment_arm_id: assignment_result[:treatment_arm_id],
+                   stratum_id: assignment_result[:stratum_id],
+                   version: assignment_result[:version]
+                 }
             assignment_result[:treatment_arm] = ta
             assignment_result.delete(:treatment_arm_id)
             assignment_result.delete(:stratum_id)
@@ -21,7 +23,7 @@ module Convert
 
         assignment[:treatment_assignment_results] = assignment_logic
         end
-        assignment.delete(:patient) if !assignment[:patient].nil?
+        assignment.delete(:patient) unless assignment[:patient].nil?
         assignment[:assays] = assays
         assignment
       rescue => error

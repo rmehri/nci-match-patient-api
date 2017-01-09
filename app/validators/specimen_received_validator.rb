@@ -18,7 +18,7 @@ module MessageValidator
     validates :received_date, presence: true
     validates :internal_use_only, presence: true
 
-    #Override
+    # Override
     def include_correct_module
       case @type.to_sym
         when :BLOOD
@@ -28,7 +28,7 @@ module MessageValidator
       end
     end
 
-    #@Override
+    # @Override
     def specimen_received=(value)
       @specimen_received = value
       unless value.blank?

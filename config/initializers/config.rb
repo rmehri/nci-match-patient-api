@@ -8,7 +8,7 @@ module Config
       # prefix = ENV["queue_prefix"]
       # prefix = if (prefix.nil? || prefix.length == 0) then '' else prefix + '_' end
 
-      queue_name = Rails.configuration.environment.fetch('queue_name')
+      _queue_name = Rails.configuration.environment.fetch('queue_name')
     end
   end
 end

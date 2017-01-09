@@ -9,7 +9,7 @@ module V1
 
     private
 
-    def set_resource(resource = {})
+    def set_resource(_resource = {})
       variant_report = NciMatchPatientModels::VariantReport.query_by_analysis_id(params[:patient_id], params[:id])
       raise Errors::ResourceNotFound if variant_report.nil?
 

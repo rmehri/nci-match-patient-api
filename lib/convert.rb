@@ -50,15 +50,15 @@ module Convert
           specimen_shipments_dbm = shipments_dbm
                                        .select {|v| (v.type == 'BLOOD_DNA')}
         end
-        
+
         shipments_uims = []
-        
+
         specimen_shipments_dbm.each do | shipment_dbm |
           shipment_uim = shipment_dbm.to_h
 
           shipment_uim['analyses'] = variant_reports_dbm
               .select {|vr| vr.surgical_event_id == shipment_dbm.surgical_event_id && vr.molecular_id == shipment_dbm.molecular_id }
-              .map { |vr| 
+              .map { |vr|
                 {
                   "analysis_id" => vr.analysis_id,
                   "variant_report_received_date" => vr.variant_report_received_date,
@@ -74,8 +74,8 @@ module Convert
                   "tsv_path_name"     => get_s3_url(vr.ion_reporter_id, vr.molecular_id, vr.analysis_id, vr.tsv_file_name),
                   "qc_report_url"     => get_qc_report_url(vr.ion_reporter_id, vr.molecular_id, vr.analysis_id, vr.tsv_file_name),
                   "vr_chart_data_url" => get_vr_chart_url(vr.ion_reporter_id, vr.molecular_id, vr.analysis_id, vr.vcf_file_name)
-                } 
-              } 
+                }
+              }
 
           shipments_uims.push(shipment_uim)
         end
@@ -140,7 +140,7 @@ module Convert
 
     def self.select_variants_for_variant_report(variants_dbm, molecular_id, analysis_id)
       variants_dbm_for_report = []
-      if (variants_dbm != nil)
+      unless variants_dbm.nil?
         variants_dbm_for_report = variants_dbm
             .select {|v| (v.molecular_id == molecular_id && v.analysis_id == analysis_id)}
       end
