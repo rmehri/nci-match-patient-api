@@ -22,40 +22,12 @@ class Ability
 
 end
 
-NciMatchRoles::Admin.instance_eval do
-  def get_methods; :manage; end
-end
-
-
-NciMatchRoles::PatientMessageSender.instance_eval do
-  def get_methods; :trigger; end
-end
-
-NciMatchRoles::MochaVariantReportReviewer.instance_eval do
-  def get_methods; :variant_report_status; end
-end
-
-NciMatchRoles::AssignmentReportReviewer.instance_eval do
-  def get_methods; :assignment_confirmation; end
-end
-
-NciMatchRoles::System.instance_eval do
-  def get_methods; :manage; end
-end
-
-
-NciMatchRoles::SpecimenMessageSender.instance_eval do
-  def get_methods; :trigger; end
-end
-
-NciMatchRoles::AssayMessageSender.instance_eval do
-  def get_methods; :trigger; end
-end
-
-NciMatchRoles::VariantReportSender.instance_eval do
-  def get_methods; :trigger; end
-end
-
-NciMatchRoles::MdaVariantReportReviewer.instance_eval do
-  def get_methods; :variant_report_status; end
-end
+NciMatchRoles::Admin.instance_eval { def get_methods; :manage; end }
+NciMatchRoles::PatientMessageSender.instance_eval { def get_methods; :trigger; end }
+NciMatchRoles::MochaVariantReportReviewer.instance_eval { def get_methods; :variant_report_status; end }
+NciMatchRoles::AssignmentReportReviewer.instance_eval { def get_methods; :assignment_confirmation; end }
+NciMatchRoles::System.instance_eval { def get_methods; :manage; end }
+NciMatchRoles::SpecimenMessageSender.instance_eval { def get_methods; :trigger; end }
+NciMatchRoles::AssayMessageSender.instance_eval { def get_methods; :trigger; end }
+NciMatchRoles::VariantReportSender.instance_eval { def get_methods; :trigger; end }
+NciMatchRoles::MdaVariantReportReviewer.instance_eval { def get_methods; :variant_report_status; end }
