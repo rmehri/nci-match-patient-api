@@ -14,7 +14,7 @@ describe V1::VersionsController do
 
     # it 'Should return the API version' do
     #  get :version
-    #  expect(response.body).to include(NciMatchPatientApi::Application.VERSION)
+    #  expect(response.body).to include(NciMatchPatientApi::Application.version)
     #  expect(response).to have_http_status(200)
     # end
 
@@ -23,7 +23,7 @@ describe V1::VersionsController do
     end
 
     it 'should handle an error correctly' do
-      allow(NciMatchPatientApi::Application).to receive(:VERSION).and_raise('this error')
+      allow(NciMatchPatientApi::Application).to receive(:version).and_raise('this error')
       get :version
       expect(response).to have_http_status(500)
     end
