@@ -8,7 +8,7 @@ class Ability
     user = user.dig(:roles) || []
     user.each do | role |
       begin
-        methods << role.downcase.classify.constantize.get_methods
+        methods << "NciMatchRoles::#{role.downcase.classify}".constantize.get_methods
       rescue NameError
         methods = []
       end
@@ -22,56 +22,40 @@ class Ability
 
 end
 
-module Admin
-  module ClassMethods
-    def get_methods
-      :manage
-    end
-  end
-  extend ClassMethods
-  def self.included(base)
-    base.extend( ClassMethods )
-  end
+NciMatchRoles::Admin.instance_eval do
+  def get_methods; :manage; end
 end
 
-module PatientMessageSender
-  module ClassMethods
-    def get_methods
-      :trigger
-    end
-  end
-  extend ClassMethods
-  def self.included(base)
-    base.extend( ClassMethods )
-  end
+
+NciMatchRoles::PatientMessageSender.instance_eval do
+  def get_methods; :trigger; end
 end
 
-module MochaVariantReportReviewer
-  module ClassMethods
-    def get_methods
-      :variant_report_status
-    end
-  end
-  extend ClassMethods
-  def self.included(base)
-    base.extend( ClassMethods )
-  end
+NciMatchRoles::MochaVariantReportReviewer.instance_eval do
+  def get_methods; :variant_report_status; end
 end
 
-module AssignmentReportReviewer
-  module ClassMethods
-    def get_methods
-      :assignment_confirmation
-    end
-  end
-  extend ClassMethods
-  def self.included(base)
-    base.extend( ClassMethods )
-  end
+NciMatchRoles::AssignmentReportReviewer.instance_eval do
+  def get_methods; :assignment_confirmation; end
 end
 
-module System include Admin; end
-module SpecimenMessageSender include PatientMessageSender; end
-module AssayMessageSender include PatientMessageSender; end
-module VariantReportSender include PatientMessageSender; end
-module MdaVariantReportReviewer include MochaVariantReportReviewer; end
+NciMatchRoles::System.instance_eval do
+  def get_methods; :manage; end
+end
+
+
+NciMatchRoles::SpecimenMessageSender.instance_eval do
+  def get_methods; :trigger; end
+end
+
+NciMatchRoles::AssayMessageSender.instance_eval do
+  def get_methods; :trigger; end
+end
+
+NciMatchRoles::VariantReportSender.instance_eval do
+  def get_methods; :trigger; end
+end
+
+NciMatchRoles::MdaVariantReportReviewer.instance_eval do
+  def get_methods; :variant_report_status; end
+end
