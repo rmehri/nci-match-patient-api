@@ -6,7 +6,7 @@ module V1
     end
 
     private
-    def set_resource(resource = nil)
+    def set_resource(_resource = nil)
       puts "=============== params: #{params[:id]}"
       shipments = NciMatchPatientModels::Shipment.find_by({"molecular_id" => params[:id]}).collect { |data| data.to_h.compact.deep_symbolize_keys! }
       return instance_variable_set("@#{resource_name}", {}) if shipments.length == 0

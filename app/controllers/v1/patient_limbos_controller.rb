@@ -7,7 +7,7 @@ module V1
     end
 
     private
-    def set_resource(resource = {})
+    def set_resource(_resource = {})
       # non_target_statuses = ["REGISTRATION", "TISSUE_VARIANT_REPORT_CONFIRMED", "PENDING_CONFIRMATION", "ON_TREATMENT_ARM", "REQUEST_ASSIGNMENT", "REQUEST_NO_ASSIGNMENT", "OFF_STUDY", "OFF_STUDY_BIOPSY_EXPIRED"]
       target_statuses = ["TISSUE_SPECIMEN_RECEIVED",
                          "TISSUE_NUCLEIC_ACID_SHIPPED",
@@ -34,7 +34,7 @@ module V1
         messages = []
         active_tissue_specimen = patient[:active_tissue_specimen]
 
-        if (active_tissue_specimen[:active_molecular_id].nil?)
+        if active_tissue_specimen[:active_molecular_id].nil?
           messages << "Tissue shipment missing"
         elsif active_tissue_specimen[:active_analysis_id].nil?
           messages << "Variant report missing"
@@ -46,11 +46,11 @@ module V1
           messages << "No confirmed variant report"
         end
 
-        if (!patient[:message].nil?)
+        unless patient[:message].nil?
           messages << patient[:message]
         end
 
-        if (patient[:current_status] == 'PENDING_APPROVAL')
+        if patient[:current_status] == 'PENDING_APPROVAL'
           messages << "Assignment report awaiting approval from COG"
         end
 

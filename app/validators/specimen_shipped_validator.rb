@@ -21,7 +21,7 @@ module MessageValidator
     validates :shipped_dttm, presence: true, date: {on_or_before: lambda {DateTime.current.utc}}
     validates :internal_use_only, presence: true
 
-    #Override
+    # Override
     def include_correct_module
       case @type.to_sym
         when :BLOOD_DNA
@@ -33,7 +33,7 @@ module MessageValidator
       end
     end
 
-    #@Override
+    # @Override
     def specimen_shipped=(value)
       @specimen_shipped = value
       unless value.blank?
@@ -51,7 +51,6 @@ module MessageValidator
         @shipped_dttm = value[:shipped_dttm]
         @destination = value[:destination]
         # @internal_use_only = value[:internal_use_only]
-
       end
     end
   end

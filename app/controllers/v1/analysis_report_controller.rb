@@ -19,7 +19,7 @@ module V1
       ApplicationHelper.has_role(required_roles, current_user)
     end
 
-    def set_resource(resource = {})
+    def set_resource(_resource = {})
 
       patient = NciMatchPatientModels::Patient.query_patient_by_id(params[:patient_id])
       return standard_error_message("Patient [#{params[:patient_id]}] not found", 404) if patient.blank?

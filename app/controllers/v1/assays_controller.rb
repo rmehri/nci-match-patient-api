@@ -7,7 +7,7 @@ module V1
     end
 
     private
-    def set_resource(resource = {})
+    def set_resource(_resource = {})
       assays = []
       specimens = NciMatchPatientModels::Specimen.find_by({:specimen_type => 'TISSUE'})
       specimens.each do | specimen|

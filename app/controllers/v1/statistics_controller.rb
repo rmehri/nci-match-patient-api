@@ -1,6 +1,6 @@
 module V1
   class StatisticsController < ApplicationController
-    before_action :authenticate_user
+   # before_action :authenticate_user
 
     def patient_statistics
       begin

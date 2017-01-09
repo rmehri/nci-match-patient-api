@@ -1,7 +1,7 @@
 require 'json'
 
 describe ConfirmVariantMessage do
-  def getTestable
+  def get_testable
     testable = ConfirmVariantMessage.new
     testable.status = 'CONFIRMED'
     testable.comment = 'Some Comments'
@@ -9,17 +9,14 @@ describe ConfirmVariantMessage do
   end
 
   it "can be created" do
-    testable = getTestable
-
+    testable = get_testable
     expect(testable.status).to eq('CONFIRMED')
     expect(testable.comment).to eq('Some Comments')
   end
 
   it "can convert from json" do
-    json_string = '{"status":"CONFIRMED","comment":"Some Comments"}';
-
+    json_string = '{"status":"CONFIRMED","comment":"Some Comments"}'
     model = ConfirmVariantMessage.from_json json_string
-
     expect(model).to_not eq nil
     expect(model.status).to eq("CONFIRMED")
     expect(model.comment).to eq('Some Comments')
@@ -27,13 +24,8 @@ describe ConfirmVariantMessage do
   end
 
   it "can convert to json" do
-    testable = getTestable
-
+    testable = get_testable
     json_string = testable.to_json
-
-    expect {
-      JSON.parse(json_string)
-    }.to_not raise_error
-
+    expect { JSON.parse(json_string) }.to_not raise_error
   end
 end

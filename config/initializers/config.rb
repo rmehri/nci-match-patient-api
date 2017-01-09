@@ -2,7 +2,7 @@ module Config
   class Queue
 
     # Obsolete. ENV['queue_name'] shall have the full queue name to use
-    def self.name(name)
+    def self.name(_name)
       # input "name" is currently ignored since we only deal with one queue and
       # its name is configured in environment
       # prefix = ENV["queue_prefix"]

@@ -6,7 +6,7 @@ module Aws
       def self.read(bucket_name, path_to_file)
 
         resource = self.s3_client.bucket(bucket_name).object(path_to_file)
-        raise "Specified resource path or name does not exist" if !resource.exists?
+        raise "Specified resource path or name does not exist" unless resource.exists?
 
         resource.get({}).body.read
       end
@@ -14,7 +14,7 @@ module Aws
       def self.get_presigned_url(bucket_name, path_to_file)
 
         resource = self.s3_client.bucket(bucket_name).object(path_to_file)
-        raise "Specified resource path or name does not exist" if !resource.exists?
+        raise "Specified resource path or name does not exist" unless resource.exists?
 
         resource.presigned_url(:get, expires_in: 20.minutes)
       end

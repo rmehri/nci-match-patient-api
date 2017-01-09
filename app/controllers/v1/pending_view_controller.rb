@@ -55,8 +55,7 @@ module V1
       else
         specimen = NciMatchPatientModels::Specimen.query_latest_blood_specimen_by_patient_id(patient_id)
       end
-
-      if !specimen.nil? then specimen.received_date else "" end
+      !specimen.nil? ? specimen.received_date : ""
     end
 
     def get_patient_diseases(patient_id)

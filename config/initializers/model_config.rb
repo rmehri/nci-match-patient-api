@@ -9,7 +9,7 @@ module ModelConfig
     configure_table NciMatchPatientModels::Shipment
     configure_table NciMatchPatientModels::Assignment
 
-    if (!Rails.env.to_s.start_with?("test"))
+    unless Rails.env.to_s.start_with?("test")
       ensure_table NciMatchPatientModels::Patient
       ensure_table NciMatchPatientModels::Event
       ensure_table NciMatchPatientModels::Variant
@@ -18,19 +18,16 @@ module ModelConfig
       ensure_table NciMatchPatientModels::Shipment
       ensure_table NciMatchPatientModels::Assignment
     end
-
   end
 
   def self.configure_table(table)
     name = table.new.class.name.underscore
     name = name.to_s.split('/').last || ''
-
     table.set_table_name name
   end
 
   def self.ensure_table(table)
-
-    if (!table.table_exists?)
+    unless table.table_exists?
       read_capacity_units =  Rails.configuration.environment.fetch('read_capacity_units').to_i
       write_capacity_units = Rails.configuration.environment.fetch('write_capacity_units').to_i
 
@@ -40,7 +37,6 @@ module ModelConfig
       migration.wait_until_available
     end
   end
-
 end
 
 ModelConfig.configure

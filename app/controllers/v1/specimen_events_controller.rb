@@ -2,13 +2,13 @@ module V1
   class SpecimenEventsController < BaseController
     before_action :set_resource, only: [:index]
 
-    #Combination of Specimen with Shipments, Events, Variant_reports
+    # Combination of Specimen with Shipments, Events, Variant_reports
     def index
       render json: instance_variable_get("@#{resource_name}")
     end
 
     private
-    def set_resource(resource = {})
+    def set_resource(_resource = {})
       tissue_specimens = []
       resources_by_type = {}
 
@@ -92,16 +92,18 @@ module V1
     end
 
     def build_analyses_assignment_model(assignment)
-      (assignment.blank?) ? {} :
-      {
+      if assignment.blank?
+        {}
+      else
+        {
           :analysis_id => assignment[:analysis_id],
           :assignment_report_status => assignment[:status],
           :status_date => assignment[:status_date],
           :comment_user => assignment[:comment_user],
           :comment => assignment[:comment],
           :assignment_uuid => assignment[:uuid]
-      }
+        }
+      end
     end
-
   end
 end

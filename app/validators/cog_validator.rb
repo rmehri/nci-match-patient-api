@@ -29,8 +29,6 @@ module MessageValidator
         else
           p "Cog message status is: #{@status}"
       end
-
     end
-
-   end
+  end
 end

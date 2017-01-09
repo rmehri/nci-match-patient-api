@@ -19,9 +19,9 @@ module Convert
             assignment_result.delete(:version)
             assignment_logic[assignment_result[:assignment_status]] ||= []
             assignment_logic[assignment_result[:assignment_status]].push(assignment_result)
-        end
+          end
 
-        assignment[:treatment_assignment_results] = assignment_logic
+          assignment[:treatment_assignment_results] = assignment_logic
         end
         assignment.delete(:patient) unless assignment[:patient].nil?
         assignment[:assays] = assays

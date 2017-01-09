@@ -3,7 +3,7 @@ require 'factory_girl_rails'
 
 describe Config::Table do
 
-  #Test needs to be independent of system
+  # Test needs to be independent of system
   # describe Config::Queue do
   #   it "should get correct queue name" do
   #     name = Config::Queue.name("patient")

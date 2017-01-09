@@ -23,7 +23,7 @@ module Convert
         uiModel.variant_reports = to_ui_variant_reports(variant_reports_dbm, variants_dbm)
       end
 
-      if patient_dbm.current_assignment != nil
+      unless patient_dbm.current_assignment.nil?
         uiModel.assignment_report = patient_dbm.current_assignment
       end
 
@@ -207,13 +207,13 @@ module Convert
     end
 
     def self.query_variants(variants_dbm, variant_type)
-      if (variants_dbm != nil)
+      if variants_dbm != nil
         variants_dbm
             .select {|v| v.variant_type == variant_type}
             .map { |v|
 
           v_hash = v.to_h
-          v_hash.delete_if { |key, value| value.blank? }
+          v_hash.delete_if { |_key, value| value.blank? }
           v_hash
           # v.to_h
         }
@@ -221,7 +221,5 @@ module Convert
         []
       end
     end
-
   end
-
 end

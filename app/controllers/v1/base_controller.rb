@@ -13,7 +13,7 @@ module V1
       raise "Incoming message has UNKNOWN message type" if (type == 'UNKNOWN')
 
       error = MessageValidator.validate_json_message(type, message)
-      raise "Incoming message failed message schema validation: #{error}" if !error.nil?
+      raise "Incoming message failed message schema validation: #{error}" unless error.nil?
 
       status = validate_patient_state_and_queue(message, type)
 
@@ -33,12 +33,12 @@ module V1
       render json: get_resource.compact
     end
 
-    #place holder
+    # place holder
     def destroy
       # render json: nil, status: 200
     end
 
-    #place holder
+    # place holder
     def update
       # render json: nil, status: 200
     end
