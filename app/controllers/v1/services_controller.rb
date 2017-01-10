@@ -29,6 +29,7 @@ module V1
 
     end
 
+    # POST /api/v1/patients/variant_report/:molecular_id
     def variant_report_uploaded
       message = get_post_data("")
 
@@ -55,31 +56,28 @@ module V1
     # PUT /api/v1/patients/variant/{variant_uuid}{checked|unchecked}
     def variant_status
 
-      begin
-        message = ConfirmVariantMessage.from_url get_url_path_segments
-        post_data = get_post_data("")
-        message['comment'] = post_data[:comment]
-        message['comment_user'] = post_data[:comment_user]
+      message = ConfirmVariantMessage.from_url get_url_path_segments
+      raise Errors::RequestForbidden, message if message.is_a? String
 
-        response_json = PatientProcessor.run_service("/confirm_variant", message, token)
+      post_data = get_post_data("")
+      message['comment'] = post_data[:comment]
+      message['comment_user'] = post_data[:comment_user]
 
-        AppLogger.log(self.class.name, "\nResponse from Patient Processor: #{response_json}")
+      response = PatientProcessor.run_service("/confirm_variant", message, token)
+      response_hash = response.parsed_response
+      raise Errors::RequestForbidden, response_hash["message"] if !((200..299).include? response.code)
 
-        message_in_response = JSON.parse(response_json)['message']
-        if (message_in_response.include? "Error")
-          standard_error_message(message_in_response)
-        else
-          standard_success_message(message_in_response)
-        end
 
-      rescue => error
-        standard_error_message(error.message)
-      end
+      AppLogger.log(self.class.name, "variant_status response from Patient Processor: #{response_hash}")
+      standard_success_message(response_hash["message"])
+
     end
 
     # put /api/v1/patients/{patient_id}/variant_reports{analysis_id}/{confirm|reject}
     def variant_report_status
       message = ConfirmVariantReportMessage.from_url get_url_path_segments
+      raise Errors::RequestForbidden, message if message.is_a? String
+
       post_data = get_post_data("")
       message['comment'] = post_data[:comment]
       message['comment_user'] = post_data[:comment_user]
@@ -99,7 +97,9 @@ module V1
     # PUT /api/v1/patients/{patient_id}/assignment_reports/{analysis_id}/confirm
     def assignment_confirmation
       message = ConfirmAssignmentMessage.from_url get_url_path_segments
-      p "============ message from ConfirmAssignmentMessage: #{message}"
+      raise Errors::RequestForbidden, message if message.is_a? String
+
+      p "============ message for ConfirmAssignmentMessage: #{message}"
       post_data = get_post_data("")
       message['comment'] = post_data[:comment]
       message['comment_user'] = post_data[:comment_user]
@@ -110,7 +110,6 @@ module V1
 
       error = MessageValidator.validate_json_message(type, message)
       raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{error}" unless error.nil?
-      p "=========== input data: #{message}"
 
       validate_patient_state(message, type)
       result = PatientProcessor.run_service('/confirm_assignment', message, token)

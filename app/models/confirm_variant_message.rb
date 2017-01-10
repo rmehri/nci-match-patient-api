@@ -32,9 +32,10 @@ class ConfirmVariantMessage
     id = url_segments[start_index+1]
     check = url_segments[start_index+2].downcase
 
-    raise "Unregnized checked flag in variant confirmation url" if (check != 'checked' && check != 'unchecked')
+    # raise "Unregnized checked flag in variant confirmation url" if (check != 'checked' && check != 'unchecked')
 
-    message = {"variant_uuid" => id, "status" => check}
+    message = (check != 'checked' && check != 'unchecked') ?
+        "Unregnized checked flag in variant confirmation url" : {"variant_uuid" => id, "status" => check}
 
   end
 
