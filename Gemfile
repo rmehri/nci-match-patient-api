@@ -25,9 +25,8 @@ gem 'knock', '2.0'
 gem 'wannabe_bool', '0.6.0'
 gem 'responders', '2.3.0'
 
-gem 'nci_match_patient_models', :git => 'git://github.com/CBIIT/nci-match-lib.git', :branch => 'master'
-gem 'nci_match_roles', :git => 'git://github.com/CBIIT/nci-match-lib.git', :branch => 'master'
-# gem 'nci_match_patient_models', '1.1.0', :path => '/Users/verbeckjb/git/nci-match-lib'
+gem 'nci_match_patient_models', :git => 'git://github.com/CBIIT/nci-match-lib.git', :branch => :master
+gem 'nci_match_roles', :git => 'git://github.com/CBIIT/nci_match_roles.git', :branch => :master
 
 gem "httparty", '0.14.0'
 
