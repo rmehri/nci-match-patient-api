@@ -7,9 +7,18 @@ module V1
     end
 
     private
-    def is_variant_report_reviewer
+    def is_variant_report_reviewer(clia_lab)
       # temp solution
-      required_roles = ["SYSTEM", "ADMIN", "MDA_VARIANT_REPORT_REVIEWER", "MOCHA_VARIANT_REPORT_REVIEWER"]
+      required_roles = ["SYSTEM", "ADMIN"]
+      case clia_lab
+        when "MDA"
+          required_roles << "MDA_VARIANT_REPORT_REVIEWER"
+        when "MoCha"
+          required_roles << "MOCHA_VARIANT_REPORT_REVIEWER"
+        else
+          p "========variant report does not have valid clia_lab"
+      end
+
       ApplicationHelper.has_role(required_roles, current_user)
 
     end
@@ -27,7 +36,7 @@ module V1
       variant_report_hash = NciMatchPatientModelExtensions::VariantReportExtension.compose_variant_report(params[:patient_id], params[:id])
       raise Errors::ResourceNotFound if variant_report_hash.blank?
 
-      variant_report_hash[:editable] = is_variant_report_reviewer && variant_report_hash[:status] != "CONFIRMED"
+      variant_report_hash[:editable] = is_variant_report_reviewer(variant_report_hash[:clia_lab]) && variant_report_hash[:status] != "CONFIRMED"
 
       VariantReportHelper.add_download_links(variant_report_hash)
 
