@@ -1,7 +1,8 @@
 module V1
   class ServicesController < ApplicationController
     before_action :authenticate_user
-    load_and_authorize_resource class: "NciMatchPatientModels"
+    load_and_authorize_resource :class => NciMatchPatientModels
+
 
     # POST /api/v1/patients/{patient_id}
     def trigger
@@ -11,7 +12,7 @@ module V1
 
       type = MessageValidator.get_message_type(message)
       raise Errors::RequestForbidden, 'Incoming message has UNKNOWN message type' if (type == 'UNKNOWN')
-
+      authorize! :validate_json_message, type.to_sym
       if (type == 'VariantReport')
         shipments = NciMatchPatientModels::Shipment.find_by({"molecular_id" => message[:molecular_id]})
         raise "Unable to find shipment with molecular id [#{message[:molecular_id]}]" if shipments.length == 0
@@ -19,7 +20,6 @@ module V1
         patient_id = shipments[0].patient_id
         message[:patient_id] = patient_id
       end
-
       error = MessageValidator.validate_json_message(type, message)
       raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{error}" unless error.nil?
 
@@ -36,6 +36,7 @@ module V1
       type = MessageValidator.get_message_type(message)
       raise Errors::RequestForbidden, 'Incoming message has UNKNOWN message type' if (type == 'UNKNOWN')
 
+      authorize! :validate_json_message, type.to_sym
       shipments = NciMatchPatientModels::Shipment.find_by({"molecular_id" => message[:molecular_id]})
       raise Errors::RequestForbidden, "Unable to find shipment with molecular id [#{message[:molecular_id]}]" if shipments.length == 0
 
@@ -86,6 +87,7 @@ module V1
       type = MessageValidator.get_message_type(message)
       raise Errors::RequestForbidden, "Incoming message has UNKNOWN message type" if type == 'UNKNOWN'
 
+      authorize! :validate_json_message, type.to_sym
       error = MessageValidator.validate_json_message(type, message)
       raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{error}" unless error.nil?
 
@@ -108,6 +110,7 @@ module V1
       type = MessageValidator.get_message_type(message)
       raise Errors::RequestForbidden, "Incoming message has UNKNOWN message type" if type == 'UNKNOWN'
 
+      authorize! :validate_json_message, type.to_sym
       error = MessageValidator.validate_json_message(type, message)
       raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{error}" unless error.nil?
 

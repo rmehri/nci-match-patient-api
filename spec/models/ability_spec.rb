@@ -14,7 +14,12 @@ describe Ability, :type => :model do
     end
 
     it "allow PATIENT_MESSAGE_SENDER to access trigger method" do
-      expect(Ability.new({:roles => ["PATIENT_MESSAGE_SENDER"]}).can?(:trigger, :all)).to eq(true)
+      expect(Ability.new({:roles => ["PATIENT_MESSAGE_SENDER"]}).can?(:trigger, NciMatchPatientModels)).to eq(true)
+    end
+
+    it "allow PATIENT_MESSAGE_SENDER to access validate_json_message method" do
+      expect(Ability.new({:roles => ["PATIENT_MESSAGE_SENDER"]}).can?(:validate_json_message, :TreatmentArm)).to eq(true)
+      expect(Ability.new({:roles => ["PATIENT_MESSAGE_SENDER"]}).can?(:validate_json_message, :Cog)).to eq(true)
     end
 
     it "allow MochaVariantReportReviewer to access variant_report_status method" do
@@ -22,7 +27,7 @@ describe Ability, :type => :model do
     end
 
     it "allow AssignmentReportReviewer to access assignment_confirmation method" do
-      expect(Ability.new({:roles => ["ASSIGNMENT_REPORT_REVIEWER"]}).can?(:assignment_confirmation, :all)).to eq(true)
+      expect(Ability.new({:roles => ["ASSIGNMENT_REPORT_REVIEWER"]}).can?(:assignment_confirmation, :AssignmentStatus)).to eq(true)
     end
 
     it "allow System to manage all" do
@@ -30,19 +35,19 @@ describe Ability, :type => :model do
     end
 
     it "allow SpecimenMessageSender to access trigger method" do
-      expect(Ability.new({:roles => ["SPECIMEN_MESSAGE_SENDER"]}).can?(:trigger, :all)).to eq(true)
+      expect(Ability.new({:roles => ["SPECIMEN_MESSAGE_SENDER"]}).can?(:trigger, NciMatchPatientModels)).to eq(true)
     end
 
     it "allow AssayMessageSender to access trigger method" do
-      expect(Ability.new({:roles => ["ASSAY_MESSAGE_SENDER"]}).can?(:trigger, :all)).to eq(true)
+      expect(Ability.new({:roles => ["ASSAY_MESSAGE_SENDER"]}).can?(:trigger, NciMatchPatientModels)).to eq(true)
     end
 
     it "allow VariantReportSender to access trigger method" do
-      expect(Ability.new({:roles => ["VARIANT_REPORT_SENDER"]}).can?(:trigger, :all)).to eq(true)
+      expect(Ability.new({:roles => ["VARIANT_REPORT_SENDER"]}).can?(:trigger, NciMatchPatientModels)).to eq(true)
     end
 
     it "allow MdaVariantReportReviewer to access variant_report_status method" do
-      expect(Ability.new({:roles => ["MDA_VARIANT_REPORT_REVIEWER"]}).can?(:variant_report_status, :all)).to eq(true)
+      expect(Ability.new({:roles => ["MDA_VARIANT_REPORT_REVIEWER"]}).can?(:variant_report_status, :VariantReportStatus)).to eq(true)
     end
 
   end

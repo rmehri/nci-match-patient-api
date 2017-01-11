@@ -26,7 +26,7 @@ gem 'wannabe_bool', '0.6.0'
 gem 'responders', '2.3.0'
 
 gem 'nci_match_patient_models', :git => 'git://github.com/CBIIT/nci-match-lib.git', :tag => "v1.1.6"
-gem 'nci_match_roles', :git => 'git://github.com/CBIIT/nci_match_roles.git', :tag => "v0.2-alpha"
+gem 'nci_match_roles', :git => 'git://github.com/CBIIT/nci_match_roles.git', :tag => "v0.3-alpha"
 
 gem "httparty", '0.14.0'
 
