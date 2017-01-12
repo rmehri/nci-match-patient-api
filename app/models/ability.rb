@@ -15,7 +15,7 @@ class Ability
         methods = []
       end
     end
-    can methods, subjects
+    can methods, subjects.flatten
   end
 
   def methods
@@ -42,8 +42,8 @@ NciMatchRoles::MochaVariantReportReviewer.instance_eval do
 end
 
 NciMatchRoles::AssignmentReportReviewer.instance_eval do
-  def get_methods; :assignment_confirmation; end;
-  def get_subjects; :AssignmentStatus; end;
+  def get_methods; [:assignment_confirmation, :validate_json_message]; end;
+  def get_subjects; [:VariantReportStatus, NciMatchPatientModels]; end;
 end
 
 NciMatchRoles::SpecimenMessageSender.instance_eval do
@@ -61,6 +61,6 @@ NciMatchRoles::VariantReportSender.instance_eval do
   def get_subjects; [:VariantReportStatus, :VariantReport, NciMatchPatientModels]; end
 end
 NciMatchRoles::MdaVariantReportReviewer.instance_eval do
-  def get_methods; :variant_report_status; end;
-  def get_subjects; :VariantReportStatus; end;
+  def get_methods; [:variant_report_status, :validate_json_message]; end;
+  def get_subjects; [NciMatchPatientModels, :VariantReportStatus]; end;
 end

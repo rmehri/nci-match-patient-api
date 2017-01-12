@@ -27,8 +27,12 @@ describe Ability, :type => :model do
     end
 
     it "allow AssignmentReportReviewer to access assignment_confirmation method" do
-      expect(Ability.new({:roles => ["ASSIGNMENT_REPORT_REVIEWER"]}).can?(:assignment_confirmation, :AssignmentStatus)).to eq(true)
+      expect(Ability.new({:roles => ["ASSIGNMENT_REPORT_REVIEWER"]}).can?(:assignment_confirmation, :VariantReportStatus)).to eq(true)
+      expect(Ability.new({:roles => ["ASSIGNMENT_REPORT_REVIEWER"]}).can?(:assignment_confirmation, NciMatchPatientModels)).to eq(true)
+      expect(Ability.new({:roles => ["ASSIGNMENT_REPORT_REVIEWER"]}).can?(:validate_json_message, :VariantReportStatus)).to eq(true)
+      expect(Ability.new({:roles => ["ASSIGNMENT_REPORT_REVIEWER"]}).can?(:validate_json_message, NciMatchPatientModels)).to eq(true)
     end
+
 
     it "allow System to manage all" do
       expect(Ability.new({:roles => ["SYSTEM"]}).can?(:manage, :all)).to eq(true)
@@ -48,6 +52,9 @@ describe Ability, :type => :model do
 
     it "allow MdaVariantReportReviewer to access variant_report_status method" do
       expect(Ability.new({:roles => ["MDA_VARIANT_REPORT_REVIEWER"]}).can?(:variant_report_status, :VariantReportStatus)).to eq(true)
+      expect(Ability.new({:roles => ["MDA_VARIANT_REPORT_REVIEWER"]}).can?(:variant_report_status, NciMatchPatientModels)).to eq(true)
+      expect(Ability.new({:roles => ["MDA_VARIANT_REPORT_REVIEWER"]}).can?(:validate_json_message, :VariantReportStatus)).to eq(true)
+      expect(Ability.new({:roles => ["MDA_VARIANT_REPORT_REVIEWER"]}).can?(:validate_json_message, NciMatchPatientModels)).to eq(true)
     end
 
   end
