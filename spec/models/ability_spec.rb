@@ -27,9 +27,9 @@ describe Ability, :type => :model do
     end
 
     it "allow AssignmentReportReviewer to access assignment_confirmation method" do
-      expect(Ability.new({:roles => ["ASSIGNMENT_REPORT_REVIEWER"]}).can?(:assignment_confirmation, :VariantReportStatus)).to eq(true)
+      expect(Ability.new({:roles => ["ASSIGNMENT_REPORT_REVIEWER"]}).can?(:assignment_confirmation, :AssignmentStatus)).to eq(true)
       expect(Ability.new({:roles => ["ASSIGNMENT_REPORT_REVIEWER"]}).can?(:assignment_confirmation, NciMatchPatientModels)).to eq(true)
-      expect(Ability.new({:roles => ["ASSIGNMENT_REPORT_REVIEWER"]}).can?(:validate_json_message, :VariantReportStatus)).to eq(true)
+      expect(Ability.new({:roles => ["ASSIGNMENT_REPORT_REVIEWER"]}).can?(:validate_json_message, :AssignmentStatus)).to eq(true)
       expect(Ability.new({:roles => ["ASSIGNMENT_REPORT_REVIEWER"]}).can?(:validate_json_message, NciMatchPatientModels)).to eq(true)
     end
 

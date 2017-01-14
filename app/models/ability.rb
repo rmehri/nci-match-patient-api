@@ -43,7 +43,7 @@ end
 
 NciMatchRoles::AssignmentReportReviewer.instance_eval do
   def get_methods; [:assignment_confirmation, :validate_json_message]; end;
-  def get_subjects; [:VariantReportStatus, NciMatchPatientModels]; end;
+  def get_subjects; [:AssignmentStatus, NciMatchPatientModels]; end;
 end
 
 NciMatchRoles::SpecimenMessageSender.instance_eval do
