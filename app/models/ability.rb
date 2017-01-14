@@ -61,6 +61,6 @@ NciMatchRoles::VariantReportSender.instance_eval do
   def get_subjects; [:VariantReportStatus, :VariantReport, NciMatchPatientModels]; end
 end
 NciMatchRoles::MdaVariantReportReviewer.instance_eval do
-  def get_methods; [:variant_report_status, :validate_json_message]; end;
+  def get_methods; [:variant_status, :variant_report_status, :validate_json_message]; end;
   def get_subjects; [NciMatchPatientModels, :VariantReportStatus]; end;
 end
