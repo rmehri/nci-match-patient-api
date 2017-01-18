@@ -45,16 +45,6 @@ module V1
 
     private
 
-    def get_role
-      # data = HTTParty.post('https://ncimatch.auth0.com/tokeninfo',
-      #                      :body => {
-      #                          :id_token => token.to_s
-      #                      }.to_json,
-      #                      :headers => { 'Content-Type' => 'application/json' } )
-      # p data.parsed_response["app_metadata"]["roles"]
-      # p token
-    end
-
     # @return [Object]
     def get_resource
       instance_variable_get("@#{resource_name}")
