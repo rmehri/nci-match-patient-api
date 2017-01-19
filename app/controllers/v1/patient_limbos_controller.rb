@@ -61,12 +61,18 @@ module V1
     end
 
     def add_assay_messages(active_tissue_specimen, messages)
-      Rails.configuration.assay.collect do |k, v|
-        if (Date.parse(v["start_date"]) <= Date.current) && (Date.current <= Date.parse(v["end_date"]))
-          if (active_tissue_specimen[k.to_sym].nil?)
-            messages << "#{k.to_s} assay result missing"
+
+      if (active_tissue_specimen['slide_shipped_date'].nil?)
+        messages << "Slide shipment missing"
+      else
+        Rails.configuration.assay.collect do |k, v|
+          if (Date.parse(v["start_date"]) <= Date.current) && (Date.current <= Date.parse(v["end_date"]))
+            if (active_tissue_specimen[k.to_sym].nil?)
+              messages << "#{k.to_s} assay result missing"
+            end
           end
         end
+
       end
 
     end
