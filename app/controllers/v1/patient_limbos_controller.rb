@@ -38,20 +38,18 @@ module V1
           messages << "Tissue shipment missing"
         elsif active_tissue_specimen[:active_analysis_id].nil?
           messages << "Variant report missing"
+        elsif (active_tissue_specimen[:variant_report_status].nil? || active_tissue_specimen[:variant_report_status] != 'CONFIRMED')
+            messages << "No confirmed variant report"
         end
 
         add_assay_messages(active_tissue_specimen, messages)
 
-        if (active_tissue_specimen[:variant_report_status].nil? || active_tissue_specimen[:variant_report_status] != 'CONFIRMED')
-          messages << "No confirmed variant report"
+        if patient[:current_status] == 'PENDING_APPROVAL'
+          messages << "Assignment report awaiting approval from COG"
         end
 
         unless patient[:message].nil?
           messages << patient[:message]
-        end
-
-        if patient[:current_status] == 'PENDING_APPROVAL'
-          messages << "Assignment report awaiting approval from COG"
         end
 
         patient[:message] = messages
@@ -62,7 +60,7 @@ module V1
 
     def add_assay_messages(active_tissue_specimen, messages)
 
-      if (active_tissue_specimen['slide_shipped_date'].nil?)
+      if (active_tissue_specimen[:slide_shipped_date].nil?)
         messages << "Slide shipment missing"
       else
         Rails.configuration.assay.collect do |k, v|
