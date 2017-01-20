@@ -48,7 +48,7 @@ module V1
           messages << "Assignment report awaiting approval from COG"
         end
 
-        unless patient[:message].nil?
+        unless (patient[:message].nil? || !(patient[:message].include? "Assignment error"))
           messages << patient[:message]
         end
 
