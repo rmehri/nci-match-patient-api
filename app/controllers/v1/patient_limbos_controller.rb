@@ -8,13 +8,14 @@ module V1
 
     private
     def set_resource(_resource = {})
-      # non_target_statuses = ["REGISTRATION", "TISSUE_VARIANT_REPORT_CONFIRMED", "PENDING_CONFIRMATION", "ON_TREATMENT_ARM", "REQUEST_ASSIGNMENT", "REQUEST_NO_ASSIGNMENT", "OFF_STUDY", "OFF_STUDY_BIOPSY_EXPIRED"]
+      # non_target_statuses = ["REGISTRATION", "PENDING_CONFIRMATION", "ON_TREATMENT_ARM", "REQUEST_ASSIGNMENT", "REQUEST_NO_ASSIGNMENT", "OFF_STUDY", "OFF_STUDY_BIOPSY_EXPIRED"]
       target_statuses = ["TISSUE_SPECIMEN_RECEIVED",
                          "TISSUE_NUCLEIC_ACID_SHIPPED",
                          "TISSUE_SLIDE_SPECIMEN_SHIPPED",
                          "ASSAY_RESULTS_RECEIVED",
                          "TISSUE_VARIANT_REPORT_RECEIVED",
                          "TISSUE_VARIANT_REPORT_REJECTED",
+                         "TISSUE_VARIANT_REPORT_CONFIRMED",
                          "PENDING_APPROVAL",
                          "AWAITING_PATIENT_DATA",
                          "AWAITING_TREATMENT_ARM_STATUS"]
@@ -25,24 +26,30 @@ module V1
 
       resources.collect{ |resource| (Date.current - Date.parse(resource[:active_tissue_specimen][:specimen_collected_date])).to_i >= 7 }
       resources.uniq!{ |resource| resource[:patient_id] }
-      generate_messages(resources)
-      instance_variable_set("@#{resource_name}", resources)
+      final_resources = generate_messages(resources)
+      instance_variable_set("@#{resource_name}", final_resources)
     end
 
     def generate_messages(resources)
+      final_resources = []
       resources.each do | patient |
         messages = []
         active_tissue_specimen = patient[:active_tissue_specimen]
 
+        vr_message = []
         if active_tissue_specimen[:active_molecular_id].nil?
-          messages << "Tissue shipment missing"
+          vr_message << "Tissue shipment missing"
         elsif active_tissue_specimen[:active_analysis_id].nil?
-          messages << "Variant report missing"
+          vr_message << "Variant report missing"
         elsif (active_tissue_specimen[:variant_report_status].nil? || active_tissue_specimen[:variant_report_status] != 'CONFIRMED')
-            messages << "No confirmed variant report"
+          vr_message << "No confirmed variant report"
         end
 
-        add_assay_messages(active_tissue_specimen, messages)
+        assay_messages = get_assay_messages(active_tissue_specimen)
+        next if assay_messages.blank? && vr_message.blank?
+
+        messages.push(*vr_message)
+        messages.push(*assay_messages)
 
         if patient[:current_status] == 'PENDING_APPROVAL'
           messages << "Assignment report awaiting approval from COG"
@@ -54,25 +61,30 @@ module V1
 
         patient[:message] = messages
         patient[:days_pending] = (Date.current - Date.parse(active_tissue_specimen[:specimen_collected_date])).to_i
+
+        final_resources << patient
       end
 
+      final_resources
     end
 
-    def add_assay_messages(active_tissue_specimen, messages)
+    def get_assay_messages(active_tissue_specimen)
 
+      assay_messages = []
       if (active_tissue_specimen[:slide_shipped_date].nil?)
-        messages << "Slide shipment missing"
+        assay_messages << "Slide shipment missing"
       else
         Rails.configuration.assay.collect do |k, v|
           if (Date.parse(v["start_date"]) <= Date.current) && (Date.current <= Date.parse(v["end_date"]))
             if (active_tissue_specimen[k.to_sym].nil?)
-              messages << "#{k.to_s} assay result missing"
+              assay_messages << "#{k.to_s} assay result missing"
             end
           end
         end
 
       end
 
+      assay_messages
     end
   end
 
