@@ -29,14 +29,16 @@ module V1
 
     def format_fields(patient)
       patient.deep_symbolize_keys!
-      unless patient[:current_assignment].blank?
-        unless patient[:current_assignment][:selected_treatment_arm].blank?
-          selected_ta = patient[:current_assignment][:selected_treatment_arm]
-          selected_ta[:treatment_arm_title] = ApplicationHelper.format_treatment_arm_title(selected_ta)
+      if patient[:current_status] == "ON_TREATMENT_ARM"
+        unless patient[:current_assignment].blank?
+          unless patient[:current_assignment][:selected_treatment_arm].blank?
+            selected_ta = patient[:current_assignment][:selected_treatment_arm]
+            selected_ta[:treatment_arm_title] = ApplicationHelper.format_treatment_arm_title(selected_ta)
 
-          patient[:current_assignment] = selected_ta
+            patient[:current_assignment] = selected_ta
+          end
+
         end
-
       end
 
       unless patient[:diseases].blank?
