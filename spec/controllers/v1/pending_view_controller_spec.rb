@@ -12,6 +12,11 @@ describe V1::PendingViewController do
     variant_report.variant_report_type = 'TISSUE'
     allow(NciMatchPatientModels::VariantReport).to receive(:scan).and_return([variant_report])
 
+    patient = NciMatchPatientModels::Patient.new
+    patient.patient_id = "3366"
+    patient.current_status = "TISSUE_VARIANT_REPORT_RECEIVED"
+    allow(NciMatchPatientModels::Patient).to receive(:query).and_return([patient])
+
     allow(NciMatchPatientModels::Assignment).to receive(:scan).and_return([])
     get :pending_view
     expect(response).to have_http_status(200)
@@ -37,6 +42,7 @@ describe V1::PendingViewController do
     patient = NciMatchPatientModels::Patient.new
     patient.patient_id = "3366"
     patient.diseases = [{:disease_name => "cancer", :disease_id => '123'}]
+    patient.current_status = "TISSUE_VARIANT_REPORT_RECEIVED"
     allow(NciMatchPatientModels::Patient).to receive(:query).and_return([patient])
 
     get :pending_view
