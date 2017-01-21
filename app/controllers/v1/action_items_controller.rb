@@ -9,8 +9,13 @@ module V1
     private
 
     def set_resource(resources = {})
-      resources = NciMatchPatientModels::VariantReport.scan(resource_params).collect { |record| build_model(record.to_h.compact) }
-      resources += NciMatchPatientModels::Assignment.scan(assignment_resource_params).collect { |record| build_model(record.to_h.compact, 'assignment_report') }
+
+      patient = NciMatchPatientModels::Patient.query_patient_by_id(params[:patient_id])
+      if (patient.current_status != "OFF_STUDY" && patient.current_status != "OFF_STUDY_BIOPSY_EXPIRED")
+        resources = NciMatchPatientModels::VariantReport.scan(resource_params).collect { |record| build_model(record.to_h.compact) }
+        resources += NciMatchPatientModels::Assignment.scan(assignment_resource_params).collect { |record| build_model(record.to_h.compact, 'assignment_report') }
+      end
+
       instance_variable_set("@#{resource_name}", resources)
     end
 
