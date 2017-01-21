@@ -80,7 +80,6 @@ class ApplicationController < ActionController::Base
     AppLogger.log(self.class.name, "Validating messesage of type [#{message_type}]")
 
     message_type = {message_type => message}
-    p "================= token: "
     result = StateMachine.validate(message_type, token)
 
     raise Errors::RequestForbidden, "Incoming message failed patient state validation: #{result}" if result != 'true'
