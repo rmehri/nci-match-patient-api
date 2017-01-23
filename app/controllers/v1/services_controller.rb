@@ -2,6 +2,7 @@ module V1
   class ServicesController < ApplicationController
     before_action :authenticate_user
     load_and_authorize_resource :class => NciMatchPatientModels
+    skip_before_filter :authenticate_user, :only => [:presign]
 
 
     # POST /api/v1/patients/{patient_id}
@@ -27,6 +28,23 @@ module V1
 
       standard_success_message('Message has been processed successfully', 202)
 
+    end
+
+    # :site/:molecular_id/:analysis_id/:file_name
+    def presign
+      if params[:file_name] && params[:site] && params[:molecular_id] && params[:analysis_id]
+        s3 = Aws::S3::Resource.new(region: 'us-east-1')
+        obj = s3.bucket('pedmatch-dev').object(params[:site] + "/" + params[:molecular_id] + "/" + params[:analysis_id] + "/" + params[:file_name])
+        params = { acl: 'public-read' }
+        # params[:content_length] = 100000*1024
+        url = {
+            presigned_url: obj.presigned_url(:put, params),
+            public_url: obj.public_url
+        }
+        render :json => {:url => url[:presigned_url].to_s}
+      else
+        render :json => {:error => 'Invalid Params'}
+      end
     end
 
     # POST /api/v1/patients/variant_report/:molecular_id
