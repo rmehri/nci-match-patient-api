@@ -34,8 +34,8 @@ module V1
       resource[:specimen_shipments].collect do | shipment |
         assignments = NciMatchPatientModels::Assignment.scan(build_index_query({:molecular_id => shipment[:molecular_id], :projection => [:analysis_id, :status, :status_date, :uuid, :comment_user,:comment]})).collect{|record| record.to_h.compact}
         variant_reports = NciMatchPatientModels::VariantReport.scan(build_index_query({:molecular_id => shipment[:molecular_id],
-                                                                                       :projection => [:ion_reporter_id, :molecular_id, :analysis_id, :variant_report_received_date, :dna_bam_path_name, :dna_bai_path_name,
-                                                                                                       :vcf_path_name, :rna_bam_path_name, :rna_bai_path_name, :tsv_file_name,
+                                                                                       :projection => [:ion_reporter_id, :molecular_id, :analysis_id, :variant_report_received_date, :comment_user,
+                                                                                                       # :dna_bam_path_name, :dna_bai_path_name, :vcf_path_name, :rna_bam_path_name, :rna_bai_path_name, :tsv_file_name,
                                                                                                        :status ,:qc_report_url, :vr_chart_data_url]})).collect{|record| record.to_h.compact }
 
         variant_reports = variant_reports.sort_by{ |report| report[:variant_report_received_date]}.reverse
@@ -43,14 +43,17 @@ module V1
         assignments = assignments.sort_by{ |record| record[:assignment_date]}.reverse
         shipment[:analyses] = []
         variant_reports.each do | variant_report |
-          analyses_assignment = Hash.new
+          analysis_assignments = []
           assignments.each do | assignment |
             if(variant_report[:analysis_id] == assignment[:analysis_id])
               analyses_assignment = build_analyses_assignment_model(assignment)
-              break
+              analysis_assignments << analyses_assignment
             end
           end
-          shipment[:analyses] += [build_variant_report_analyses_model(variant_report).merge(analyses_assignment)]
+
+          variant_report_hash = build_variant_report_analyses_model(variant_report)
+          variant_report_hash[:assignments] = analysis_assignments.sort_by {|assignment| assignment[:status_date]}.reverse
+          shipment[:analyses] += [variant_report_hash]
         end
       end
 
@@ -88,7 +91,8 @@ module V1
                 :molecular_id => variant_report[:molecular_id],
                 :analysis_id => variant_report[:analysis_id],
                 :variant_report_status => variant_report[:status],
-                :variant_report_received_date => variant_report[:variant_report_received_date]
+                :variant_report_received_date => variant_report[:variant_report_received_date],
+                :comment_user => variant_report[:comment_user]
         }
 
       VariantReportHelper.add_download_links(report)
