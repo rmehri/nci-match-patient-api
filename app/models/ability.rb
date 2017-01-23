@@ -37,8 +37,8 @@ NciMatchRoles::PatientMessageSender.instance_eval do
 end
 
 NciMatchRoles::MochaVariantReportReviewer.instance_eval do
-  def get_methods; [:variant_status, :variant_report_status]; end;
-  def get_subjects; :all; end;
+  def get_methods; [:variant_status, :variant_report_status, :validate_json_message]; end;
+  def get_subjects; [NciMatchPatientModels, :VariantReportStatus, :MoCha]; end;
 end
 
 NciMatchRoles::AssignmentReportReviewer.instance_eval do
@@ -62,5 +62,5 @@ NciMatchRoles::VariantReportSender.instance_eval do
 end
 NciMatchRoles::MdaVariantReportReviewer.instance_eval do
   def get_methods; [:variant_status, :variant_report_status, :validate_json_message]; end;
-  def get_subjects; [NciMatchPatientModels, :VariantReportStatus]; end;
+  def get_subjects; [NciMatchPatientModels, :VariantReportStatus, :MDA]; end;
 end

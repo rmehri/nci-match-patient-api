@@ -109,6 +109,9 @@ module V1
       error = MessageValidator.validate_json_message(type, message)
       raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{error}" unless error.nil?
 
+      lab_type = NciMatchPatientModels::VariantReport.query_by_analysis_id(message[:patient_id], message[:analysis_id]).to_h[:clia_lab]
+      authorize! :variant_report_status, lab_type.to_sym
+
       validate_patient_state(message, type)
       result = PatientProcessor.run_service('/confirmVariantReport', message, token)
       standard_success_message(result)
