@@ -30,23 +30,6 @@ module V1
 
     end
 
-    # :site/:molecular_id/:analysis_id/:file_name
-    def presign
-      if params[:file_name] && params[:site] && params[:molecular_id] && params[:analysis_id]
-        s3 = Aws::S3::Resource.new(region: 'us-east-1')
-        obj = s3.bucket('pedmatch-dev').object(params[:site] + "/" + params[:molecular_id] + "/" + params[:analysis_id] + "/" + params[:file_name])
-        params = { acl: 'public-read' }
-        # params[:content_length] = 100000*1024
-        url = {
-            presigned_url: obj.presigned_url(:put, params),
-            public_url: obj.public_url
-        }
-        render :json => {:url => url[:presigned_url].to_s}
-      else
-        render :json => {:error => 'Invalid Params'}
-      end
-    end
-
     # POST /api/v1/patients/variant_report/:molecular_id
     def variant_report_uploaded
       message = get_post_data("")

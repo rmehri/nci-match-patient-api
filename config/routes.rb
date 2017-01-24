@@ -24,12 +24,9 @@ Rails.application.routes.draw do
 
     end
 
-    # return $http.get(matchConfig.cliaApiBaseUrl + '/aliquot/files/' + site + '/' + molecularId + '/' + analysisId + '/' + fileName);
-
     controller :services do
       post "patients/:patient_id" => :trigger
       post "patients/variant_report/:molecular_id" => :variant_report_uploaded
-      post "patients/presign/:site/:molecular_id/:analysis_id/:file_name" => :presign
 
       put "patients/:patient_id/variant_reports/:analysis_id/:status" => :variant_report_status
       put "patients/:patient_id/assignment_reports/:analysis_id/:status" => :assignment_confirmation
