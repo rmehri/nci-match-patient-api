@@ -4,7 +4,7 @@ class StateMachine
 
   def self.validate(message, token = "")
     begin
-      AppLogger.log(self.class.name, "============ token calling state: #{token}")
+      # AppLogger.log(self.class.name, "============ token calling state: #{token}")
 
       result = post("/patientMessage",
                     {
@@ -13,7 +13,6 @@ class StateMachine
                     })
       result.body
     rescue Error => error
-      p "=================== are we here: #{error}"
       AppLogger.log(self.class.name, "Exception while calling State Api /patientMessage")
       raise error
     end
