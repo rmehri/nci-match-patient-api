@@ -9,7 +9,8 @@ module V1
     def trigger
       puts "================== current user: #{current_user.to_json}"
       patient_id = get_patient_id_from_url
-      message = get_post_data(patient_id)
+      message = ApplicationHelper.replace_value_in_patient_message(get_post_data, "patient_id", patient_id)
+      message.deep_symbolize_keys!
 
       type = MessageValidator.get_message_type(message)
       raise Errors::RequestForbidden, 'Incoming message has UNKNOWN message type' if (type == 'UNKNOWN')
@@ -32,7 +33,8 @@ module V1
 
     # POST /api/v1/patients/variant_report/:molecular_id
     def variant_report_uploaded
-      message = get_post_data("")
+      message = get_post_data
+      message.deep_symbolize_keys!
 
       type = MessageValidator.get_message_type(message)
       raise Errors::RequestForbidden, 'Incoming message has UNKNOWN message type' if (type == 'UNKNOWN')
@@ -61,14 +63,13 @@ module V1
       message = ConfirmVariantMessage.from_url get_url_path_segments
       raise Errors::RequestForbidden, message if message.is_a? String
 
-      post_data = get_post_data("")
+      post_data = get_post_data
       message['comment'] = post_data[:comment]
       message['comment_user'] = post_data[:comment_user]
 
       response = PatientProcessor.run_service("/confirm_variant", message, token)
       response_hash = response.parsed_response
       raise Errors::RequestForbidden, response_hash["message"] if !((200..299).include? response.code)
-
 
       AppLogger.log(self.class.name, "variant_status response from Patient Processor: #{response_hash}")
       standard_success_message(response_hash["message"])
@@ -80,7 +81,7 @@ module V1
       message = ConfirmVariantReportMessage.from_url get_url_path_segments
       raise Errors::RequestForbidden, message if message.is_a? String
 
-      post_data = get_post_data("")
+      message = get_post_data
       message['comment'] = post_data[:comment]
       message['comment_user'] = post_data[:comment_user]
       message.deep_transform_keys!(&:underscore).symbolize_keys!
@@ -109,7 +110,7 @@ module V1
       raise Errors::RequestForbidden, message if message.is_a? String
 
       p "============ message for ConfirmAssignmentMessage: #{message}"
-      post_data = get_post_data("")
+      post_data = get_post_data
       message['comment'] = post_data[:comment]
       message['comment_user'] = post_data[:comment_user]
       message.deep_transform_keys!(&:underscore).symbolize_keys!

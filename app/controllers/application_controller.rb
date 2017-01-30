@@ -38,15 +38,10 @@ class ApplicationController < ActionController::Base
     return request.fullpath.split("/")
   end
 
-  def get_post_data(patient_id)
+  def get_post_data
     json_data = JSON.parse(request.raw_post)
     logger.info "Patient Api received message: #{json_data.to_json}"
     json_data.deep_transform_keys!(&:underscore).symbolize_keys!
-
-    json_data.merge!({:patient_id => patient_id})
-
-    logger.info "========== message after merge: #{json_data}"
-    json_data
   end
 
 
