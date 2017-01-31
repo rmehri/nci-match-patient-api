@@ -81,7 +81,7 @@ module V1
       message = ConfirmVariantReportMessage.from_url get_url_path_segments
       raise Errors::RequestForbidden, message if message.is_a? String
 
-      message = get_post_data
+      post_data = get_post_data
       message['comment'] = post_data[:comment]
       message['comment_user'] = post_data[:comment_user]
       message.deep_transform_keys!(&:underscore).symbolize_keys!
