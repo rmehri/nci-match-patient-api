@@ -8,24 +8,26 @@ module V1
 
     private
     def is_variant_report_reviewer(clia_lab)
-      # temp solution
-      required_roles = ["SYSTEM", "ADMIN"]
-      case clia_lab
-        when "MDA"
-          required_roles << "MDA_VARIANT_REPORT_REVIEWER"
-        when "MoCha"
-          required_roles << "MOCHA_VARIANT_REPORT_REVIEWER"
-        else
-          p "========variant report does not have valid clia_lab"
-      end
+      return false if clia_lab.nil?
 
-      ApplicationHelper.has_role(required_roles, current_user)
+      begin
+        authorize! :variant_report_status, clia_lab.to_sym
+        return true
+      rescue => error
+        p "=========== VR review role error: error"
+        return false
+      end
 
     end
 
     def is_assignment_reviewer
-      required_roles = ["SYSTEM", "ADMIN", "ASSIGNMENT_REPORT_REVIEWER"]
-      ApplicationHelper.has_role(required_roles, current_user)
+      begin
+        authorize! :validate_json_message, "AssignmentStatus".to_sym
+        return true
+      rescue
+        return false
+      end
+
     end
 
     def set_resource(_resource = {})
