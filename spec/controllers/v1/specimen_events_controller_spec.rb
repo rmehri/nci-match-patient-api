@@ -13,7 +13,8 @@ describe V1::SpecimenEventsController do
   it 'GET #index should return something' do
     get :index, :patient_id => "1234"
     expect(response).to have_http_status(200)
-    expect(response.body).to eq("{\"tissue_specimens\":[]}")
+    expect(response.body).to include("{\"tissue_specimens\":[]")
+    expect(response.body).to include("\"blood_specimens\"")
   end
 
   it 'GET #index should return a proper json with data' do
@@ -21,7 +22,12 @@ describe V1::SpecimenEventsController do
     specimen.patient_id = "3366"
     specimen.specimen_type = 'TISSUE'
     specimen.surgical_event_id = 'surg_123'
-    allow(NciMatchPatientModels::Specimen).to receive(:scan).and_return([specimen])
+
+    blood_specimen = NciMatchPatientModels::Specimen.new
+    blood_specimen.patient_id = "3366"
+    blood_specimen.specimen_type = 'BLOOD'
+
+    allow(NciMatchPatientModels::Specimen).to receive(:scan).and_return([specimen, blood_specimen])
 
     shipment = NciMatchPatientModels::Shipment.new
     shipment.patient_id = "3366"

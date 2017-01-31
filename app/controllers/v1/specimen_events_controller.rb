@@ -9,8 +9,10 @@ module V1
 
     private
     def set_resource(_resource = {})
-      tissue_specimens = []
       resources_by_type = {}
+
+      tissue_specimens = []
+      blood_specimens = []
 
       resources = NciMatchPatientModels::Specimen.scan(resource_params).collect { |data| data.to_h.compact }
 
@@ -19,13 +21,15 @@ module V1
           resource = embed_resources(resource)
           tissue_specimens.push(resource)
         else
-          embed_blood_specimens(resource, resources_by_type)
-          embed_blood_shipment_resources(resource, resources_by_type)
+          blood_specimens.push(resource)
         end
-
       end
 
+      blood_shipments = embed_blood_shipment_resources
+      blood_resources = {:specimens => blood_specimens, :specimen_shipments => blood_shipments}
+
       resources_by_type[:tissue_specimens] = tissue_specimens
+      resources_by_type[:blood_specimens] = blood_resources
       instance_variable_set("@#{resource_name}", resources_by_type)
     end
 
@@ -60,24 +64,26 @@ module V1
       resource
     end
 
-    def embed_blood_specimens(resource, blood_shipment_resources)
-      blood_shipment_resources[:blood_specimens] ||= []
-      blood_shipment_resources[:blood_specimens].push(resource)
-    end
+    def embed_blood_shipment_resources
 
-    def embed_blood_shipment_resources(resource ={}, blood_shipment_resources)
+      puts "============ patientid blood: #{params[:patient_id]}"
+      resources = NciMatchPatientModels::Shipment.scan(build_index_query({:patient_id => params[:patient_id], :shipment_type => 'BLOOD_DNA'})).collect { |data| data.to_h.compact }
+      resources.collect do | shipment |
 
-      blood_shipment_resources[:blood_shipments] = NciMatchPatientModels::Shipment.scan(build_index_query({:patient_id => resource[:patient_id], :shipment_type => 'BLOOD_DNA'})).collect { |data| data.to_h.compact }
-      blood_shipment_resources[:blood_shipments].collect do | shipment |
+        puts "=========== shipment: #{shipment}"
+
         variant_reports = NciMatchPatientModels::VariantReport.scan(build_index_query({:molecular_id => shipment[:molecular_id],
-                                                                                       :projection => [:analysis_id, :variant_report_received_date, :dna_bam_path_name, :dna_bai_path_name,
-                                                                                                       :vcf_path_name, :rna_bam_path_name, :rna_bai_path_name, :tsv_file_name,
-                                                                                                       :status ,:qc_report_url, :vr_chart_data_url]})).collect{|record| record.to_h.compact }
+                                                                                       :projection => [:ion_reporter_id, :molecular_id, :analysis_id, :variant_report_received_date, :status]})).collect{|record| record.to_h.compact }
+        variant_reports = variant_reports.sort_by{ |report| report[:variant_report_received_date]}.reverse
+
         shipment[:analyses] = []
         variant_reports.each do | variant_report |
+          puts "============== vr: #{variant_report}"
           shipment[:analyses] += [build_variant_report_analyses_model(variant_report)]
         end
       end
+
+      resources
     end
 
     def specimen_events_params
