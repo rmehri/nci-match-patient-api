@@ -57,4 +57,19 @@ module ApplicationHelper
     message_hash
   end
 
+  def self.trim_value_in_patient_message(message_hash)
+    return message_hash if message_hash.blank?
+
+    message_hash.deep_symbolize_keys!
+    message_hash.each do |key, value |
+      if (value.is_a? Hash)
+        trim_value_in_patient_message(value)
+      elsif (value.is_a? String)
+        message_hash[key] = value.strip
+      end
+    end
+
+    message_hash
+  end
+
 end

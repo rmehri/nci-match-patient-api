@@ -10,6 +10,7 @@ module V1
       puts "================== current user: #{current_user.to_json}"
       patient_id = get_patient_id_from_url
       message = ApplicationHelper.replace_value_in_patient_message(get_post_data, "patient_id", patient_id)
+      message = ApplicationHelper.trim_value_in_patient_message(message)
       message.deep_symbolize_keys!
 
       type = MessageValidator.get_message_type(message)
