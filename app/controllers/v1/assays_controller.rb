@@ -7,14 +7,14 @@ module V1
     end
 
     private
+
     def set_resource(_resource = {})
       assays = []
-      specimens = NciMatchPatientModels::Specimen.find_by({:specimen_type => 'TISSUE'})
-      specimens.each do | specimen|
+      specimens = NciMatchPatientModels::Specimen.find_by({ specimen_type: 'TISSUE' })
+      specimens.each do |specimen|
         next if specimen.assays.nil?
         assays.push(*merge_assay_hash(specimen))
       end
-
       instance_variable_set("@#{resource_name}", assays)
     end
 
@@ -26,7 +26,6 @@ module V1
         specimen_assay[:surgical_event_id] = specimen.surgical_event_id
         assays << specimen_assay
       end
-
       assays
     end
   end
