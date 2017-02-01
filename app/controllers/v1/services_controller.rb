@@ -65,8 +65,17 @@ module V1
       raise Errors::RequestForbidden, message if message.is_a? String
 
       post_data = get_post_data
-      message['comment'] = post_data[:comment]
-      message['comment_user'] = post_data[:comment_user]
+      message[:comment] = post_data[:comment]
+      message[:comment_user] = post_data[:comment_user]
+
+      variant = NciMatchPatientModels::Variant.query_by_uuid(message[:variant_uuid])
+      raise Errors::ResourceNotFound, "Unable to find variant with uuid" if variant.nil?
+
+      variant_report = NciMatchPatientModels::VariantReport.query_by_analysis_id(variant.patient_id, variant.analysis_id)
+      raise Errors::RequestForbidden, "Variant with uuid does not belong to any variant report" if variant_report.nil?
+
+      lab_type = variant_report.clia_lab
+      authorize! :variant_report_status, lab_type.to_sym
 
       response = PatientProcessor.run_service("/confirm_variant", message, token)
       response_hash = response.parsed_response
