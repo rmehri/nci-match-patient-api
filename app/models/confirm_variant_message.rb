@@ -35,7 +35,7 @@ class ConfirmVariantMessage
     # raise "Unregnized checked flag in variant confirmation url" if (check != 'checked' && check != 'unchecked')
 
     message = (check != 'checked' && check != 'unchecked') ?
-        "Unregnized checked flag in variant confirmation url" : {"variant_uuid" => id, "status" => check}
+        "Unregnized checked flag in variant confirmation url" : {:variant_uuid => id, :status => check}
 
   end
 
