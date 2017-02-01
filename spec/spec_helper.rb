@@ -1,3 +1,7 @@
+# Ruby coverage report for Codacy
+require 'codacy-coverage'
+Codacy::Reporter.start
+
 require 'simplecov'
 SimpleCov.start
 
