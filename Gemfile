@@ -45,6 +45,8 @@ end
 group :test do
   gem "simplecov"
   gem "codeclimate-test-reporter", "~> 1.0.0"
+  # Ruby coverage report for Codacy 
+  gem 'codacy-coverage', :require => false
 end
 
 group :development do
