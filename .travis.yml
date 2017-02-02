@@ -44,5 +44,4 @@ after_success:
 notifications:
   slack: clinicalbiomed:gRp5LqKElNOjUUMPLlq4qC1j
 addons:
-  code_climate:
-    repo_token: 38f7a026c777334223f638f462414677c4b27c45b5503fa2edf52a54e9bfdf55
+  
