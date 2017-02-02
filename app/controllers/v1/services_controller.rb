@@ -35,6 +35,7 @@ module V1
     # POST /api/v1/patients/variant_report/:molecular_id
     def variant_report_uploaded
       message = get_post_data
+      message = ApplicationHelper.trim_value_in_patient_message(message)
       message.deep_symbolize_keys!
 
       type = MessageValidator.get_message_type(message)
