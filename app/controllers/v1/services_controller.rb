@@ -40,9 +40,12 @@ module V1
       type = MessageValidator.get_message_type(message)
       raise Errors::RequestForbidden, 'Incoming message has UNKNOWN message type' if (type == 'UNKNOWN')
 
-      authorize! :validate_json_message, type.to_sym
+      # authorize! :validate_json_message, type.to_sym
       shipments = NciMatchPatientModels::Shipment.find_by({"molecular_id" => message[:molecular_id]})
       raise Errors::RequestForbidden, "Unable to find shipment with molecular id [#{message[:molecular_id]}]" if shipments.length == 0
+
+      lab_type = shipments[0].destination
+      authorize! :variant_report_uploaded, lab_type.to_sym
 
       patient_id = shipments[0].patient_id
       message[:patient_id] = patient_id
@@ -50,9 +53,8 @@ module V1
       error = MessageValidator.validate_json_message(type, message)
       raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{error}" unless error.nil?
 
-      status = validate_patient_state_and_queue(message, type)
-
-      raise Errors::RequestForbidden, 'Incoming message failed patient state validation' if status == false
+      p "================== here1"
+      validate_patient_state_and_queue(message, type)
 
       standard_success_message('Message has been processed successfully', 202)
 

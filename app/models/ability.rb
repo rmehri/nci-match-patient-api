@@ -36,11 +36,6 @@ NciMatchRoles::PatientMessageSender.instance_eval do
   def get_subjects; [:Cog, :TreatmentArm, NciMatchPatientModels]; end;
 end
 
-NciMatchRoles::MochaVariantReportReviewer.instance_eval do
-  def get_methods; [:variant_status, :variant_report_status, :validate_json_message]; end;
-  def get_subjects; [NciMatchPatientModels, :VariantReportStatus, :MoCha]; end;
-end
-
 NciMatchRoles::AssignmentReportReviewer.instance_eval do
   def get_methods; [:assignment_confirmation, :validate_json_message]; end;
   def get_subjects; [:AssignmentStatus, NciMatchPatientModels]; end;
@@ -56,11 +51,22 @@ NciMatchRoles::AssayMessageSender.instance_eval do
   def get_subjects; [:Assay, NciMatchPatientModels]; end
 end
 
-NciMatchRoles::VariantReportSender.instance_eval do
-  def get_methods; [:trigger, :validate_json_message]; end
-  def get_subjects; [:VariantReportStatus, :VariantReport, NciMatchPatientModels]; end
+NciMatchRoles::MdaVariantReportSender.instance_eval do
+  def get_methods; [:variant_report_uploaded, :validate_json_message]; end
+  def get_subjects; [NciMatchPatientModels, :VariantReport, :MDA]; end
 end
+
 NciMatchRoles::MdaVariantReportReviewer.instance_eval do
   def get_methods; [:variant_status, :variant_report_status, :validate_json_message]; end;
   def get_subjects; [NciMatchPatientModels, :VariantReportStatus, :MDA]; end;
+end
+
+NciMatchRoles::MochaVariantReportSender.instance_eval do
+  def get_methods; [:variant_report_uploaded, :validate_json_message]; end
+  def get_subjects; [NciMatchPatientModels, :VariantReport, :MoCha]; end
+end
+
+NciMatchRoles::MochaVariantReportReviewer.instance_eval do
+  def get_methods; [:variant_status, :variant_report_status, :validate_json_message]; end;
+  def get_subjects; [NciMatchPatientModels, :VariantReportStatus, :MoCha]; end;
 end
