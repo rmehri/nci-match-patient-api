@@ -1,5 +1,6 @@
 # Ruby coverage report for Codacy
-
+require 'codacy-coverage'
+Codacy::Reporter.start
 
 require 'simplecov'
 SimpleCov.start
@@ -29,8 +30,7 @@ require 'rails_helper'
 require 'rspec/active_model/mocks'
 require 'aws-record'
 require 'active_model'
-require 'codacy-coverage'
-Codacy::Reporter.start
+
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
