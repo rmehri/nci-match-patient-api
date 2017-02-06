@@ -87,7 +87,7 @@ module V1
         end
 
         # allow_upload
-        shipment[:allow_upload] = set_allow_upload(variant_report_confirmed, clia_lab, latest_specimen) if shipment[:shipment_type] == "TISSUE"
+        shipment[:allow_upload] = set_allow_upload(variant_report_confirmed, clia_lab, latest_specimen) if shipment[:shipment_type] == "TISSUE_DNA_AND_CDNA"
       end
 
       resource
