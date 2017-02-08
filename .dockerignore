@@ -6,7 +6,6 @@ Docker*
 .travis.yml
 temp*
 tmp*
-codeclimate*
 spec*
 .rspec*
 Gemfile.lock
