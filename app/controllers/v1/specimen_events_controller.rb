@@ -150,6 +150,7 @@ module V1
         {
           :analysis_id => assignment[:analysis_id],
           :assignment_report_status => assignment[:status],
+          :assignment_date => assignment[:assignment_date],
           :status_date => assignment[:status_date],
           :comment_user => assignment[:comment_user],
           :comment => assignment[:comment],
