@@ -123,4 +123,36 @@ describe ApplicationHelper do
     expect(message[:specimen_received][:surgical_event_id]).to eq("3366-bsn")
   end
 
+  it 'should match string with beginnging and end token' do
+    value = "ICCBAF47"
+    v = ApplicationHelper.string_match(value, "ICC", "s")
+    expect(v).to be_falsey
+
+    value = "ICCBAF47s"
+    v = ApplicationHelper.string_match(value, "ICC", "s")
+    expect(v).to be_truthy
+
+    value = "ICBAF47s"
+    v = ApplicationHelper.string_match(value, "ICC", "s")
+    expect(v).to be_falsey
+  end
+
+  it 'should retrieve gene name from assay name' do
+    value = "ICCBAF47s"
+    gene = ApplicationHelper.to_gene_name(value)
+    expect(gene).to eq("BAF47")
+
+    value = nil
+    gene = ApplicationHelper.to_gene_name(value)
+    expect(gene).to be_nil
+
+    value = "NoMarker"
+    gene = ApplicationHelper.to_gene_name(value)
+    expect(gene).to eq("NoMarker")
+
+    value = "ICCPTENs"
+    gene = ApplicationHelper.to_gene_name(value)
+    expect(gene).to eq("PTEN")
+  end
+
 end

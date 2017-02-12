@@ -72,4 +72,14 @@ module ApplicationHelper
     message_hash
   end
 
+  def self.string_match(value, start_with, end_with)
+    value =~ /^#{start_with}.*#{end_with}$/
+  end
+
+  def self.to_gene_name(assay_name)
+    return assay_name if !ApplicationHelper.string_match(assay_name, "ICC", "s")
+
+    assay_name[3..-2]
+  end
+
 end

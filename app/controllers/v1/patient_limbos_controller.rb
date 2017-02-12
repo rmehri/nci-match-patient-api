@@ -77,7 +77,8 @@ module V1
         Rails.configuration.assay.collect do |k, v|
           if (Date.parse(v["start_date"]) <= Date.current) && (Date.current <= Date.parse(v["end_date"]))
             if (active_tissue_specimen[k.to_sym].nil?)
-              assay_messages << "#{k.to_s} assay result missing"
+              gene_name = ApplicationHelper.to_gene_name(k.to_s)
+              assay_messages << "#{gene_name} assay result missing"
             end
           end
         end
