@@ -147,17 +147,24 @@ module V1
       if assignment.blank?
         {}
       else
-        ta_title = ApplicationHelper.format_treatment_arm_title(assignment[:selected_treatment_arm]) if !assignment[:selected_treatment_arm].blank?
-        {
+        assignment_hash = {
           :analysis_id => assignment[:analysis_id],
           :assignment_report_status => assignment[:status],
           :assignment_date => assignment[:assignment_date],
           :status_date => assignment[:status_date],
           :comment_user => assignment[:comment_user],
           :comment => assignment[:comment],
-          :assignment_uuid => assignment[:uuid],
-          :treatment_arm_title => ta_title
+          :assignment_uuid => assignment[:uuid]
         }
+        unless assignment[:selected_treatment_arm].blank?
+          ta_hash = assignment[:selected_treatment_arm].symbolize_keys
+          assignment_hash[:treatment_arm_title] = ApplicationHelper.format_treatment_arm_title(ta_hash)
+          assignment_hash[:treatment_arm_id] = ta_hash[:treatment_arm_id]
+          assignment_hash[:treatment_arm_stratum_id] = ta_hash[:stratum_id]
+          assignment_hash[:treatment_arm_version] = ta_hash[:version]
+        end
+
+        assignment_hash
       end
     end
   end
