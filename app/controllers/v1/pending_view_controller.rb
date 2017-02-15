@@ -20,6 +20,7 @@ module V1
                   :analysis_id => variant_report.analysis_id,
                   :surgical_event_id => variant_report.surgical_event_id,
                   :ion_reporter_id => variant_report.ion_reporter_id,
+                  :clia_lab => variant_report.clia_lab,
                   :variant_report_received_date => variant_report.variant_report_received_date}
           data[:specimen_received_date] = get_specimen_received_date(variant_report.patient_id,
                                                                      variant_report.variant_report_type)
