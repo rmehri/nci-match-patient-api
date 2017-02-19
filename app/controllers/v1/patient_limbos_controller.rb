@@ -40,7 +40,7 @@ module V1
         if active_tissue_specimen[:active_molecular_id].nil?
           vr_message << "Tissue DNA and RNA shipment missing"
         elsif active_tissue_specimen[:active_analysis_id].nil? ||
-            (!active_tissue_specimen[:variant_report_status].nil? && active_tissue_specimen[:variant_report_status] != 'CONFIRMED')
+            (!active_tissue_specimen[:variant_report_status].nil? && active_tissue_specimen[:variant_report_status] == 'REJECTED')
           vr_message << "Variant report missing"
         elsif (active_tissue_specimen[:variant_report_status].nil? || active_tissue_specimen[:variant_report_status] != 'CONFIRMED')
           vr_message << "No confirmed variant report"
