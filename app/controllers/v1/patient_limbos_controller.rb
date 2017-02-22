@@ -47,7 +47,6 @@ module V1
         end
 
         assay_messages = get_assay_messages(active_tissue_specimen)
-        next if assay_messages.blank? && vr_message.blank?
 
         messages.push(*vr_message)
         messages.push(*assay_messages)
