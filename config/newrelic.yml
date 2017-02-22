@@ -20,10 +20,15 @@ common: &default_settings
 
   # To disable the agent regardless of other settings, uncomment the following:
   # agent_enabled: false
+  agent_enabled: true
 
   # Logging level for log/newrelic_agent.log
   log_level: info
+  
+  # Level of security needs to match with newrelic account
+  high_security: true
 
+  monitor_mode: true
 
 # Environment-specific settings are in this section.
 # RAILS_ENV or RACK_ENV (as appropriate) is used to determine the environment.
@@ -34,21 +39,21 @@ development:
 
   # NOTE: There is substantial overhead when running in developer mode.
   # Do not use for production or load testing.
-  developer_mode: true
+  developer_mode: false
   monitor_mode: false
 
 test:
   <<: *default_settings
   app_name: Patient API (Test)
   # It doesn't make sense to report to New Relic from automated test runs.
-  monitor_mode: true
+  RAILS_ENV: test
 
 uat:
   <<: *default_settings
   app_name: Patient API (UAT)
-  monitor_mode: true
+  RAILS_ENV: uat
 
 production:
   <<: *default_settings
   app_name: Patient API (Production)
-  monitor_mode: true
+  RAILS_ENV: production
