@@ -5,7 +5,8 @@ common: &defaults
 
 development:
   <<: *defaults
-  aws_dynamo_endpoint: "http://localhost:8000"
+  aws_dynamo_endpoint: "https://dynamodb.us-east-1.amazonaws.com"
+  slack_channel: "#match-bot-dev"
 
   queue_name: <%= ENV["PATIENT_QUEUE_NAME="] %>
 
@@ -22,6 +23,7 @@ development:
 
 test:
   <<: *defaults
+  slack_channel: "#match-bot-int"
   aws_dynamo_endpoint: "https://dynamodb.us-east-1.amazonaws.com"
   queue_name: 'patient_queue'
 
@@ -39,6 +41,7 @@ test:
   s3_bucket: "pedmatch-int"
 uat:
   <<: *defaults
+  slack_channel: "#match-bot-uat"
   aws_dynamo_endpoint: "https://dynamodb.us-east-1.amazonaws.com"
   #Constructed queue name: "patient_processor"
   queue_name: 'patient_queue'
