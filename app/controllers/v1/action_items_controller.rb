@@ -8,7 +8,7 @@ module V1
 
     private
 
-    def set_resource(resources = {})
+    def set_resource(resources = [])
 
       patient = NciMatchPatientModels::Patient.query_patient_by_id(params[:patient_id])
       if (patient.current_status != "OFF_STUDY" && patient.current_status != "OFF_STUDY_BIOPSY_EXPIRED")
