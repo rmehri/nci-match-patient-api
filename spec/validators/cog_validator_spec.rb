@@ -3,6 +3,10 @@ require 'spec_helper'
 
 describe 'CogValidator behavior' do
 
+  context 'not a message type' do
+    it { expect(MessageValidator::CogValidator.new.from_json({:status => ""}.to_json)).to be_truthy }
+  end
+
   context 'for REGISTRATION ' do
     good_message = FactoryGirl.build(:good_message_registration).to_json
     bad_message = FactoryGirl.build(:bad_message_registration).to_json
