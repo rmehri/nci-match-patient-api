@@ -13,7 +13,7 @@ describe V1::EventsController do
 
 
   it 'POST #create' do
-    expect(post :create, :id => 1).to have_http_status(500)
+    expect{post :create, :id => 1}.to raise_error(ActionController::UrlGenerationError)
   end
 
   it '#update should throw an route error' do
