@@ -11,8 +11,9 @@ describe V1::EventsController do
     expect(:get => "api/v1/patients/events").to route_to(:controller => "v1/events", :action => "index")
   end
 
+
   it 'POST #create' do
-    expect { post :create, :id => 1}.to raise_error(ActionController::UrlGenerationError)
+    expect(post :create, :id => 1).to have_http_status(500)
   end
 
   it '#update should throw an route error' do

@@ -10,6 +10,7 @@ module MessageValidator
   autoload :VariantReportStatusValidator,  'variant_report_status_validator'
   autoload :TreatmentArmsValidator,        'treatment_arms_validator'
   autoload :AssignmentStatusValidator,     'assignment_status_validator'
+  autoload :EventValidator,                'event_validator'
   # autoload :RegistrationValidator,         'registration_validator'
   autoload :AbstractValidator,             'abstract_validator'
 
