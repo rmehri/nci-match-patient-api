@@ -28,6 +28,34 @@ describe 'SpecimenShippedValidator behavior' do
     }.to_json
   end
 
+  let(:good_message_slide) do
+    {
+        "header"=> {
+            "msg_guid"=> "3037ddec-0081-4e22-8448-721ab4ad76b4",
+            "msg_dttm"=> "2016-05-01T19:42:13+00:00"
+        },
+        "specimen_shipped"=> {
+            "study_id"=> "APEC1621",
+            "patient_id"=> "3344",
+            "type"=> "SLIDE",
+            "molecular_id"=> "3344-bsn-msn",
+
+            "carrier"=> "Federal Express",
+            "tracking_id"=> "7956 4568 1235",
+            "shipped_dttm"=> "2016-05-01T19:42:13+00:00",
+            "destination"=> "MDA",
+            "surgical_event_id" => "3344-bsn-msn",
+            "slide_barcode" => "1231453826",
+        },
+
+        "internal_use_only"=> {
+            "stars_patient_id"=> "ABCXYZ",
+            "stars_specimen_id_cdna"=> "ABCXYZ-0BJ64F",
+            "stars_specimen_id_dna"=> "ABCXYZ-0BJ64B"
+        }
+    }.to_json
+  end
+
   let(:good_message_tissue) do
     {
         "header"=> {
@@ -101,6 +129,12 @@ describe 'SpecimenShippedValidator behavior' do
 
   it "should validate a good tissue message" do
     message = JSON.parse(good_message_tissue)
+    valid = MessageValidator::SpecimenShippedValidator.new.from_json(message.to_json).valid?
+    expect(valid).to be_truthy
+  end
+
+  it "validate a good slide message" do
+    message = JSON.parse(good_message_slide)
     valid = MessageValidator::SpecimenShippedValidator.new.from_json(message.to_json).valid?
     expect(valid).to be_truthy
   end
