@@ -1,6 +1,6 @@
 module MessageValidator
   class EventValidator < AbstractValidator
-    include ActiveModel::Validators
+    include ActiveModel::Validations
     include ActiveModel::Callbacks
 
 
