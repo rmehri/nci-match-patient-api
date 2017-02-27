@@ -21,6 +21,7 @@ gem 'aws-record', '>= 1.0.0.pre.8'
 gem 'json-schema', '2.7.0'
 gem 'cancan'
 gem 'knock', '2.0'
+gem 'axlsx'
 
 gem 'wannabe_bool', '0.6.0'
 gem 'responders', '2.3.0'
@@ -45,7 +46,7 @@ end
 
 group :test do
   gem "simplecov"
-  # Ruby coverage report for Codacy 
+  # Ruby coverage report for Codacy
   gem 'codacy-coverage', :require => false
 end
 
