@@ -1,6 +1,6 @@
 module V1
-  class VariantReportDownloadsController < BaseController
-    def download_excel
+  class ReportDownloadsController < BaseController
+    def variant_report_download
       @variant_report = get_variant_report
       Axlsx::Package.new do |p|
         p.workbook do |wb|

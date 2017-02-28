@@ -6,7 +6,7 @@ Rails.application.routes.draw do
         get 'statistics', controller: 'statistics', action: :patient_statistics
         get 'pending_items', controller: 'pending_view', action: :pending_view
         get 'amois', controller: 'statistics', action: :sequenced_and_confirmed_patients
-        get ':patient_id/variant_report/:analysis_id', to: 'variant_report_downloads#download_excel'
+        get ':patient_id/variant_report/:analysis_id', to: 'report_downloads#variant_report_download'
         resources :variant_reports, :events, :variants, :assignments, :shipments, only: [:show, :index]
         resources :patient_limbos, :specimens, :assays, only: [:index]
 
