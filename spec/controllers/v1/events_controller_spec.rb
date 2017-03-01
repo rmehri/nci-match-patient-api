@@ -1,4 +1,4 @@
-describe V1::EventsController do
+describe V1::EventsController, :type => :controller do
 
   it 'GET #show' do
     expect(:get => "api/v1/patients/events/3344").to route_to(:controller => "v1/events", :action => "show", :id => "3344")
@@ -11,17 +11,27 @@ describe V1::EventsController do
     expect(:get => "api/v1/patients/events").to route_to(:controller => "v1/events", :action => "index")
   end
 
-
   it 'POST #create' do
-    expect{post :create, :id => 1}.to raise_error(ActionController::UrlGenerationError)
+    expect(:post => "api/v1/patients/events").to route_to(:controller => "v1/events", :action => "create")
+  end
+
+  it 'POST #create success' do
+    allow(PatientProcessor).to receive(:run_service).and_return("test")
+    post :create, '{"entity_id": "123", "event_date": "2017-03-14" }'
+    expect(response.body).to include("test")
+  end
+
+  it 'POST #create success' do
+    post :create, '{"entity_id": "123"}'
+    expect(response.status).to eq(403)
   end
 
   it '#update should throw an route error' do
-    expect { patch :update, :id => 1}.to raise_error(ActionController::UrlGenerationError)
+    expect { patch :update, params: {id: 1}}.to raise_error(ActionController::UrlGenerationError)
   end
 
   it '#delete should throw an route error' do
-    expect { delete :destroy, :id => 1}.to raise_error(ActionController::UrlGenerationError)
+    expect { delete :destroy, params: {id: 1}}.to raise_error(ActionController::UrlGenerationError)
   end
 
   # describe "should build a valid query" do
