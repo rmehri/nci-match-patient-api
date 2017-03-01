@@ -2,7 +2,9 @@ module V1
   class ReportDownloadsController < BaseController
     def variant_report_download
       @variant_report = get_variant_report
-      render xlsx: 'report_downloads/variant_report_download.xlsx.axlsx', filename: 'variant_report.xlsx'
+      patient_id = @variant_report[:patient][:patient_id]
+      molecular_id = @variant_report[:variant_report][:molecular_id]
+      render xlsx: 'report_downloads/variant_report_download.xlsx.axlsx', filename: "VariantReport-#{patient_id}-#{molecular_id}.xlsx"
     end
 
     private
