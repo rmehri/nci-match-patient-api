@@ -14,8 +14,9 @@ t_label = styles.add_style :b => true, :bg_color => 'FFDFDEDF'
 t_money = styles.add_style :b => true, :num_fmt => 5, :bg_color => 'FFDFDEDF'
 heading = styles.add_style :bg_color => 'D8D8D8', :b => true, :border => { :style => :thick, :color => '00' }, :alignment => { :horizontal => :center, :vertical => :center, :wrap_text => false }
 sub_heading = styles.add_style :b => true, :alignment => { :horizontal => :center, :vertical => :center, :wrap_text => false}
+align = styles.add_style alignment: { horizontal: :center, vertical: :center, wrap_text: true }
 
-wb.add_worksheet do |sheet|
+wb.add_worksheet(name: 'Variant Report') do |sheet|
   sheet.add_row
   sheet.add_row [nil, 'Variant Report'], style: [nil, heading]
   sheet.add_row
@@ -46,15 +47,17 @@ wb.add_worksheet do |sheet|
   sheet.add_row
   unless @variant_report[:variant_report][:snv_indels].nil?
     sheet.add_row [nil, 'Variant Type', 'Identifier', 'Func Gene', 'Chrom', 'Position', 'Reference', 'Alternative', 'Protein', 'Transcript', 'Hgvs', 'Read Depth',
-    'Allele Freq', 'variant_class', 'LOE', 'Ref CN', 'Raw CN', 'CN', 'CI 95%', 'CI 5%', 'Oncomine Variant Class', 'Exon', 'Function']
-    sheet.add_style 'B29:W29', b: true, bg_color: '95AFBA'
-    sheet.column_widths 5, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 25, 10, 15
+    'Allele Freq', 'Variant Class', 'LOE', 'Ref CN', 'Raw CN', 'CN', 'CI 95%', 'CI 5%', 'Oncomine Variant Class', 'Exon', 'Function'], style: [nil, align, align, align, align, align, align, align, align, align, align,
+                                                                                                                                               align, align, align, align, align, align, align, align, align, align, align, align]
+    sheet.add_style 'B29:W29', b: true, bg_color: 'D8D8D8'
+    sheet.column_widths 5, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 25, 10, 18
     @variant_report[:variant_report][:snv_indels].each do |snv_indel|
       sheet.add_row [nil, snv_indel[:variant_type] || '-', snv_indel[:identifier] || '-', snv_indel[:func_gene] || '-', snv_indel[:chromosome] || '-', snv_indel[:position] || '-',
       snv_indel[:reference] || '-', snv_indel[:alternative] || '-', snv_indel[:protein] || '-', snv_indel[:transcript] || '-', snv_indel[:hgvs] || '-', snv_indel[:read_depth] || '-',
       snv_indel[:allele_frequency] || '-', snv_indel[:variant_class] || '-', snv_indel[:level_of_evidence] || '-', snv_indel[:ref_copy_number] || '-', snv_indel[:raw_copy_number] || '-',
       snv_indel[:copy_number] || '-', snv_indel[:confidence_interval_95_percent] || '-', snv_indel[:confidence_interval_5_percent] || '-',
-      snv_indel[:oncomine_variant_class] || '-', snv_indel[:exon] || '-', snv_indel[:function] || '-']
+      snv_indel[:oncomine_variant_class] || '-', snv_indel[:exon] || '-', snv_indel[:function] || '-'], style: [nil, align, align, align, align, align, align, align, align, align, align, align, align, align, align,
+                                                                                                                align, align, align, align, align, align, align, align]
     end
     sheet.add_border 'B30:W30', [:top]
   end
@@ -64,14 +67,16 @@ wb.add_worksheet do |sheet|
   sheet.add_row
   unless @variant_report[:variant_report][:copy_number_variants].nil?
     sheet.add_row [nil, 'Variant Type', 'Identifier', 'Func Gene', 'Chrom', 'Position', 'Reference', 'Alternative', 'Protein', 'Transcript', 'Hgvs', 'Read Depth',
-    'Allele Freq', 'variant_class', 'LOE', 'Ref CN', 'Raw CN', 'CN', 'CI 95%', 'CI 5%', 'Oncomine Variant Class', 'Exon', 'Function']
-    sheet.add_style 'B36:W36', b: true, bg_color: '95AFBA'
+    'Allele Freq', 'variant_class', 'LOE', 'Ref CN', 'Raw CN', 'CN', 'CI 95%', 'CI 5%', 'Oncomine Variant Class', 'Exon', 'Function'], style: [nil, align, align, align, align, align, align, align, align, align, align,
+                                                                                                                                               align, align, align, align, align, align, align, align, align, align, align, align]
+    sheet.add_style 'B36:W36', b: true, bg_color: 'D8D8D8'
     @variant_report[:variant_report][:copy_number_variants].each do |cnv|
       sheet.add_row [nil, cnv[:variant_type] || '-', cnv[:identifier] || '-', cnv[:func_gene] || '-', cnv[:chromosome] || '-', cnv[:position] || '-',
       cnv[:reference] || '-', cnv[:alternative] || '-', cnv[:protein] || '-', cnv[:transcript] || '-', cnv[:hgvs] || '-', cnv[:read_depth] || '-',
       cnv[:allele_frequency] || '-', cnv[:variant_class] || '-', cnv[:level_of_evidence] || '-', cnv[:ref_copy_number] || '-', cnv[:raw_copy_number] || '-',
       cnv[:copy_number] || '-', cnv[:confidence_interval_95_percent] || '-', cnv[:confidence_interval_5_percent] || '-',
-      cnv[:oncomine_variant_class] || '-', cnv[:exon] || '-', cnv[:function] || '-']
+      cnv[:oncomine_variant_class] || '-', cnv[:exon] || '-', cnv[:function] || '-'], style: [nil, align, align, align, align, align, align, align, align, align, align, align, align, align, align,
+                                                                                              align, align, align, align, align, align, align, align]
     end
     sheet.add_border 'B37:W37', [:top]
   end
@@ -81,14 +86,16 @@ wb.add_worksheet do |sheet|
   sheet.add_row
   unless @variant_report[:variant_report][:gene_fusions].nil?
     sheet.add_row [nil, 'Variant Type', 'Identifier', 'Func Gene', 'Chrom', 'Position', 'Reference', 'Alternative', 'Protein', 'Transcript', 'Hgvs', 'Read Depth',
-    'Allele Freq', 'variant_class', 'LOE', 'Ref CN', 'Raw CN', 'CN', 'CI 95%', 'CI 5%', 'Oncomine Variant Class', 'Exon', 'Function']
-    sheet.add_style 'B44:W44', b: true, bg_color: '95AFBA'
+    'Allele Freq', 'variant_class', 'LOE', 'Ref CN', 'Raw CN', 'CN', 'CI 95%', 'CI 5%', 'Oncomine Variant Class', 'Exon', 'Function'], style: [nil, align, align, align, align, align, align, align, align, align, align,
+                                                                                                                                               align, align, align, align, align, align, align, align, align, align, align, align]
+    sheet.add_style 'B44:W44', b: true, bg_color: 'D8D8D8'
     @variant_report[:variant_report][:gene_fusions].each do |gf|
       sheet.add_row [nil, gf[:variant_type] || '-', gf[:identifier] || '-', gf[:func_gene] || '-', gf[:chromosome] || '-', gf[:position] || '-',
       gf[:reference] || '-', gf[:alternative] || '-', gf[:protein] || '-', gf[:transcript] || '-', gf[:hgvs] || '-', gf[:read_depth] || '-',
       gf[:allele_frequency] || '-', gf[:variant_class] || '-', gf[:level_of_evidence] || '-', gf[:ref_copy_number] || '-', gf[:raw_copy_number] || '-',
       gf[:copy_number] || '-', gf[:confidence_interval_95_percent] || '-', gf[:confidence_interval_5_percent] || '-',
-      gf[:oncomine_variant_class] || '-', gf[:exon] || '-', gf[:function] || '-']
+      gf[:oncomine_variant_class] || '-', gf[:exon] || '-', gf[:function] || '-'], style: [nil, align, align, align, align, align, align, align, align, align, align, align, align, align, align, align, align, align, align,
+                                                                                           align, align, align, align]
     end
     sheet.add_border 'B45:W45', [:top]
   end
