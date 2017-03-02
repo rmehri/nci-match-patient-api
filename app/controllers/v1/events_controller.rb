@@ -17,7 +17,7 @@ module V1
       message = JSON.parse(request.raw_post)
       errors = MessageValidator.validate_json_message("Event", message)
       raise Errors::RequestForbidden, errors unless errors.blank?
-      results = PatientProcessor.run_service(:EVENT, message)
+      results = PatientProcessor.run_service("/upload_event", message)
       standard_success_message(results)
     end
 
