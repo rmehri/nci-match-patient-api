@@ -7,9 +7,12 @@ module MessageValidator
     define_model_callbacks :from_json
     after_from_json :include_correct_module
 
-    attr_accessor :entity_id, :event_date, :event_data, :event_message, :event_type
+    attr_accessor :patient_id, :molecular_id, :analysis_id, :surgical_event_id, :dna_file_name, :rna_file_name, :vcf_file_name
 
-    validates :entity_id, presence: true
-    validates :event_date, presence: true
+    validates :molecular_id, presence: true
+    validates :analysis_id, presence: true
+    validates :dna_file_name, file: [".bam"]
+    validates :rna_file_name, file: [".bam"]
+    validates :vcf_file_name, file: [".vcf", ".zip"]
   end
 end

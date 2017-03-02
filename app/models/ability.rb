@@ -53,7 +53,7 @@ end
 
 NciMatchRoles::MdaVariantReportSender.instance_eval do
   def get_methods; [:variant_report_uploaded, :validate_json_message]; end
-  def get_subjects; [NciMatchPatientModels, :VariantReport, :MDA]; end
+  def get_subjects; [NciMatchPatientModels, :VariantReport, :MDA, :Event]; end
 end
 
 NciMatchRoles::MdaVariantReportReviewer.instance_eval do
@@ -63,7 +63,7 @@ end
 
 NciMatchRoles::MochaVariantReportSender.instance_eval do
   def get_methods; [:variant_report_uploaded, :validate_json_message]; end
-  def get_subjects; [NciMatchPatientModels, :VariantReport, :MoCha]; end
+  def get_subjects; [NciMatchPatientModels, :VariantReport, :MoCha, :Event]; end
 end
 
 NciMatchRoles::MochaVariantReportReviewer.instance_eval do
