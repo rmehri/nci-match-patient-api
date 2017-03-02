@@ -9,10 +9,8 @@ module MessageValidator
 
     attr_accessor :patient_id, :molecular_id, :analysis_id, :surgical_event_id, :dna_file_name, :rna_file_name, :vcf_file_name
 
-    validates :patient_id, presence: true
     validates :molecular_id, presence: true
     validates :analysis_id, presence: true
-    validates :surgical_event_id, presence: true
     validates :dna_file_name, file: [".bam"]
     validates :rna_file_name, file: [".bam"]
     validates :vcf_file_name, file: [".vcf", ".zip"]

@@ -36,6 +36,4 @@ RSpec.describe MessageValidator::EventValidator do
     it {expect(MessageValidator.validate_json_message("Event", invalid_file_message)).not_to eq(nil) }
   end
 
-
-
 end
