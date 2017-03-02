@@ -1,5 +1,10 @@
 describe V1::EventsController, :type => :controller do
 
+  let(:user) { {:roles => ["Admin"]} }
+  before(:each) do
+    allow(controller).to receive(:current_user).and_return(user)
+  end
+
   it 'GET #show' do
     expect(:get => "api/v1/patients/events/3344").to route_to(:controller => "v1/events", :action => "show", :id => "3344")
   end
