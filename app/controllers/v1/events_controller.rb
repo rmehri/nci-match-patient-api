@@ -14,7 +14,6 @@ module V1
 
     def create
       message = JSON.parse(request.raw_post)
-      p current_user
       authorize! :validate_json_message, :Event
       errors = MessageValidator.validate_json_message("Event", message)
       raise Errors::RequestForbidden, errors unless errors.blank?
