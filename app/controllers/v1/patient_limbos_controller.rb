@@ -24,7 +24,8 @@ module V1
                                                        :scan_filter => {"current_status" => {:comparison_operator => "IN", :attribute_value_list => target_statuses},
                                                                         "active_tissue_specimen" => {:comparison_operator => "NOT_NULL"}}}).collect { |data| data.to_h.compact.deep_symbolize_keys! }
 
-      resources.collect{ |resource| (Date.current - Date.parse(resource[:active_tissue_specimen][:specimen_received_date])).to_i >= 7 }
+
+      resources = resources.select{ |resource| (Date.current - Date.parse(resource[:active_tissue_specimen][:specimen_received_date])).to_i >= 7 }
       resources.uniq!{ |resource| resource[:patient_id] }
       final_resources = generate_messages(resources)
       instance_variable_set("@#{resource_name}", final_resources)
