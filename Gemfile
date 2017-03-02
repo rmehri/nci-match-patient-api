@@ -25,8 +25,6 @@ gem 'rubyzip', '= 1.0.0'
 gem 'axlsx', '= 2.0.1'
 gem 'axlsx_rails'
 
-# gem 'axlsx_styler', '~> 0.1.2'
-
 gem 'wannabe_bool', '0.6.0'
 gem 'responders', '2.3.0'
 
