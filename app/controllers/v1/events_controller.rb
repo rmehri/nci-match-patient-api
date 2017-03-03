@@ -17,7 +17,7 @@ module V1
       authorize! :validate_json_message, :Event
       errors = MessageValidator.validate_json_message("Event", message)
       raise Errors::RequestForbidden, errors unless errors.blank?
-      results = PatientProcessor.run_service("/upload_event", message)
+      results = PatientProcessor.run_service("/upload_event", message, token)
       standard_success_message(results)
     end
 
