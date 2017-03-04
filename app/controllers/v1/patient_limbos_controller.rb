@@ -20,7 +20,7 @@ module V1
                          "AWAITING_PATIENT_DATA",
                          "AWAITING_TREATMENT_ARM_STATUS"]
 
-      resources = NciMatchPatientModels::Patient.scan({:attributes_to_get => ["active_tissue_specimen", "patient_id", "current_status", "diseases", "message"],
+      resources = NciMatchPatientModels::Patient.scan({:attributes_to_get => ["active_tissue_specimen", "patient_id", "current_status", "diseases", "assignment_error"],
                                                        :scan_filter => {"current_status" => {:comparison_operator => "IN", :attribute_value_list => target_statuses},
                                                                         "active_tissue_specimen" => {:comparison_operator => "NOT_NULL"}}}).collect { |data| data.to_h.compact.deep_symbolize_keys! }
 
@@ -56,8 +56,10 @@ module V1
           messages << "Assignment report awaiting approval from COG"
         end
 
-        unless (patient[:message].nil? || !(patient[:message].include? "Assignment error"))
-          messages << patient[:message]
+        p "============= assignment_error: #{patient[:assignment_error]}"
+
+        unless (patient[:assignment_error].nil?)
+          messages << patient[:assignment_error]
         end
 
         patient[:message] = messages
