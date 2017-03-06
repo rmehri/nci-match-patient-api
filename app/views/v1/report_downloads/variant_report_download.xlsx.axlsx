@@ -11,7 +11,7 @@ values = styles.add_style alignment: { horizontal: :center, vertical: :center, w
 
 wb.add_worksheet(name: 'Variant Report') do |sheet|
   sheet.add_row
-  sheet.add_row [nil, nil, 'Variant Report', nil, nil, nil, nil, nil], style: [nil, heading, heading, heading, heading, heading, heading, heading], height: 30
+  sheet.add_row [nil, nil, 'Variant Report', nil, nil, nil, nil, nil], style: [nil] + [heading] * 7, height: 30
   sheet.add_row
   sheet.add_row
   sheet.add_row [nil, 'Patient ID', @variant_report[:patient][:patient_id] || '-'], style: [nil, bold, values], height: 20
@@ -35,35 +35,35 @@ wb.add_worksheet(name: 'Variant Report') do |sheet|
   sheet.add_row
   sheet.add_row [nil, 'SNV Indel(S)'], style: [nil, sub_heading], height: 30
   unless @variant_report[:variant_report][:snv_indels].nil?
-    sheet.add_row ['Confirm', 'Id', 'Chrom', 'Position', 'Reference', 'Alternative', 'Allele Freq', 'Func Gene', 'Oncomine Variant Class', 'Exon', 'Function', 'Hgvs', 'Read Depth', 'Transcript', 'Protein'], style: [keys, keys, keys, keys, keys, keys, keys, keys, keys, keys, keys, keys, keys, keys, keys], height: 25
+    sheet.add_row ['Confirm', 'Id', 'Chrom', 'Position', 'Reference', 'Alternative', 'Allele Freq', 'Func Gene', 'Oncomine Variant Class', 'Exon', 'Function', 'Hgvs', 'Read Depth', 'Transcript', 'Protein'], style: [keys] * 15, height: 25
     #sheet.add_style 'B29:W29', b: true, bg_color: 'D8D8D8'
     sheet.column_widths 5, 15, 30, 15, 15, 15, 15, 15, 25, 15, 25, 25, 20, 15, 15
     @variant_report[:variant_report][:snv_indels].each do |snv_indel|
-      sheet.add_row [snv_indel[:confirmed] || '-', snv_indel[:identifier] || '-', snv_indel[:chromosome] || '-', snv_indel[:position] || '-', snv_indel[:reference] || '-', snv_indel[:alternative] || '-', snv_indel[:allele_frequency] || '-', snv_indel[:func_gene] || '-', snv_indel[:oncomine_variant_class] || '-', snv_indel[:exon] || '-', snv_indel[:function] || '-', snv_indel[:hgvs] || '-', snv_indel[:read_depth] || '-', snv_indel[:transcript] || '-', snv_indel[:protein] || '-'], style: [values, values, values, values, values, values, values, values, values, values, values, values, values, values, values], height: 20
+      sheet.add_row [snv_indel[:confirmed] || '-', snv_indel[:identifier] || '-', snv_indel[:chromosome] || '-', snv_indel[:position] || '-', snv_indel[:reference] || '-', snv_indel[:alternative] || '-', snv_indel[:allele_frequency] || '-', snv_indel[:func_gene] || '-', snv_indel[:oncomine_variant_class] || '-', snv_indel[:exon] || '-', snv_indel[:function] || '-', snv_indel[:hgvs] || '-', snv_indel[:read_depth] || '-', snv_indel[:transcript] || '-', snv_indel[:protein] || '-'], style: [values] * 15, height: 20
     end
   end
   sheet.add_row
   sheet.add_row
   sheet.add_row [nil, 'Copy Number Variant(S)'], style: [nil, sub_heading], height: 30
   unless @variant_report[:variant_report][:copy_number_variants].nil?
-    sheet.add_row ['Confirm', 'Id', 'Chrom', 'Position', 'Raw CN', 'CN', 'CI 5%', 'CI 95%'], style: [keys, keys, keys, keys, keys, keys, keys, keys], height: 25
+    sheet.add_row ['Confirm', 'Id', 'Chrom', 'Position', 'Raw CN', 'CN', 'CI 5%', 'CI 95%'], style: [keys] * 8, height: 25
     @variant_report[:variant_report][:copy_number_variants].each do |cnv|
-      sheet.add_row [cnv[:confirmed] || '-', cnv[:identifier] || '-', cnv[:chromosome] || '-', cnv[:position] || '-', cnv[:raw_copy_number] || '-', cnv[:copy_number] || '-', cnv[:confidence_interval_5_percent] || '-', cnv[:confidence_interval_95_percent] || '-'], style: [values, values, values, values, values, values, values, values], height: 20
+      sheet.add_row [cnv[:confirmed] || '-', cnv[:identifier] || '-', cnv[:chromosome] || '-', cnv[:position] || '-', cnv[:raw_copy_number] || '-', cnv[:copy_number] || '-', cnv[:confidence_interval_5_percent] || '-', cnv[:confidence_interval_95_percent] || '-'], style: [values] * 8, height: 20
     end
   end
   sheet.add_row
   sheet.add_row
   sheet.add_row [nil, 'Gene Fusion(S)'], style: [nil, sub_heading], height: 30
   unless @variant_report[:variant_report][:gene_fusions].nil?
-    sheet.add_row ['Confirm', 'Id', 'Driver Gene', 'Driver Count', 'Partner Gene', 'Partner Count', 'Annotation'], style: [keys, keys, keys, keys, keys, keys, keys], height: 25
+    sheet.add_row ['Confirm', 'Id', 'Driver Gene', 'Driver Count', 'Partner Gene', 'Partner Count', 'Annotation'], style: [keys] * 7, height: 25
     @variant_report[:variant_report][:gene_fusions].each do |gf|
-      sheet.add_row [gf[:confirmed] || '-', gf[:identifier] || '-', gf[:driver_gene] || '-', gf[:driver_read_count] || '-', gf[:partner_gene] || '-', gf[:partner_read_count] || '-', gf[:annotation] || '-'], style: [values, values, values, values, values, values, values], height: 20
+      sheet.add_row [gf[:confirmed] || '-', gf[:identifier] || '-', gf[:driver_gene] || '-', gf[:driver_read_count] || '-', gf[:partner_gene] || '-', gf[:partner_read_count] || '-', gf[:annotation] || '-'], style: [values] * 7, height: 20
     end
   end
   sheet.add_row
   sheet.add_row
   sheet.add_row
-  sheet.add_row [nil, 'MOI/aMOI Summary', nil], style: [nil, keys, keys], height: 25
+  sheet.add_row [nil, 'MOI/aMOI Summary', nil], style: [nil] + [keys] * 2, height: 25
   sheet.add_row
   sheet.add_row [nil, 'Total Number of aMOIs', @variant_report[:variant_report][:total_amois] || '-'], style: [nil, bold, values], height: 20
   sheet.add_row
