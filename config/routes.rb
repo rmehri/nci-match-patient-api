@@ -39,6 +39,11 @@ Rails.application.routes.draw do
       # put "patients/:patient_id/assignment_report_rollback" => :rollback_assignment_report
 
     end
+    controller :roll_back do
+      put "patients/:patient_id/variant_report_rollback" => :rollback_variant_report
+      put "patients/:patient_id/assignment_report_rollback" => :rollback_assignment_report
+    end
+
     match "*path", to: 'errors#bad_request', via: :all
   end
 end
