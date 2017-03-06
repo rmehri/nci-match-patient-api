@@ -70,6 +70,9 @@ module V1
         variant_report_confirmed = false
         clia_lab = ""
         variant_reports.each do | variant_report |
+
+          next if variant_report[:status] == "UNDETERMINED"
+
           analysis_assignments = []
           assignments.each do | assignment |
             if(variant_report[:analysis_id] == assignment[:analysis_id])
@@ -112,6 +115,8 @@ module V1
         variant_report_confirmed = false
         clia_lab = ""
         variant_reports.each do | variant_report |
+          next if variant_report[:status] == "UNDETERMINED"
+
           variant_report_confirmed = true if variant_report[:status] == "CONFIRMED"
           clia_lab = variant_report[:clia_lab]
 
