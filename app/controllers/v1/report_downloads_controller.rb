@@ -4,7 +4,8 @@ module V1
       @variant_report = get_variant_report
       patient_id = @variant_report[:patient][:patient_id]
       molecular_id = @variant_report[:variant_report][:molecular_id]
-      render xlsx: 'report_downloads/variant_report_download.xlsx.axlsx', filename: "VariantReport-#{patient_id}-#{molecular_id}.xlsx"
+      filename = "VariantReport-#{patient_id}-#{molecular_id}.xlsx"
+      render xlsx: 'report_downloads/variant_report_download.xlsx.axlsx', filename: filename
     end
 
     private
