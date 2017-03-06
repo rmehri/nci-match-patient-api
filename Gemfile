@@ -29,7 +29,7 @@ gem 'wannabe_bool', '0.6.0'
 gem 'responders', '2.3.0'
 
 gem 'slack-logger'
-gem 'nci_match_patient_models', :git => 'git://github.com/CBIIT/nci-match-lib.git', :tag => "v1.1.12"
+gem 'nci_match_patient_models', :git => 'git://github.com/CBIIT/nci-match-lib.git', :tag => "v1.1.14"
 gem 'nci_match_roles', :git => 'git://github.com/CBIIT/nci_match_roles.git', :tag => "v1.0.0"
 
 gem "httparty", '0.14.0'
