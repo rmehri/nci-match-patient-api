@@ -2,6 +2,7 @@
 wb = xlsx_package.workbook
 styles = wb.styles
 bold = styles.add_style b: true, alignment: { vertical: :center, wrap_text: true }
+date_style = styles.add_style alignment: { horizontal: :center, vertical: :center, wrap_text: false }, format_code: 'mm-dd-yyyy hh:mm:ss'
 values = styles.add_style alignment: { horizontal: :center, vertical: :center, wrap_text: false }
 heading = styles.add_style bg_color: 'D8D8D8', b: true, sz: 30, alignment: { horizontal: :center, vertical: :center, wrap_text: false }
 sub_heading = styles.add_style b: true, sz: 15, alignment: { horizontal: :center, vertical: :center, wrap_text: false }
@@ -10,16 +11,16 @@ values = styles.add_style alignment: { horizontal: :center, vertical: :center, w
 
 wb.add_worksheet(name: 'Variant Report') do |sheet|
   sheet.add_row
-  sheet.add_row [nil, nil, 'Variant Report', nil, nil, nil, nil, nil, nil], style: [nil, heading, heading, heading, heading, heading, heading, heading, heading], height: 30
+  sheet.add_row [nil, nil, 'Variant Report', nil, nil, nil, nil, nil], style: [nil, heading, heading, heading, heading, heading, heading, heading], height: 30
   sheet.add_row
   sheet.add_row
   sheet.add_row [nil, 'Patient ID', @variant_report[:patient][:patient_id] || '-'], style: [nil, bold, values], height: 20
-  sheet.add_row [nil, 'Registration Date', @variant_report[:patient][:registration_date] || '-'], style: [nil, bold, values], height: 20
+  sheet.add_row [nil, 'Registration Date', DateTime.strptime(@variant_report[:patient][:registration_date], "%Y-%m-%dT%H:%M:%S%z").in_time_zone], style: [nil, bold, date_style], height: 20
+  sheet.add_row [nil, 'Status Date', DateTime.strptime(@variant_report[:patient][:status_date], "%Y-%m-%dT%H:%M:%S%z").in_time_zone], style: [nil, bold, date_style], height: 20
+  sheet.add_row [nil, 'Variant Report Received Date', DateTime.strptime(@variant_report[:variant_report][:variant_report_received_date], "%Y-%m-%dT%H:%M:%S%z").in_time_zone], style: [nil, bold, date_style], height: 20
   sheet.add_row [nil, 'Study ID', @variant_report[:patient][:study_id] || '-'], style: [nil, bold, values], height: 20
   sheet.add_row [nil, 'Current Step Number', @variant_report[:patient][:current_step_number] || '-'], style: [nil, bold, values], height: 20
   sheet.add_row [nil, 'Current Status', @variant_report[:patient][:current_status] || '-'], style: [nil, bold, values], height: 20
-  sheet.add_row [nil, 'Status Date', @variant_report[:patient][:status_date] || '-'], style: [nil, bold, values], height: 20
-  sheet.add_row [nil, 'Variant Report Received Date', @variant_report[:variant_report][:variant_report_received_date] || '-'], style: [nil, bold, values], height: 20
   sheet.add_row [nil, 'Surgical Event ID', @variant_report[:variant_report][:surgical_event_id] || '-'], style: [nil, bold, values], height: 20
   sheet.add_row [nil, 'Variant Report Type', @variant_report[:variant_report][:variant_report_type] || '-'], style: [nil, bold, values], height: 20
   sheet.add_row [nil, 'Molecular ID', @variant_report[:variant_report][:molecular_id] || '-'], style: [nil, bold, values], height: 20
@@ -29,7 +30,6 @@ wb.add_worksheet(name: 'Variant Report') do |sheet|
   sheet.add_row [nil, 'MAPD', @variant_report[:variant_report][:mapd] || '-'], style: [nil, bold, values], height: 20
   sheet.add_row [nil, 'Torrent Variant Caller Version', @variant_report[:variant_report][:torrent_variant_caller_version] || '-'], style: [nil, bold, values], height: 20
   sheet.add_row [nil, 'Total Variants', @variant_report[:variant_report][:total_variants] || '-'], style: [nil, bold, values], height: 20
-  sheet.add_row [nil, 'Specimen Received Date', @variant_report[:variant_report][:specimen_received_date] || '-'], style: [nil, bold, values], height: 20
   sheet.add_row [nil, 'Ion Reporter ID', @variant_report[:variant_report][:ion_reporter_id] || '-'], style: [nil, bold, values], height: 20
   sheet.add_row
   sheet.add_row
