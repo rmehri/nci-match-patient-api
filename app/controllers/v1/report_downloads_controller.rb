@@ -1,4 +1,5 @@
 module V1
+  # Handles the Patient Variant Report & Assignment Report downloads in .XLS format
   class ReportDownloadsController < BaseController
     def variant_report_download
       @variant_report = get_variant_report
@@ -21,10 +22,10 @@ module V1
 
       VariantReportHelper.add_download_links(variant_report_hash)
       assignments = NciMatchPatientModels::Assignment.query_by_patient_id(params[:patient_id], false).collect { |data| data.to_h.compact }
-      assignments = assignments.sort_by{| assignment | assignment[:assignment_date]}.reverse
+      assignments = assignments.sort_by { |assignment| assignment[:assignment_date] }.reverse
 
       assignments_with_assays = []
-      assignments.each do | assignment |
+      assignments.each do |assignment|
         assignment[:editable] = is_assignment_reviewer && assignment[:status] != 'CONFIRMED'
         assays = find_assays(assignment[:surgical_event_id])
         assignments_with_assays.push(Convert::AssignmentDbModel.to_ui(assignment, assays)) unless assignment.blank?
@@ -36,13 +37,13 @@ module V1
 
     def find_assays(surgical_event_id)
       assays = []
-      specimens = NciMatchPatientModels::Specimen.find_by({ surgical_event_id: surgical_event_id }).collect { |data| data.to_h.compact }
-      assays = specimens[0][:assays] if specimens.length > 0
+      specimens = NciMatchPatientModels::Specimen.find_by(surgical_event_id: surgical_event_id).collect { |data| data.to_h.compact }
+      assays = specimens[0][:assays] unless specimens.empty?
       assays
     end
 
     def get_variants(analysis_id)
-      NciMatchPatientModels::Variant.scan(build_query({ analysis_id: analysis_id })).collect { |data| data.to_h.compact }
+      NciMatchPatientModels::Variant.scan(build_query(analysis_id: analysis_id)).collect { |data| data.to_h.compact }
     end
   end
 end
