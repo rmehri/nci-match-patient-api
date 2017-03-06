@@ -9,6 +9,14 @@ module V1
       render xlsx: 'report_downloads/variant_report_download.xlsx.axlsx', filename: filename
     end
 
+    def assignment_report_download
+      @assignment_report = get_assignment_report[0]
+      patient_id = @assignment_report[:patient_id]
+      molecular_id = @assignment_report[:molecular_id]
+      filename = "AssignmentReport-#{patient_id}-#{molecular_id}.xlsx"
+      render xlsx: 'report_downloads/assignment_report_download.xlsx.axlsx', filename: filename
+    end
+
     private
 
     def get_variant_report(_resource = {})
@@ -33,6 +41,17 @@ module V1
 
       analysis_report = Convert::AnalysisReportDbModel.to_ui_model(patient.to_h.compact, variant_report_hash, assignments_with_assays)
       instance_variable_set("@#{resource_name}", analysis_report)
+    end
+
+    def get_assignment_report(_resource = {})
+      patient = NciMatchPatientModels::Patient.query_patient_by_id(params[:patient_id])
+      return standard_error_message("Patient [#{params[:patient_id]}] not found", 404) if patient.blank?
+      assignments = NciMatchPatientModels::Assignment.query_by_patient_id(params[:patient_id], false).collect { |data| data.to_h.compact }
+      assignments = assignments.select { |assignment| assignment[:uuid] == params[:uuid]}
+      assignment = assignments[0]
+      assignments_with_assays = []
+      assays = find_assays(assignment[:surgical_event_id])
+      assignments_with_assays.push(Convert::AssignmentDbModel.to_ui(assignment, assays)) unless assignment.blank?
     end
 
     def find_assays(surgical_event_id)
