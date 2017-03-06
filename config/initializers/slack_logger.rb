@@ -16,7 +16,7 @@ SlackLogger.setup do |config|
   #  per minute.
   #
   ## Default:
-  config.logger.level = :ERROR
+  config.logger.level = :FATAL
 
   ## Slack Client
   # -------------
