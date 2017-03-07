@@ -96,9 +96,7 @@ module V1
       message['comment_user'] = post_data[:comment_user]
       message.deep_transform_keys!(&:underscore).symbolize_keys!
 
-      p message
       type = MessageValidator.get_message_type(message)
-      p type
       raise Errors::RequestForbidden, "Incoming message has UNKNOWN message type" if type == 'UNKNOWN'
 
       authorize! :validate_json_message, type.to_sym
