@@ -77,7 +77,7 @@ module ApplicationHelper
   end
 
   def self.to_gene_name(assay_name)
-    return assay_name if !ApplicationHelper.string_match(assay_name, "ICC", "s")
+    return assay_name unless ApplicationHelper.string_match(assay_name, "ICC", "s")
 
     assay_name[3..-2]
   end

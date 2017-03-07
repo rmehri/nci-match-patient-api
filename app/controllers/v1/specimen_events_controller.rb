@@ -44,8 +44,8 @@ module V1
     def set_allow_upload(variant_report_confirmed, clia_lab, latest_specimen)
 
       return false if variant_report_confirmed
-      return false if !latest_specimen
-      return false if !is_variant_report_sender(clia_lab)
+      return false unless latest_specimen
+      return false unless is_variant_report_sender(clia_lab)
 
       patient = NciMatchPatientModels::Patient.query_patient_by_id(params[:patient_id])
       return false if patient.current_status == "OFF_STUDY" || patient.current_status == "REQUEST_NO_ASSIGNMENT"

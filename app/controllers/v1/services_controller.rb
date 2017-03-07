@@ -80,7 +80,7 @@ module V1
 
       response = PatientProcessor.run_service("/confirm_variant", message, token)
       response_hash = response.parsed_response
-      raise Errors::RequestForbidden, response_hash["message"] if !((200..299).include? response.code)
+      raise Errors::RequestForbidden, response_hash["message"] unless ((200..299).include? response.code)
 
       AppLogger.log(self.class.name, "variant_status response from Patient Processor: #{response_hash}")
       standard_success_message(response_hash["message"])

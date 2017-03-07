@@ -1,13 +1,7 @@
 class ConfirmVariantMessage
 
-  attr_accessor :id
-  attr_accessor :patient_id
-  attr_accessor :molecular_id
-  attr_accessor :analysis_id
-  attr_accessor :type
-  attr_accessor :status
-  attr_accessor :comment
-  attr_accessor :comment_user
+  attr_accessor :id, :patient_id, :molecular_id, :analysis_id,
+                :type, :status, :comment, :comment_user
 
   def self.from_json(string)
     data = JSON.load string
@@ -26,17 +20,14 @@ class ConfirmVariantMessage
   end
 
   def self.from_url(url_segments)
-    start_index = url_segments.index("variant")
-    raise "Variant confirmation url has missing parameter" if url_segments.length < start_index + 2
+    start_index = url_segments.index('variant')
+    raise 'Variant confirmation url has missing parameter' if url_segments.length < start_index + 2
 
-    id = url_segments[start_index+1]
-    check = url_segments[start_index+2].downcase
+    id = url_segments[start_index + 1]
+    check = url_segments[start_index + 2].downcase
 
     # raise "Unregnized checked flag in variant confirmation url" if (check != 'checked' && check != 'unchecked')
 
-    message = (check != 'checked' && check != 'unchecked') ?
-        "Unregnized checked flag in variant confirmation url" : {:variant_uuid => id, :status => check}
-
+    message = (check != 'checked' && check != 'unchecked') ? 'Unregnized checked flag in variant confirmation url' : { variant_uuid: id, status: check }
   end
-
 end

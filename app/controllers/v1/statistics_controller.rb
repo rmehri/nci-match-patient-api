@@ -1,13 +1,13 @@
 module V1
   class StatisticsController < ApplicationController
-   before_action :authenticate_user
+  before_action :authenticate_user
 
     def patient_statistics
       begin
-        patients_assignments = NciMatchPatientModels::Patient.scan({:scan_filter => {'current_status' =>
-                                                                  {:comparison_operator => "EQ",
-                                                                   :attribute_value_list => ['ON_TREATMENT_ARM']}},
-                                             :attributes_to_get => ['current_assignment']}).collect {|r| r.to_h.deep_symbolize_keys!.compact}
+        patients_assignments = NciMatchPatientModels::Patient.scan({ scan_filter: {'current_status' =>
+                                                                   { comparison_operator: "EQ",
+                                                                     attribute_value_list: ['ON_TREATMENT_ARM']}},
+                                                                     attributes_to_get: ['current_assignment']}).collect { |r| r.to_h.deep_symbolize_keys!.compact }
         render json: {
             number_of_patients: NciMatchPatientModels::Patient.scan({}).collect{}.length.to_s,
             number_of_patients_on_treatment_arm: patients_assignments.length.to_s,
@@ -21,7 +21,7 @@ module V1
 
     def sequenced_and_confirmed_patients
         begin
-          report_dbm = NciMatchPatientModels::VariantReport.find_by({"status" => "CONFIRMED", "variant_report_type" => "TISSUE"}).collect {|x| x.to_h}.uniq
+          report_dbm = NciMatchPatientModels::VariantReport.find_by({ "status" => "CONFIRMED", "variant_report_type" => "TISSUE" }).collect { |x| x.to_h }.uniq
           AppLogger.log_debug(self.class.name, "Got #{report_dbm.length} variant reports with status='CONFIRMED' and variant_report_type='TISSUE'")
 
           render json: {
@@ -45,12 +45,12 @@ module V1
       begin
         treatment_arm_accrual = {}
         patients_assignments.each do |assignment|
-          if(assignment.has_key?(:current_assignment))
-            if(assignment[:current_assignment].has_key?(:selected_treatment_arm))
+          if assignment.has_key?(:current_assignment)
+            if assignment[:current_assignment].has_key?(:selected_treatment_arm)
               taKey = assignment[:current_assignment][:selected_treatment_arm][:treatment_arm_id] +
                   ' (' + assignment[:current_assignment][:selected_treatment_arm][:stratum_id] +
                   ', ' + assignment[:current_assignment][:selected_treatment_arm][:version] + ')'
-              if(treatment_arm_accrual.has_key?(taKey))
+              if treatment_arm_accrual.has_key?(taKey)
                 treatment_arm_accrual[taKey][:patients] = treatment_arm_accrual[taKey][:patients] + 1
               else
                 treatment_arm_accrual[taKey] = {
