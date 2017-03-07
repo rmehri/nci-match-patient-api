@@ -117,7 +117,6 @@ module V1
     # PUT /api/v1/patients/{patient_id}/assignment_reports/{analysis_id}/confirm
     def assignment_confirmation
       message = ConfirmAssignmentMessage.from_url get_url_path_segments
-      raise Errors::RequestForbidden, message if message.is_a? String
 
       p "============ message for ConfirmAssignmentMessage: #{message}"
       post_data = get_post_data
