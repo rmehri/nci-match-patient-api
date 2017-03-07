@@ -21,6 +21,61 @@ describe V1::ReportDownloadsController do
       get :assignment_report_download, format: :xlsx, patient_id: '3366', uuid: 'd6c03b15-f0c3-4b4c-a810-007f919f399d'
       response.content_type.to_s.should eq Mime::Type.lookup_by_extension(:xlsx).to_s
     end
+
+    it 'should return variant report for a patient if there is one' do
+      patient = NciMatchPatientModels::Patient.new
+      patient.patient_id = '3366'
+      patient.registration_date = DateTime.current.getutc().to_s
+      allow(NciMatchPatientModels::Patient).to receive(:query).and_return([patient])
+
+      variant_report = { patient_id: '3366', variant_report_type: 'TISSUE', analysis_id: '3366_job1' }
+
+      variant1 = NciMatchPatientModels::Variant.new
+      variant1.uuid = 'd6c03b15-f0c3-4b4c-a810-007f919f399d'
+      variant1.variant_type = 'snp'
+      variant1.amois = []
+      variant1.confirmed = false
+      variant1.molecular_id = 'mo-1234'
+      variant1.analysis_id = 'an-1234'
+
+      variant2 = NciMatchPatientModels::Variant.new
+      variant2.uuid = 'random2'
+      variant2.variant_type = 'fusion'
+      variant2.amois = [{ 'treatment_id' => 'A', 'stratum_id' => '100', 'version' => '2016' }]
+      variant2.confirmed = true
+      variant2.molecular_id = 'mo-1234'
+      variant2.analysis_id = 'an-1234'
+
+      variant_report[:snv_indels] = [variant1.to_h]
+      variant_report[:gene_fusions] = [variant2.to_h]
+
+      allow(NciMatchPatientModelExtensions::VariantReportExtension).to receive(:compose_variant_report).and_return(variant_report)
+
+      get :variant_report_download, :patient_id => '3366', :analysis_id => '3366_job1'
+      expect(response).to have_http_status(200)
+    end
+
+    it 'should return Assignment Report for a patient' do
+      patient = NciMatchPatientModels::Patient.new
+      patient.patient_id = '3366'
+      patient.registration_date = DateTime.current.getutc().to_s
+      allow(NciMatchPatientModels::Patient).to receive(:query).and_return([patient])
+
+      assignment = NciMatchPatientModels::Assignment.new
+      assignment.patient_id = '3366'
+      assignment.uuid = 'd6c03b15-f0c3-4b4c-a810-007f919f399d'
+      assignment.assignment_date = DateTime.current.getutc().to_s
+      assignment.surgical_event_id = 'ei-1234'
+      allow(NciMatchPatientModels::Assignment).to receive(:query).and_return([assignment])
+
+      specimen = NciMatchPatientModels::Specimen.new
+      specimen.patient_id = '3366'
+      specimen.collected_date = DateTime.current.getutc().to_s
+      allow(NciMatchPatientModels::Specimen).to receive(:scan).and_return([specimen])
+
+      get :assignment_report_download, patient_id: '3366', uuid: 'd6c03b15-f0c3-4b4c-a810-007f919f399d'
+      expect(response).to have_http_status(200)
+    end
   end
 
   describe 'Error Handling' do
