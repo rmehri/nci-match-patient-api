@@ -1,22 +1,8 @@
 
 class ConfirmVariantReportMessage
   def self.from_url(url_segments)
-    start_index = url_segments.index("patients")
-    return "Confirm variant report url is missing patient id" if url_segments.length < start_index + 1
-
-    patient_id = url_segments[start_index+1]
-
-    start_index = url_segments.index("variant_reports")
-    return "Confirm variant report url is missing parameter" if url_segments.length < start_index + 2
-
-    analysis_id = url_segments[start_index+1]
-    confirm = url_segments[start_index+2].downcase
-
-    return "Variant report update action can only be 'confirm' or 'reject'" if confirm != 'confirm' && confirm != 'reject'
-
-    confirm = confirm == 'confirm' ? 'CONFIRMED' : 'REJECTED'
-
-    {"patient_id" => patient_id, "analysis_id" => analysis_id, "status" => confirm}
+    raise ActionController::BadRequest.new("Malformed URL") unless url_segments.is_a? Array
+    {"patient_id" => url_segments[4], "analysis_id" => url_segments[6], "status" => (url_segments.last + 'ED').upcase} rescue raise ActionController::BadRequest.new("Url is malformed")
   end
 
 end

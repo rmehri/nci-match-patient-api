@@ -62,7 +62,6 @@ module V1
 
     # PUT /api/v1/patients/variant/{variant_uuid}{checked|unchecked}
     def variant_status
-
       message = ConfirmVariantMessage.from_url get_url_path_segments
       raise Errors::RequestForbidden, message if message.is_a? String
 
@@ -91,14 +90,15 @@ module V1
     # put /api/v1/patients/{patient_id}/variant_reports{analysis_id}/{confirm|reject}
     def variant_report_status
       message = ConfirmVariantReportMessage.from_url get_url_path_segments
-      raise Errors::RequestForbidden, message if message.is_a? String
 
       post_data = get_post_data
       message['comment'] = post_data[:comment]
       message['comment_user'] = post_data[:comment_user]
       message.deep_transform_keys!(&:underscore).symbolize_keys!
 
+      p message
       type = MessageValidator.get_message_type(message)
+      p type
       raise Errors::RequestForbidden, "Incoming message has UNKNOWN message type" if type == 'UNKNOWN'
 
       authorize! :validate_json_message, type.to_sym
