@@ -7,28 +7,29 @@ module V1
     end
 
     private
+
+    def target_statuses
+      ["TISSUE_SPECIMEN_RECEIVED",
+       "TISSUE_NUCLEIC_ACID_SHIPPED",
+       "TISSUE_SLIDE_SPECIMEN_SHIPPED",
+       "ASSAY_RESULTS_RECEIVED",
+       "TISSUE_VARIANT_REPORT_RECEIVED",
+       "TISSUE_VARIANT_REPORT_REJECTED",
+       "TISSUE_VARIANT_REPORT_CONFIRMED",
+       "PENDING_APPROVAL",
+       "AWAITING_PATIENT_DATA",
+       "AWAITING_TREATMENT_ARM_STATUS"]
+    end
+
     def set_resource(_resource = {})
       # non_target_statuses = ["REGISTRATION", "PENDING_CONFIRMATION", "ON_TREATMENT_ARM", "REQUEST_ASSIGNMENT", "REQUEST_NO_ASSIGNMENT", "OFF_STUDY", "OFF_STUDY_BIOPSY_EXPIRED"]
-      target_statuses = ["TISSUE_SPECIMEN_RECEIVED",
-                         "TISSUE_NUCLEIC_ACID_SHIPPED",
-                         "TISSUE_SLIDE_SPECIMEN_SHIPPED",
-                         "ASSAY_RESULTS_RECEIVED",
-                         "TISSUE_VARIANT_REPORT_RECEIVED",
-                         "TISSUE_VARIANT_REPORT_REJECTED",
-                         "TISSUE_VARIANT_REPORT_CONFIRMED",
-                         "PENDING_APPROVAL",
-                         "AWAITING_PATIENT_DATA",
-                         "AWAITING_TREATMENT_ARM_STATUS"]
-
       resources = NciMatchPatientModels::Patient.scan({:attributes_to_get => ["active_tissue_specimen", "patient_id", "current_status", "diseases", "assignment_error"],
                                                        :scan_filter => {"current_status" => {:comparison_operator => "IN", :attribute_value_list => target_statuses},
                                                                         "active_tissue_specimen" => {:comparison_operator => "NOT_NULL"}}}).collect { |data| data.to_h.compact.deep_symbolize_keys! }
 
-
       resources = resources.select{ |resource| (Date.current - Date.parse(resource[:active_tissue_specimen][:specimen_received_date])).to_i >= 7 }
       resources.uniq!{ |resource| resource[:patient_id] }
-      final_resources = generate_messages(resources)
-      instance_variable_set("@#{resource_name}", final_resources)
+      instance_variable_set("@#{resource_name}", generate_messages(resources))
     end
 
     def generate_messages(resources)
@@ -37,30 +38,12 @@ module V1
         messages = []
         active_tissue_specimen = patient[:active_tissue_specimen]
 
-        vr_message = []
-        if active_tissue_specimen[:active_molecular_id].nil?
-          vr_message << "Tissue DNA and RNA shipment missing"
-        elsif active_tissue_specimen[:active_analysis_id].nil? ||
-            (!active_tissue_specimen[:variant_report_status].nil? && active_tissue_specimen[:variant_report_status] == 'REJECTED')
-          vr_message << "Variant report missing"
-        elsif (active_tissue_specimen[:variant_report_status].nil? || active_tissue_specimen[:variant_report_status] != 'CONFIRMED')
-          vr_message << "No confirmed variant report"
-        end
+        messages.push(*get_variant_report_message(active_tissue_specimen))
+        messages.push(*get_assay_messages(active_tissue_specimen))
 
-        assay_messages = get_assay_messages(active_tissue_specimen)
+        messages << "Assignment report awaiting approval from COG" if patient[:current_status] == 'PENDING_APPROVAL'
+        messages << patient[:assignment_error] unless patient[:assignment_error].nil?
 
-        messages.push(*vr_message)
-        messages.push(*assay_messages)
-
-        if patient[:current_status] == 'PENDING_APPROVAL'
-          messages << "Assignment report awaiting approval from COG"
-        end
-
-        p "============= assignment_error: #{patient[:assignment_error]}"
-
-        unless (patient[:assignment_error].nil?)
-          messages << patient[:assignment_error]
-        end
 
         patient[:message] = messages
         patient[:days_pending] = (Date.current - Date.parse(active_tissue_specimen[:specimen_received_date])).to_i
@@ -71,8 +54,20 @@ module V1
       final_resources
     end
 
-    def get_assay_messages(active_tissue_specimen)
+    def get_variant_report_message(active_tissue_specimen)
+      vr_message = []
+      if active_tissue_specimen[:active_molecular_id].nil?
+        vr_message << "Tissue DNA and RNA shipment missing"
+      elsif active_tissue_specimen[:active_analysis_id].nil? ||
+          (!active_tissue_specimen[:variant_report_status].nil? && active_tissue_specimen[:variant_report_status] == 'REJECTED')
+        vr_message << "Variant report missing"
+      elsif (active_tissue_specimen[:variant_report_status].nil? || active_tissue_specimen[:variant_report_status] != 'CONFIRMED')
+        vr_message << "No confirmed variant report"
+      end
+      vr_message
+    end
 
+    def get_assay_messages(active_tissue_specimen)
       assay_messages = []
       if (active_tissue_specimen[:slide_shipped_date].nil?)
         assay_messages << "Slide shipment missing"
@@ -85,9 +80,7 @@ module V1
             end
           end
         end
-
       end
-
       assay_messages
     end
   end
