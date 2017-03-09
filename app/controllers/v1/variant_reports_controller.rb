@@ -20,6 +20,8 @@ module V1
     def set_resource(_resource = {})
       resources = NciMatchPatientModels::VariantReport.scan(resource_params).collect { |data| data.to_h }
       raise Errors::ResourceNotFound if resources.blank?
+
+      resources = resources.select {| resource| resource['status'] != "UNDETERMINED"}
       instance_variable_set("@#{resource_name}", resources)
     end
 
