@@ -104,22 +104,18 @@ module V1
 
       latest = true
       resources.collect do | shipment |
+        clia_lab = shipment[:destination]
         variant_reports = NciMatchPatientModels::VariantReport.scan(build_index_query({:molecular_id => shipment[:molecular_id],
                                                                                        :projection => [:ion_reporter_id, :molecular_id, :analysis_id, :clia_lab, :variant_report_received_date, :status]})).collect{|record| record.to_h.compact }
 
         variant_reports = variant_reports.sort_by{ |report| report[:variant_report_received_date]}.reverse
 
-
-
         shipment[:analyses] = []
         variant_report_confirmed = false
-        clia_lab = ""
         variant_reports.each do | variant_report |
           next if variant_report[:status] == "UNDETERMINED"
 
           variant_report_confirmed = true if variant_report[:status] == "CONFIRMED"
-          clia_lab = variant_report[:clia_lab]
-
           shipment[:analyses] += [build_variant_report_analyses_model(variant_report)]
         end
 
