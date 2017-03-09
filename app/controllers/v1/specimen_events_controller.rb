@@ -61,7 +61,7 @@ module V1
         assignments = NciMatchPatientModels::Assignment.scan(build_index_query({:molecular_id => shipment[:molecular_id], :projection => [:assignment_date, :analysis_id, :status, :status_date, :uuid, :comment_user,:comment, :selected_treatment_arm]})).collect{|record| record.to_h.compact}
         variant_reports = NciMatchPatientModels::VariantReport.scan(build_index_query({:molecular_id => shipment[:molecular_id],
                                                                                        :projection => [:ion_reporter_id, :molecular_id, :analysis_id, :variant_report_received_date, :comment_user, :clia_lab,
-                                                                                                       # :dna_bam_path_name, :dna_bai_path_name, :vcf_path_name, :rna_bam_path_name, :rna_bai_path_name, :tsv_file_name,
+                                                                                                       :dna_bam_name, :dna_bai_name, :vcf_name, :cdna_bam_name, :cdna_bai_name, :tsv_file_name,
                                                                                                        :status ,:qc_report_url, :vr_chart_data_url]})).collect{|record| record.to_h.compact }
 
         variant_reports = variant_reports.sort_by{ |report| report[:variant_report_received_date]}.reverse
@@ -106,7 +106,8 @@ module V1
       resources.collect do | shipment |
         clia_lab = shipment[:destination]
         variant_reports = NciMatchPatientModels::VariantReport.scan(build_index_query({:molecular_id => shipment[:molecular_id],
-                                                                                       :projection => [:ion_reporter_id, :molecular_id, :analysis_id, :clia_lab, :variant_report_received_date, :status]})).collect{|record| record.to_h.compact }
+                                                                                       :projection => [:ion_reporter_id, :molecular_id, :analysis_id, :clia_lab, :variant_report_received_date,
+                                                                                                       :status]})).collect{|record| record.to_h.compact }
 
         variant_reports = variant_reports.sort_by{ |report| report[:variant_report_received_date]}.reverse
 
