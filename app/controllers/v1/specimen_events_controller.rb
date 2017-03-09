@@ -57,6 +57,7 @@ module V1
       resource[:specimen_shipments] = NciMatchPatientModels::Shipment.scan(build_index_query({:surgical_event_id => resource[:surgical_event_id]})).collect { |data| data.to_h.compact }
 
       resource[:specimen_shipments].collect do | shipment |
+        clia_lab = shipment[:destination]
         assignments = NciMatchPatientModels::Assignment.scan(build_index_query({:molecular_id => shipment[:molecular_id], :projection => [:assignment_date, :analysis_id, :status, :status_date, :uuid, :comment_user,:comment, :selected_treatment_arm]})).collect{|record| record.to_h.compact}
         variant_reports = NciMatchPatientModels::VariantReport.scan(build_index_query({:molecular_id => shipment[:molecular_id],
                                                                                        :projection => [:ion_reporter_id, :molecular_id, :analysis_id, :variant_report_received_date, :comment_user, :clia_lab,
@@ -68,7 +69,6 @@ module V1
         assignments = assignments.sort_by{ |record| record[:assignment_date]}.reverse
         shipment[:analyses] = []
         variant_report_confirmed = false
-        clia_lab = ""
         variant_reports.each do | variant_report |
 
           next if variant_report[:status] == "UNDETERMINED"
