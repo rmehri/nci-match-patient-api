@@ -19,7 +19,7 @@ module V1
     def index
       plural_resource_name = "@#{resource_name.pluralize}"
       resources = resource_class.scan(query_params).collect { |data| data.to_h }
-      resources = resources.select {| resource| resource['status'] != "UNDETERMINED"}
+      resources = resources.select {| resource| resource[:status] != "UNDETERMINED"}
       instance_variable_set(plural_resource_name, resources)
       render json: instance_variable_get(plural_resource_name)
     end
@@ -29,7 +29,7 @@ module V1
       resources = NciMatchPatientModels::VariantReport.scan(resource_params).collect { |data| data.to_h }
       raise Errors::ResourceNotFound if resources.blank?
 
-      resources = resources.select {| resource| resource['status'] != "UNDETERMINED"}
+      resources = resources.select {| resource| resource[:status] != "UNDETERMINED"}
       instance_variable_set("@#{resource_name}", resources)
     end
 
