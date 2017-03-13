@@ -20,10 +20,10 @@ wb.add_worksheet(name: 'Variant Report') do |sheet|
   sheet.add_row [nil, 'Study ID', @variant_report[:patient][:study_id] || '-'], style: [nil, bold, values], height: 20
   sheet.add_row [nil, 'Current Step Number', @variant_report[:patient][:current_step_number] || '-'], style: [nil, bold, values], height: 20
   sheet.add_row [nil, 'Current Status', @variant_report[:patient][:current_status] || '-'], style: [nil, bold, values], height: 20
-  sheet.add_row [nil, 'Surgical Event ID', @variant_report[:variant_report][:surgical_event_id] || '-'], style: [nil, bold, values], height: 20
+  sheet.add_row [nil, 'Surgical Event ID', @variant_report[:variant_report][:surgical_event_id] || '-'], style: [nil, bold, values], height: 30
   sheet.add_row [nil, 'Variant Report Type', @variant_report[:variant_report][:variant_report_type] || '-'], style: [nil, bold, values], height: 20
-  sheet.add_row [nil, 'Molecular ID', @variant_report[:variant_report][:molecular_id] || '-'], style: [nil, bold, values], height: 20
-  sheet.add_row [nil, 'Analysis ID', @variant_report[:variant_report][:analysis_id] || '-'], style: [nil, bold, values], height: 20
+  sheet.add_row [nil, 'Molecular ID', @variant_report[:variant_report][:molecular_id] || '-'], style: [nil, bold, values], height: 30
+  sheet.add_row [nil, 'Analysis ID', @variant_report[:variant_report][:analysis_id] || '-'], style: [nil, bold, values], height: 30
   sheet.add_row [nil, 'Status', @variant_report[:variant_report][:status] || '-'], style: [nil, bold, values], height: 20
   sheet.add_row [nil, 'Cellularity', @variant_report[:variant_report][:cellularity] || '-'], style: [nil, bold, values], height: 20
   sheet.add_row [nil, 'MAPD', @variant_report[:variant_report][:mapd] || '-'], style: [nil, bold, values], height: 20
@@ -35,7 +35,7 @@ wb.add_worksheet(name: 'Variant Report') do |sheet|
   sheet.add_row [nil, 'SNV Indel(S)'], style: [nil, sub_heading], height: 30
   unless @variant_report[:variant_report][:snv_indels].nil?
     sheet.add_row ['Confirm', 'Id', 'Chrom', 'Position', 'Reference', 'Alternative', 'Allele Freq', 'Func Gene', 'Oncomine Variant Class', 'Exon', 'Function', 'Hgvs', 'Read Depth', 'Transcript', 'Protein'], style: [keys] * 15, height: 25
-    sheet.column_widths 5, 15, 30, 15, 15, 15, 15, 15, 25, 15, 25, 25, 20, 20, 20
+    sheet.column_widths 5, 15, 35, 15, 15, 15, 15, 15, 25, 15, 25, 25, 20, 20, 20
     @variant_report[:variant_report][:snv_indels].each do |snv_indel|
       sheet.add_row [snv_indel[:confirmed] || '-', snv_indel[:identifier] || '-', snv_indel[:chromosome] || '-', snv_indel[:position] || '-', snv_indel[:reference] || '-', snv_indel[:alternative] || '-', snv_indel[:allele_frequency] || '-', snv_indel[:func_gene] || '-', snv_indel[:oncomine_variant_class] || '-', snv_indel[:exon] || '-', snv_indel[:function] || '-', snv_indel[:hgvs] || '-', snv_indel[:read_depth] || '-', snv_indel[:transcript] || '-', snv_indel[:protein] || '-'], style: [values] * 15, height: 20
     end
