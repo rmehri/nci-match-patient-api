@@ -54,8 +54,11 @@ module V1
     end
 
     def embed_resources(resource ={}, latest_specimen)
-      resource[:specimen_shipments] = NciMatchPatientModels::Shipment.scan(build_index_query({:surgical_event_id => resource[:surgical_event_id]})).collect { |data| data.to_h.compact }
+      shipments = NciMatchPatientModels::Shipment.scan(build_index_query({:surgical_event_id => resource[:surgical_event_id]})).collect { |data| data.to_h.compact }
 
+      resource[:specimen_shipments] = shipments.sort_by{ |record| record[:shipped_date]}.reverse
+
+      latest_shipment = true
       resource[:specimen_shipments].collect do | shipment |
         clia_lab = shipment[:destination]
         assignments = NciMatchPatientModels::Assignment.scan(build_index_query({:molecular_id => shipment[:molecular_id], :projection => [:assignment_date, :analysis_id, :status, :status_date, :uuid, :comment_user,:comment, :selected_treatment_arm]})).collect{|record| record.to_h.compact}
@@ -90,7 +93,8 @@ module V1
         end
 
         # allow_upload
-        shipment[:allow_upload] = set_allow_upload(variant_report_confirmed, clia_lab, latest_specimen) if shipment[:shipment_type] == "TISSUE_DNA_AND_CDNA"
+        shipment[:allow_upload] = set_allow_upload(variant_report_confirmed, clia_lab, latest_specimen && latest_shipment) if shipment[:shipment_type] == "TISSUE_DNA_AND_CDNA"
+        latest_shipment = false
       end
 
       resource
