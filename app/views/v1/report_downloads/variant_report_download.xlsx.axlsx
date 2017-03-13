@@ -15,7 +15,6 @@ wb.add_worksheet(name: 'Variant Report') do |sheet|
   sheet.add_row
   sheet.add_row [nil, 'Patient ID', @variant_report[:patient][:patient_id] || '-'], style: [nil, bold, values], height: 20
   sheet.add_row [nil, 'Registration Date', DateTime.strptime(@variant_report[:patient][:registration_date], '%Y-%m-%dT%H:%M:%S%z').in_time_zone], style: [nil, bold, date_style], height: 20
-  sheet.add_row [nil, 'Status Date', DateTime.strptime(@variant_report[:patient][:status_date], '%Y-%m-%dT%H:%M:%S%z').in_time_zone], style: [nil, bold, date_style], height: 20
   sheet.add_row [nil, 'Variant Report Received Date', DateTime.strptime(@variant_report[:variant_report][:variant_report_received_date], '%Y-%m-%dT%H:%M:%S%z').in_time_zone], style: [nil, bold, date_style], height: 20
   sheet.add_row [nil, 'Study ID', @variant_report[:patient][:study_id] || '-'], style: [nil, bold, values], height: 20
   sheet.add_row [nil, 'Current Step Number', @variant_report[:patient][:current_step_number] || '-'], style: [nil, bold, values], height: 20
