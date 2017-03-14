@@ -10,6 +10,12 @@ describe V1::ShipmentsController do
     expect(:get => "api/v1/patients/shipments").to route_to(:controller => "v1/shipments", :action => "index")
   end
 
+  it 'GET #show will return something' do
+    allow(NciMatchPatientModels::Shipment).to receive(:scan).and_return({})
+    get :show, id: '123_test'
+    expect(response.body).to eq("")
+  end
+
   it 'POST #create' do
     expect { post :create, :id => 1}.to raise_error(ActionController::UrlGenerationError)
   end

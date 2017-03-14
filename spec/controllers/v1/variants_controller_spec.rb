@@ -12,6 +12,19 @@ describe V1::VariantsController do
   end
 
 
+  it 'GET #show will return something' do
+    allow(NciMatchPatientModels::Variant).to receive(:scan).and_return({})
+    get :show, id: '123_test'
+    expect(response.body).to eq("")
+  end
+
+  it 'GET #index will return something' do
+    allow(NciMatchPatientModels::Variant).to receive(:scan).and_return({})
+    get :index, id: '123_test'
+    expect(response.body).to eq("[]")
+  end
+
+
 
   it 'POST #create' do
     expect { post :create, :id => 1}.to raise_error(ActionController::UrlGenerationError)

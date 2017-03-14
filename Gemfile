@@ -49,6 +49,7 @@ group :test do
   gem 'simplecov'
   # Ruby coverage report for Codacy
   gem 'codacy-coverage', require: false
+  gem 'webmock'
 end
 
 group :development do

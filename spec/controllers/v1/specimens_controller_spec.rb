@@ -15,6 +15,18 @@ describe V1::SpecimensController do
                                                                  :action => "index", :patient_id  => "3344",)
   end
 
+  it 'GET #show will return something' do
+    allow(NciMatchPatientModels::Specimen).to receive(:scan).and_return({})
+    get :show, patient_id: '123_test', id: "msn-123"
+    expect(response.body).to eq("")
+  end
+
+  it 'GET #index will return something' do
+    allow(NciMatchPatientModels::Specimen).to receive(:scan).and_return({})
+    get :index, patient_id: '123_test'
+    expect(response.body).to eq("[]")
+  end
+
   it 'POST #create' do
     expect { post :create, :id => 1}.to raise_error(ActionController::UrlGenerationError)
   end

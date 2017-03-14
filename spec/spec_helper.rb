@@ -30,6 +30,10 @@ require 'rails_helper'
 require 'rspec/active_model/mocks'
 require 'aws-record'
 require 'active_model'
+require 'webmock/rspec'
+
+#need to remove all tests that make outside connections. -jv
+WebMock.allow_net_connect!
 
 
 RSpec.configure do |config|

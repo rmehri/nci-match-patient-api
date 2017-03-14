@@ -27,5 +27,7 @@ describe V1::VersionsController do
       get :version
       expect(response).to have_http_status(500)
     end
+
+    it {expect(get: '/api/v1/patients/version').to be_truthy}
   end
 end
