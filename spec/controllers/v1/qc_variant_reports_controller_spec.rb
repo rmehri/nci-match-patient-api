@@ -19,6 +19,7 @@ describe V1::QcVariantReportsController do
     variant_report.variant_report_received_date = "2016-09-12"
     variant_report.analysis_id = "1"
     variant_report.molecular_id = "2"
+    variant_report.tsv_file_name = "test.tsv"
 
     allow(NciMatchPatientModels::VariantReport).to receive(:query).and_return([variant_report])
     allow(Aws::S3::S3Reader).to receive(:read).and_return({:patient_id => "3366"})

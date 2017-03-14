@@ -5,19 +5,15 @@ module V1
 
     def show
       variant_report = get_resource.compact
-      render json: Aws::S3::S3Reader.read(Rails.configuration.environment.fetch('s3_bucket'),
-                                            get_s3_file_path(variant_report))
+      s3_path = get_s3_file_path(variant_report)
+      render json: Aws::S3::S3Reader.read(Rails.configuration.environment.fetch('s3_bucket'), s3_path)
     end
 
     private
 
     def get_s3_file_path(variant_report)
-      begin
-        qc_file = File.basename(variant_report[:tsv_file_name], ".tsv") + ".json"
-        "#{variant_report[:ion_reporter_id]}/#{variant_report[:molecular_id]}/#{variant_report[:analysis_id]}/#{qc_file}"
-      rescue => error
-        standard_error_message(error.message)
-      end
+      qc_file = variant_report[:tsv_file_name].blank? ? "" : File.basename(variant_report[:tsv_file_name], ".tsv") + ".json"
+      "#{variant_report[:ion_reporter_id]}/#{variant_report[:molecular_id]}/#{variant_report[:analysis_id]}/#{qc_file}"
     end
 
     def set_resource(resource = {})
