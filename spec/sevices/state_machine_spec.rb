@@ -43,4 +43,9 @@ describe StateMachine do
     allow(HTTParty::Response).to receive(:body).and_return(message_body)
     expect(StateMachine.validate(valid_message, "JWTTOKEN")).to eq(message_body)
   end
+
+  it 'will error out' do
+    allow(HTTParty::Request).to receive(:new).and_raise(URI::InvalidURIError)
+    expect{StateMachine.validate(valid_message, "JWTTOKEN")}.to raise_error(URI::InvalidURIError)
+  end
 end

@@ -5,7 +5,6 @@ class StateMachine
   def self.validate(message, token = "")
     begin
       # AppLogger.log(self.class.name, "============ token calling state: #{token}")
-
       result = post("/patientMessage",
                     {
                         :body => message.to_json,
