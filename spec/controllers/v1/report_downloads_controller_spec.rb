@@ -13,6 +13,34 @@ describe V1::ReportDownloadsController do
     end
 
     it 'Should generate a proper Variant Report excel sheet' do
+      patient = NciMatchPatientModels::Patient.new
+      patient.patient_id = '3366'
+      patient.registration_date = DateTime.current.getutc().to_s
+      allow(NciMatchPatientModels::Patient).to receive(:query).and_return([patient])
+
+      variant_report = { patient_id: '3366', variant_report_type: 'TISSUE', analysis_id: '3366_job1' }
+
+      variant1 = NciMatchPatientModels::Variant.new
+      variant1.uuid = 'd6c03b15-f0c3-4b4c-a810-007f919f399d'
+      variant1.variant_type = 'snp'
+      variant1.amois = []
+      variant1.confirmed = false
+      variant1.molecular_id = 'mo-1234'
+      variant1.analysis_id = 'an-1234'
+
+      variant2 = NciMatchPatientModels::Variant.new
+      variant2.uuid = 'random2'
+      variant2.variant_type = 'fusion'
+      variant2.amois = [{ 'treatment_id' => 'A', 'stratum_id' => '100', 'version' => '2016' }]
+      variant2.confirmed = true
+      variant2.molecular_id = 'mo-1234'
+      variant2.analysis_id = 'an-1234'
+
+      variant_report[:snv_indels] = [variant1.to_h]
+      variant_report[:gene_fusions] = [variant2.to_h]
+
+      allow(NciMatchPatientModelExtensions::VariantReportExtension).to receive(:compose_variant_report).and_return(variant_report)
+
       get :variant_report_download, format: :xlsx, patient_id: '3366', analysis_id: '3366_job1'
       response.content_type.to_s.should eq Mime::Type.lookup_by_extension(:xlsx).to_s
     end

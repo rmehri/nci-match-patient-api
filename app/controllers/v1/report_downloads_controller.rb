@@ -2,11 +2,16 @@ module V1
   # Handles the Patient Variant Report & Assignment Report downloads in .XLS format
   class ReportDownloadsController < BaseController
     def variant_report_download
-      @variant_report = get_variant_report
-      patient_id = @variant_report[:patient][:patient_id]
-      molecular_id = @variant_report[:variant_report][:molecular_id]
-      filename = "VariantReport-#{patient_id}-#{molecular_id}.xlsx"
-      render xlsx: 'report_downloads/variant_report_download.xlsx.axlsx', filename: filename
+      begin
+        @variant_report = get_variant_report
+        patient_id = @variant_report[:patient][:patient_id]
+        molecular_id = @variant_report[:variant_report][:molecular_id]
+        filename = "VariantReport-#{patient_id}-#{molecular_id}.xlsx"
+        render xlsx: 'report_downloads/variant_report_download.xlsx.axlsx', filename: filename
+      rescue => error
+        standard_error_message(error.message, 404)
+      end
+
     end
 
     def assignment_report_download
@@ -21,7 +26,7 @@ module V1
 
     def get_variant_report(_resource = {})
       patient = NciMatchPatientModels::Patient.query_patient_by_id(params[:patient_id])
-      return standard_error_message("Patient [#{params[:patient_id]}] not found", 404) if patient.blank?
+      raise "Patient [#{params[:patient_id]}] not found" if patient.blank?
 
       variant_report_hash = NciMatchPatientModelExtensions::VariantReportExtension.compose_variant_report(params[:patient_id], params[:analysis_id])
       raise Errors::ResourceNotFound if variant_report_hash.blank?
@@ -45,7 +50,7 @@ module V1
 
     def get_assignment_report(_resource = {})
       patient = NciMatchPatientModels::Patient.query_patient_by_id(params[:patient_id])
-      return standard_error_message("Patient [#{params[:patient_id]}] not found", 404) if patient.blank?
+      raise "Patient [#{params[:patient_id]}] not found" if patient.blank?
       assignments = NciMatchPatientModels::Assignment.query_by_patient_id(params[:patient_id], false).collect { |data| data.to_h.compact }
       assignments = assignments.select { |assignment| assignment[:uuid] == params[:uuid]}
       assignment = assignments[0]
