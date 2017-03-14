@@ -13,12 +13,12 @@ describe V1::ErrorsController do
 
     it 'should raise the UrlGenerationError JSON' do
       header = {'ACCEPT' => 'application/json'}
-      expect { get :bad_request, patient_id: '3366', headers: header}.to raise_error(ActionController::UrlGenerationError)
+      expect { get :bad_request, patient_id: '3366', headers: header, :format => 'json'}.to raise_error(ActionController::UrlGenerationError)
     end
 
     it 'should raise the UrlGenerationError, any other format' do
       header = {'ACCEPT' => 'text/html'}
-      expect { get :bad_request, patient_id: '3366', headers: header}.to raise_error(ActionController::UrlGenerationError)
+      expect { get :bad_request, patient_id: '3366', headers: header, :format => 'xml'}.to raise_error(ActionController::UrlGenerationError)
     end
   end
 end
