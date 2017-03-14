@@ -1,6 +1,6 @@
 
 class VariantReportUpdater
-  attr_accessor :patient_id, :ion_reportter_id, :molecular_id, :analysis_id, :tsv_file_name
+  attr_accessor :patient_id, :ion_reporter_id, :molecular_id, :analysis_id, :tsv_file_name
 
   def updated_variant_report(variant_report, token)
 
