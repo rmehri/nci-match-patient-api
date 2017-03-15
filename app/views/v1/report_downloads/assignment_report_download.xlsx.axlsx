@@ -12,7 +12,6 @@ wb.add_worksheet(name: 'Assignment Report') do |sheet|
   sheet.add_row
   sheet.add_row [nil, nil, 'Assignment Report', nil, nil, nil, nil, nil, nil], style: [nil] + [heading] * 8, height: 30
   sheet.add_row
-  sheet.add_row
   sheet.add_row [nil, 'Patient ID', @assignment_report[:patient_id] || '-'], style: [nil, bold, values], height: 20
   sheet.add_row [nil, 'Study ID', @assignment_report[:study_id] || '-'], style: [nil, bold, values], height: 20
   sheet.add_row [nil, 'Status', @assignment_report[:status] || '-'], style: [nil, bold, values], height: 20
@@ -25,9 +24,6 @@ wb.add_worksheet(name: 'Assignment Report') do |sheet|
   sheet.add_row [nil, 'Assignment Date', DateTime.strptime(@assignment_report[:assignment_date], '%Y-%m-%dT%H:%M:%S%z').in_time_zone], style: [nil, bold, date_style], height: 20
   sheet.add_row
   sheet.add_row
-  sheet.add_row
-  sheet.add_row
-  sheet.add_row
   sheet.add_row [nil, 'Treatment Arm', 'Reason'], style: [nil] + [heading] * 2, height: 30
   sheet.add_row
   unless @assignment_report[:treatment_assignment_results].nil?
@@ -36,8 +32,6 @@ wb.add_worksheet(name: 'Assignment Report') do |sheet|
       val.each do |value|
         treatment_arm = value[:treatment_arm][:treatment_arm_id] + '/' + value[:treatment_arm][:stratum_id] + '/' + value[:treatment_arm][:version]
         sheet.add_row [nil, treatment_arm, value[:reason] || '-'], style: [nil, keys, values], height: 100
-        sheet.add_row
-        sheet.add_row
         sheet.add_row
         sheet.column_widths 5, 50, 100
       end
