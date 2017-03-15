@@ -65,9 +65,5 @@ module V1
       assays = specimens[0][:assays] unless specimens.empty?
       assays
     end
-
-    def get_variants(analysis_id)
-      NciMatchPatientModels::Variant.scan(build_query(analysis_id: analysis_id)).collect { |data| data.to_h.compact }
-    end
   end
 end

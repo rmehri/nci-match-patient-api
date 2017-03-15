@@ -12,6 +12,12 @@ describe V1::ReportDownloadsController do
                                                                                                              'patient_id' => '3366', 'uuid' => 'd6c03b15-f0c3-4b4c-a810-007f919f399d')
     end
 
+    it 'should throw 404 if the patient is not found' do
+      allow(NciMatchPatientModels::Patient).to receive(:query_patient_by_id).and_return('')
+      get :variant_report_download, patient_id: '', analysis_id: '3366_job1'
+      expect(response).to have_http_status(404)
+    end
+
     it 'Should generate a proper Variant Report excel sheet' do
       patient = NciMatchPatientModels::Patient.new
       patient.patient_id = '3366'
