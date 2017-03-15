@@ -22,7 +22,7 @@ class ConfirmVariantMessage
   def self.from_url(url_segments)
     raise ActionController::BadRequest unless url_segments.is_a? Array
     url_segments.last.downcase!
-    raise "Unregnized checked flag in variant confirmation url" unless (url_segments.include?("unchecked") || url_segments.include?("check"))
+    raise "Unregnized checked flag in variant confirmation url" unless (url_segments.include?("unchecked") || url_segments.include?("checked"))
     {:variant_uuid => url_segments[5], :status => url_segments.last}
   end
 end
