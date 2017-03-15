@@ -20,14 +20,9 @@ class ConfirmVariantMessage
   end
 
   def self.from_url(url_segments)
-    start_index = url_segments.index('variant')
-    raise 'Variant confirmation url has missing parameter' if url_segments.length < start_index + 2
-
-    id = url_segments[start_index + 1]
-    check = url_segments[start_index + 2].downcase
-
-    # raise "Unregnized checked flag in variant confirmation url" if (check != 'checked' && check != 'unchecked')
-
-    message = (check != 'checked' && check != 'unchecked') ? 'Unregnized checked flag in variant confirmation url' : { variant_uuid: id, status: check }
+    raise ActionController::BadRequest unless url_segments.is_a? Array
+    url_segments.last.downcase!
+    raise "Unregnized checked flag in variant confirmation url" unless (url_segments.include?("checked") || url_segments.include?("check"))
+    {:variant_uuid => url_segments[5], :status => url_segments.last}
   end
 end
