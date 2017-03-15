@@ -26,9 +26,9 @@ describe ConfirmVariantMessage do
   it {expect{ConfirmVariantMessage.from_url({})}.to raise_error(ActionController::BadRequest)}
   it {expect{ConfirmVariantMessage.from_url(nil)}.to raise_error(ActionController::BadRequest)}
 
-  it {expect{ConfirmVariantMessage.from_url(["cat", "dog", "mouse"])}.to raise_error("Unregnized checked flag in variant confirmation url")}
+  it {expect{ConfirmVariantMessage.from_url(["cat", "dog", "mouse"])}.to raise_error(Errors::RequestForbidden)}
 
-  it {expect(ConfirmVariantMessage.from_url(["", "api", "v1", "patient", "variant", "123_uuid", "checked"])).to eq({:variant_uuid => "123_uuid", :status => "checked"})}
+  it {expect(ConfirmVariantMessage.from_url(["", "api", "v1", "patient", "variant", "123_uuid", "unchecked"])).to eq({:variant_uuid => "123_uuid", :status => "unchecked"})}
 
   it "can convert to json" do
     testable = get_testable
