@@ -17,7 +17,7 @@ module MessageValidator
     validates :type, presence: true, inclusion: {in: %w(TISSUE_DNA_AND_CDNA SLIDE BLOOD_DNA), message: "%{value} is not a support type"}
     validates :carrier, presence: true
     validates :tracking_id, presence: true
-    validates :destination, presence: true, inclusion: {in: %w(MDA MoCha), message: "%{value} is not a valid shipping destination"}
+    validates :destination, presence: true, inclusion: {in: %w(MDA MoCha Dartmouth), message: "%{value} is not a valid shipping destination"}
     validates :shipped_dttm, presence: true, date: {on_or_before: lambda {DateTime.current.utc}}
     validates :internal_use_only, presence: true
 
