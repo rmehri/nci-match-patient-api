@@ -13,12 +13,12 @@ wb.add_worksheet(name: 'Assignment Report') do |sheet|
   sheet.add_row [nil, nil, 'Assignment Report', nil, nil, nil, nil, nil, nil], style: [nil] + [heading] * 8, height: 30
   sheet.add_row
   sheet.add_row [nil, 'Patient ID', @assignment_report[:patient_id] || '-'], style: [nil, bold, values], height: 20
-  sheet.add_row [nil, 'Study ID', @assignment_report[:study_id] || '-'], style: [nil, bold, values], height: 20
-  sheet.add_row [nil, 'Status', @assignment_report[:status] || '-'], style: [nil, bold, values], height: 20
-  sheet.add_row [nil, 'Report Status', @assignment_report[:report_status] || '-'], style: [nil, bold, values], height: 20
   sheet.add_row [nil, 'Surgical Event ID', @assignment_report[:surgical_event_id] || '-'], style: [nil, bold, values], height: 20
   sheet.add_row [nil, 'Molecular ID', @assignment_report[:molecular_id] || '-'], style: [nil, bold, values], height: 20
   sheet.add_row [nil, 'Analysis ID', @assignment_report[:analysis_id] || '-'], style: [nil, bold, values], height: 20
+  sheet.add_row [nil, 'Status', @assignment_report[:status] || '-'], style: [nil, bold, values], height: 20
+  sheet.add_row [nil, 'Study ID', @assignment_report[:study_id] || '-'], style: [nil, bold, values], height: 20
+  sheet.add_row [nil, 'Report Status', @assignment_report[:report_status] || '-'], style: [nil, bold, values], height: 20
   sheet.add_row [nil, 'Step Number', @assignment_report[:step_number] || '-'], style: [nil, bold, values], height: 20
   sheet.add_row [nil, 'Status Date', DateTime.strptime(@assignment_report[:status_date], '%Y-%m-%dT%H:%M:%S%z').in_time_zone], style: [nil, bold, date_style], height: 20
   sheet.add_row [nil, 'Assignment Date', DateTime.strptime(@assignment_report[:assignment_date], '%Y-%m-%dT%H:%M:%S%z').in_time_zone], style: [nil, bold, date_style], height: 20
