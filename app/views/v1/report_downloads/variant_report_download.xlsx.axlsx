@@ -27,7 +27,6 @@ wb.add_worksheet(name: 'Variant Report') do |sheet|
   sheet.add_row [nil, 'Cellularity', @variant_report[:variant_report][:cellularity] || '-'], style: [nil, bold, values], height: 25
   sheet.add_row [nil, 'MAPD', @variant_report[:variant_report][:mapd] || '-'], style: [nil, bold, values], height: 25
   sheet.add_row [nil, 'Torrent Variant Caller Version', @variant_report[:variant_report][:torrent_variant_caller_version] || '-'], style: [nil, bold, values], height: 20
-  sheet.add_row [nil, 'Total Variants', @variant_report[:variant_report][:total_variants] || '-'], style: [nil, bold, values], height: 20
   sheet.add_row [nil, 'Ion Reporter ID', @variant_report[:variant_report][:ion_reporter_id] || '-'], style: [nil, bold, values], height: 25
   sheet.add_row
   sheet.add_row
