@@ -23,7 +23,7 @@ describe Ability, :type => :model do
     end
 
     it "allow MochaVariantReportReviewer to access variant_report_status method" do
-      expect(Ability.new({:roles => ["MOCHA_VARIANT_REPORT_REVIEWER"]}).can?(:variant_report_status, :MoCha)).to eq(true)
+      expect(Ability.new({:roles => ["MOCHA_VARIANT_REPORT_REVIEWER"]}).can?(:variant_report_status, :mocha)).to eq(true)
     end
 
     it "allow AssignmentReportReviewer to access assignment_confirmation method" do

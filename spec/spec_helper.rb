@@ -62,6 +62,8 @@ RSpec.configure do |config|
     # mocks.verify_partial_doubles = true
   end
 
+  Aws::DynamoDB::Client.new(stub_responses: true)
+
   config.before(:each, :type => :controller) do
     setup_knock
   end

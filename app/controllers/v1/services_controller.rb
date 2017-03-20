@@ -106,7 +106,7 @@ module V1
       variant_report = NciMatchPatientModels::VariantReport.query_by_analysis_id(message[:patient_id], message[:analysis_id])
       raise Errors::RequestForbidden, "Unable to confirm non existent variant report" if variant_report.nil?
 
-      lab_type = variant_report.to_h[:clia_lab]
+      lab_type = variant_report.to_h[:clia_lab].to_s.downcase
       authorize! :variant_report_status, lab_type.to_sym
 
       validate_patient_state(message, type)
