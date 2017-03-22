@@ -133,7 +133,7 @@ module V1
     def is_variant_report_reviewer(clia_lab)
       return false if clia_lab.nil?
       begin
-        authorize! :variant_report_status, clia_lab.to_s.downcase.to_sym
+        authorize! :variant_report_status, clia_lab.to_sym
         return true
       rescue => error
         return false
@@ -144,7 +144,7 @@ module V1
     def is_variant_report_sender(clia_lab)
       return false if clia_lab.nil?
       begin
-        authorize! :variant_report_uploaded, clia_lab.to_s.downcase.to_sym
+        authorize! :variant_report_uploaded, clia_lab.to_sym
         return true
       rescue => error
         return false
