@@ -19,6 +19,10 @@ module V1
         @dockerinstance = hash['Docker'].present? ? hash['Docker'] : ''
         @buildtime = hash['BuildTime'].present? ? hash['BuildTime'] : ''
         @environment = Rails.env
+        respond_to do |format|
+          format.html # show.html.erb
+          format.json { render json: @hash }
+        end
       rescue => error
         standard_error_message(error)
       end
