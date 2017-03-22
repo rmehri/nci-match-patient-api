@@ -2,37 +2,22 @@ module V1
   class VersionsController < ApplicationController
     def version
       begin
-        document = File.open('build_number.html', 'r')
-        hash = Hash.new
-        document.each_line do |line|
-          str = line.to_s
-          arr = str.split('=', 2)
-          hash.store(arr[0], arr[1])
-        end
-        @version = NciMatchPatientApi::Application.version
-        @rails_version = Rails::VERSION::STRING
-        @ruby_version = RUBY_VERSION
-        @running_on = hash['Commit'].present? ? hash['Commit'] : ''
-        @author = hash['Author'].present? ? hash['Author'] : ''
-        @travisbuild = hash['TravisBuild'].present? ? hash['TravisBuild'] : ''
-        @travisjob = hash['TravisBuildID'].present? ? hash['TravisBuildID'] : ''
-        @dockerinstance = hash['Docker'].present? ? hash['Docker'] : ''
-        @buildtime = hash['BuildTime'].present? ? hash['BuildTime'] : ''
-        @environment = Rails.env
-        respond_to do |format|
-          format.html # show.html.erb
-          format.json { render json: @hash }
+        File.open('build_number.html', 'r') do |document|
+          hash = {}
+          document.each_line do |line|
+            arr = line.split('=', 2)
+            hash.store(arr[0], arr[1].squish!)
+          end
+          document.close
+          hash[:version] = NciMatchPatientApi::Application.version
+          hash[:rails_version] = Rails::VERSION::STRING
+          hash[:ruby_version] = RUBY_VERSION
+          hash[:environment] = Rails.env
+          render json: hash
         end
       rescue => error
-        standard_error_message(error)
+        standard_error_message(error, 500)
       end
-    end
-
-    private
-
-    def standard_error_message(error)
-      logger.error error.message
-      render json: error.to_json, status: 500
     end
   end
 end
