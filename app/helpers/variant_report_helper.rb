@@ -13,8 +13,14 @@ module VariantReportHelper
 
     variant_report[:dna_bai_path_name] = s3_file_folder + construct_bai_file_name(variant_report[:dna_bam_name]) unless variant_report[:dna_bam_name].blank?
     variant_report[:rna_bai_path_name] = s3_file_folder + construct_bai_file_name(variant_report[:cdna_bam_name]) unless variant_report[:cdna_bam_name].blank?
+    variant_report[:pdf_url] = find_pdf_link(files)
 
     variant_report
+  end
+
+  def self.find_pdf_link(files)
+    target = files.select{ | file | file[:file_path_name].include? ".pdf" }
+    return target.blank? ? nil : target.first[:file_path_name]
   end
 
   def self.find_file_link(files, file_name)
