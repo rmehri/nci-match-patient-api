@@ -64,7 +64,7 @@ module V1
         assignments = NciMatchPatientModels::Assignment.scan(build_index_query({:molecular_id => shipment[:molecular_id], :projection => [:assignment_date, :analysis_id, :status, :status_date, :uuid, :comment_user,:comment, :selected_treatment_arm]})).collect{|record| record.to_h.compact}
         variant_reports = NciMatchPatientModels::VariantReport.scan(build_index_query({:molecular_id => shipment[:molecular_id],
                                                                                        :projection => [:ion_reporter_id, :molecular_id, :analysis_id, :variant_report_received_date, :comment_user, :clia_lab,
-                                                                                                       :dna_bam_name, :dna_bai_name, :vcf_name, :cdna_bam_name, :cdna_bai_name, :tsv_file_name,
+                                                                                                       :dna_bam_name, :vcf_file_name, :cdna_bam_name, :tsv_file_name,
                                                                                                        :status ,:qc_report_url, :vr_chart_data_url]})).collect{|record| record.to_h.compact }
 
         variant_reports = variant_reports.sort_by{ |report| report[:variant_report_received_date]}.reverse
@@ -111,7 +111,7 @@ module V1
         clia_lab = shipment[:destination]
         variant_reports = NciMatchPatientModels::VariantReport.scan(build_index_query({:molecular_id => shipment[:molecular_id],
                                                                                        :projection => [:ion_reporter_id, :molecular_id, :analysis_id, :clia_lab, :variant_report_received_date,
-                                                                                                       :status]})).collect{|record| record.to_h.compact }
+                                                                                                       :status, :dna_bam_name, :rna_bam_name , :vcf_file_name]})).collect{|record| record.to_h.compact }
 
         variant_reports = variant_reports.sort_by{ |report| report[:variant_report_received_date]}.reverse
 
@@ -143,10 +143,14 @@ module V1
                 :analysis_id => variant_report[:analysis_id],
                 :variant_report_status => variant_report[:status],
                 :variant_report_received_date => variant_report[:variant_report_received_date],
-                :comment_user => variant_report[:comment_user]
+                :comment_user => variant_report[:comment_user],
+                :dna_bam_name => variant_report[:dna_bam_name],
+                :cdna_bam_name => variant_report[:cdna_bam_name],
+                :vcf_file_name => variant_report[:vcf_file_name]
+
         }
 
-      VariantReportHelper.add_download_links(variant_report)
+      VariantReportHelper.add_download_links(report)
     end
 
     def build_analyses_assignment_model(assignment)
