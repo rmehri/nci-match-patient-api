@@ -11,11 +11,21 @@ module VariantReportHelper
     variant_report[:rna_bam_path_name] = find_file_link(files, variant_report[:cdna_bam_name]) unless variant_report[:cdna_bam_name].blank?
     variant_report[:vcf_path_name] = find_file_link(files, variant_report[:vcf_file_name]) unless variant_report[:vcf_file_name].blank?
 
-    variant_report[:dna_bai_path_name] = s3_file_folder + construct_bai_file_name(variant_report[:dna_bam_name]) unless variant_report[:dna_bam_name].blank?
-    variant_report[:rna_bai_path_name] = s3_file_folder + construct_bai_file_name(variant_report[:cdna_bam_name]) unless variant_report[:cdna_bam_name].blank?
+    dna_bai_name = variant_report[:dna_bam_name].blank? ? "" : s3_file_folder + construct_bai_file_name(variant_report[:dna_bam_name])
+    variant_report[:dna_bai_path_name] = dna_bai_name if file_exists(files, dna_bai_name)
+
+    rna_bai_name = variant_report[:cdna_bam_name].blank? ? "" : s3_file_folder + construct_bai_file_name(variant_report[:cdna_bam_name])
+    variant_report[:rna_bai_path_name] = rna_bai_name if file_exists(files, rna_bai_name)
+
     variant_report[:pdf_url] = find_pdf_link(files)
 
     variant_report
+  end
+
+  def self.file_exists(files, bai_key)
+    return false if bai_key.blank?
+    target = files.select{ | file | file[:file_path_name].include? bai_key }
+    return !(target.blank?)
   end
 
   def self.find_pdf_link(files)
