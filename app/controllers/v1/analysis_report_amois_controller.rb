@@ -17,7 +17,9 @@ module V1
       mois = get_amois(variant_report_hash.deep_symbolize_keys!)
       match_amois_with_uuid(variant_report_hash, mois)
 
-      instance_variable_set("@#{resource_name}", Convert::AmoisRuleModel.to_ui_model(mois).to_json)
+      updated_amois = Convert::AmoisRuleModel.to_ui_model(mois)
+      # queue_to_save_updated_amois(params[:patient_id], params[:id], updated_amois)
+      instance_variable_set("@#{resource_name}", updated_amois.to_json)
     end
 
     def get_amois(variant_report)
@@ -60,6 +62,13 @@ module V1
           moi[:uuid] = variants[0][:uuid]
         end
       end
+    end
+
+    def queue_to_save_updated_amois(patient_id, analysis_id, updated_amois)
+      message = {:patient_id => patient_id, :analysis_id => analysis_id, updated_amois => updated_amois}
+      queue_name = Rails.configuration.environment.fetch('queue_name')
+      logger.debug "Analysis_report_amois publishing to queue: #{queue_name}..."
+      Aws::Sqs::Publisher.publish(message, queue_name)
     end
   end
 end

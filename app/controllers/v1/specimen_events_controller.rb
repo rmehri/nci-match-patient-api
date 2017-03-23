@@ -146,7 +146,7 @@ module V1
                 :comment_user => variant_report[:comment_user]
         }
 
-      VariantReportHelper.add_download_links(report)
+      VariantReportHelper.add_download_links(variant_report)
     end
 
     def build_analyses_assignment_model(assignment)
