@@ -24,7 +24,7 @@ module VariantReportHelper
 
   def self.file_exists(files, bai_key)
     return false if bai_key.blank?
-    target = files.select{ | file | file[:file_path_name].include? bai_key }
+    target = files.select{ | file | file[:file_path_name].include? "/#{bai_key}" }
     return !(target.blank?)
   end
 
@@ -34,7 +34,7 @@ module VariantReportHelper
   end
 
   def self.find_file_link(files, file_name)
-    target = files.select{ | file | file[:file_path_name].include? file_name }
+    target = files.select{ | file | file[:file_path_name].include? "/#{file_name}" }
     return target.first[:file_path_name]
   end
 
