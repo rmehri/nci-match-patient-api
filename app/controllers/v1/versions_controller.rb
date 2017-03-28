@@ -9,10 +9,10 @@ module V1
             hash.store(arr[0], arr[1].squish!)
           end
           document.close
-          hash[:version] = NciMatchPatientApi::Application.version
-          hash[:rails_version] = Rails::VERSION::STRING
-          hash[:ruby_version] = RUBY_VERSION
-          hash[:environment] = Rails.env
+          hash['Version'] = NciMatchPatientApi::Application.version
+          hash['Rails Version'] = Rails::VERSION::STRING
+          hash['Ruby Version'] = RUBY_VERSION
+          hash['Environment'] = Rails.env
           render json: hash
         end
       rescue => error
