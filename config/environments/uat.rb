@@ -5,7 +5,7 @@ Rails.application.configure do
   # config.logger = Logger.new(STDOUT)
   # Set log level
   config.log_level = :WARN
-  # config.log_tags = [ :host, :subdomain, :uuid ]
+  config.log_tags = [ :uuid, lambda {|request| Rails.application.class.parent_name} ]
 
 # Code is not reloaded between requests.
   config.cache_classes = true

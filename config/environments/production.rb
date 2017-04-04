@@ -2,10 +2,9 @@ Rails.application.configure do
 # Settings specified here will take precedence over those in config/application.rb.
 
 # Enable stdout logger
-# config.logger = Logger.new(STDOUT)
 # Set log level
   config.log_level = :WARN
-  # config.log_tags = [ :host, :subdomain, :uuid ]
+  config.log_tags = [ :uuid, lambda {|request| Rails.application.class.parent_name} ]
 
   # Code is not reloaded between requests.
   config.cache_classes = true
@@ -46,13 +45,7 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
-
-  # Set to :debug to see everything in the log.
-  config.log_level = :info
-
-  # Prepend all log lines with the following tags.
-  # config.log_tags = [ :subdomain, :uuid ]
+  # config.force_ssl = tru
 
   # Use a different logger for distributed setups.
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)

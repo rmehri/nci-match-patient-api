@@ -34,8 +34,10 @@ Rails.application.configure do
 
   # Enable stdout logger
   # Set log level
+  # config.logger = Logger.new(STDOUT)
   config.log_level = :INFO
-  # config.log_tags = [ :host, :subdomain, :uuid ]
+  config.log_tags = [ :uuid, lambda {|request| Rails.application.class.parent_name} ]
+  # config.logger.formatter = Proc.new { |severity, datetime, _progname, msg| "[#{datetime.strftime("%B %d %H:%M:%S")}] [#{$$}] [#{severity}] [#{Rails.application.class.parent_name}], #{msg}\n"}
 
   if Rails.configuration.environment.fetch('queue_name').blank?
     raise "Please set your environment queue name for the project before running"

@@ -14,7 +14,7 @@ describe TreatmentArmApi do
     allow(HTTParty::Response).to receive(:code).and_return(200)
     allow(HTTParty::Response).to receive(:body).and_return(treatment_arms)
 
-    returned_tas = TreatmentArmApi.get_treatment_arms
+    returned_tas = TreatmentArmApi.get_treatment_arms("123")
     expect(returned_tas.to_s).to include("TA_1")
 
   end
@@ -26,6 +26,6 @@ describe TreatmentArmApi do
     allow(HTTParty::Request).to receive(:perform).and_return(HTTParty::Response)
     allow(HTTParty::Response).to receive(:code).and_return(500)
 
-    expect{(TreatmentArmApi.get_treatment_arms)}.to raise_error(RuntimeError)
+    expect{(TreatmentArmApi.get_treatment_arms("123"))}.to raise_error(RuntimeError)
   end
 end

@@ -23,7 +23,7 @@ module V1
     end
 
     def get_amois(variant_report)
-      VariantReportUpdater.new.updated_variant_report(variant_report, token)
+      VariantReportUpdater.new.updated_variant_report(variant_report, request.uuid, token)
     end
 
     def match_amois_with_uuid(variant_report, mois)

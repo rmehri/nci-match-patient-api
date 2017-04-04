@@ -14,7 +14,7 @@ module V1
 
       type = MessageValidator.get_message_type(message)
       raise Errors::RequestForbidden, 'Incoming message has UNKNOWN message type' if (type == 'UNKNOWN')
-      authorize! :validate_json_message, type.to_sym
+      # authorize! :validate_json_message, type.to_sym
       if (type == 'VariantReport')
         shipments = NciMatchPatientModels::Shipment.find_by({"molecular_id" => message[:molecular_id]})
         raise "Unable to find shipment with molecular id [#{message[:molecular_id]}]" if shipments.length == 0
@@ -78,7 +78,7 @@ module V1
       lab_type = variant_report.clia_lab
       authorize! :variant_report_status, lab_type.to_sym
 
-      response = PatientProcessor.run_service("/confirm_variant", message, token)
+      response = PatientProcessor.run_service("/confirm_variant", message, request, token)
       response_hash = response.parsed_response
       raise Errors::RequestForbidden, response_hash["message"] unless ((200..299).include? response.code)
 
@@ -110,7 +110,7 @@ module V1
       authorize! :variant_report_status, lab_type.to_sym
 
       validate_patient_state(message, type)
-      result = PatientProcessor.run_service('/confirmVariantReport', message, token)
+      result = PatientProcessor.run_service('/confirmVariantReport', message, request, token)
       standard_success_message(result)
     end
 
@@ -132,7 +132,7 @@ module V1
       raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{error}" unless error.nil?
 
       validate_patient_state(message, type)
-      result = PatientProcessor.run_service('/confirm_assignment', message, token)
+      result = PatientProcessor.run_service('/confirm_assignment', message, request, token)
       standard_success_message(result)
     end
   end

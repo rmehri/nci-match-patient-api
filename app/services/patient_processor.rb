@@ -3,14 +3,14 @@ class PatientProcessor
   include HTTParty
   base_uri "#{Rails.configuration.environment.fetch('patient_processor')}"
 
-  def self.run_service(service, message, token = "")
+  def self.run_service(service, message, uuid, token = "")
 
     p "======== Calling patient processor service: #{service} with message: #{message}"
     begin
       post(service,
                 {
                     :body => message.to_json,
-                    :headers => { 'Authorization' => "Bearer #{token}", 'Content-Type' => 'application/json', 'Accept' => 'application/json'}
+                    :headers => { 'X-Request-Id' => uuid, 'Authorization' => "Bearer #{token}", 'Content-Type' => 'application/json', 'Accept' => 'application/json'}
                 })
       # raise "Patient processor returned error code #{result.code}" if result.code != 200
       # result.body

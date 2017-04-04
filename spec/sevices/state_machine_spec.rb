@@ -19,7 +19,7 @@ describe StateMachine do
     allow(HTTParty::Response).to receive(:new).and_return(HTTParty::Response)
     allow(HTTParty::Request).to receive(:perform).and_return(HTTParty::Response)
     allow(HTTParty::Response).to receive(:body).and_return(message_body)
-    expect(StateMachine.validate(valid_message)).to eq(message_body)
+    expect(StateMachine.validate(valid_message, "123")).to eq(message_body)
 
   end
 
@@ -31,7 +31,7 @@ describe StateMachine do
     allow(HTTParty::Request).to receive(:perform).and_return(HTTParty::Response)
     allow(HTTParty::Response).to receive(:body).and_return(error_body)
 
-    res = StateMachine.validate(invalid_message)
+    res = StateMachine.validate(invalid_message, "123")
     expect(res).to eq(error_body)
   end
 
@@ -41,11 +41,11 @@ describe StateMachine do
     allow(HTTParty::Response).to receive(:new).and_return(HTTParty::Response)
     allow(HTTParty::Request).to receive(:perform).and_return(HTTParty::Response)
     allow(HTTParty::Response).to receive(:body).and_return(message_body)
-    expect(StateMachine.validate(valid_message, "JWTTOKEN")).to eq(message_body)
+    expect(StateMachine.validate(valid_message, "123", "JWTTOKEN")).to eq(message_body)
   end
 
   it 'will error out' do
     allow(HTTParty::Request).to receive(:new).and_raise(URI::InvalidURIError)
-    expect{StateMachine.validate(valid_message, "JWTTOKEN")}.to raise_error(URI::InvalidURIError)
+    expect{StateMachine.validate(valid_message, "123", "JWTTOKEN")}.to raise_error(URI::InvalidURIError)
   end
 end

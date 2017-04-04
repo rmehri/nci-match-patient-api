@@ -1,12 +1,6 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  # Enable stdout logger
-  # config.logger = Logger.new(STDOUT)
-  # Set log level
-  config.log_level = :INFO
-  # config.log_tags = [ :host, :subdomain, :uuid ]
-
   # The test environment is used exclusively to run your application's
   # test suite. You never need to work with it otherwise. Remember that
   # your test database is "scratch space" for the test suite and is wiped
@@ -43,4 +37,6 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+  config.log_level = :INFO
+  config.log_tags = [ :uuid, lambda {|request| Rails.application.class.parent_name} ]
 end

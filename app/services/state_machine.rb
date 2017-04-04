@@ -2,13 +2,12 @@ class StateMachine
   include HTTParty
   base_uri "#{Rails.configuration.environment.fetch('patient_state_api')}"
 
-  def self.validate(message, token = "")
+  def self.validate(message, uuid, token = "")
     begin
-      # AppLogger.log(self.class.name, "============ token calling state: #{token}")
       result = post("/patientMessage",
                     {
                         :body => message.to_json,
-                        :headers => { 'Authorization' => "Bearer #{token}", 'Content-Type' => 'application/json', 'Accept' => 'application/json'}
+                        :headers => { 'X-Request-Id' => uuid, 'Authorization' => "Bearer #{token}", 'Content-Type' => 'application/json', 'Accept' => 'application/json'}
                     })
       result.body
     rescue Error => error

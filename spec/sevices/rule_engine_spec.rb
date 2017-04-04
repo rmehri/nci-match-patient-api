@@ -15,7 +15,7 @@ describe RuleEngine do
     allow(HTTParty::Response).to receive(:code).and_return(200)
     allow(HTTParty::Response).to receive(:body).and_return(mois)
 
-    returned_mois = RuleEngine.get_mois("patient_id", "ion_id", "mole_id", "an_id", "test.tsv", treatment_arms)
+    returned_mois = RuleEngine.get_mois("patient_id", "ion_id", "mole_id", "an_id", "test.tsv", treatment_arms, "request", "token")
     expect(returned_mois.to_s).to include("7788")
 
   end
@@ -27,6 +27,6 @@ describe RuleEngine do
     allow(HTTParty::Request).to receive(:perform).and_return(HTTParty::Response)
     allow(HTTParty::Response).to receive(:code).and_return(500)
 
-    expect{(RuleEngine.get_mois("patient_id", "ion_id", "mole_id", "an_id", "test.tsv", []))}.to raise_error(RuntimeError)
+    expect{(RuleEngine.get_mois("patient_id", "ion_id", "mole_id", "an_id", "test.tsv", [], "request", "token"))}.to raise_error(RuntimeError)
   end
 end
