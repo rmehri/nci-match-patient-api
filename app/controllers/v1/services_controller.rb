@@ -14,7 +14,7 @@ module V1
 
       type = MessageValidator.get_message_type(message)
       raise Errors::RequestForbidden, 'Incoming message has UNKNOWN message type' if (type == 'UNKNOWN')
-      # authorize! :validate_json_message, type.to_sym
+      authorize! :validate_json_message, type.to_sym
       if (type == 'VariantReport')
         shipments = NciMatchPatientModels::Shipment.find_by({"molecular_id" => message[:molecular_id]})
         raise "Unable to find shipment with molecular id [#{message[:molecular_id]}]" if shipments.length == 0
@@ -40,7 +40,7 @@ module V1
       type = MessageValidator.get_message_type(message)
       raise Errors::RequestForbidden, 'Incoming message has UNKNOWN message type' if (type == 'UNKNOWN')
 
-      # authorize! :validate_json_message, type.to_sym
+      authorize! :validate_json_message, type.to_sym
       shipments = NciMatchPatientModels::Shipment.find_by({"molecular_id" => message[:molecular_id]})
       raise Errors::RequestForbidden, "Unable to find shipment with molecular id [#{message[:molecular_id]}]" if shipments.length == 0
 
