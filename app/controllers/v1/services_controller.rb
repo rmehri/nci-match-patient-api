@@ -78,7 +78,7 @@ module V1
       lab_type = variant_report.clia_lab
       authorize! :variant_report_status, lab_type.to_sym
 
-      response = PatientProcessor.run_service("/confirm_variant", message, request, token)
+      response = PatientProcessor.run_service("/confirm_variant", message, request.uuid, token)
       response_hash = response.parsed_response
       raise Errors::RequestForbidden, response_hash["message"] unless ((200..299).include? response.code)
 
@@ -110,7 +110,7 @@ module V1
       authorize! :variant_report_status, lab_type.to_sym
 
       validate_patient_state(message, type)
-      result = PatientProcessor.run_service('/confirmVariantReport', message, request, token)
+      result = PatientProcessor.run_service('/confirmVariantReport', message, request.uuid, token)
       standard_success_message(result)
     end
 
@@ -132,7 +132,7 @@ module V1
       raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{error}" unless error.nil?
 
       validate_patient_state(message, type)
-      result = PatientProcessor.run_service('/confirm_assignment', message, request, token)
+      result = PatientProcessor.run_service('/confirm_assignment', message, request.uuid, token)
       standard_success_message(result)
     end
   end
