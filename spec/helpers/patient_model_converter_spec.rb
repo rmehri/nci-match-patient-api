@@ -5,7 +5,7 @@
 #
 #     model.patient_id           = 'PAT123'
 #     model.registration_date    = '2016-05-09T22:06:33+00:00'
-#     model.study_id             = 'APEC1621'
+#     model.study_id             = 'APEC1621SC'
 #     model.gender               = 'MALE'
 #     model.ethnicity            = 'WHITE'
 #     model.races                = ["WHITE", "HAWAIIAN"]
@@ -172,7 +172,7 @@
 #         :collected_date  => "2016-06-09T22:06:33+00:00",
 #         :surgical_event_id => "SUREVT098" + i.to_s,
 #         :failed_date => "2016-06-09T22:06:33+00:00",
-#         :study_id => "APEC1621",
+#         :study_id => "APEC1621SC",
 #         :type => "TUMOR",
 #         :pathology_status => "Agreed on pathology",
 #         :pathology_status_date => "2016-06-09T22:06:33+00:00",
