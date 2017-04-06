@@ -12,10 +12,7 @@ module V1
 
     def assignment_report_download
       @assignment_report = get_assignment_report[0]
-      patient_id = @assignment_report[:patient_id]
-      molecular_id = @assignment_report[:molecular_id]
-      filename = "AssignmentReport-#{patient_id}-#{molecular_id}.xlsx"
-      render xlsx: 'report_downloads/assignment_report_download.xlsx.axlsx', filename: filename
+      render xlsx: 'report_downloads/assignment_report_download.xlsx.axlsx'
     end
 
     private
