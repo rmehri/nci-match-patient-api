@@ -4,14 +4,10 @@ module V1
     def variant_report_download
       begin
         @variant_report = get_variant_report
-        patient_id = @variant_report[:patient][:patient_id]
-        molecular_id = @variant_report[:variant_report][:molecular_id]
-        filename = "VariantReport-#{patient_id}-#{molecular_id}.xlsx"
-        render xlsx: 'report_downloads/variant_report_download.xlsx.axlsx', filename: filename
+        render xlsx: 'report_downloads/variant_report_download.xlsx.axlsx'
       rescue => error
         standard_error_message(error.message, 404)
       end
-
     end
 
     def assignment_report_download
