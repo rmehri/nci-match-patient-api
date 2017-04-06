@@ -2,7 +2,7 @@ var params = {
     TableName: 'p_patient_development',
     Item: {
 
-      "study_id": "APEC1621",
+      "study_id": "APEC1621SC",
     	"patient_id": "2222",
     	"registration_date": "2016-05-09T22:06:33+00:00",
     	"current_status": "REGISTRATION",
@@ -25,7 +25,7 @@ var params = {
     TableName: 'p_patient_development',
     Item: {
 
-      "study_id": "APEC1621",
+      "study_id": "APEC1621SC",
     	"patient_id": "3333",
     	"registration_date": "2016-06-09T22:06:33+00:00",
     	"current_status": "REGISTRATION",
@@ -48,7 +48,7 @@ var params = {
     TableName: 'p_patient_development',
     Item: {
 
-      "study_id": "APEC1621",
+      "study_id": "APEC1621SC",
     	"patient_id": "4444",
     	"registration_date": "2016-05-09T22:06:33+00:00",
     	"current_status": "ON_TREATMENT_ARM",

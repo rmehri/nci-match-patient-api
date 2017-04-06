@@ -6,7 +6,7 @@ describe ApplicationHelper do
             "msg_guid" => "0f8fad5b-d9cb-469f-al65-80067728950e",
             "msg_dttm" => "2016-05-09T22:06:33+00:00"
         },
-        "study_id" => "APEC1621",
+        "study_id" => "APEC1621SC",
         "patient_id" => "3366",
         "step_number" => "1.0",
         "status_date" => "2016-05-09T22:06:33+00:00",
@@ -32,7 +32,7 @@ describe ApplicationHelper do
         },
         "specimen_received" => {
             "patient_id" => "3366",
-            "study_id" => "APEC1621",
+            "study_id" => "APEC1621SC",
             "surgical_event_id" => "3366-bsn",
             "type" => "TISSUE",
             "collection_dt" => "2016-09-11",
@@ -61,7 +61,7 @@ describe ApplicationHelper do
             "msg_dttm" => "2016-04-25T18:42:13+00:00"
         },
         "specimen_received" => {
-            "study_id" => "APEC1621",
+            "study_id" => "APEC1621SC",
             "surgical_event_id" => "3366-bsn",
             "type" => "TISSUE",
             "collection_dt" => "2016-09-11",
@@ -92,7 +92,7 @@ describe ApplicationHelper do
         },
         "specimen_received" => {
             "patient_id" => " 3366 ",
-            "study_id" => "APEC1621",
+            "study_id" => "APEC1621SC",
             "surgical_event_id" => " 3366- bsn",
             "type" => "TISSUE",
             "collection_dt" => "2016-09-11",

@@ -9,7 +9,7 @@ describe 'SpecimenReceivedValidator behavior' do
             "msg_dttm"=> "2016-04-25T18:42:13+00:00"
         },
         "specimen_received"=> {
-            "study_id"=> "APEC1621",
+            "study_id"=> "APEC1621SC",
             "patient_id"=> "3344",
             "type"=> "BLOOD",
             "collection_dt"=> "2016-04-25",
@@ -33,7 +33,7 @@ describe 'SpecimenReceivedValidator behavior' do
         },
         "specimen_received"=> {
             "patient_id"=> "3344",
-            "study_id"=> "APEC1621",
+            "study_id"=> "APEC1621SC",
             "surgical_event_id"=> "3344-bsn",
             "type"=> "TISSUE",
             "collection_dt"=> "2016-04-25",
@@ -58,7 +58,7 @@ describe 'SpecimenReceivedValidator behavior' do
         },
         "specimen_received"=> {
             "patient_id"=> "3344",
-            "study_id"=> "APEC1621",
+            "study_id"=> "APEC1621SC",
             "surgical_event_id"=> "",
             "type"=> "TISSUE",
             "collection_dt"=> "2016-04-25",
@@ -83,7 +83,7 @@ describe 'SpecimenReceivedValidator behavior' do
         },
         "specimen_received"=> {
             "patient_id"=> "3344",
-            "study_id"=> "APEC1621",
+            "study_id"=> "APEC1621SC",
             "surgical_event_id"=> "3344-bsn",
             "type"=> "BAD_TYPE",
             "collection_dt"=> "2016-04-25",

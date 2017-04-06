@@ -20,7 +20,7 @@ describe V1::PatientsController, :type => :controller do
     stub_model NciMatchPatientModels::Patient,
                :patient_id => 'PAT123',
                :registration_date => '2016-05-09T22:06:33+00:00',
-               :study_id => 'APEC1621',
+               :study_id => 'APEC1621SC',
                :gender => 'MALE',
                :ethnicity => 'WHITE',
                :races => ["WHITE", "HAWAIIAN"],
@@ -136,7 +136,7 @@ describe V1::PatientsController, :type => :controller do
             "msg_guid": "0f8fad5b-d9cb-469f-al65-80067728950e",
             "msg_dttm": "2016-05-09T22:06:33+00:00"
         },
-        "study_id": "APEC1621",
+        "study_id": "APEC1621SC",
         "patient_id": "3366",
         "step_number": "1.0",
         "status_date": "2016-05-09T22:06:33+00:00",
@@ -158,7 +158,7 @@ describe V1::PatientsController, :type => :controller do
             "msg_guid": "0f8fad5b-d9cb-469f-al65-80067728950e",
             "msg_dttm": "2016-05-09T22:06:33+00:00"
         },
-        "study_id": "APEC1621",
+        "study_id": "APEC1621SC",
         "patient_id": "3366",
         "step_number": "1.0",
         "status_date": "2016-05-09T22:06:33+00:00",

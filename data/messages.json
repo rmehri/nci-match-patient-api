@@ -9,7 +9,7 @@
 		"msg_guid": "0f8fad5b-d9cb-469f-al65-80067728950e",
 		"msg_dttm": "2016-05-09T22:06:33+00:00"
 	},
-	"study_id": "APEC1621",
+	"study_id": "APEC1621SC",
 	"patient_id": "2222",
 	"step_number": "1.0",
 	"registration_date": "2016-05-09T22:06:33+00:00",
@@ -28,7 +28,7 @@
 		"msg_guid": "0f8fad5b-d9cb-469f-al65-80067728950e",
 		"msg_dttm": "2016-05-09T22:06:33+00:00"
 	},
-	"study_id": "APEC1621",
+	"study_id": "APEC1621SC",
 	"patient_id": "2222",
 	"step_number": "1.1",
 	"treatment_arm_id": "APEC1621B",
@@ -49,7 +49,7 @@
 		"msg_guid": "0f8fad5b-d9cb-469f-al65-80067728950e",
 		"msg_dttm": "2016-05-09T22:06:33+00:00"
 	},
-	"study_id": "APEC1621",
+	"study_id": "APEC1621SC",
 	"patient_id": "2222",
 	"treatment_arm_id": "APEC1621B",
 	"status": "OFF_THERAPY",
@@ -68,7 +68,7 @@
 		"msg_guid": "0f8fad5b-d9cb-469f-al65-80067728950e",
 		"msg_dttm": "2016-05-09T22:06:33+00:00"
 	},
-	"study_id": "APEC1621",
+	"study_id": "APEC1621SC",
 	"patient_id": "2222",
 	"status": "OFF_STUDY",
 	"message": "death",
@@ -87,7 +87,7 @@
 		"msg_guid": "0f8fad5b-d9cb-469f-al65-80067728950e",
 		"msg_dttm": "2016-05-09T22:06:33+00:00"
 	},
-	"study_id": "APEC1621",
+	"study_id": "APEC1621SC",
 	"patient_id": "2222",
 	"treatment_arm_id": "APEC1621B",
 	"request_status": "SUCCESS",
@@ -106,7 +106,7 @@
 		"msg_guid": "0f8fad5b-d9cb-469f-al65-80067728950e",
 		"msg_dttm": "2016-05-09T22:06:33+00:00"
 	},
-	"study_id": "APEC1621",
+	"study_id": "APEC1621SC",
 	"patient_id": "2222",
 	"treatment_arm_id": "APEC1621B",
 	"request_status": "FAILURE",
@@ -132,7 +132,7 @@
 	},
 	"specimens_received" : [
 		{
-			"study_id": "APEC1621",
+			"study_id": "APEC1621SC",
 			"patient_id": "17364",
 			"collection_grouping_id": "CGID-123456",
 			"type": "Blood",
@@ -147,7 +147,7 @@
 			}
 		},
 		{
-			"study_id": "APEC1621",
+			"study_id": "APEC1621SC",
 			"patient_id": "23123",
 			"collection_grouping_id": "CGID-77864",
 			"type": "Tissue",
@@ -162,7 +162,7 @@
 			}
 		},
 		{
-			"study_id": "APEC1621",
+			"study_id": "APEC1621SC",
 			"patient_id": "23123",
 			"collection_grouping_id": "CGID-77864",
 			"type": "Tissue",
@@ -177,7 +177,7 @@
 			}
 		},
 		{
-			"study_id": "APEC1621",
+			"study_id": "APEC1621SC",
 			"patient_id": "23123",
 			"collection_grouping_id": "CGID-77865",
 			"type": "Blood",

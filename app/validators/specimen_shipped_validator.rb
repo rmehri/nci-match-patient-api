@@ -12,7 +12,7 @@ module MessageValidator
 
 
     validates :header, presence: true
-    validates :study_id, presence: true, inclusion: { in: %w(APEC1621), message: "%{value} is not a valid study_id"} # reapeated so should be its own validation
+    validates :study_id, presence: true, inclusion: { in: %w(APEC1621SC), message: "%{value} is not a valid study_id"} # reapeated so should be its own validation
     validates :patient_id, presence: true
     validates :type, presence: true, inclusion: {in: %w(TISSUE_DNA_AND_CDNA SLIDE BLOOD_DNA), message: "%{value} is not a support type"}
     validates :carrier, presence: true

@@ -8,7 +8,7 @@ FactoryGirl.define do
             'msg_dttm' => '2016-05-09T22:06:33+00:00'
         }
            ]
-    study_id  'APEC1621'
+    study_id  'APEC1621SC'
     patient_id '2222'
     step_number '1.0'
     status_date '2016-05-09T22:06:33+00:00'
@@ -29,7 +29,7 @@ FactoryGirl.define do
                    'msg_dttm' => '2016-05-09T22:06:33+00:00'
                }
            ]
-    study_id  'APEC1621'
+    study_id  'APEC1621SC'
     step_number '1.0'
     status_date '2016-05-09T22:06:33+00:00'
     status 'REGISTRATION'
@@ -53,7 +53,7 @@ FactoryGirl.define do
            ]
     treatment_arm_id '12345'
     stratum_id '123456'
-    study_id  'APEC1621'
+    study_id  'APEC1621SC'
     patient_id '2222'
     step_number '1.0'
     status_date '2016-05-09T22:06:33+00:00'
@@ -74,7 +74,7 @@ FactoryGirl.define do
                    'msg_dttm' => '2016-05-09T22:06:33+00:00'
                }
            ]
-    study_id  'APEC1621'
+    study_id  'APEC1621SC'
     step_number '1.0'
     status_date '2016-05-09T22:06:33+00:00'
     status 'ON_TREATMENT_ARM'
@@ -95,7 +95,7 @@ FactoryGirl.define do
                    'msg_dttm' => '2016-05-09T22:06:33+00:00'
                }
            ]
-    study_id  'APEC1621'
+    study_id  'APEC1621SC'
     patient_id '2222'
     step_number '1.0'
     status_date '2016-05-09T22:06:33+00:00'
@@ -116,7 +116,7 @@ FactoryGirl.define do
                    'msg_dttm' => '2016-05-09T22:06:33+00:00'
                }
            ]
-    study_id  'APEC1621'
+    study_id  'APEC1621SC'
     step_number '1.0'
     status_date '2016-05-09T22:06:33+00:00'
     status 'OFF_STUDY'
@@ -137,7 +137,7 @@ FactoryGirl.define do
                    'msg_dttm' => '2016-05-09T22:06:33+00:00'
                }
            ]
-    study_id  'APEC1621'
+    study_id  'APEC1621SC'
     patient_id '2222'
     step_number '1.0'
     status_date '2016-05-09T22:06:33+00:00'
@@ -159,7 +159,7 @@ FactoryGirl.define do
                    'msg_dttm' => '2016-05-09T22:06:33+00:00'
                }
            ]
-    study_id  'APEC1621'
+    study_id  'APEC1621SC'
     step_number '1.0'
     status_date '2016-05-09T22:06:33+00:00'
     status 'REQUEST_ASSIGNMENT'

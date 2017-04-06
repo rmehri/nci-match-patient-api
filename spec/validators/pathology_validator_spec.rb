@@ -5,7 +5,7 @@ describe 'PathologyValidator behavior' do
   let(:good_message) do
     {
         "patient_id":"3344",
-        "study_id": "APEC1621",
+        "study_id": "APEC1621SC",
         "surgical_event_id":"3344-bsn",
         "case_number": "case-3377",
         "type": "PATHOLOGY_STATUS",

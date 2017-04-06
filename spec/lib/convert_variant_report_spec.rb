@@ -10,7 +10,7 @@ describe Convert::VariantReportDbModel do
     stub_model NciMatchPatientModels::VariantReport,
                :patient_id => 'PAT123',
                :variant_report_received_date => '2016-05-09T22:06:33+00:00',
-               :study_id => 'APEC1621',
+               :study_id => 'APEC1621SC',
                :surgical_event_id => "3366-bsn",
                :variant_report_type => "TISSUE",
                :molecular_id => "3366-bsn-msn-2",

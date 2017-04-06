@@ -5,7 +5,7 @@ describe 'AssayValidator behavior' do
   let(:good_message) do
     {
         "patient_id":"3344",
-        "study_id": "APEC1621",
+        "study_id": "APEC1621SC",
         "surgical_event_id":"3344-bsn",
         "case_number": "case-3377",
         "type": "RESULT",
@@ -18,7 +18,7 @@ describe 'AssayValidator behavior' do
   let(:bad_message) do
     {
         "patient_id":"3344",
-        "study_id": "APEC1621",
+        "study_id": "APEC1621SC",
         "surgical_event_id":"3344-bsn",
         "reported_date":"2015-12-12T12:12:09.071-05:00",
         "result":"POSITIVE"

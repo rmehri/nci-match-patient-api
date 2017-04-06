@@ -9,7 +9,7 @@ describe 'SpecimenShippedValidator behavior' do
             "msg_dttm"=> "2016-05-01T19:42:13+00:00"
         },
         "specimen_shipped"=> {
-            "study_id"=> "APEC1621",
+            "study_id"=> "APEC1621SC",
             "patient_id"=> "3344",
             "type"=> "BLOOD_DNA",
             "molecular_id"=> "3344-bsn-msn",
@@ -35,7 +35,7 @@ describe 'SpecimenShippedValidator behavior' do
             "msg_dttm"=> "2016-05-01T19:42:13+00:00"
         },
         "specimen_shipped"=> {
-            "study_id"=> "APEC1621",
+            "study_id"=> "APEC1621SC",
             "patient_id"=> "3344",
             "type"=> "SLIDE",
             "molecular_id"=> "3344-bsn-msn",
@@ -63,7 +63,7 @@ describe 'SpecimenShippedValidator behavior' do
             "msg_dttm"=> "2016-05-01T19:42:13+00:00"
         },
         "specimen_shipped"=> {
-            "study_id"=> "APEC1621",
+            "study_id"=> "APEC1621SC",
             "patient_id"=> "3344",
             "type"=> "TISSUE_DNA_AND_CDNA",
 
@@ -91,7 +91,7 @@ describe 'SpecimenShippedValidator behavior' do
             "msg_dttm"=> "2016-05-01T19:42:13+00:00"
         },
         "specimen_shipped"=> {
-            "study_id"=> "APEC1621",
+            "study_id"=> "APEC1621SC",
             "patient_id"=> "3344",
             "type"=> "TISSUE_BAD_TYPE",
 
