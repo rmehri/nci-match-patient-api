@@ -4,7 +4,7 @@ module V1
     def variant_report_download
       begin
         @variant_report = get_variant_report
-        render xlsx: 'report_downloads/variant_report_download.xlsx.axlsx'
+        render xlsx: 'variant_report_download.xlsx.axlsx'
       rescue => error
         standard_error_message(error.message, 404)
       end
@@ -12,7 +12,7 @@ module V1
 
     def assignment_report_download
       @assignment_report = get_assignment_report[0]
-      render xlsx: 'report_downloads/assignment_report_download.xlsx.axlsx'
+      render xlsx: 'assignment_report_download.xlsx.axlsx'
     end
 
     private
