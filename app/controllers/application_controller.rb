@@ -60,7 +60,7 @@ class ApplicationController < ActionController::Base
   def queue_message(message, message_type)
     queue_name = Rails.configuration.environment.fetch('queue_name')
     logger.debug "Patient API publishing to queue: #{queue_name}..."
-    Aws::Sqs::Publisher.publish(message, queue_name)
+    Aws::Sqs::Publisher.publish(message, request.uuid, queue_name)
     true
   end
 
@@ -82,7 +82,7 @@ class ApplicationController < ActionController::Base
 
     queue_name = Rails.configuration.environment.fetch('queue_name')
     logger.debug "Patient API publishing to queue: #{queue_name}..."
-    Aws::Sqs::Publisher.publish(message, queue_name)
+    Aws::Sqs::Publisher.publish(message, request.uuid, queue_name)
 
   end
 end
