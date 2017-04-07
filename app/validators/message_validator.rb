@@ -20,8 +20,6 @@ module MessageValidator
   end
 
   def self.get_message_type(message)
-    type = 'UNKNOWN'
-
     if (!message[:specimen_received].nil?)
       type = "SpecimenReceived"
     elsif (!message[:specimen_shipped].nil?)
