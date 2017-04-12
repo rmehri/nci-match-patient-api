@@ -2,6 +2,8 @@
 class AbstractValidator
   include ActiveModel::Serializers::JSON
 
+  class << self; attr_accessor :message_format end
+
   def from_json(json, include_root=include_root_in_json)
     _run_from_json_callbacks do
       super

@@ -3,6 +3,8 @@ module MessageValidator
     include ActiveModel::Validations
     include ActiveModel::Callbacks
 
+    @message_format = /:status=>"CONFIRMED"|"REJECTED"/
+
     define_model_callbacks :from_json
     after_from_json :include_correct_module
 
@@ -18,4 +20,5 @@ module MessageValidator
               inclusion: {in: %w(CONFIRMED REJECTED), message: "%{value} is not a valid variant report status value"}
 
   end
+
 end

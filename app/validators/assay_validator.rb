@@ -3,6 +3,8 @@ module MessageValidator
     include ActiveModel::Validations
     include ActiveModel::Callbacks
 
+    @message_format =  /:biomarker/
+
     define_model_callbacks :from_json
     after_from_json :include_correct_module
 
@@ -19,5 +21,6 @@ module MessageValidator
     validates :result, presence: true, inclusion: {in: %w(POSITIVE NEGATIVE INDETERMINATE), message: "%{value} is not a valid assay result"}
     validates :case_number, presence: true
     validates :type, inclusion: {in: %w(RESULT), message: "%{value} is not a valid assay message type"}
+
   end
 end

@@ -16,6 +16,7 @@ module MessageValidator
                                                     message: "%{value} is not supported COG status value"}
 
 
+
     def include_correct_module
       case @status.to_sym
         when :REGISTRATION

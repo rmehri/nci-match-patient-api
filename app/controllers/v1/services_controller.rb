@@ -12,8 +12,14 @@ module V1
       message = ApplicationHelper.trim_value_in_patient_message(message)
       message.deep_symbolize_keys!
 
+      # type = MessageFactory.get_message_type(message)
+      # raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{type.errors.messages}" unless type.valid?
+      # authorize! :validate_json_message, type.class
+      #
+      # validate_patient_state_and_queue(message, type.class)
+      # standard_success_message('Message has been processed successfully', 202)
+
       type = MessageValidator.get_message_type(message)
-      raise Errors::RequestForbidden, 'Incoming message has UNKNOWN message type' if (type == 'UNKNOWN')
       authorize! :validate_json_message, type.to_sym
       if (type == 'VariantReport')
         shipments = NciMatchPatientModels::Shipment.find_by({"molecular_id" => message[:molecular_id]})
