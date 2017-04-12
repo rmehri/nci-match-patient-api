@@ -10,7 +10,7 @@ class RuleEngine
     service_url = base_uri + "/variant_report/#{patient_id}/#{ion_reporter_id}/#{molecular_id}/#{analysis_id}/#{tsv_file_name}?filtered=true"
 
     AppLogger.log(self.class.name, "Calling out to service #{service_url}...")
-
+    AppLogger.log(self.class.name, "And the treatment arm data sent to Rule is #{treatment_arms}...")
     begin
       options = {
           body: treatment_arms,
