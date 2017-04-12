@@ -1,4 +1,4 @@
-module MessageValidator
+module MessageFactory
 
   autoload :SpecimenReceivedValidator,     'specimen_received_validator'
   autoload :SpecimenShippedValidator,      'specimen_shipped_validator'
