@@ -14,11 +14,6 @@ module MessageValidator
   # autoload :RegistrationValidator,         'registration_validator'
   autoload :AbstractValidator,             'abstract_validator'
 
-  class << self
-    cattr_reader :schema
-
-  end
-
   def self.get_message_type(message)
     if (!message[:specimen_received].nil?)
       type = "SpecimenReceived"

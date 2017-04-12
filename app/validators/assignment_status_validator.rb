@@ -3,6 +3,8 @@ module MessageValidator
     include ActiveModel::Validations
     include ActiveModel::Callbacks
 
+    @message_format = /:status_type=>"ASSIGNMENT"/
+
     define_model_callbacks :from_json
     after_from_json :include_correct_module
 

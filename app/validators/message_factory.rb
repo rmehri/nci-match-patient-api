@@ -14,31 +14,26 @@ module MessageFactory
   # autoload :RegistrationValidator,         'registration_validator'
   autoload :AbstractValidator,             'abstract_validator'
 
-  class << self
-    cattr_reader :schema
-
-  end
-
   def self.get_message_type(message)
     case message.to_s
       when MessageValidator::SpecimenReceivedValidator.message_format
-        type = MessageValidator::SpecimenReceivedValidator.new
+        type = MessageValidator::SpecimenReceivedValidator
       when MessageValidator::SpecimenShippedValidator.message_format
-        type = MessageValidator::SpecimenShippedValidator.new
+        type = MessageValidator::SpecimenShippedValidator
       when MessageValidator::AssayValidator.message_format
-        type = MessageValidator::AssayValidator.new
+        type = MessageValidator::AssayValidator
       when MessageValidator::PathologyValidator.message_format
-        type = MessageValidator::PathologyValidator.new
+        type = MessageValidator::PathologyValidator
       when MessageValidator::AssignmentStatusValidator.message_format
-        type = MessageValidator::AssignmentStatusValidator.new
+        type = MessageValidator::AssignmentStatusValidator
       when MessageValidator::VariantReportStatusValidator.message_format
-        type = MessageValidator::VariantReportStatusValidator.new
+        type = MessageValidator::VariantReportStatusValidator
       when MessageValidator::VariantReportValidator.message_format
-        type = MessageValidator::VariantReportValidator.new
+        type = MessageValidator::VariantReportValidator
       when MessageValidator::TreatmentArmsValidator.message_format
-        type = MessageValidator::TreatmentArmsValidator.new
+        type = MessageValidator::TreatmentArmsValidator
       else
-        type = MessageValidator::CogValidator.new
+        type = MessageValidator::CogValidator
     end
     return type.new.from_json(message.to_json)
   end

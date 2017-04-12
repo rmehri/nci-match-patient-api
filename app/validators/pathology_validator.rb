@@ -3,6 +3,8 @@ module MessageValidator
     include ActiveModel::Validations
     include ActiveModel::Callbacks
 
+    @message_format = /:type=>"PATHOLOGY_STATUS"/
+
     define_model_callbacks :from_json
     after_from_json :include_correct_module
 
@@ -17,4 +19,5 @@ module MessageValidator
     validates :case_number, presence: true
     validates :type, inclusion: {in: %w(PATHOLOGY_STATUS), message: "%{value} is not a valid pathology message type"}
   end
+
 end
