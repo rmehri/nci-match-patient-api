@@ -46,6 +46,7 @@ module V1
       raise "Patient [#{params[:patient_id]}] not found" if patient.blank?
       assignments = NciMatchPatientModels::Assignment.query_by_patient_id(params[:patient_id], false).collect { |data| data.to_h.compact }
       assignments = assignments.select { |assignment| assignment[:uuid] == params[:uuid]}
+      raise Errors::ResourceNotFound if assignments.blank?
       assignment = assignments[0]
       assignments_with_assays = []
       assays = find_assays(assignment[:surgical_event_id])
