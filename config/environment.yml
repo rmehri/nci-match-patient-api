@@ -60,7 +60,7 @@ uat:
 production:
   <<: *defaults
   aws_dynamo_endpoint: "https://dynamodb.us-east-1.amazonaws.com"
-
+  slack_channel: "#match-bot-prod"
   #Constructed queue name: "patient_processor"
   queue_name: 'patient_queue'
 
