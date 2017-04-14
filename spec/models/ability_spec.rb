@@ -18,8 +18,8 @@ describe Ability, :type => :model do
     end
 
     it "allow PATIENT_MESSAGE_SENDER to access validate_json_message method" do
-      expect(Ability.new({:roles => ["PATIENT_MESSAGE_SENDER"]}).can?(:validate_json_message, :TreatmentArm)).to eq(true)
-      expect(Ability.new({:roles => ["PATIENT_MESSAGE_SENDER"]}).can?(:validate_json_message, :Cog)).to eq(true)
+      expect(Ability.new({:roles => ["PATIENT_MESSAGE_SENDER"]}).can?(:validate_json_message, TreatmentArmMessage)).to eq(true)
+      expect(Ability.new({:roles => ["PATIENT_MESSAGE_SENDER"]}).can?(:validate_json_message, CogMessage)).to eq(true)
     end
 
     it "allow MochaVariantReportReviewer to access variant_report_status method" do
@@ -27,9 +27,9 @@ describe Ability, :type => :model do
     end
 
     it "allow AssignmentReportReviewer to access assignment_confirmation method" do
-      expect(Ability.new({:roles => ["ASSIGNMENT_REPORT_REVIEWER"]}).can?(:assignment_confirmation, :AssignmentStatus)).to eq(true)
+      expect(Ability.new({:roles => ["ASSIGNMENT_REPORT_REVIEWER"]}).can?(:assignment_confirmation, AssignmentStatusMessage)).to eq(true)
       expect(Ability.new({:roles => ["ASSIGNMENT_REPORT_REVIEWER"]}).can?(:assignment_confirmation, NciMatchPatientModels)).to eq(true)
-      expect(Ability.new({:roles => ["ASSIGNMENT_REPORT_REVIEWER"]}).can?(:validate_json_message, :AssignmentStatus)).to eq(true)
+      expect(Ability.new({:roles => ["ASSIGNMENT_REPORT_REVIEWER"]}).can?(:validate_json_message, AssignmentStatusMessage)).to eq(true)
       expect(Ability.new({:roles => ["ASSIGNMENT_REPORT_REVIEWER"]}).can?(:validate_json_message, NciMatchPatientModels)).to eq(true)
     end
 
@@ -51,9 +51,9 @@ describe Ability, :type => :model do
     end
 
     it "allow MdaVariantReportReviewer to access variant_report_status method" do
-      expect(Ability.new({:roles => ["MDA_VARIANT_REPORT_REVIEWER"]}).can?(:variant_report_status, :VariantReportStatus)).to eq(true)
+      expect(Ability.new({:roles => ["MDA_VARIANT_REPORT_REVIEWER"]}).can?(:variant_report_status, VariantReportStatusMessage)).to eq(true)
       expect(Ability.new({:roles => ["MDA_VARIANT_REPORT_REVIEWER"]}).can?(:variant_report_status, NciMatchPatientModels)).to eq(true)
-      expect(Ability.new({:roles => ["MDA_VARIANT_REPORT_REVIEWER"]}).can?(:validate_json_message, :VariantReportStatus)).to eq(true)
+      expect(Ability.new({:roles => ["MDA_VARIANT_REPORT_REVIEWER"]}).can?(:validate_json_message, VariantReportStatusMessage)).to eq(true)
       expect(Ability.new({:roles => ["MDA_VARIANT_REPORT_REVIEWER"]}).can?(:validate_json_message, NciMatchPatientModels)).to eq(true)
     end
 
