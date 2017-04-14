@@ -9,13 +9,10 @@ module V1
       json_data = JSON.parse(request.raw_post)
       logger.info "Patient Api received message: #{json_data.to_json}"
       message = json_data.deep_transform_keys!(&:underscore).symbolize_keys
-      type = MessageValidator.get_message_type(message)
-      raise "Incoming message has UNKNOWN message type" if (type == 'UNKNOWN')
+      message_type = MessageFactory.get_message_type(message)
+      raise "Incoming message failed message schema validation: #{message_type.errors.messages}" unless message_type.valid?
 
-      error = MessageValidator.validate_json_message(type, message)
-      raise "Incoming message failed message schema validation: #{error}" unless error.nil?
-
-      status = validate_patient_state_and_queue(message, type)
+      status = validate_patient_state_and_queue(message, message_type.class)
 
       raise "Incoming message failed patient state validation" if (status == false)
 

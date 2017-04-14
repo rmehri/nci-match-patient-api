@@ -4,134 +4,222 @@ require 'spec_helper'
 describe 'CogValidator behavior' do
 
   context 'not a message type' do
-    it { expect(MessageValidator::CogValidator.new.from_json({:status => ""}.to_json)).to be_truthy }
+    it {expect(MessageFactory.get_message_type({:status => ""})).to be_truthy}
   end
 
   context 'for REGISTRATION ' do
-    good_message = FactoryGirl.build(:good_message_registration).to_json
-    bad_message = FactoryGirl.build(:bad_message_registration).to_json
+    let(:good_registration_message) { {
+        "header": {
+            "msg_guid": "0f8fad5b-d9cb-469f-al65-80067728950e",
+            "msg_dttm": "2016-05-09T22:06:33+00:00"
+        },
+        "study_id": "APEC1621SC",
+        "patient_id": "3366",
+        "step_number": "1.0",
+        "status_date": "2016-05-09T22:06:33+00:00",
+        "status": "REGISTRATION",
+        "internal_use_only": {
+            "request_id": "4-654321",
+            "environment": "4",
+            "request": "REGISTRATION for patient_id 2222"
+        }
+      }
+    }
 
-    it "should get type 'Cog' from MessageValidator" do
-      message = JSON.parse(good_message)
-      message.deep_transform_keys!(&:underscore).symbolize_keys!
-      type = MessageValidator.get_message_type(message)
-      expect(type).to eq('Cog')
-    end
+    let(:bad_registration_message) { {
+        "header": {
+            "msg_guid": "0f8fad5b-d9cb-469f-al65-80067728950e",
+            "msg_dttm": "2016-05-09T22:06:33+00:00"
+        },
+        "study_id": "APEC1621SC",
+        "step_number": "1.0",
+        "status_date": "2016-05-09T22:06:33+00:00",
+        "status": "REGISTRATION",
+        "internal_use_only": {
+            "request_id": "4-654321",
+            "environment": "4",
+            "request": "REGISTRATION for patient_id 2222"
+        }
+      }
+    }
 
-    it "should validate a good message" do
-      message = JSON.parse(good_message)
-      valid = MessageValidator::CogValidator.new.from_json(message.to_json).valid?
-      expect(valid).to be_truthy
-    end
+    let(:reg_good_test_suit) { MessageFactory.get_message_type(good_registration_message) }
+    it{expect(reg_good_test_suit.class).to eq(CogMessage)}
+    it{expect(reg_good_test_suit.valid?).to be_truthy}
 
-    it "should invalidate a bad message" do
-      message = JSON.parse(bad_message)
-      valid = MessageValidator::CogValidator.new.from_json(message.to_json).valid?
-      expect(valid).to be_falsey
-    end
-
-    it "should return a valid message when error" do
-      message = JSON.parse(bad_message)
-      message_validator = MessageValidator::CogValidator.new.from_json(message.to_json)
-      expect(message_validator.valid?).to be_falsey
-      expect(message_validator.errors.messages).not_to be_empty
-      expect(message_validator.errors.messages.to_s).to include("can't be blank")
+    let(:reg_bad_test_suit) { MessageFactory.get_message_type(bad_registration_message) }
+    it 'has valid values' do
+      expect(reg_bad_test_suit.valid?).to be_falsey
+      expect(reg_bad_test_suit.errors.messages).not_to be_empty
+      expect(reg_bad_test_suit.errors.messages.to_s).to include("can't be blank")
     end
   end
+
+
 
   context 'for ON_TREATMENT_ARM ' do
-    good_message = FactoryGirl.build(:good_message_on_treatment_arm).to_json
-    bad_message = FactoryGirl.build(:bad_message_on_treatment_arm).to_json
+    let(:good_message) {
+      {:header => [
+        {
+            'msg_guid' => '0f8fad5b-d9cb-469f-al65-80067728950e',
+            'msg_dttm' => '2016-05-09T22:06:33+00:00'
+        }],
+       :treatment_arm_id => '12345',
+       :stratum_id  => '123456',
+       :study_id => 'APEC1621SC',
+       :patient_id => '2222',
+       :step_number => '1.0',
+       :status_date => '2016-05-09T22:06:33+00:00',
+       :status => 'ON_TREATMENT_ARM',
+       :internal_use_only => [
+           {
+               "request_id"=> "4-654321",
+               "environment"=> "4",
+               "request"=> "ON_TREATMENT_ARM for patient_id 2222"
+           }
+       ]
+      }
+    }
+    let(:bad_message) {
+      {:header => [
+          {
+              'msg_guid' => '0f8fad5b-d9cb-469f-al65-80067728950e',
+              'msg_dttm' => '2016-05-09T22:06:33+00:00'
+          }],
+       :treatment_arm_id => '12345',
+       :study_id => 'APEC1621SC',
+       :step_number => '1.0',
+       :status_date => '2016-05-09T22:06:33+00:00',
+       :status => 'ON_TREATMENT_ARM',
+       :internal_use_only => [
+           {
+               "request_id"=> "4-654321",
+               "environment"=> "4",
+               "request"=> "ON_TREATMENT_ARM for patient_id 2222"
+           }
+       ]
+      }
+    }
+    let(:good_test_suit) { MessageFactory.get_message_type(good_message) }
+    it{expect(good_test_suit.class).to eq(CogMessage)}
+    it{expect(good_test_suit.valid?).to be_truthy}
 
-    it "should get type 'Cog' from MessageValidator" do
-      message = JSON.parse(good_message)
-      message.deep_transform_keys!(&:underscore).symbolize_keys!
-      type = MessageValidator.get_message_type(message)
-      expect(type).to eq('Cog')
+    let(:bad_test_suit) { MessageFactory.get_message_type(bad_message) }
+    it 'has valid fail messages ' do
+      expect(bad_test_suit.valid?).to be_falsey
+      expect(bad_test_suit.errors.messages).not_to be_empty
+      expect(bad_test_suit.errors.messages.to_s).to include("can't be blank")
     end
 
-    it "should validate a good message" do
-      message = JSON.parse(good_message)
-      valid = MessageValidator::CogValidator.new.from_json(message.to_json).valid?
-      expect(valid).to be_truthy
-    end
-
-    it "should invalidate a bad message" do
-      message = JSON.parse(bad_message)
-      valid = MessageValidator::CogValidator.new.from_json(message.to_json).valid?
-      expect(valid).to be_falsey
-    end
-
-    it "should return a valid message when error" do
-      message = JSON.parse(bad_message)
-      message_validator = MessageValidator::CogValidator.new.from_json(message.to_json)
-      expect(message_validator.valid?).to be_falsey
-      expect(message_validator.errors.messages).not_to be_empty
-      expect(message_validator.errors.messages.to_s).to include("can't be blank")
-    end
   end
 
+
   context 'for OFF_STUDY ' do
-    good_message = FactoryGirl.build(:good_message_off_study).to_json
-    bad_message = FactoryGirl.build(:bad_message_off_study).to_json
+    let(:good_message) { {
+        :header => [
+            {
+                'msg_guid' => '0f8fad5b-d9cb-469f-al65-80067728950e',
+                'msg_dttm' => '2016-05-09T22:06:33+00:00'
+            }
+        ],
+        :study_id => 'APEC1621SC',
+        :patient_id => '2222',
+        :step_number => '1.0',
+        :status_date => '2016-05-09T22:06:33+00:00',
+        :status => 'OFF_STUDY',
+        :internal_use_only => [{
+                                "request_id"=> "4-654321",
+                                "environment"=> "4",
+                                "request"=> "OFF_STUDY for patient_id 2222"
+                               }]
+      }
+    }
+    let(:bad_message) { {
+        :header => [
+            {
+                'msg_guid' => '0f8fad5b-d9cb-469f-al65-80067728950e',
+                'msg_dttm' => '2016-05-09T22:06:33+00:00'
+            }
+        ],
+        :study_id => 'APEC1621SC',
+        :step_number => '1.0',
+        :status_date => '2016-05-09T22:06:33+00:00',
+        :status => 'OFF_STUDY',
+        :internal_use_only => [{
+                                   "request_id"=> "4-654321",
+                                   "environment"=> "4",
+                                   "request"=> "OFF_STUDY for patient_id 2222"
+                               }]
+      }
+    }
 
-    it "should get type 'Cog' from MessageValidator" do
-      message = JSON.parse(good_message)
-      message.deep_transform_keys!(&:underscore).symbolize_keys!
-      type = MessageValidator.get_message_type(message)
-      expect(type).to eq('Cog')
-    end
+    let(:good_test_suit) { MessageFactory.get_message_type(good_message) }
+    it{expect(good_test_suit.class).to eq(CogMessage)}
+    it{expect(good_test_suit.valid?).to be_truthy}
 
-    it "should validate a good message" do
-      message = JSON.parse(good_message)
-      valid = MessageValidator::CogValidator.new.from_json(message.to_json).valid?
-      expect(valid).to be_truthy
-    end
-
-    it "should invalidate a bad message" do
-      message = JSON.parse(bad_message)
-      valid = MessageValidator::CogValidator.new.from_json(message.to_json).valid?
-      expect(valid).to be_falsey
-    end
-
-    it "should return a valid message when error" do
-      message = JSON.parse(bad_message)
-      message_validator = MessageValidator::CogValidator.new.from_json(message.to_json)
-      expect(message_validator.valid?).to be_falsey
-      expect(message_validator.errors.messages).not_to be_empty
-      expect(message_validator.errors.messages.to_s).to include("can't be blank")
+    let(:bad_test_suit) { MessageFactory.get_message_type(bad_message) }
+    it 'has valid fail messages ' do
+      expect(bad_test_suit.valid?).to be_falsey
+      expect(bad_test_suit.errors.messages).not_to be_empty
+      expect(bad_test_suit.errors.messages.to_s).to include("can't be blank")
     end
   end
 
   context 'for REQUEST_ASSIGNMENT' do
-    good_message = FactoryGirl.build(:good_message_request_assignment).to_json
-    bad_message = FactoryGirl.build(:bad_message_request_assignment).to_json
+    let(:good_message) { {
+        :header => [
+            {
+                'msg_guid' => '0f8fad5b-d9cb-469f-al65-80067728950e',
+                'msg_dttm' => '2016-05-09T22:06:33+00:00'
+            }
+        ],
+        :study_id => 'APEC1621SC',
+        :patient_id => '2222',
+        :step_number => '1.0',
+        :status_date => '2016-05-09T22:06:33+00:00',
+        :status => 'REQUEST_ASSIGNMENT',
+        :internal_use_only => [
+            {
+                "request_id"=> "4-654321",
+                "environment"=> "4",
+                "request"=> "REQUEST_ASSIGNMENT for patient_id 2222"
+            }
+        ],
+        :rebiopsy => 'Y'
+      }
+    }
 
-    it "should get type 'Cog' from MessageValidator" do
-      message = JSON.parse(good_message)
-      message.deep_transform_keys!(&:underscore).symbolize_keys!
-      type = MessageValidator.get_message_type(message)
-      expect(type).to eq('Cog')
-    end
+    let(:bad_message) { {
+        :header => [
+            {
+                'msg_guid' => '0f8fad5b-d9cb-469f-al65-80067728950e',
+                'msg_dttm' => '2016-05-09T22:06:33+00:00'
+            }
+        ],
+        :study_id => 'APEC1621SC',
+        :step_number => '1.0',
+        :status_date => '2016-05-09T22:06:33+00:00',
+        :status => 'REQUEST_ASSIGNMENT',
+        :internal_use_only => [
+            {
+                "request_id"=> "4-654321",
+                "environment"=> "4",
+                "request"=> "REQUEST_ASSIGNMENT for patient_id 2222"
+            }
+        ],
+        :rebiopsy => 'Y'
+    }
+    }
 
-    it "should validate a good message" do
-      message = JSON.parse(good_message)
-      valid = MessageValidator::CogValidator.new.from_json(message.to_json).valid?
-      expect(valid).to be_truthy
-    end
+    let(:good_test_suit) { MessageFactory.get_message_type(good_message) }
+    it{expect(good_test_suit.class).to eq(CogMessage)}
+    it{expect(good_test_suit.valid?).to be_truthy}
 
-    it "should invalidate a bad message" do
-      message = JSON.parse(bad_message)
-      valid = MessageValidator::CogValidator.new.from_json(message.to_json).valid?
-      expect(valid).to be_falsey
-    end
-
-    it "should return a valid message when error" do
-      message = JSON.parse(bad_message)
-      message_validator = MessageValidator::CogValidator.new.from_json(message.to_json)
-      expect(message_validator.valid?).to be_falsey
-      expect(message_validator.errors.messages).not_to be_empty
-      expect(message_validator.errors.messages.to_s).to include("can't be blank")
+    let(:bad_test_suit) { MessageFactory.get_message_type(bad_message) }
+    it 'has valid fail messages ' do
+      expect(bad_test_suit.valid?).to be_falsey
+      expect(bad_test_suit.errors.messages).not_to be_empty
+      expect(bad_test_suit.errors.messages.to_s).to include("can't be blank")
     end
   end
 

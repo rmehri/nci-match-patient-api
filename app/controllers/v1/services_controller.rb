@@ -12,27 +12,19 @@ module V1
       message = ApplicationHelper.trim_value_in_patient_message(message)
       message.deep_symbolize_keys!
 
-      # type = MessageFactory.get_message_type(message)
-      # raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{type.errors.messages}" unless type.valid?
-      # authorize! :validate_json_message, type.class
-      #
-      # validate_patient_state_and_queue(message, type.class)
-      # standard_success_message('Message has been processed successfully', 202)
-
-      type = MessageValidator.get_message_type(message)
-      authorize! :validate_json_message, type.to_sym
-      if (type == 'VariantReport')
+      type = MessageFactory.get_message_type(message)
+      raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{type.errors.messages}" unless type.valid?
+      authorize! :validate_json_message, type.class
+      #Needs to be moved -jv
+      if (type.class == VariantReportMessage)
         shipments = NciMatchPatientModels::Shipment.find_by({"molecular_id" => message[:molecular_id]})
         raise "Unable to find shipment with molecular id [#{message[:molecular_id]}]" if shipments.length == 0
 
         patient_id = shipments[0].patient_id
         message[:patient_id] = patient_id
       end
-      error = MessageValidator.validate_json_message(type, message)
-      raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{error}" unless error.nil?
 
-      validate_patient_state_and_queue(message, type)
-
+      validate_patient_state_and_queue(message, type.class)
       standard_success_message('Message has been processed successfully', 202)
 
     end
@@ -43,10 +35,10 @@ module V1
       message = ApplicationHelper.trim_value_in_patient_message(message)
       message.deep_symbolize_keys!
 
-      type = MessageValidator.get_message_type(message)
-      raise Errors::RequestForbidden, 'Incoming message has UNKNOWN message type' if (type == 'UNKNOWN')
+      type = MessageFactory.get_message_type(message)
+      raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{type.errors.messages}" unless type.valid?
 
-      authorize! :validate_json_message, type.to_sym
+      authorize! :validate_json_message, type.class
       shipments = NciMatchPatientModels::Shipment.find_by({"molecular_id" => message[:molecular_id]})
       raise Errors::RequestForbidden, "Unable to find shipment with molecular id [#{message[:molecular_id]}]" if shipments.length == 0
 
@@ -56,12 +48,7 @@ module V1
       patient_id = shipments[0].patient_id
       message[:patient_id] = patient_id
 
-      error = MessageValidator.validate_json_message(type, message)
-      raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{error}" unless error.nil?
-
-      p "================== here1"
-      validate_patient_state_and_queue(message, type)
-
+      validate_patient_state_and_queue(message, type.class)
       standard_success_message('Message has been processed successfully', 202)
 
     end
@@ -102,12 +89,9 @@ module V1
       message['comment_user'] = post_data[:comment_user]
       message.deep_transform_keys!(&:underscore).symbolize_keys!
 
-      type = MessageValidator.get_message_type(message)
-      raise Errors::RequestForbidden, "Incoming message has UNKNOWN message type" if type == 'UNKNOWN'
-
-      authorize! :validate_json_message, type.to_sym
-      error = MessageValidator.validate_json_message(type, message)
-      raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{error}" unless error.nil?
+      type = MessageFactory.get_message_type(message)
+      raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{type.errors.messages}" unless type.valid?
+      authorize! :validate_json_message, type.class
 
       variant_report = NciMatchPatientModels::VariantReport.query_by_analysis_id(message[:patient_id], message[:analysis_id])
       raise Errors::RequestForbidden, "Unable to confirm non existent variant report" if variant_report.nil?
@@ -115,7 +99,7 @@ module V1
       lab_type = variant_report.to_h[:clia_lab]
       authorize! :variant_report_status, lab_type.to_sym
 
-      validate_patient_state(message, type)
+      validate_patient_state(message, type.class)
       result = PatientProcessor.run_service('/confirmVariantReport', message, request.uuid, token)
       standard_success_message(result)
     end
@@ -130,14 +114,11 @@ module V1
       message['comment_user'] = post_data[:comment_user]
       message.deep_transform_keys!(&:underscore).symbolize_keys!
 
-      type = MessageValidator.get_message_type(message)
-      raise Errors::RequestForbidden, "Incoming message has UNKNOWN message type" if type == 'UNKNOWN'
-
+      type = MessageFactory.get_message_type(message)
       authorize! :validate_json_message, type.to_sym
-      error = MessageValidator.validate_json_message(type, message)
-      raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{error}" unless error.nil?
+      raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{type.errors.messages}" unless type.valid?
 
-      validate_patient_state(message, type)
+      validate_patient_state(message, type.class)
       result = PatientProcessor.run_service('/confirm_assignment', message, request.uuid, token)
       standard_success_message(result)
     end

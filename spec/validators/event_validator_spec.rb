@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.describe MessageValidator::EventValidator do
 
-  let (:validator) {MessageValidator::EventValidator}
+  let (:validator) {EventMessage}
 
   let (:valid_message) { {:patient_id => "123", :molecular_id => "123-mole",
                           :surgical_event_id => "123-surg", :analysis_id => "123-ana"}  }
@@ -17,23 +17,22 @@ RSpec.describe MessageValidator::EventValidator do
 
   context "initialize correctly" do
     it { expect(validator).to be_truthy }
-    it { expect(MessageValidator.validate_json_message("Event", "Random")).to be_truthy }
   end
 
   context "validate a valid message" do
-    it {expect(MessageValidator.validate_json_message("Event", valid_message)).to eq(nil) }
+    it {expect(EventMessage.new.from_json(valid_message.to_json).valid?).to be_truthy}
   end
 
   context "validate a valid file message" do
-    it {expect(MessageValidator.validate_json_message("Event", valid_file_message)).to eq(nil)}
+    it {expect(EventMessage.new.from_json(valid_file_message.to_json).valid?).to be_truthy}
   end
 
   context "fail a invalid message" do
-    it {expect(MessageValidator.validate_json_message("Event", invalid_message)).not_to eq(nil) }
+    it {expect(EventMessage.new.from_json(invalid_message.to_json).valid?).to be_falsey}
   end
 
   context "fail a invalid file message" do
-    it {expect(MessageValidator.validate_json_message("Event", invalid_file_message)).not_to eq(nil) }
+    it {expect(EventMessage.new.from_json(invalid_file_message.to_json).valid?).to be_falsey}
   end
 
 end
