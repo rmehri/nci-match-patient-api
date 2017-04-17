@@ -6,7 +6,7 @@ module V1
 
     # POST /api/v1/patients/{patient_id}
     def trigger
-      puts "================== current user: #{current_user.to_json}"
+      logger.info("================== current user: #{current_user.to_json}")
       patient_id = get_patient_id_from_url
       message = ApplicationHelper.replace_value_in_patient_message(get_post_data, "patient_id", patient_id)
       message = ApplicationHelper.trim_value_in_patient_message(message)
@@ -108,15 +108,15 @@ module V1
     def assignment_confirmation
       message = ConfirmAssignmentMessage.from_url get_url_path_segments
 
-      p "============ message for ConfirmAssignmentMessage: #{message}"
+      logger.info("============ message for ConfirmAssignmentMessage: #{message}")
       post_data = get_post_data
       message['comment'] = post_data[:comment]
       message['comment_user'] = post_data[:comment_user]
       message.deep_transform_keys!(&:underscore).symbolize_keys!
 
       type = MessageFactory.get_message_type(message)
-      authorize! :validate_json_message, type.class
       raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{type.errors.messages}" unless type.valid?
+      authorize! :validate_json_message, type.class
 
       validate_patient_state(message, type.class)
       result = PatientProcessor.run_service('/confirm_assignment', message, request.uuid, token)
