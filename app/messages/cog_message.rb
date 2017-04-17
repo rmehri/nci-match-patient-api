@@ -1,6 +1,8 @@
 class CogMessage < AbstractMessage
   include MessageValidator::CogValidator
 
+  @message_format = /:status=>"REGISTRATION"|"ON_TREATMENT_ARM"|"OFF_STUDY"|"OFF_STUDY_BIOPSY_EXPIRED"|"REQUEST_ASSIGNMENT"|"REQUEST_NO_ASSIGNMENT"/
+
   attr_accessor :header, :study_id, :patient_id, :step_number, :registration_date, :status, :status_date, :internal_use_only,
                 :treatment_arm_id, :treatment_arm_version, :stratum_id, :assignment_date, :message, :rebiopsy
 

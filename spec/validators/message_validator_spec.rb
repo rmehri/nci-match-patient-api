@@ -21,6 +21,6 @@ RSpec.describe MessageFactory do
   it{expect(MessageFactory.get_message_type(variant_report_status_rejected).class).to eq(VariantReportStatusMessage)}
   it{expect(MessageFactory.get_message_type(variant_report).class).to eq(VariantReportMessage)}
   it{expect(MessageFactory.get_message_type(treatment_arm).class).to eq(TreatmentArmMessage)}
-  it{expect(MessageFactory.get_message_type({:status => ""}).class).to eq(CogMessage)}
+  it{expect(MessageFactory.get_message_type({:status => "REQUEST_NO_ASSIGNMENT"}).class).to eq(CogMessage)}
 
 end

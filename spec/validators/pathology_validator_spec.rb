@@ -18,6 +18,7 @@ describe 'PathologyValidator behavior' do
     {
         :patient_id => "3344",
         :surgical_event_id => "3344-bsn",
+        :type => "PATHOLOGY_STATUS",
         :status => "Y"
     }
   end

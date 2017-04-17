@@ -183,7 +183,7 @@ describe V1::PatientsController, :type => :controller do
   end
 
   it "#create should throw error when message is unknown" do
-    expect(post :create, {"unknown": "unknown"}.to_json).to have_http_status(500)
+    expect(post :create, {"unknown": "unknown"}.to_json).to have_http_status(404)
   end
 
   it '#update should throw an route error' do

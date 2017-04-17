@@ -18,8 +18,10 @@ module MessageFactory
         type = VariantReportMessage
       when TreatmentArmMessage.message_format
         type = TreatmentArmMessage
-      else
+      when CogMessage.message_format
         type = CogMessage
+      else
+        type = UnknownMessage
     end
     return type.new.from_json(message.to_json)
   end
