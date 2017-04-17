@@ -78,5 +78,5 @@ end
 
 NciMatchRoles::DartmouthVariantReportSender.instance_eval do
   def get_methods; [:variant_status, :variant_report_uploaded, :variant_report_status, :validate_json_message]; end;
-  def get_subjects; [NciMatchPatientModels, :VariantReportMessage, :Dartmouth, :Event]; end;
+  def get_subjects; [NciMatchPatientModels, VariantReportMessage, :Dartmouth, :Event]; end;
 end
