@@ -115,7 +115,7 @@ module V1
       message.deep_transform_keys!(&:underscore).symbolize_keys!
 
       type = MessageFactory.get_message_type(message)
-      authorize! :validate_json_message, type.to_sym
+      authorize! :validate_json_message, type.class
       raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{type.errors.messages}" unless type.valid?
 
       validate_patient_state(message, type.class)
