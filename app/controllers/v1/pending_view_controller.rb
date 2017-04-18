@@ -13,6 +13,7 @@ module V1
           next if variant_report.variant_report_type == 'BLOOD'
 
           patient = NciMatchPatientModels::Patient.query_patient_by_id(variant_report.patient_id)
+          next if (patient.current_status.blank?)
           next if (patient.current_status == "OFF_STUDY" || patient.current_status == "OFF_STUDY_BIOPSY_EXPIRED")
 
           data = {:patient_id => variant_report.patient_id,
