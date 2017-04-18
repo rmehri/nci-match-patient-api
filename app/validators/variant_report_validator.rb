@@ -7,7 +7,6 @@ module MessageValidator
       validates :molecular_id, presence: true
       validates :analysis_id, presence: true
       validates :tsv_file_name, presence: true
-      validates :patient_id, presence: true
     end
 
   end
