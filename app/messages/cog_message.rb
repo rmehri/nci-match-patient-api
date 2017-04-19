@@ -6,6 +6,9 @@ class CogMessage < AbstractMessage
   attr_accessor :header, :study_id, :patient_id, :step_number, :registration_date, :status, :status_date, :internal_use_only,
                 :treatment_arm_id, :treatment_arm_version, :stratum_id, :assignment_date, :message, :rebiopsy
 
+  def status_date=(value)
+    @status_date = DateTime.parse(value)
+  end
 
   def include_correct_module
     case @status.to_sym
