@@ -151,7 +151,7 @@ module V1
 
     def is_assignment_reviewer
       begin
-        authorize! :validate_json_message, "AssignmentStatus".to_sym
+        authorize! :validate_json_message, AssignmentStatusMessage.class
         return true
       rescue
         return false
