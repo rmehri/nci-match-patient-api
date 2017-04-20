@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'AssayValidator behavior' do
+RSpec.describe AssayMessage do
 
   let(:good_message) do
     {

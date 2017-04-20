@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'SpecimenShippedValidator behavior' do
+RSpec.describe SpecimenShippedMessage do
 
   let(:good_message_blood) do
     {

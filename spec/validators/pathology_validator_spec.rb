@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'PathologyValidator behavior' do
+RSpec.describe PathologyMessage do
 
   let(:good_message) do
     {

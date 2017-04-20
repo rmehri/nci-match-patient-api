@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'spec_helper'
 
-describe 'CogValidator behavior' do
+RSpec.describe CogMessage do
 
   context 'not a message type' do
     it {expect(MessageFactory.get_message_type({:status => "REGISTRATION"})).to be_truthy}

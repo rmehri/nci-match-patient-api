@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'VariantReportStatusValidator' do
+RSpec.describe VariantReportStatusMessage do
 
   let(:good_message) do
     {
