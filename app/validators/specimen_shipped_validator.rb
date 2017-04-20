@@ -10,9 +10,6 @@ module MessageValidator
       validates :carrier, presence: true
       validates :tracking_id, presence: true
       validates :destination, presence: true, inclusion: {in: %w(MDA MoCha Dartmouth), message: "%{value} is not a valid shipping destination"}
-      # validates :shipped_dttm, presence: true, date: {on_or_before: lambda {DateTime.current.utc}}
-      # validates :shipped_dttm, presence: true, inclusion: {in: ((Time.now.utc - 5.years)..Time.now.utc)}
-      validates :shipped_dttm, presence: true
       validates :internal_use_only, presence: true
     end
 

@@ -8,9 +8,7 @@ class SpecimenShippedMessage < AbstractMessage
                 :study_id, :surgical_event_id, :internal_use_only, :slide_barcode, :destination,
                 :molecular_id, :carrier, :tracking_id, :shipped_dttm
 
-  def shipped_dttm=(value)
-    @shipped_dttm = DateTime.parse(value)
-  end
+  validates :shipped_dttm, presence: true, date: {on_or_before: lambda {DateTime.current.utc}}
 
   # Override
   def include_correct_module
