@@ -73,7 +73,7 @@ module V1
         assay_messages << "Slide shipment missing"
       else
         Rails.configuration.assay.collect do |k, v|
-          if (Date.parse(v["start_date"]) <= Date.current) && (Date.current <= Date.parse(v["end_date"]))
+          if (Date.parse(v["start_date"]) <= Date.current) && ((v["end_date"].blank? || Date.current < Date.parse(v["end_date"])))
             if (active_tissue_specimen[k.to_sym].nil?)
               gene_name = ApplicationHelper.to_gene_name(k.to_s)
               assay_messages << "#{gene_name} assay result missing"
