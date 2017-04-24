@@ -34,8 +34,11 @@ describe Ability, :type => :model do
     end
 
 
-    it "allow System to manage all" do
-      expect(Ability.new({:roles => ["SYSTEM"]}).can?(:manage, :all)).to eq(true)
+    it "allow System to access event and variant report" do
+      expect(Ability.new({:roles => ["SYSTEM"]}).can?(:validate_json_message, :Event)).to eq(true)
+      expect(Ability.new({:roles => ["SYSTEM"]}).can?(:validate_json_message, VariantReportMessage)).to eq(true)
+      expect(Ability.new({:roles => ["SYSTEM"]}).can?(:create, :Event)).to eq(true)
+      expect(Ability.new({:roles => ["SYSTEM"]}).can?(:create, VariantReportMessage)).to eq(true)
     end
 
     it "allow SpecimenMessageSender to access trigger method" do

@@ -29,7 +29,11 @@ class Ability
 end
 
 NciMatchRoles::Admin.instance_eval { def get_methods; :manage; end; def get_subjects; :all; end }
-NciMatchRoles::System.instance_eval { def get_methods; :manage; end; def get_subjects; :all; end }
+
+NciMatchRoles::System.instance_eval do
+  def get_methods; [:create, :validate_json_message]; end;
+  def get_subjects; [:Event, VariantReportMessage]; end
+end
 
 NciMatchRoles::PatientMessageSender.instance_eval do
   def get_methods; [:trigger, :validate_json_message]; end;

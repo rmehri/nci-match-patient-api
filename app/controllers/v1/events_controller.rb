@@ -13,9 +13,9 @@ module V1
     end
 
     def create
+      authorize! :create, :Event
       message = JSON.parse(request.raw_post)
       em = EventMessage.new.from_json(message.to_json)
-      authorize! :validate_json_message, :Event
       raise Errors::RequestForbidden, em.errors unless em.valid?
       results = PatientProcessor.run_service("/upload_event", message, request.uuid, token)
       standard_success_message(results)
