@@ -2,6 +2,7 @@ module V1
   class VersionsController < ApplicationController
     def version
       begin
+        TestJob.set(wait: 1.minutes).perform_later("Hurray")
         File.open('build_number.html', 'r') do |document|
           hash = {}
           document.each_line do |line|

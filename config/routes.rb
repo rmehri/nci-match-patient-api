@@ -43,4 +43,12 @@ Rails.application.routes.draw do
 
     match "*path", to: 'errors#bad_request', via: :all
   end
+
+  scope '/api/v2', module: 'v2' do
+    resources :patients, only: [:show, :index, :create] do
+      collection do
+        resource :versions, only: [:show]
+      end
+    end
+  end
 end
