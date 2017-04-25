@@ -15,6 +15,8 @@ gem 'sdoc', '0.4.2', group: :doc
 
 gem 'rack-cors', '0.4.0'
 
+gem 'shoryuken'
+
 gem 'aws-sdk', '2.6.34'
 gem 'aws-sdk-rails', '1.0.1'
 gem 'aws-record', '>= 1.0.0.pre.8'

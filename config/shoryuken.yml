@@ -1,0 +1,13 @@
+aws:
+  access_key_id: <%= ENV["AWS_ACCESS_KEY_ID"] %>
+  secret_access_key: <%= ENV["AWS_SECRET_ACCESS_KEY"] %>
+  region:             us-east-1
+  receive_message:
+    attribute_names:
+      - ApproximateReceiveCount
+      - SentTimestamp
+concurrency: 25
+delay: 30
+queues:
+  - [<%= ENV["PATIENT_QUEUE_NAME="] %>, 6]
+  - [<%= ENV["PATIENT_QUEUE_NAME="] %>_deadletter, 2]
