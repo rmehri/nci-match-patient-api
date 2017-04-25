@@ -15,10 +15,11 @@ module V1
 
       variant_report_hash = variant_report.to_h
       mois = get_amois(variant_report_hash.deep_symbolize_keys!)
-      match_amois_with_uuid(variant_report_hash, mois)
+      amoi_count = match_amois_with_uuid(variant_report_hash, mois)
 
       updated_amois = Convert::AmoisRuleModel.to_ui_model(mois)
-      # queue_to_save_updated_amois(params[:patient_id], params[:id], updated_amois)
+      update_amoi_count_in_variant_report(variant_report, amoi_count)
+
       instance_variable_set("@#{resource_name}", updated_amois.to_json)
     end
 
@@ -27,17 +28,20 @@ module V1
     end
 
     def match_amois_with_uuid(variant_report, mois)
-      find_amoi_uuid(variant_report, mois[:snv_indels])
-      find_amoi_uuid(variant_report, mois[:copy_number_variants])
-      find_amoi_uuid(variant_report, mois[:gene_fusions])
+      amoi_count = find_amoi_uuid(variant_report, mois[:snv_indels])
+      amoi_count += find_amoi_uuid(variant_report, mois[:copy_number_variants])
+      amoi_count += find_amoi_uuid(variant_report, mois[:gene_fusions])
+      amoi_count
     end
 
     def find_amoi_uuid(variant_report, mois)
-      return if mois.blank?
+      amoi_count = 0
+      return amoi_count if mois.blank?
 
       mois.each do | moi |
         moi.deep_symbolize_keys!
         next if moi[:amois].blank?
+        amoi_count += 1
         query_hash = {
                        patient_id: variant_report[:patient_id],
                        molecular_id: variant_report[:molecular_id],
@@ -62,13 +66,17 @@ module V1
           moi[:uuid] = variants[0][:uuid]
         end
       end
+
+      amoi_count
     end
 
-    def queue_to_save_updated_amois(patient_id, analysis_id, updated_amois)
-      message = {:patient_id => patient_id, :analysis_id => analysis_id, updated_amois => updated_amois}
-      queue_name = Rails.configuration.environment.fetch('queue_name')
-      logger.debug "Analysis_report_amois publishing to queue: #{queue_name}..."
-      Aws::Sqs::Publisher.publish(message, queue_name)
+    def update_amoi_count_in_variant_report(variant_report, amoi_count)
+      if (variant_report.total_amois != amoi_count)
+        variant_report.total_amois = amoi_count
+        variant_report.save
+        AppLogger.log(self.class.name, "Amoi count updated for patient [#{variant_report.patient_id}]")
+      end
     end
+
   end
 end
