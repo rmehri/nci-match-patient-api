@@ -5,7 +5,7 @@ module Aws
       attr_accessor :client, :url
 
       def self.publish(message, uuid, passed_queue_name = Rails.configuration.environment.fetch('queue_name'))
-        # MessageJob.perform_later(message)
+        # JobBuilder.new("MessageJob").build.perform_later(message)
         begin
           @url = self.client.get_queue_url(queue_name: passed_queue_name).queue_url
           @client.send_message({queue_url: @url, :message_body => message.to_json,
