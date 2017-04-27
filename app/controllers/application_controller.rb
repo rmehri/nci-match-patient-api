@@ -78,6 +78,9 @@ class ApplicationController < ActionController::Base
     message_type = {message_type => message}
     result = StateMachine.validate(message_type, request.uuid, token)
 
+    # NCH now sends us multiple almost identical specimen_received messages
+    # We just process one and return ok for the others
+    return if (result != 'true' && (result.include? 'A specimen with the same surgical event id already exists'))
     raise Errors::RequestForbidden, "Incoming message failed patient state validation: #{result}" if result != 'true'
 
     queue_name = Rails.configuration.environment.fetch('queue_name')
