@@ -76,7 +76,7 @@ NciMatchRoles::MochaVariantReportReviewer.instance_eval do
 end
 
 NciMatchRoles::DartmouthVariantReportReviewer.instance_eval do
-  def get_methods; [:variant_status, :validate_json_message]; end;
+  def get_methods; [:variant_status, :variant_report_status, :validate_json_message]; end;
   def get_subjects; [NciMatchPatientModels, VariantReportStatusMessage, :Dartmouth]; end;
 end
 
