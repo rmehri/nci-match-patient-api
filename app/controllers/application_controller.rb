@@ -74,7 +74,7 @@ class ApplicationController < ActionController::Base
 
   def validate_patient_state_and_queue(message, message_type)
     AppLogger.log(self.class.name, "Validating messesage of type [#{message_type}]")
-
+    # job = JobBuilder.new(message_type.to_s.gsub("Message", "Job")).job
     message_type = {message_type => message}
     result = StateMachine.validate(message_type, request.uuid, token)
 
@@ -83,6 +83,7 @@ class ApplicationController < ActionController::Base
     queue_name = Rails.configuration.environment.fetch('queue_name')
     logger.debug "Patient API publishing to queue: #{queue_name}..."
     Aws::Sqs::Publisher.publish(message, request.uuid, queue_name)
+    # job.perform_later(message)
 
   end
 end
