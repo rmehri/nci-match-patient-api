@@ -57,20 +57,32 @@ class ApplicationController < ActionController::Base
     return patient_id
   end
 
+  def queue_message(message, message_type)
+    queue_name = Rails.configuration.environment.fetch('queue_name')
+    logger.debug "Patient API publishing to queue: #{queue_name}..."
+    Aws::Sqs::Publisher.publish(message, request.uuid, queue_name)
+    true
+  end
+
   def validate_patient_state(message, message_type)
     AppLogger.log(self.class.name, "Validating messesage of type [#{message_type}]")
-    result = StateMachine.validate({message_type => message}, request.uuid, token)
+    message_type = {message_type => message}
+    result = StateMachine.validate(message_type, request.uuid, token)
 
-    raise Errors::RequestForbidden, "Incoming message failed patient state validation: #{result}" unless result.to_b
+    raise Errors::RequestForbidden, "Incoming message failed patient state validation: #{result}" if result != 'true'
   end
 
   def validate_patient_state_and_queue(message, message_type)
     AppLogger.log(self.class.name, "Validating messesage of type [#{message_type}]")
     # job = JobBuilder.new(message_type.to_s.gsub("Message", "Job")).job
-    result = StateMachine.validate({message_type => message}, request.uuid, token)
-    raise Errors::RequestForbidden, "Incoming message failed patient state validation: #{result}" unless result.to_b
+    message_type = {message_type => message}
+    result = StateMachine.validate(message_type, request.uuid, token)
 
-    Aws::Sqs::Publisher.publish(message, request.uuid)
+    raise Errors::RequestForbidden, "Incoming message failed patient state validation: #{result}" if result != 'true'
+
+    queue_name = Rails.configuration.environment.fetch('queue_name')
+    logger.debug "Patient API publishing to queue: #{queue_name}..."
+    Aws::Sqs::Publisher.publish(message, request.uuid, queue_name)
     # job.perform_later(message)
 
   end
