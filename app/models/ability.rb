@@ -47,7 +47,7 @@ end
 
 NciMatchRoles::SpecimenMessageSender.instance_eval do
   def get_methods; [:trigger, :validate_json_message]; end;
-  def get_subjects; [SpecimenReceivedMessage, SpecimenShippedMessage, NciMatchPatientModels]; end
+  def get_subjects; [Specimen::ReceivedMessage, Specimen::ShippedMessage, NciMatchPatientModels]; end
 end
 
 NciMatchRoles::AssayMessageSender.instance_eval do
