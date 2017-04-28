@@ -34,10 +34,10 @@ class JobBuilder
     Object.const_set(class_name, Class.new(ActiveJob::Base) {queue_as "#{Rails.configuration.environment.fetch('queue_name')}"})
   end
 
-  #Builds out Namespace for class
-  #Example: given ["Cat", "Dog"] it will create a Cat::Dog module
+  # Builds out Namespace for class
+  # Example: given ["Cat", "Dog"] it will create a Cat::Dog module
   def build_module(name)
-    return Object unless !name.blank?
+    return Object if name.blank?
     current_name = name.pop
     object = build_module(name)
     object.const_set(current_name.classify, Module.new)
