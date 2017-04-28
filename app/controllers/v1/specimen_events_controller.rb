@@ -58,7 +58,7 @@ module V1
 
       resource[:specimen_shipments] = shipments.sort_by{ |record| record[:shipped_date]}.reverse
 
-      latest_shipment = true
+      latest_tissue_shipment = true
       resource[:specimen_shipments].collect do | shipment |
         clia_lab = shipment[:destination]
         assignments = NciMatchPatientModels::Assignment.scan(build_index_query({:molecular_id => shipment[:molecular_id], :projection => [:assignment_date, :analysis_id, :status, :status_date, :uuid, :comment_user,:comment, :selected_treatment_arm]})).collect{|record| record.to_h.compact}
@@ -68,8 +68,8 @@ module V1
                                                                                                        :status ,:qc_report_url, :vr_chart_data_url]})).collect{|record| record.to_h.compact }
 
         variant_reports = variant_reports.sort_by{ |report| report[:variant_report_received_date]}.reverse
-
         assignments = assignments.sort_by{ |record| record[:assignment_date]}.reverse
+
         shipment[:analyses] = []
         variant_report_confirmed = false
         variant_reports.each do | variant_report |
@@ -93,8 +93,8 @@ module V1
         end
 
         # allow_upload
-        shipment[:allow_upload] = set_allow_upload(variant_report_confirmed, clia_lab, latest_specimen && latest_shipment) if shipment[:shipment_type] == "TISSUE_DNA_AND_CDNA"
-        latest_shipment = false
+        shipment[:allow_upload] = set_allow_upload(variant_report_confirmed, clia_lab, latest_specimen && latest_tissue_shipment) if shipment[:shipment_type] == "TISSUE_DNA_AND_CDNA" && latest_tissue_shipment
+        latest_tissue_shipment = false if shipment[:shipment_type] == "TISSUE_DNA_AND_CDNA" && latest_tissue_shipment
       end
 
       resource
