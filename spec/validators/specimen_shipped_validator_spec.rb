@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Specimen::ShippedMessage do
+RSpec.describe SpecimenShippedMessage do
 
   let(:good_message_blood) do
     {
@@ -104,7 +104,7 @@ RSpec.describe Specimen::ShippedMessage do
     }
   end
 
-  it{expect(MessageFactory.get_message_type(good_message_blood).class).to eq(Specimen::ShippedMessage)}
+  it{expect(MessageFactory.get_message_type(good_message_blood).class).to eq(SpecimenShippedMessage)}
 
   it{expect(MessageFactory.get_message_type(good_message_blood).valid?).to be_truthy}
 

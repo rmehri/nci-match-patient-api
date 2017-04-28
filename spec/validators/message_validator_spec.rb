@@ -12,8 +12,8 @@ RSpec.describe MessageFactory do
   let(:variant_report) {{:analysis_id => "345"}}
   let(:treatment_arm) {{:treatment_arms => "test"}}
 
-  it{expect(MessageFactory.get_message_type(specimen_received).class).to eq(Specimen::ReceivedMessage)}
-  it{expect(MessageFactory.get_message_type(specimen_shipped).class).to eq(Specimen::ShippedMessage)}
+  it{expect(MessageFactory.get_message_type(specimen_received).class).to eq(SpecimenReceivedMessage)}
+  it{expect(MessageFactory.get_message_type(specimen_shipped).class).to eq(SpecimenShippedMessage)}
   it{expect(MessageFactory.get_message_type(assay).class).to eq(AssayMessage)}
   it{expect(MessageFactory.get_message_type(pathology).class).to eq(PathologyMessage)}
   it{expect(MessageFactory.get_message_type(assignment_status).class).to eq(AssignmentStatusMessage)}

@@ -2,10 +2,10 @@ module MessageFactory
 
   def self.get_message_type(message)
     case message.to_s
-      when Specimen::ReceivedMessage.message_format
-        type = Specimen::ReceivedMessage
-      when Specimen::ShippedMessage.message_format
-        type = Specimen::ShippedMessage
+      when SpecimenReceivedMessage.message_format
+        type = SpecimenReceivedMessage
+      when SpecimenShippedMessage.message_format
+        type = SpecimenShippedMessage
       when AssayMessage.message_format
         type = AssayMessage
       when PathologyMessage.message_format
