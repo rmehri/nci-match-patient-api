@@ -29,9 +29,9 @@ class JobBuilder
 
   def create_class(class_name, name_space=nil)
     unless name_space.blank?
-      Object.const_get(name_space).const_set(class_name, Class.new(ActiveJob::Base) {queue_as "#{Rails.configuration.environment.fetch('queue_name')}"})
+      Object.const_get(name_space.classify).const_set(class_name.classify, Class.new(ActiveJob::Base) {queue_as "#{Rails.configuration.environment.fetch('queue_name')}"})
     end
-    Object.const_set(class_name, Class.new(ActiveJob::Base) {queue_as "#{Rails.configuration.environment.fetch('queue_name')}"})
+    Object.const_set(class_name.classify, Class.new(ActiveJob::Base) {queue_as "#{Rails.configuration.environment.fetch('queue_name')}"})
   end
 
   # Builds out Namespace for class
