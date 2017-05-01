@@ -11,6 +11,7 @@ RSpec.describe MessageFactory do
   let(:variant_report_status_rejected) {{:status => 'REJECTED'}}
   let(:variant_report) {{:analysis_id => "345"}}
   let(:treatment_arm) {{:treatment_arms => "test"}}
+  let(:unknown) {{}}
 
   it{expect(MessageFactory.get_message_type(specimen_received).class).to eq(SpecimenReceivedMessage)}
   it{expect(MessageFactory.get_message_type(specimen_shipped).class).to eq(SpecimenShippedMessage)}
@@ -22,5 +23,6 @@ RSpec.describe MessageFactory do
   it{expect(MessageFactory.get_message_type(variant_report).class).to eq(VariantReportMessage)}
   it{expect(MessageFactory.get_message_type(treatment_arm).class).to eq(TreatmentArmMessage)}
   it{expect(MessageFactory.get_message_type({:status => "REQUEST_NO_ASSIGNMENT"}).class).to eq(CogMessage)}
+  it{expect{MessageFactory.get_message_type(unknown).class}.to raise_error(Errors::ResourceNotFound)}
 
 end
