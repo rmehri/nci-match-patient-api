@@ -1,5 +1,5 @@
-# module Specimen
-#   class ShippedMessage < AbstractMessage
+module Specimen
+  class ShippedMessage < AbstractMessage
 #     include MessageValidator::SpecimenShippedValidator
 #
 #     @message_format = /:specimen_shipped/
@@ -43,5 +43,5 @@
 #       end
 #     end
 #
-#   end
-# end
+  end
+end

@@ -1,5 +1,5 @@
-# module Specimen
-#   class ReceivedMessage < AbstractMessage
+module Specimen
+  class ReceivedMessage < AbstractMessage
 #     include MessageValidator::SpecimenReceivedValidator
 #
 #     @message_format = /:specimen_received/
@@ -30,5 +30,5 @@
 #         @received_date = value[:received_dttm]
 #       end
 #     end
-#   end
-# end
+  end
+end

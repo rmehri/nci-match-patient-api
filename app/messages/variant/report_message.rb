@@ -1,5 +1,5 @@
-# module Variant
-#   class ReportMessage < AbstractMessage
+module Variant
+  class ReportMessage < AbstractMessage
 #     include MessageValidator::VariantReportValidator
 #
 #     @message_format =/:analysis_id/
@@ -9,5 +9,5 @@
 #                   :molecular_id,
 #                   :analysis_id,
 #                   :tsv_file_name
-#   end
-# end
+  end
+end

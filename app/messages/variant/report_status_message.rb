@@ -1,5 +1,5 @@
-# module Variant
-#   class ReportStatusMessage < AbstractMessage
+module Variant
+  class ReportStatusMessage < AbstractMessage
 #     include MessageValidator::VariantReportStatusValidator
 #
 #     @message_format = /:status=>"CONFIRMED"|"REJECTED"/
@@ -10,5 +10,5 @@
 #                   :comment,
 #                   :comment_user
 #
-#   end
-# end
+  end
+end
