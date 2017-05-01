@@ -1,5 +1,5 @@
-# module Assignment
-#   class StatusMessage < AbstractMessage
+module Assignment
+  class StatusMessage < AbstractMessage
 #     include MessageValidator::AssignmentStatusValidator
 #
 #     @message_format = /:status_type=>"ASSIGNMENT"/
@@ -12,5 +12,5 @@
 #                   :comment,
 #                   :comment_user
 #
-#   end
-# end
+  end
+end
