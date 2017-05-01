@@ -1,5 +1,5 @@
-module Assignment
-  class PatientDataMessage
-
-  end
-end
+# module Assignment
+#   class PatientDataMessage
+#
+#   end
+# end
