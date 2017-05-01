@@ -27,21 +27,21 @@ class JobBuilder
   # Object.const_set("Specimen", Module.new)
   # Object.const_get("Specimen").const_set("ReceivedJob", Class.new(ActiveJob::Base) {queue_as "#{Rails.configuration.environment.fetch('queue_name')}"} })
 
-  def create_class(class_name, name_space=nil)
-    unless name_space.blank?
-      Object.const_get(name_space.classify).const_set(class_name.classify, Class.new(ActiveJob::Base) {queue_as "#{Rails.configuration.environment.fetch('queue_name')}"})
-    end
-    Object.const_set(class_name.classify, Class.new(ActiveJob::Base) {queue_as "#{Rails.configuration.environment.fetch('queue_name')}"})
-  end
+  # def create_class(class_name, name_space=nil)
+  #   unless name_space.blank?
+  #     Object.const_get(name_space.classify).const_set(class_name.classify, Class.new(ActiveJob::Base) {queue_as "#{Rails.configuration.environment.fetch('queue_name')}"})
+  #   end
+  #   Object.const_set(class_name.classify, Class.new(ActiveJob::Base) {queue_as "#{Rails.configuration.environment.fetch('queue_name')}"})
+  # end
 
   # Builds out Namespace for class
   # Example: given ["Cat", "Dog"] it will create a Cat::Dog module
-  def build_module(name)
-    return Object if name.blank?
-    current_name = name.pop
-    object = build_module(name)
-    object.const_set(current_name.classify, Module.new)
-  end
+  # def build_module(name)
+  #   return Object if name.blank?
+  #   current_name = name.pop
+  #   object = build_module(name)
+  #   object.const_set(current_name.classify, Module.new)
+  # end
 
 
 end
