@@ -56,7 +56,7 @@ NciMatchRoles::AssayMessageSender.instance_eval do
 end
 
 NciMatchRoles::MdaVariantReportSender.instance_eval do
-  def get_methods; [:variant_report_uploaded, :validate_json_message]; end
+  def get_methods; [:variant_report_uploaded, :validate_json_message, :create]; end
   def get_subjects; [NciMatchPatientModels, VariantReportMessage, :MDA, :Event]; end
 end
 
@@ -66,7 +66,7 @@ NciMatchRoles::MdaVariantReportReviewer.instance_eval do
 end
 
 NciMatchRoles::MochaVariantReportSender.instance_eval do
-  def get_methods; [:variant_report_uploaded, :validate_json_message]; end
+  def get_methods; [:variant_report_uploaded, :validate_json_message, :create]; end
   def get_subjects; [NciMatchPatientModels, VariantReportMessage, :MoCha, :Event]; end
 end
 
@@ -81,6 +81,6 @@ NciMatchRoles::DartmouthVariantReportReviewer.instance_eval do
 end
 
 NciMatchRoles::DartmouthVariantReportSender.instance_eval do
-  def get_methods; [:variant_status, :variant_report_uploaded, :validate_json_message]; end;
+  def get_methods; [:variant_status, :variant_report_uploaded, :validate_json_message, :create]; end;
   def get_subjects; [NciMatchPatientModels, VariantReportMessage, :Dartmouth, :Event]; end;
 end
