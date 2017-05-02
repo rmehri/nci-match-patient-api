@@ -39,11 +39,11 @@ describe Ability, :type => :model do
       it{expect(Ability.new({:roles => ["SYSTEM"]}).can?(:validate_json_message, VariantReportMessage)).to eq(true)}
       it{expect(Ability.new({:roles => ["SYSTEM"]}).can?(:create, :Event)).to eq(true)}
       it{expect(Ability.new({:roles => ["SYSTEM"]}).can?(:create, VariantReportMessage)).to eq(true)}
-      it{expect(Ability.new({:roles => ["SYSTEM"]}).can?(:variant_report_uploaded, :MDA)).to eq(true)}
-      it{expect(Ability.new({:roles => ["SYSTEM"]}).can?(:variant_report_uploaded, :MoCha)).to eq(true)}
-      it{expect(Ability.new({:roles => ["SYSTEM"]}).can?(:variant_report_uploaded, :Dartmouth)).to eq(true)}
-      it{expect(Ability.new({:roles => ["SYSTEM"]}).can?(:variant_report_uploaded, VariantReportMessage)).to eq(true)}
-      it{expect(Ability.new({:roles => ["SYSTEM"]}).can?(:variant_report_uploaded, NciMatchPatientModels)).to eq(true)}
+      # it{expect(Ability.new({:roles => ["SYSTEM"]}).can?(:variant_report_uploaded, :MDA)).to eq(true)}
+      # it{expect(Ability.new({:roles => ["SYSTEM"]}).can?(:variant_report_uploaded, :MoCha)).to eq(true)}
+      # it{expect(Ability.new({:roles => ["SYSTEM"]}).can?(:variant_report_uploaded, :Dartmouth)).to eq(true)}
+      # it{expect(Ability.new({:roles => ["SYSTEM"]}).can?(:variant_report_uploaded, VariantReportMessage)).to eq(true)}
+      # it{expect(Ability.new({:roles => ["SYSTEM"]}).can?(:variant_report_uploaded, NciMatchPatientModels)).to eq(true)}
     end
 
     context "allow SpecimenMessageSender to access trigger method" do
