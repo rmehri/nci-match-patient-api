@@ -16,13 +16,14 @@ module V1
        "TISSUE_VARIANT_REPORT_RECEIVED",
        "TISSUE_VARIANT_REPORT_REJECTED",
        "TISSUE_VARIANT_REPORT_CONFIRMED",
+       "PENDING_CONFIRMATION",
        "PENDING_APPROVAL",
        "AWAITING_PATIENT_DATA",
        "AWAITING_TREATMENT_ARM_STATUS"]
     end
 
     def set_resource(_resource = {})
-      # non_target_statuses = ["REGISTRATION", "PENDING_CONFIRMATION", "ON_TREATMENT_ARM", "REQUEST_ASSIGNMENT", "REQUEST_NO_ASSIGNMENT", "OFF_STUDY", "OFF_STUDY_BIOPSY_EXPIRED"]
+      # non_target_statuses = ["REGISTRATION", "ON_TREATMENT_ARM", "REQUEST_ASSIGNMENT", "REQUEST_NO_ASSIGNMENT", "OFF_STUDY", "OFF_STUDY_BIOPSY_EXPIRED"]
       resources = NciMatchPatientModels::Patient.scan({:attributes_to_get => ["active_tissue_specimen", "patient_id", "current_status", "diseases", "assignment_error"],
                                                        :scan_filter => {"current_status" => {:comparison_operator => "IN", :attribute_value_list => target_statuses},
                                                                         "active_tissue_specimen" => {:comparison_operator => "NOT_NULL"}}}).collect { |data| data.to_h.compact.deep_symbolize_keys! }
@@ -41,6 +42,7 @@ module V1
         messages.push(*get_variant_report_message(active_tissue_specimen))
         messages.push(*get_assay_messages(active_tissue_specimen))
 
+        messages << "Assignment report pending confirmation" if patient[:current_status] == 'PENDING_CONFIRMATION'
         messages << "Assignment report awaiting approval from COG" if patient[:current_status] == 'PENDING_APPROVAL'
         messages << patient[:assignment_error] unless patient[:assignment_error].nil?
 
