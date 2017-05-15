@@ -36,7 +36,7 @@ NciMatchRoles::System.instance_eval do
 end
 
 NciMatchRoles::PatientMessageSender.instance_eval do
-  def get_methods; [:trigger, :validate_json_message]; end;
+  def get_methods; [:trigger, :validate_json_message, :user_update]; end;
   def get_subjects; [CogMessage, TreatmentArmMessage, NciMatchPatientModels]; end;
 end
 
@@ -46,12 +46,12 @@ NciMatchRoles::AssignmentReportReviewer.instance_eval do
 end
 
 NciMatchRoles::SpecimenMessageSender.instance_eval do
-  def get_methods; [:trigger, :validate_json_message]; end;
+  def get_methods; [:trigger, :validate_json_message, :user_update]; end;
   def get_subjects; [SpecimenReceivedMessage, SpecimenShippedMessage, NciMatchPatientModels]; end
 end
 
 NciMatchRoles::AssayMessageSender.instance_eval do
-  def get_methods; [:trigger, :validate_json_message]; end
+  def get_methods; [:trigger, :validate_json_message, :user_update]; end
   def get_subjects; [AssayMessage, NciMatchPatientModels]; end
 end
 

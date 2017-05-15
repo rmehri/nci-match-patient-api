@@ -4,9 +4,10 @@ module V1
     before_action :users_params, only: :update
 
     def update
-      authorize! :user_update, "ADMIN".to_sym
+      authorize! :user_update, NciMatchPatientModels
       Auth0Service.get_management_token
-      Auth0Service.reset_password(current_user[:sub], params[:password])
+      code = Auth0Service.update_password(current_user[:sub], params[:password])
+      render :json => {:status => code}
     end
 
     def users_params
