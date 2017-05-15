@@ -11,8 +11,8 @@ Rails.application.routes.draw do
         resources :variant_reports, :variants, :assignments, :shipments, only: [:show, :index]
         resources :patient_limbos, :specimens, :assays, only: [:index]
         resources :events, only: [:show, :index, :create]
-
         resources :shipment_status, only: [:show]
+        patch 'users', to: 'users#update'
       end
 
       resources :action_items, only: [:index]

@@ -1,6 +1,7 @@
 common: &defaults
   aws_region: "us-east-1"
   s3_url: "https://s3.amazonaws.com"
+  auth0_domain: "https://ncimatch.auth0.com"
 
 
 development:
@@ -20,6 +21,7 @@ development:
   treatment_arm_api: "localhost:10235/api/v1/treatment_arms"
 
   s3_bucket: "pedmatch-dev"
+  auth0_connection: "MATCH-Development"
 
 test:
   <<: *defaults
@@ -39,6 +41,7 @@ test:
   http_read_timeout: "120"
 
   s3_bucket: "pedmatch-int"
+  auth0_connection: "MATCH-IntTest"
 uat:
   <<: *defaults
   slack_channel: "#match-bot-uat"
@@ -56,6 +59,7 @@ uat:
   treatment_arm_api: "https://pedmatch-uat.nci.nih.gov/api/v1/treatment_arms/"
 
   s3_bucket: "pedmatch-uat"
+  auth0_connection: "MATCH-UAT"
 
 production:
   <<: *defaults
@@ -74,3 +78,4 @@ production:
   treatment_arm_api: "https://pedmatch.nci.nih.gov/api/v1/treatment_arms/"
 
   s3_bucket: "pedmatch"
+  auth0_connection: "MATCH-Production"
