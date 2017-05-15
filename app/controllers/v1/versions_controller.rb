@@ -3,17 +3,17 @@ module V1
     def version
       begin
         File.open('build_number.html', 'r') do |document|
-          hash = {}
+          result = {}
           document.each_line do |line|
             arr = line.split('=', 2)
-            hash.store(arr[0], arr[1].squish!)
+            result.store(arr[0], arr[1].squish!)
           end
           document.close
-          hash['Version'] = NciMatchPatientApi::Application.version
-          hash['Rails Version'] = Rails::VERSION::STRING
-          hash['Ruby Version'] = RUBY_VERSION
-          hash['Environment'] = Rails.env
-          render json: hash
+          result['Version'] = NciMatchPatientApi::Application.version
+          result['Rails Version'] = Rails::VERSION::STRING
+          result['Ruby Version'] = RUBY_VERSION
+          result['Environment'] = Rails.env
+          render json: result
         end
       rescue => error
         standard_error_message(error, 500)
