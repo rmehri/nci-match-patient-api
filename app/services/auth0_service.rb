@@ -15,10 +15,11 @@ class Auth0Service
     }
     result = post("#{Rails.configuration.environment.fetch('auth0_domain')}/oauth/token", options)
     @management_token = JSON.parse(result.body)['access_token']
+    true
   end
 
 
-  def self.reset_password(user_id, password)
+  def self.update_password(user_id, password)
     options = {
         body: {'password' => password, 'connection' => Rails.configuration.environment.fetch('auth0_connection')}.to_json,
         headers: {'Content-Type' => 'application/json', 'Authorization' => "Bearer #{@management_token}"}
