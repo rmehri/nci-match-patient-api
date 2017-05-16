@@ -20,6 +20,37 @@ module V1
       render json: format_fields(patient)
     end
 
+    def health_check
+      result = {}
+      begin
+        dynamodb = Aws::DynamoDB::Client.new(endpoint: Rails.configuration.environment.fetch('aws_dynamo_endpoint'),
+                                             access_key_id: Rails.application.secrets.aws_access_key_id,
+                                             secret_access_key: Rails.application.secrets.aws_secret_access_key,
+                                             region: Rails.configuration.environment.fetch('aws_region'),
+                                             retry_limit: 0)
+        result['dynamodb_connection'] = 'Successfull' if dynamodb.list_tables.class == Seahorse::Client::Response
+      rescue => error
+        Rails.logger.info("Connection to DynamoDB failed because of #{error.message}")
+        result['dynamodb_connection'] = 'Unsuccessfull'
+      end
+      result['queue_name'] = Rails.configuration.environment.fetch('queue_name')
+      begin
+        region = Rails.configuration.environment.fetch('aws_region')
+        end_point = "https://sqs.#{region}.amazonaws.com"
+        queue_name = Rails.configuration.environment.fetch('queue_name')
+        access_key = Rails.application.secrets.aws_access_key_id
+        aws_secret_access_key = Rails.application.secrets.aws_secret_access_key
+        creds = Aws::Credentials.new(access_key, aws_secret_access_key)
+        client = Aws::SQS::Client.new(endpoint: end_point, region: region, credentials: creds)
+        _queue = Shoryuken::Queue.new(client, queue_name)
+        result['queue_connection'] = 'Successfull'
+      rescue => error
+        Rails.logger.info("Connection to SQS failed because of #{error.message}")
+        result['queue_connection'] = 'Unsuccessfull'
+      end
+      render json: result
+    end
+
     private
 
     def patients_params
