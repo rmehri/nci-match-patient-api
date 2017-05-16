@@ -9,6 +9,8 @@ module V1
             result.store(arr[0], arr[1].squish!)
           end
           document.close
+          result['Build URL'] = "https://github.com/CBIIT/nci-match-patient-api/commit/#{result['Commit']}"
+          result['Travis Build URL'] = "https://travis-ci.org/CBIIT/nci-match-patient-api/builds/#{result['TravisBuildID']}"
           result['Version'] = NciMatchPatientApi::Application.version
           result['Rails Version'] = Rails::VERSION::STRING
           result['Ruby Version'] = RUBY_VERSION
