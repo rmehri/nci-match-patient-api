@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  apipie
   scope '/api/v1', module: 'v1' do
     resources :patients, only: [:show, :index, :create] do
       collection do

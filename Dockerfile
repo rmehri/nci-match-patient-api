@@ -1,4 +1,4 @@
-# Base image 
+# Base image
 FROM ruby:2.3.1
 
 MAINTAINER jeremy.pumphrey@nih.gov
@@ -11,20 +11,22 @@ WORKDIR $INSTALL_PATH
 
 ENV RAILS_ENV test
 
-# Install gems 
+# Install gems
 COPY Gemfile $INSTALL_PATH/
 RUN gem install bundler && bundle install
 
-COPY . . 
+COPY . .
 RUN ruby -v; rails -v; bundler -v; gem -v
 RUN pwd;ls -alt $INSTALL_PATH
 
 #Add a file with build number and date for /version to use
 RUN cat $INSTALL_PATH/build_number.html
 
+RUN rake apipie:cache
+
 #Insert script to change localhost to docker-compose names
 ADD https://raw.githubusercontent.com/CBIIT/match-docker/master/docker-compose-env.sh .
 RUN chmod 755 docker-compose-env.sh && ls -alt $INSTALL_PATH
 
-# Default command 
+# Default command
 CMD ./docker-compose-env.sh && rails server --binding 0.0.0.0

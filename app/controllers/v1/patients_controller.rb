@@ -1,5 +1,10 @@
 module V1
   class PatientsController < BaseController
+    include PatientsDoc
+
+    resource_description do
+      name 'Patients'
+    end
 
     def index
       plural_resource_name = "@#{resource_name.pluralize}"
