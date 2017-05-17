@@ -50,6 +50,7 @@ Rails.application.routes.draw do
     resources :patients, only: [:show, :index, :create] do
       collection do
         resource :versions, only: [:show]
+        resource :health_checks, only: [:show]
       end
     end
   end
