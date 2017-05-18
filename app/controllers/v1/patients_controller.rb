@@ -70,10 +70,13 @@ module V1
           patient[:current_status] == "ON_TREATMENT_ARM")
         unless patient[:current_assignment].blank?
           unless patient[:current_assignment][:selected_treatment_arm].blank?
-            selected_ta = patient[:current_assignment][:selected_treatment_arm]
-            selected_ta[:treatment_arm_title] = ApplicationHelper.format_treatment_arm_title(selected_ta)
+            unless patient[:current_assignment][:report_status] == "COMPASSIONATE_CARE"
+              selected_ta = patient[:current_assignment][:selected_treatment_arm]
+              selected_ta[:treatment_arm_title] = ApplicationHelper.format_treatment_arm_title(selected_ta)
 
-            patient[:current_assignment] = selected_ta
+              patient[:current_assignment] = selected_ta
+            end
+
           end
 
         end
