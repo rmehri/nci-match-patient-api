@@ -28,7 +28,7 @@ wb.add_worksheet(name: 'Assignment Report') do |sheet|
   sheet.add_row
   unless @assignment_report[:treatment_assignment_results].nil?
     @assignment_report[:treatment_assignment_results].each do |key, val|
-    sheet.add_row [nil, '>' + key], style: [nil, sub_heading, sub_heading], height: 40
+    sheet.add_row [nil, '>', key], style: [nil, sub_heading, sub_heading], height: 40
       val.each do |value|
         treatment_arm = value[:treatment_arm][:treatment_arm_id] + '/' + value[:treatment_arm][:stratum_id] + '/' + value[:treatment_arm][:version]
         sheet.add_row [nil, treatment_arm, value[:reason] || '-'], style: [nil, keys, values], height: 100
