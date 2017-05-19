@@ -51,9 +51,9 @@ wb.add_worksheet(name: 'Variant Report') do |sheet|
   sheet.add_row
   sheet.add_row [nil, 'Gene Fusions'], style: [nil, sub_heading], height: 30
   unless @variant_report[:variant_report][:gene_fusions].nil?
-    sheet.add_row ['Confirm', 'Id', 'Gene1', 'Driver Count', 'Gene2', 'Partner Count', 'Annotation'], style: [keys] * 7, height: 25
+    sheet.add_row ['Confirm', 'Id', 'Gene1', 'Gene2', 'Read Depth', 'Annotation'], style: [keys] * 7, height: 25
     @variant_report[:variant_report][:gene_fusions].each do |gf|
-      sheet.add_row [gf[:confirmed] || '-', gf[:identifier] || '-', gf[:driver_gene] || '-', gf[:driver_read_count] || '-', gf[:partner_gene] || '-', gf[:partner_read_count] || '-', gf[:annotation] || '-'], style: [values] * 7, height: 20
+      sheet.add_row [gf[:confirmed] || '-', gf[:identifier] || '-', gf[:partner_gene] || '-', gf[:driver_gene] || '-', gf[:driver_read_count] || '-', gf[:annotation] || '-'], style: [values] * 7, height: 20
     end
   end
   sheet.add_row
