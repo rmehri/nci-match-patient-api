@@ -10,6 +10,7 @@ module V1
     private
 
     def set_resource(_resource = {})
+      AppLogger.log(self.class.name, "getting Amoi's ")
       variant_report = NciMatchPatientModels::VariantReport.query_by_analysis_id(params[:patient_id], params[:id])
       raise Errors::ResourceNotFound if variant_report.nil?
 
@@ -17,9 +18,11 @@ module V1
       mois = get_amois(variant_report_hash.deep_symbolize_keys!)
       amoi_count = match_amois_with_uuid(variant_report_hash, mois)
 
+      AppLogger.log(self.class.name, "setting Amoi's ")
       updated_amois = Convert::AmoisRuleModel.to_ui_model(mois)
       update_amoi_count_in_variant_report(variant_report, amoi_count)
 
+      AppLogger.log(self.class.name, "done with Amoi's ")
       instance_variable_set("@#{resource_name}", updated_amois.to_json)
     end
 
