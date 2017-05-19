@@ -6,7 +6,9 @@ module V1
     def create
       client = Aws::S3::Client.new(endpoint: Rails.configuration.environment.fetch('s3_url'))
       url = Aws::S3::Presigner.new(client: client).presigned_url(:put_object, bucket: Rails.configuration.environment.fetch('s3_bucket'), key: params[:file_name])
-      render json: {:presigned_url => url}
+      uri = URI(url)
+      headers = URI::decode_www_form(uri.query).to_h
+      render json: {:presigned_url => url, host: "#{uri.scheme}://#{uri.host}", path: uri.path, :headers => headers}
     end
 
     def s3_params
