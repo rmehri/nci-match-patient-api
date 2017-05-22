@@ -193,16 +193,4 @@ describe V1::PatientsController, :type => :controller do
   it '#delete should throw an route error' do
     expect { delete :destroy, :id => 1}.to raise_error(ActionController::UrlGenerationError)
   end
-
-
-  it 'should route to the correct controller' do
-    expect(get: 'api/v1/patients/healthz').to route_to(controller: 'v1/patients', action: 'health_check')
-  end
-
-  it 'Should return the Connection Details' do
-    get :health_check
-    expect(response).to have_http_status(200)
-  end
-
-
 end
