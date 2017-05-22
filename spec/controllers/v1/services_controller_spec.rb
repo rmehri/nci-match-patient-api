@@ -9,31 +9,29 @@ describe V1::ServicesController do
     allow(HTTParty::Request).to receive(:perform).and_return(true)
   end
 
-  let(:good_message) do
+   let(:good_message) do
     {
-        "header"=> {
-            "msg_guid" => "0f8fad5b-d9cb-469f-al65-80067728950e",
-            "msg_dttm"=> "2016-05-09T22:06:33+00:00"
-        },
-        "study_id"=> "APEC1621SC",
-        "patient_id"=> "3344",
-        "step_number"=> "1.0",
-        "registration_date"=> "2016-05-09T22:06:33+00:00",
-        "status"=> "REGISTRATION",
-        "internal_use_only"=> {
-            "request_id"=> "4-654321",
-            "environment"=> "4",
-            "request"=> "REGISTRATION for patient_id 2222"
-        }
-    }.to_json
+      header: {
+        msg_guid: "0f8fad5b-d9cb-469f-al65-80067728950e",
+        msg_dttm: "2016-05-09T22:06:33+00:00"
+      },
+      study_id: "APEC1621SC",
+      patient_id: "3344",
+      step_number: "1.0",
+      registration_date: "2016-05-09T22:06:33+00:00",
+      status: "REGISTRATION",
+      internal_use_only: {
+        request_id: "4-654321",
+        environment: "4",
+        request: "REGISTRATION for patient_id 2222"
+      }
+    }
   end
 
   # it "should process a registration message" do
-  #   # post "api/v1/patients/1", good_message
-  #
-  #   expect(post "api/v1/patients/1", good_message).to have_http_status(200)
+  #   HTTParty.post('api/v1/patients/1', body: good_message.to_json, headers: { 'Content-Type' => 'application/json' } )
+  #   expect(response).to have_http_status(200)
   # end
-
 
   it "should route to correct controller" do
     expect(:post => "api/v1/patients/3355").to route_to(:controller => "v1/services", :action => "trigger", :patient_id =>"3355")
@@ -57,5 +55,4 @@ describe V1::ServicesController do
                                                                                    :analysis_id => "aid",
                                                                                    :status => "confirm")
   end
-
 end
