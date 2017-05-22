@@ -4,7 +4,8 @@ require 'rails_helper'
 RSpec.describe V1::S3Controller, type: :controller do
 
   context 'route to the correct controller' do
-    it{expect(:post => "api/v1/patients/s3").to route_to(:controller => "v1/s3", :action => "create")}
+    it{expect(:post => "api/v1/patients/test/s3").to route_to(:controller => "v1/s3", :action => "create", :patient_id => "test")}
+    it{expect(:get => "api/v1/patients/test/s3").to route_to(:controller => "v1/s3", :action => "index", :patient_id => "test")}
   end
 
 

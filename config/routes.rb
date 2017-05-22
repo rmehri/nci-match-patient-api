@@ -13,12 +13,12 @@ Rails.application.routes.draw do
         resources :patient_limbos, :specimens, :assays, only: [:index]
         resources :events, only: [:show, :index, :create]
         resources :shipment_status, only: [:show]
-        resources :s3, only: [:create]
         patch 'users', to: 'users#update'
         get 'healthz', to: 'patients#health_check'
       end
 
       resources :action_items, only: [:index]
+      resources :s3, only: [:create, :show, :index]
       resources :treatment_arm_history, only: [:index]
 
       resources :specimens, only: [:show, :index]
