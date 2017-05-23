@@ -120,7 +120,8 @@ module V1
 
       validate_patient_state(message, type.class)
       result = PatientProcessor.run_service('/confirm_assignment', message, request.uuid, token)
-      standard_success_message(result)
+
+      ((200..250).include? result.code) ? standard_success_message(result) : standard_error_message(result)
     end
   end
 end
