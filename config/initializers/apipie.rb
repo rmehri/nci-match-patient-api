@@ -9,6 +9,7 @@ Apipie.configure do |config|
   config.reload_controllers      = true
   config.debug                   = false
   config.app_info                = <<-DOC
-    Application Description
+    This ecosystem is responsible for receiving and processing patient messages that comes from third party systems and other ecosystems within the uMATCH system.
+    This ecosystem is in charge of maintaining its own set of data models that would assist the customer in answering questions centered around patients.
   DOC
 end

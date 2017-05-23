@@ -3,7 +3,7 @@ module V1
     include PatientsDoc
 
     resource_description do
-      name 'Patients'
+      name 'Patient'
     end
 
     def index
