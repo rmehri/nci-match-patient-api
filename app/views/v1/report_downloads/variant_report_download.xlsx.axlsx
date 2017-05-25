@@ -35,7 +35,7 @@ wb.add_worksheet(name: 'Variant Report') do |sheet|
     sheet.add_row ['Confirm', 'ID', 'Chromosome', 'Position', 'OCP Ref', 'OCP Alt', 'Allele Freq', 'Func Gene', 'Oncomine Variant Class', 'Exon', 'Function', 'HGVS', 'Read Depth', 'Transcript', 'Protein'], style: [keys] * 15, height: 25
     sheet.column_widths 5, 15, 40, 15, 15, 15, 15, 15, 25, 15, 25, 25, 20, 20, 20
     @variant_report[:variant_report][:snv_indels].each do |snv_indel|
-      sheet.add_row [snv_indel[:confirmed] || '-', snv_indel[:identifier] || '-', snv_indel[:chromosome] || '-', snv_indel[:position] || '-', snv_indel[:ocp_reference] || '-', snv_indel[:ocp_alternative] || '-', snv_indel[:allele_frequency] || '-', snv_indel[:func_gene] || '-', snv_indel[:oncomine_variant_class] || '-', snv_indel[:exon] || '-', snv_indel[:function] || '-', snv_indel[:hgvs] || '-', snv_indel[:read_depth] || '-', snv_indel[:transcript] || '-', snv_indel[:protein] || '-'], style: [values] * 15, height: 20
+      sheet.add_row [snv_indel[:confirmed] || 'FALSE', snv_indel[:identifier] || '-', snv_indel[:chromosome] || '-', snv_indel[:position] || '-', snv_indel[:ocp_reference] || '-', snv_indel[:ocp_alternative] || '-', snv_indel[:allele_frequency] || '-', snv_indel[:func_gene] || '-', snv_indel[:oncomine_variant_class] || '-', snv_indel[:exon] || '-', snv_indel[:function] || '-', snv_indel[:hgvs] || '-', snv_indel[:read_depth] || '-', snv_indel[:transcript] || '-', snv_indel[:protein] || '-'], style: [values] * 15, height: 20
     end
   end
   sheet.add_row
@@ -44,7 +44,7 @@ wb.add_worksheet(name: 'Variant Report') do |sheet|
   unless @variant_report[:variant_report][:copy_number_variants].nil?
     sheet.add_row ['Confirm', 'ID', 'Chromosome', 'Position', 'Raw CN', 'CI 5%', 'CN', 'CI 95%'], style: [keys] * 8, height: 25
     @variant_report[:variant_report][:copy_number_variants].each do |cnv|
-      sheet.add_row [cnv[:confirmed] || '-', cnv[:identifier] || '-', cnv[:chromosome] || '-', cnv[:position] || '-', cnv[:raw_copy_number] || '-', cnv[:confidence_interval_5_percent] || '-',  cnv[:copy_number] || '-', cnv[:confidence_interval_95_percent] || '-'], style: [values] * 8, height: 20
+      sheet.add_row [cnv[:confirmed] || 'FALSE', cnv[:identifier] || '-', cnv[:chromosome] || '-', cnv[:position] || '-', cnv[:raw_copy_number] || '-', cnv[:confidence_interval_5_percent] || '-',  cnv[:copy_number] || '-', cnv[:confidence_interval_95_percent] || '-'], style: [values] * 8, height: 20
     end
   end
   sheet.add_row
@@ -53,7 +53,7 @@ wb.add_worksheet(name: 'Variant Report') do |sheet|
   unless @variant_report[:variant_report][:gene_fusions].nil?
     sheet.add_row ['Confirm', 'ID', 'Gene1', 'Gene2', 'Read Depth', 'Annotation'], style: [keys] * 7, height: 25
     @variant_report[:variant_report][:gene_fusions].each do |gf|
-      sheet.add_row [gf[:confirmed] || '-', gf[:identifier] || '-', gf[:partner_gene] || '-', gf[:driver_gene] || '-', gf[:driver_read_count] || '-', gf[:annotation] || '-'], style: [values] * 7, height: 20
+      sheet.add_row [gf[:confirmed] || 'FALSE', gf[:identifier] || '-', gf[:partner_gene] || '-', gf[:driver_gene] || '-', gf[:driver_read_count] || '-', gf[:annotation] || '-'], style: [values] * 7, height: 20
     end
   end
   sheet.add_row
