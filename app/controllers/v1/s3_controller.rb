@@ -11,11 +11,15 @@ module V1
 
     def index
       bucket = Aws::S3::Bucket.new(client: s3_client, name: Rails.configuration.environment.fetch('s3_bucket'))
-      list = bucket.objects(prefix: "#{params[:patient_id]}/").collect{ | obj | {name: obj.key,
-                                                                                 url: obj.presigned_url(:get, response_content_disposition: 'attachment'),
-                                                                                 comment: "",
-                                                                                 uploaded_date: obj.last_modified,
-                                                                                 user: obj.object.metadata["user"]} }
+      list = bucket.objects(prefix: "#{params[:patient_id]}/").collect do | obj |
+        {
+            name: obj.key,
+            url: obj.presigned_url(:get, response_content_disposition: 'attachment'),
+            comment: "",
+            uploaded_date: obj.last_modified,
+            user: obj.object.metadata["user"]
+        }
+      end
       render json: list
     end
 
@@ -23,7 +27,7 @@ module V1
       url = Aws::S3::Presigner.new(client: s3_client).presigned_url(:put_object,
                                                                     bucket: Rails.configuration.environment.fetch('s3_bucket'),
                                                                     key: "#{params[:patient_id]}/#{params[:file_name]}",
-                                                                    acl: 'public-read-write', metadata: {'user' => current_user[:email]})
+                                                                    acl: 'public-read-write', metadata: {'user' => current_user[:email].split('@')[0]})
       render json: {:presigned_url => url}
     end
 

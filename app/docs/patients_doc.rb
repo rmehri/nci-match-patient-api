@@ -56,25 +56,6 @@ module PatientsDoc
     # Nothing here, it's just a stub
   end
 
-  api :PUT, '/patients/:patient_id/assignment_report_rollback', '#Fill in description'
-  description <<-EOS
-    === What this API Call does
-
-    === Authentication Required
-      Auth0 token has to be passed as part of the request.
-    === Response Format
-      JSON
-  EOS
-  param :patient_id, String, desc: 'ID of the Patient', required: true
-  error code: 401, desc: 'Unauthorized'
-  error code: 200, desc: 'Success (OK)'
-  error code: 500, desc: 'Internal Server Error'
-  error code: 504, desc: 'Gateway Timeout (Usually occues when the Server is down)'
-
-  def rollback_assignment_report
-    # Nothing here, it's just a stub
-  end
-
   api :PUT, '/patients/:patient_id/variant_report_rollback', '#Fill in description'
   description <<-EOS
     === What this API Call does
@@ -417,7 +398,7 @@ module PatientsDoc
     # Nothing here, it's just a stub
   end
 
-  api :GET, '/patients/healthz', '#Fill in description'
+  api :GET, '/patients/healthcheck', '#Fill in description'
   description <<-EOS
     === What this API Call does
 
