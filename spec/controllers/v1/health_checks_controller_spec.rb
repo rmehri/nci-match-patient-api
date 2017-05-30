@@ -6,7 +6,7 @@ describe V1::HealthChecksController do
     s3_url = Rails.configuration.environment.fetch('s3_url')
 
     it 'should route to the correct controller' do
-      expect(get: 'api/v1/patients/healthz').to route_to(controller: 'v1/health_checks', action: 'health_check')
+      expect(get: 'api/v1/patients/healthcheck').to route_to(controller: 'v1/health_checks', action: 'health_check')
     end
 
     it 'Should return the Connection Details' do
