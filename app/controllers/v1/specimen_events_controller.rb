@@ -65,7 +65,7 @@ module V1
         variant_reports = NciMatchPatientModels::VariantReport.scan(build_index_query({:molecular_id => shipment[:molecular_id],
                                                                                        :projection => [:ion_reporter_id, :molecular_id, :analysis_id, :variant_report_received_date, :comment_user, :clia_lab,
                                                                                                        :dna_bam_name, :vcf_file_name, :cdna_bam_name, :tsv_file_name,
-                                                                                                       :status ,:qc_report_url, :vr_chart_data_url]})).collect{|record| record.to_h.compact }
+                                                                                                       :status, :status_date, :qc_report_url, :vr_chart_data_url]})).collect{|record| record.to_h.compact }
 
         variant_reports = variant_reports.sort_by{ |report| report[:variant_report_received_date]}.reverse
         assignments = assignments.sort_by{ |record| record[:assignment_date]}.reverse
@@ -142,6 +142,7 @@ module V1
                 :molecular_id => variant_report[:molecular_id],
                 :analysis_id => variant_report[:analysis_id],
                 :variant_report_status => variant_report[:status],
+                :status_date => variant_report[:status_date],
                 :variant_report_received_date => variant_report[:variant_report_received_date],
                 :comment_user => variant_report[:comment_user],
                 :dna_bam_name => variant_report[:dna_bam_name],
