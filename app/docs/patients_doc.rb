@@ -19,6 +19,41 @@ module PatientsDoc
     # Nothing here, it's just a stub
   end
 
+  api :GET, '/patients?projections=[prop_key, prop_key]&attributes=[attr_key, attr_key]', 'Returns a list of only the Projection parameter field values for the Non Empty Attribute parameter for all the Patients'
+  description <<-EOS
+    === What this API Call does
+       This API call accepts Projection & Attribute as the Query String Parameters and then returns a list of only the Projection parameter field value for the non empty Atrribute parameter for all the Patients present
+    === Authentication Required
+      Auth0 token has to be passed as part of the request.
+    === Response Format
+      JSON
+    === Sample Request
+      'http://localhost:10240/api/v1/patients?projections=[patient_id, current_status, current_step_number, registration_date]'
+    === Sample Output
+      [
+        {
+          'patient_id': PT_SC04d_TwoAssay,
+          'registration_date': 2016-02-09T22:06:33+00:00,
+          'current_step_number': 1.0,
+          'current_status': ASSAY_RESULTS_RECEIVED
+        },
+        {
+          'patient_id': ION_AQ04_TsShipped,
+          'registration_date': 2016-02-09T22:06:33+00:00,
+          'current_step_number': 1.0,
+          'current_status': TISSUE_NUCLEIC_ACID_SHIPPED
+        },
+      ]
+  EOS
+  error code: 401, desc: 'Unauthorized'
+  error code: 200, desc: 'Success (OK)'
+  error code: 500, desc: 'Internal Server Error'
+  error code: 504, desc: 'Gateway Timeout (Usually occues when the Server is down)'
+
+  def index_
+    # Nothing here, it's just a stub
+  end
+
   api :GET, '/patients/:patient_id', '#Fill in description'
   description <<-EOS
     === What this API Call does
