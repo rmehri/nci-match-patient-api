@@ -17,6 +17,8 @@ module V1
       message = JSON.parse(request.raw_post)
       em = EventMessage.new.from_json(message.to_json)
       raise Errors::RequestForbidden, em.errors unless em.valid?
+
+      AppLogger.log(self.class.name, "====================== Upload event: #{message}")
       results = PatientProcessor.run_service("/upload_event", message, request.uuid, token)
       standard_success_message(results)
     end

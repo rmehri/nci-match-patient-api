@@ -21,6 +21,7 @@ module V1
       VariantReportHelper.add_download_links(variant_report_hash)
 
       assignments = NciMatchPatientModels::Assignment.query_by_patient_id(params[:patient_id], false).collect { |data| data.to_h.compact }
+      assignments = assignments.select {|assignment| assignment[:analysis_id] == params[:id]}
       assignments = assignments.sort_by{| assignment | assignment[:assignment_date]}.reverse
 
       assignments_with_assays = []

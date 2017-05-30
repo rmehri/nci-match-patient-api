@@ -34,6 +34,7 @@ describe V1::AnalysisReportController do
     assignment.patient_id = "3366"
     assignment.assignment_date = DateTime.current.getutc().to_s
     assignment.surgical_event_id = "sei-1234"
+    assignment.analysis_id = "an-1234"
     allow(NciMatchPatientModels::Assignment).to receive(:query).and_return([assignment])
 
     specimen = NciMatchPatientModels::Specimen.new
@@ -41,7 +42,7 @@ describe V1::AnalysisReportController do
     specimen.collected_date = DateTime.current.getutc().to_s
     allow(NciMatchPatientModels::Specimen).to receive(:scan).and_return([specimen])
 
-    get :show, :patient_id => "3366", :id => "1"
+    get :show, :patient_id => "3366", :id => "an-1234"
     expect(response).to have_http_status(200)
   end
 

@@ -8,6 +8,7 @@ class RuleEngine
 
     tsv_file_name = File.basename(tsv_name, ".tsv")
     service_url = base_uri + "/variant_report/#{patient_id}/#{ion_reporter_id}/#{molecular_id}/#{analysis_id}/#{tsv_file_name}?filtered=true"
+    # service_url = base_uri + "/variant_report/amois"
 
     AppLogger.log(self.class.name, "Calling out to service #{service_url}...")
     AppLogger.log(self.class.name, "And the treatment arm data sent to Rule is #{treatment_arms}...")

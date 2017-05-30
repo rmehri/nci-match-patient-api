@@ -5,7 +5,7 @@ class PatientProcessor
 
   def self.run_service(service, message, uuid, token = "")
 
-    p "======== Calling patient processor service: #{service} with message: #{message}"
+    AppLogger.log(self.class.name, "Calling patient processor service: #{service} with message: #{message}")
     begin
       post(service,
                 {
