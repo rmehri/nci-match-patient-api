@@ -17,7 +17,7 @@ module V1
             url: obj.presigned_url(:get, response_content_disposition: 'attachment'),
             comment: "",
             uploaded_date: obj.last_modified,
-            user: obj.object.metadata["user"]
+            user: ->{ obj.object.metadata["user"] rescue "" }.call
         }
       end
       render json: list
