@@ -151,10 +151,11 @@ module PatientsDoc
     # Nothing here, it's just a stub
   end
 
-  api :POST, '/patients/:patient_id', '#Fill in description'
+  api :POST, '/patients/:patient_id', 'Inserts a new Patient'
   description <<-EOS
     === What this API Call does
-
+      This API call takes a JSON body sent from COG, NCH, MDA, and IR Ecosystem as the input along with patient_id as the Parameter,
+      Undergoes a couple of Validations and then puts the JSON on to the Queue to be consumed by the Patient Processor.
     === Authentication Required
       Auth0 token has to be passed as part of the request.
     === Response Format
@@ -162,7 +163,7 @@ module PatientsDoc
   EOS
   param :patient_id, String, desc: 'ID of the Patient', required: true
   error code: 401, desc: 'Unauthorized'
-  error code: 200, desc: 'Success (OK)'
+  error code: 202, desc: 'Accepted'
   error code: 500, desc: 'Internal Server Error'
   error code: 504, desc: 'Gateway Timeout (Usually occues when the Server is down)'
 
@@ -303,7 +304,7 @@ module PatientsDoc
     # Nothing here, it's just a stub
   end
 
-  api :GET, '/patients/:patient_id/treatment_arm_history', '#Fill in description'
+  api :GET, '/patients/:patient_id/treatment_arm_history', 'Returns the Treatment Arm History for a Patient.'
   description <<-EOS
     === What this API Call does
 
@@ -379,7 +380,7 @@ module PatientsDoc
     # Nothing here, it's just a stub
   end
 
-  api :GET, '/patients/:patient_id/action_items', '#Fill in description'
+  api :GET, '/patients/:patient_id/action_items', 'Returns a list of Actions for a Patient.'
   description <<-EOS
     === What this API Call does
 
@@ -721,16 +722,15 @@ module PatientsDoc
     # Nothing here, it's just a stub
   end
 
-  api :GET, '/patients/:patient_id/assignment_report/:uuid', '#Fill in description'
+  api :GET, '/patients/:patient_id/assignment_report/:uuid', 'Downloads the Assignment Report of a particular patient in Excel format'
   description <<-EOS
     === What this API Call does
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
-    === Response Format
-      JSON
   EOS
   param :patient_id, String, desc: 'ID of the Patient', required: true
+  param :uuid, String, desc: 'uuid of the Patient Assignment', required: true
   error code: 401, desc: 'Unauthorized'
   error code: 200, desc: 'Success (OK)'
   error code: 500, desc: 'Internal Server Error'
@@ -740,16 +740,15 @@ module PatientsDoc
     # Nothing here, it's just a stub
   end
 
-  api :GET, '/patients/:patient_id/variant_report/:analysis_id', '#Fill in description'
+  api :GET, '/patients/:patient_id/variant_report/:analysis_id', 'Downloads the Variant Report of a particular patient in Excel format'
   description <<-EOS
     === What this API Call does
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
-    === Response Format
-      JSON
   EOS
   param :patient_id, String, desc: 'ID of the Patient', required: true
+  param :analysis_id, String, desc: 'Analysis ID of the Patient', required: true
   error code: 401, desc: 'Unauthorized'
   error code: 200, desc: 'Success (OK)'
   error code: 500, desc: 'Internal Server Error'
