@@ -759,16 +759,15 @@ module PatientsDoc
     # Nothing here, it's just a stub
   end
 
-  api :GET, '/patients/amois', '#Fill in description'
+  api :GET, '/patients/amois?confirmed=true&count=true', 'Returns a list of Patients with 0, 1, 2, 3, 4, 5+ amois'
   description <<-EOS
     === What this API Call does
-
+      This API Call Returns a list of Patients with 0, 1, 2, 3, 4, 5+ amois. It also accepts the count query parameter which will provide the count for each category but when omitted it will return back a Patient object with information about the Tissue Report.
     === Authentication Required
       Auth0 token has to be passed as part of the request.
     === Response Format
       JSON
   EOS
-  param :patient_id, String, desc: 'ID of the Patient', required: true
   error code: 401, desc: 'Unauthorized'
   error code: 200, desc: 'Success (OK)'
   error code: 500, desc: 'Internal Server Error'
@@ -797,7 +796,7 @@ module PatientsDoc
     # Nothing here, it's just a stub
   end
 
-  api :GET, '/patients/statistics', '#Fill in description'
+  api :GET, '/patients/statistics', 'Returns the Patient Statistics for the Clinical Trial.'
   description <<-EOS
     === What this API Call does
 
@@ -816,17 +815,28 @@ module PatientsDoc
     # Nothing here, it's just a stub
   end
 
-  api :GET, '/patients/version', '#Fill in description'
+  api :GET, '/patients/version', 'Checks the health of the server'
   description <<-EOS
     === What this API Call does
-
-    === Authentication Required
-      Auth0 token has to be passed as part of the request.
+      This API call Checks the Health of the Server and also returns the Build Details
     === Response Format
       JSON
+    === Sample Output
+        {
+          'TravisBuild': '381',
+          'Commit': '2a14d4dc74c2dc9e5b36bc014187542192c64f50',
+          'TravisBuildID': '184339872',
+          'Author': 'Joey Verbeck <joseph.verbeck@nih.gov>',
+          'BuildTime': '12-15-16-1433',
+          'Docker': 'matchbox/nci-match-patient-api-api:12-15-16-1433',
+          'Build URL': 'https://github.com/CBIIT/nci-match-patient-api/commit/2a14d4dc74c2dc9e5b36bc014187542192c64f50',
+          'Travis Build URL': 'https://travis-ci.org/CBIIT/nci-match-patient-api/builds/184339872',
+          'Version': '1.0.0',
+          'Rails Version': '5.0.0.1',
+          'Ruby Version': '2.3.1',
+          'Environment': 'development'
+        }
   EOS
-  param :patient_id, String, desc: 'ID of the Patient', required: true
-  error code: 401, desc: 'Unauthorized'
   error code: 200, desc: 'Success (OK)'
   error code: 500, desc: 'Internal Server Error'
   error code: 504, desc: 'Gateway Timeout (Usually occues when the Server is down)'
