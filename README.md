@@ -5,3 +5,5 @@ nci-match-patient-api
 [![Build Status](https://travis-ci.org/CBIIT/nci-match-patient-api.svg?branch=master)](https://travis-ci.org/CBIIT/nci-match-patient-api)
 
 * [API Documentation](https://pedmatch-int.nci.nih.gov/api/v1/patients/apidocs)
+* Health Check   [INT](https://pedmatch-int.nci.nih.gov/api/v1/patients/healthcheck) | [UAT](https://pedmatch-uat.nci.nih.gov/api/v1/patients/healthcheck) | [Production](https://pedmatch.nci.nih.gov/api/v1/patients/healthcheck)
+* Version & Build Details   [INT](https://pedmatch-int.nci.nih.gov/api/v1/patients/version) | [UAT](https://pedmatch-int.nci.nih.gov/api/v1/patients/version) | [Production](https://pedmatch-int.nci.nih.gov/api/v1/patients/version)
