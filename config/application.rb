@@ -36,10 +36,6 @@ module NciPedMatchPatientApi
 
     config.logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
 
-    # config.after_initialize do
-    #   config.logger.extend ActiveSupport::Logger.broadcast(SlackLogger.logger)
-    # end
-
     config.environment = Rails.application.config_for(:environment)
     config.assay = Rails.application.config_for(:assay)
 

@@ -67,6 +67,10 @@ Rails.application.configure do
   # Send deprecation notices to registered listeners.
   config.active_support.deprecation = :notify
 
+  config.after_initialize do
+    config.logger.extend ActiveSupport::Logger.broadcast(SlackLogger.logger)
+  end
+
 # Disable automatic flushing of the log to improve performance.
 # config.autoflush_log = false
 
