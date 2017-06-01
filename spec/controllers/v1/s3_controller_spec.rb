@@ -13,9 +13,11 @@ RSpec.describe V1::S3Controller, type: :controller do
   # context 'create a s3 presigned link' do
   #   it 'will create the link' do
   #     s3_client = instance_double(Aws::S3::Client)
+  #     knock = double("Knock")
+  #     allow(knock).to receive(:current_user).and_return({:email => "test@nih.gov"})
   #     allow(Aws::S3::Client).to receive(:new).and_return(s3_client)
   #     allow(Aws::S3::Presigner.new).to receive(:presigned_url).and_return('')
-  #     post :create, :file_name => 'Test.txt'
+  #     post :create, :patient_id => "test" , :file_name => 'Test.txt'
   #     p response.body
   #   end
   # end
