@@ -29,7 +29,6 @@ module V1
                                                                         "active_tissue_specimen" => {:comparison_operator => "NOT_NULL"}}}).collect { |data| data.to_h.compact.deep_symbolize_keys! }
 
       resources = resources.select{ |resource| !(resource[:active_tissue_specimen][:specimen_received_date].nil?)}
-      resources = resources.select{ |resource| (Date.current - Date.parse(resource[:active_tissue_specimen][:specimen_received_date])).to_i >= 7 }
       resources.uniq!{ |resource| resource[:patient_id] }
       instance_variable_set("@#{resource_name}", generate_messages(resources))
     end

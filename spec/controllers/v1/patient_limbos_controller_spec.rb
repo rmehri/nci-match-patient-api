@@ -42,7 +42,8 @@ RSpec.describe V1::PatientLimbosController, :type => :controller do
                                                                           patient_variant_status_pending,
                                                                           safety_pig])
       get :index
-      expect(JSON.parse(response.body).length). to eq(4)
+      # requirement to include only patients in limbo more than 7 days has been removed
+      expect(JSON.parse(response.body).length). to eq(5)
     end
 
     it 'fail gracefully' do
