@@ -43,7 +43,9 @@ describe V1::VariantReportsController do
   end
 
   it '#delete should throw an route error' do
-    expect { delete :destroy, :id => 1}.to raise_error(ActionController::UrlGenerationError)
+    expect(:delete => "api/v1/patients/variant_reports/1").to route_to(:controller => "v1/variant_reports",
+                                                                        :action => "destroy",
+                                                                        :id => "1")
   end
 
 end

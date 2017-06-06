@@ -9,13 +9,16 @@ Rails.application.routes.draw do
         get 'amois', controller: 'statistics', action: :sequenced_and_confirmed_patients
         get ':patient_id/variant_report/:analysis_id', to: 'report_downloads#variant_report_download'
         get ':patient_id/assignment_report/:uuid', to: 'report_downloads#assignment_report_download'
-        resources :variant_reports, :variants, :assignments, :shipments, only: [:show, :index]
+        resources :variants, :shipments, only: [:show, :index]
+        resources :variant_reports, :assignments, only: [:show, :index, :destroy]
         resources :patient_limbos, :specimens, :assays, only: [:index]
         resources :events, only: [:show, :index, :create]
         resources :shipment_status, only: [:show]
         patch 'users', to: 'users#update'
         get 'healthcheck', to: 'health_checks#health_check'
       end
+
+
 
       resources :action_items, only: [:index]
       resources :s3, only: [:create, :show, :index]
@@ -38,10 +41,6 @@ Rails.application.routes.draw do
       put "patients/:patient_id/assignment_reports/:analysis_id/:status" => :assignment_confirmation, :defaults => {:status => ['confirm', 'reject']}
       put "patients/variant/:variant_uuid/:status" => :variant_status, :defaults => {:status => ['checked','unchecked']}
 
-    end
-    controller :roll_back do
-      put "patients/:patient_id/variant_report_rollback" => :rollback_variant_report
-      put "patients/:patient_id/assignment_report_rollback" => :rollback_assignment_report
     end
 
     match "*path", to: 'errors#bad_request', via: :all

@@ -50,7 +50,7 @@ describe V1::AssignmentsController do
   end
 
   it '#delete should throw an route error' do
-    expect { delete :destroy, :id => 1}.to raise_error(ActionController::UrlGenerationError)
+    expect(:delete => "api/v1/patients/assignments/1").to route_to(:controller => "v1/assignments", :action => "destroy", :id => "1")
   end
 
 end

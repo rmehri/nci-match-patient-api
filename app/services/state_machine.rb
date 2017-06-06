@@ -15,4 +15,5 @@ class StateMachine
       raise error
     end
   end
+
 end

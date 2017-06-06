@@ -17,6 +17,13 @@ module V1
       render json: instance_variable_get("@#{resource_name}")
     end
 
+    def destroy
+      is_valid = HTTParty.get("#{Rails.configuration.environment.fetch('patient_state_api')}/roll_back/#{params[:id]}",
+                              {:headers => {'X-Request-Id' => request.uuid, 'Authorization' => "Bearer #{token}"}})
+      raise Errors::RequestForbidden, "Incoming message failed patient state validation: #{is_valid.response.body}" if is_valid.response.code.to_i > 200
+      JobBuilder.new("RollBack::AssignmentReportJob").job.perform_later({:patient_id => params[:id]})
+    end
+
     private
     def find_assays(surgical_event_id)
       assays = []
