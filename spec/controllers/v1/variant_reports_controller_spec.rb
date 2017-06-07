@@ -42,10 +42,29 @@ describe V1::VariantReportsController do
     expect { patch :update, :id => 1}.to raise_error(ActionController::UrlGenerationError)
   end
 
-  it '#delete should throw an route error' do
+  it '#delete should route correctly' do
     expect(:delete => "api/v1/patients/variant_reports/1").to route_to(:controller => "v1/variant_reports",
                                                                         :action => "destroy",
                                                                         :id => "1")
+  end
+
+  it "#delete will add message to queue" do
+    message_body = {"status" => "Success", "error" => "some error"}
+
+    allow(HTTParty::Request).to receive(:new).and_return(HTTParty::Request)
+    allow(HTTParty::Response).to receive(:new).and_return(HTTParty::Response)
+    allow(HTTParty::Request).to receive(:perform).and_return(HTTParty::Response)
+    allow(HTTParty::Response).to receive(:body).and_return(message_body)
+    allow(JobBuilder).to receive(:new).and_return(true)
+    expect(delete :destroy, :id => 1).to be_truthy
+  end
+
+  it "#delte will raise error" do
+    allow(HTTParty::Request).to receive(:new).and_return(HTTParty::Request)
+    allow(HTTParty::Response).to receive(:new).and_return(HTTParty::Response)
+    allow(HTTParty::Request).to receive(:perform).and_return(HTTParty::Response)
+    allow(HTTParty::Response).to receive(:code).and_return(500)
+    expect(delete :destroy, :id => 1).to have_http_status(403)
   end
 
 end
