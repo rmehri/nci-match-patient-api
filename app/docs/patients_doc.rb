@@ -25,6 +25,8 @@ module PatientsDoc
        This API call accepts Projection & Attribute as the Query String Parameters and then returns a list of only the Projection parameter field value for the non empty Atrribute parameter for all the Patients present
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
     === Sample Request
@@ -60,6 +62,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -79,6 +83,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -97,6 +103,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -116,6 +124,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -135,6 +145,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -154,6 +166,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -173,6 +187,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -193,6 +209,8 @@ module PatientsDoc
       Undergoes a couple of Validations and then puts the JSON on to the Queue to be consumed by the Patient Processor.
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -212,6 +230,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -231,6 +251,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -250,6 +272,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -269,6 +293,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -288,6 +314,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -307,6 +335,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -326,6 +356,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -345,6 +377,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -364,6 +398,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -383,6 +419,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -402,6 +440,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -421,6 +461,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -440,6 +482,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      Authorization is NOT required
     === Response Format
       JSON
   EOS
@@ -459,6 +503,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -478,6 +524,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -497,6 +545,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -516,6 +566,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -535,6 +587,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -554,6 +608,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -573,6 +629,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -592,6 +650,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -611,6 +671,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -630,6 +692,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -649,6 +713,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -668,6 +734,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -687,6 +755,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -706,6 +776,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -725,6 +797,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -744,6 +818,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -763,6 +839,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
   EOS
   param :patient_id, String, desc: 'ID of the Patient', required: true
   param :uuid, String, desc: 'uuid of the Patient Assignment', required: true
@@ -781,6 +859,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
   EOS
   param :patient_id, String, desc: 'ID of the Patient', required: true
   param :analysis_id, String, desc: 'Analysis ID of the Patient', required: true
@@ -799,6 +879,8 @@ module PatientsDoc
       This API Call Returns a list of Patients with 0, 1, 2, 3, 4, 5+ amois. It also accepts the count query parameter which will provide the count for each category but when omitted it will return back a Patient object with information about the Tissue Report.
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -817,6 +899,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -836,6 +920,8 @@ module PatientsDoc
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
+    === Authorization & Roles
+      # Who is Authorized
     === Response Format
       JSON
   EOS
@@ -853,6 +939,8 @@ module PatientsDoc
   description <<-EOS
     === What this API Call does
       This API call Checks the Health of the Server and also returns the Build Details
+    === Authorization & Roles
+      Authorization is NOT required
     === Response Format
       JSON
     === Sample Output
