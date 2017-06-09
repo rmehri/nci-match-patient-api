@@ -1,6 +1,7 @@
 
 class RuleEngine
   include HTTParty
+  default_timeout 60
 
   base_uri Rails.configuration.environment.fetch("match_rule_api")
 
