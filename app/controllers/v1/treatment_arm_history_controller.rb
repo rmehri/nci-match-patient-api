@@ -32,6 +32,7 @@ module V1
           :step => record[:step_number],
           :assignment_reason => record[:selected_treatment_arm][:reason],
           :date_on_arm => record[:cog_assignment_date],
+          :date_off_arm => record[:off_arm_date],
           :assignment_date => record[:assignment_date]
       }
     end
