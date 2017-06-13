@@ -13,18 +13,22 @@ module V1
     end
 
     def set_resource(_resource = {})
-      resources = NciMatchPatientModels::Assignment.scan(resource_params).collect{|record| build_treatment_arms_history_model(record.to_h.compact) }
+      resources = NciMatchPatientModels::Assignment.query_by_patient_id(params.require(:patient_id), false)
+      resources = resources.collect{|record| build_treatment_arms_history_model(record.to_h.compact) }
+      resources = resources.select{|record| !record.blank?}
       instance_variable_set("@#{resource_name}", resources.sort_by {|record| record[:assignment_date]}.reverse)
     end
 
-    def assignment_params
-      build_index_query({:patient_id => params.require(:patient_id),
-                         :projection => ['selected_treatment_arm', 'step_number', 'cog_assignment_date', 'off_arm_date'],
-                         :attribute => ['selected_treatment_arm', 'step_number', 'cog_assignment_date', 'off_arm_date']})
-    end
+    # def assignment_params
+    #   build_index_query({:patient_id => params.require(:patient_id),
+    #                      :projection => ['selected_treatment_arm', 'step_number', 'cog_assignment_date', 'off_arm_date'],
+    #                      :attribute => ['selected_treatment_arm', 'step_number', 'cog_assignment_date']
+    #                     })
+    # end
 
     def build_treatment_arms_history_model(record = {})
       record.deep_symbolize_keys!
+      return {} if record[:selected_treatment_arm].blank? || record[:cog_assignment_date].blank?
       {
           :treatment_arm_id => record[:selected_treatment_arm][:treatment_arm_id],
           :stratum_id => record[:selected_treatment_arm][:stratum_id],
@@ -32,8 +36,7 @@ module V1
           :step => record[:step_number],
           :assignment_reason => record[:selected_treatment_arm][:reason],
           :date_on_arm => record[:cog_assignment_date],
-          :date_off_arm => record[:off_arm_date],
-          :assignment_date => record[:assignment_date]
+          :date_off_arm => record[:off_arm_date]
       }
     end
 
