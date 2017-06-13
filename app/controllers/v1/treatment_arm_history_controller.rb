@@ -19,7 +19,7 @@ module V1
 
     def assignment_params
       build_index_query({:patient_id => params.require(:patient_id),
-                         :projection => ['selected_treatment_arm', 'step_number', 'cog_assignment_date'],
+                         :projection => ['selected_treatment_arm', 'step_number', 'cog_assignment_date', 'off_arm_date'],
                          :attribute => ['selected_treatment_arm', 'step_number', 'cog_assignment_date', 'off_arm_date']})
     end
 
