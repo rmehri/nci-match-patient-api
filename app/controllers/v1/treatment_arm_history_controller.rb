@@ -15,16 +15,9 @@ module V1
     def set_resource(_resource = {})
       resources = NciMatchPatientModels::Assignment.query_by_patient_id(params.require(:patient_id), false)
       resources = resources.collect{|record| build_treatment_arms_history_model(record.to_h.compact) }
-      resources = resources.select{|record| !record.blank?}
-      instance_variable_set("@#{resource_name}", resources.sort_by {|record| record[:assignment_date]}.reverse)
+      resources = resources.select{|record| !record.blank?}.sort_by{ |assignment| assignment[:date_on_arm]}.reverse
+      instance_variable_set("@#{resource_name}", resources)
     end
-
-    # def assignment_params
-    #   build_index_query({:patient_id => params.require(:patient_id),
-    #                      :projection => ['selected_treatment_arm', 'step_number', 'cog_assignment_date', 'off_arm_date'],
-    #                      :attribute => ['selected_treatment_arm', 'step_number', 'cog_assignment_date']
-    #                     })
-    # end
 
     def build_treatment_arms_history_model(record = {})
       record.deep_symbolize_keys!
