@@ -29,7 +29,7 @@ describe V1::TreatmentArmHistoryController, :type => :controller do
 
     end
 
-    it "multiple set but not all have cog_assignment_date" do
+    it "multiple set but not those without cog_assignment_date" do
       cog_assignment_date = Date.current
       allow(NciMatchPatientModels::Assignment).to receive(:query).and_return([{:cog_assignment_date => "2017-01-29T17:52:18+00:00", :step_number => 2.1 , :assignment_date => Date.current,
                                                                                :selected_treatment_arm => {:treatment_arm_id => "CBA", :version => "321", :stratum_id => "C", :reason => "Just because"}},
@@ -45,7 +45,7 @@ describe V1::TreatmentArmHistoryController, :type => :controller do
                                                {"treatment_arm_id"=>"CBA", "stratum_id"=>"C", "version"=>"321", "step"=>2.1, "assignment_reason"=>"Just because", "date_on_arm"=>"2017-01-29T17:52:18+00:00", "date_off_arm"=>nil}])
     end
 
-    it "multiple set but not all have selected_treatment_arm" do
+    it "multiple set but not those without selected_treatment_arm" do
       cog_assignment_date = Date.current
       allow(NciMatchPatientModels::Assignment).to receive(:query).and_return([{:cog_assignment_date => Date.current ,:step_number => 2.1 , :assignment_date => Date.current,
                                                                                :selected_treatment_arm => {:treatment_arm_id => "CBA", :version => "321", :stratum_id => "C", :reason => "Just because"}},
