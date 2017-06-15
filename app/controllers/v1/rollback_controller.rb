@@ -1,7 +1,8 @@
 module V1
-  class RollbackController < ApplicationController
+  class RollbackController < BaseController
 
     def variant_report
+      authorize! :variant_report, :Admin
       is_valid = HTTParty.get("#{Rails.configuration.environment.fetch('patient_state_api')}/roll_back/variant_report/#{params[:patient_id]}",
                               {:headers => {'X-Request-Id' => request.uuid, 'Authorization' => "Bearer #{token}"}})
       raise Errors::RequestForbidden, "Incoming message failed patient state validation: #{is_valid}" if is_valid.code.to_i > 200
@@ -10,6 +11,7 @@ module V1
 
 
     def assignment_report
+      authorize! :assignment_report, :Admin
       is_valid = HTTParty.get("#{Rails.configuration.environment.fetch('patient_state_api')}/roll_back/assignment/#{params[:patient_id]}",
                               {:headers => {'X-Request-Id' => request.uuid, 'Authorization' => "Bearer #{token}"}})
       raise Errors::RequestForbidden, "Incoming message failed patient state validation: #{is_valid}" if is_valid.code.to_i > 200
