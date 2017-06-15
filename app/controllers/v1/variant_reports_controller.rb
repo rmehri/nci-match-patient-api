@@ -27,7 +27,6 @@ module V1
     def destroy
       is_valid = HTTParty.get("#{Rails.configuration.environment.fetch('patient_state_api')}/roll_back/variant_report/#{params[:id]}",
                               {:headers => {'X-Request-Id' => request.uuid, 'Authorization' => "Bearer #{token}"}})
-      p "here #{is_valid.code.to_i}"
       raise Errors::RequestForbidden, "Incoming message failed patient state validation: #{is_valid}" if is_valid.code.to_i > 200
       JobBuilder.new("RollBack::VariantReportJob").job.perform_later({:patient_id => params[:id]})
     end

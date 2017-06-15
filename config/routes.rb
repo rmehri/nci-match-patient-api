@@ -10,7 +10,7 @@ Rails.application.routes.draw do
         get ':patient_id/variant_report/:analysis_id', to: 'report_downloads#variant_report_download'
         get ':patient_id/assignment_report/:uuid', to: 'report_downloads#assignment_report_download'
         resources :variants, :shipments, only: [:show, :index]
-        resources :variant_reports, :assignments, only: [:show, :index, :destroy]
+        resources :variant_reports, :assignments, only: [:show, :index]
         resources :patient_limbos, :specimens, :assays, only: [:index]
         resources :events, only: [:show, :index, :create]
         resources :shipment_status, only: [:show]
@@ -41,6 +41,11 @@ Rails.application.routes.draw do
       put "patients/:patient_id/assignment_reports/:analysis_id/:status" => :assignment_confirmation, :defaults => {:status => ['confirm', 'reject']}
       put "patients/variant/:variant_uuid/:status" => :variant_status, :defaults => {:status => ['checked','unchecked']}
 
+    end
+
+    controller :rollback do
+      put "patients/:patient_id/variant_report_rollback" => :variant_report
+      put "patients/:patient_id/assignment_report_rollback" => :assignment_report
     end
 
     match "*path", to: 'errors#bad_request', via: :all
