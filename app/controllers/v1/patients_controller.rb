@@ -21,15 +21,6 @@ module V1
     end
 
     def show
-      items = resource_class.query_secondary_index("current_status-index", {hash_key: "current_status", search_value: "OFF_STUDY"})
-      # items = resource_class.query({table_name: 'patients',
-      #                        index_name: 'current_status-index',
-      #                        select: 'ALL_PROJECTED_ATTRIBUTES',
-      #                              key_condition_expression: 'current_status = :current_status',
-      #                              expression_attribute_values: {
-      #                                  ':current_status' => 'OFF_STUDY'
-      #                              }})
-      p items.count
       patient = get_resource.compact
       render json: format_fields(patient)
     end
