@@ -7,7 +7,7 @@ class SpecimenShippedMessage < AbstractMessage
                 :study_id, :surgical_event_id, :internal_use_only, :slide_barcode, :destination,
                 :molecular_id, :carrier, :tracking_id, :shipped_dttm
 
-  validates :shipped_dttm, presence: true, date: {on_or_before: -> {DateTime.current.utc}}
+  validates :shipped_dttm, presence: true, date: {on_or_before: -> {DateTime.current.utc + 6.hours}}
 
   # Override
   def include_correct_module

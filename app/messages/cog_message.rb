@@ -6,7 +6,7 @@ class CogMessage < AbstractMessage
   attr_accessor :header, :study_id, :patient_id, :step_number, :registration_date, :status, :status_date, :internal_use_only,
                 :treatment_arm_id, :treatment_arm_version, :stratum_id, :assignment_date, :message, :rebiopsy
 
-  validates :status_date, presence: true, date: { on_or_before: lambda {DateTime.current.utc}, message: "status_date can not be later than current date"}
+  validates :status_date, presence: true, date: { on_or_before: lambda {DateTime.current.utc + 6.hours}, message: "status_date can not be later than current date"}
 
   def include_correct_module
     case @status.to_sym
