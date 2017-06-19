@@ -104,7 +104,7 @@ module PatientsDoc
     === Authentication Required
       Auth0 token has to be passed as part of the request.
     === Authorization & Roles
-      # Who is Authorized
+      Only ADMIN is Authorized to access
     === Response Format
       JSON
   EOS
