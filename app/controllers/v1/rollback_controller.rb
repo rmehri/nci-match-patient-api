@@ -20,9 +20,11 @@ module V1
 
     private
     def convert_request(json, patient_id="")
-      message = JSON.parse(json).deep_transform_keys!(&:underscore).symbolize_keys
-      message[:patient_id] = patient_id
-      message
+      unless json.empty?
+        message = JSON.parse(json).deep_transform_keys!(&:underscore).symbolize_keys
+        message[:patient_id] = patient_id
+        message
+      end
     end
 
   end

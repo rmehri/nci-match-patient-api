@@ -66,6 +66,7 @@ RSpec.configure do |config|
 
   config.before(:each, :type => :controller) do
     setup_knock
+    ActiveJob::Base.queue_adapter = :test
   end
 
   # The settings below are suggested to provide a good initial experience
