@@ -27,7 +27,10 @@ wb.add_worksheet(name: 'Variant Report') do |sheet|
   sheet.add_row [nil, 'Cellularity', @variant_report[:variant_report][:cellularity] || '-'], style: [nil, bold, values], height: 25
   sheet.add_row [nil, 'MAPD', @variant_report[:variant_report][:mapd] || '-'], style: [nil, bold, values], height: 25
   sheet.add_row [nil, 'Torrent Variant Caller Version', @variant_report[:variant_report][:torrent_variant_caller_version] || '-'], style: [nil, bold, values], height: 20
-  sheet.add_row [nil, 'Ion Reporter ID', @variant_report[:variant_report][:ion_reporter_id] || '-'], style: [nil, bold, values], height: 25
+  sheet.add_row [nil, 'Site / Ion Reporter ID', @variant_report[:variant_report][:clia_lab] + ' / ' + @variant_report[:variant_report][:ion_reporter_id] || '-'], style: [nil, bold, values], height: 25
+  sheet.add_row [nil, 'Mapped RNA Reads', @variant_report[:variant_report][:mappedFusionPanelReads] || '-'], style: [nil, bold, values], height: 25
+  sheet.add_row [nil, 'Pool 1 Total', @variant_report[:variant_report][:oncomine_control_panel_summary][:pool1Sum] || '-'], style: [nil, bold, values], height: 25
+  sheet.add_row [nil, 'Pool 2 Total', @variant_report[:variant_report][:oncomine_control_panel_summary][:pool2Sum] || '-'], style: [nil, bold, values], height: 25
   sheet.add_row
   sheet.add_row
   sheet.add_row [nil, 'SNV Indels'], style: [nil, sub_heading], height: 30
