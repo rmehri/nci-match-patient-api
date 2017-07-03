@@ -23,7 +23,7 @@ describe V1::EventsController, :type => :controller do
   it 'POST #create success' do
     allow(PatientProcessor).to receive(:run_service).and_return("test")
     post :create, '{"patient_id": "123", "molecular_id": "123-mol", "analysis_id": "123-ana", "surgical_event_id": "123-surg", "rna_file_name": "test.bam" }'
-    expect(response.body).to include("test")
+    expect(response.body).to include("successfully")
   end
 
   it 'POST #create success' do

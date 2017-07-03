@@ -18,9 +18,13 @@ module V1
       em = EventMessage.new.from_json(message.to_json)
       raise Errors::RequestForbidden, em.errors unless em.valid?
 
-      AppLogger.log(self.class.name, "====================== Upload event: #{message}")
-      results = PatientProcessor.run_service("/upload_event", message, request.uuid, token)
-      standard_success_message(results)
+      AppLogger.log(self.class.name, "====================== Queuing upload event message: #{message}")
+      # results = PatientProcessor.run_service("/upload_event", message, request.uuid, token)
+
+      message[:correlation_id] = (request.uuid.blank?) ? SecureRandom.uuid : request.uuid
+      JobBuilder.new("UploadEventJob").job.perform_later(message)
+
+      standard_success_message("Upload event message queued successfully")
     end
 
     private
