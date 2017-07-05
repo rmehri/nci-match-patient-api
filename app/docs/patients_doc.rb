@@ -4,7 +4,7 @@ module PatientsDoc
   api :GET, '/patients', 'Lists all the Patiens Present in the Database'
   description <<-EOS
     === What this API Call does
-      This API call Returns all the Patients present in the Database
+      This API call returns all the patients present in the Database
     === Authentication Required
       Auth0 token has to be passed as part of the request.
     === Response Format
@@ -56,7 +56,7 @@ module PatientsDoc
     # Nothing here, it's just a stub
   end
 
-  api :GET, '/patients/:patient_id', '#Fill in description'
+  api :GET, '/patients/:patient_id', 'Returns data of the patient identified by patient_id'
   description <<-EOS
     === What this API Call does
 
@@ -77,16 +77,25 @@ module PatientsDoc
     # Nothing here, it's just a stub
   end
 
-  api :POST, '/patients', '#Fill in description'
+  api :POST, '/patients/:patient_id', 'Post messages concerning the patient identified by patient_id'
   description <<-EOS
     === What this API Call does
-
+      Create or update the patient identified by patient_id
     === Authentication Required
       Auth0 token has to be passed as part of the request.
     === Authorization & Roles
-      # Who is Authorized
+      ADMIN
+      PATIENT_MESSAGE_SENDER
+      ASSAY_MESSAGE_SENDER
+      SPECIMEN_MESSAGE_SENDER
+      MOCHA_VARIANT_REPORT_SENDER
+      MDA_VARIANT_REPORT_SENDER
+      DARTMOUTH_VARIANT_REPORT_SENDER
+
     === Response Format
-      JSON
+      {"message": "Message has been processed successfully"}
+
+      {"message": "[Incoming message failed patient state validation: {\"error\":\"This patient has already been registered and cannot be registered again. \"}] Errors::RequestForbidden"}
   EOS
   error code: 401, desc: 'Unauthorized'
   error code: 200, desc: 'Success (OK)'
@@ -97,10 +106,10 @@ module PatientsDoc
     # Nothing here, it's just a stub
   end
 
-  api :PUT, '/patients/:patient_id/variant_report_rollback', '#Fill in description'
+  api :PUT, '/patients/:patient_id/variant_report_rollback', 'To rollback a patient state'
   description <<-EOS
     === What this API Call does
-
+      To rollback a patient to TISSUE_VARIANT_REPORT_RECEIVED
     === Authentication Required
       Auth0 token has to be passed as part of the request.
     === Authorization & Roles
@@ -118,14 +127,17 @@ module PatientsDoc
     # Nothing here, it's just a stub
   end
 
-  api :PUT, '/patients/variant/:variant_uuid/:status', '#Fill in description'
+  api :PUT, '/patients/variant/:variant_uuid/:status', 'To confirm / unconfirmed a variant'
   description <<-EOS
     === What this API Call does
-
+      To confirm / unconfirmed a variant
     === Authentication Required
       Auth0 token has to be passed as part of the request.
     === Authorization & Roles
-      # Who is Authorized
+      ADMIN
+      MOCHA_VARIANT_REPORT_REVIEWER
+      MDA_VARIANT_REPORT_REVIEWER
+      DARTMOUTH_VARIANT_REPORT_REVIEWER
     === Response Format
       JSON
   EOS
@@ -139,14 +151,15 @@ module PatientsDoc
     # Nothing here, it's just a stub
   end
 
-  api :PUT, '/patients/:patient_id/assignment_reports/:analysis_id/:status', '#Fill in description'
+  api :PUT, '/patients/:patient_id/assignment_reports/:analysis_id/:status', 'To confirm a patient assignment'
   description <<-EOS
     === What this API Call does
-
+      To confirm a patient assignment
     === Authentication Required
       Auth0 token has to be passed as part of the request.
     === Authorization & Roles
-      # Who is Authorized
+      ADMIN
+      ASSIGNMENT_REPORT_REVIEWER
     === Response Format
       JSON
   EOS
@@ -160,14 +173,17 @@ module PatientsDoc
     # Nothing here, it's just a stub
   end
 
-  api :PUT, '/patients/:patient_id/variant_reports/:analysis_id/:status', '#Fill in description'
+  api :PUT, '/patients/:patient_id/variant_reports/:analysis_id/:status', 'To confirm / reject a variant report'
   description <<-EOS
     === What this API Call does
-
+      To confirm / reject a variant report
     === Authentication Required
       Auth0 token has to be passed as part of the request.
     === Authorization & Roles
-      # Who is Authorized
+      ADMIN
+      MOCHA_VARIANT_REPORT_REVIEWER
+      MDA_VARIANT_REPORT_REVIEWER
+      DARTMOUTH_VARIANT_REPORT_REVIEWER
     === Response Format
       JSON
   EOS
@@ -181,14 +197,25 @@ module PatientsDoc
     # Nothing here, it's just a stub
   end
 
-  api :POST, '/patients/:patient_id/variant_report/:molecular_id', '#Fill in description'
+  api :POST, '/patients/:patient_id/variant_report/:molecular_id', 'To notify that a tsv is ready to be processed'
   description <<-EOS
     === What this API Call does
+      To notify that a tsv is ready to be processed. IR Ecosystem calls this api when it completed converting a vcf to tsv.
+      Example message body:
+        {
+          “ion_reporter_id”: “<ir_id>",
+           “analysis_id”: “<analysis_id>",
+          “tsv_file_name”: “xxx.tsv”
+        }
 
     === Authentication Required
       Auth0 token has to be passed as part of the request.
     === Authorization & Roles
-      # Who is Authorized
+      ADMIN
+      SYSTEM
+      MOCHA_VARIANT_REPORT_SENDER
+      MDA_VARIANT_REPORT_SENDER
+      DARTMOUTH_VARIANT_REPORT_SENDER
     === Response Format
       JSON
   EOS
@@ -202,27 +229,27 @@ module PatientsDoc
     # Nothing here, it's just a stub
   end
 
-  api :POST, '/patients/:patient_id', 'Inserts a new Patient'
-  description <<-EOS
-    === What this API Call does
-      This API call takes a JSON body sent from COG, NCH, MDA, and IR Ecosystem as the input along with patient_id as the Parameter,
-      Undergoes a couple of Validations and then puts the JSON on to the Queue to be consumed by the Patient Processor.
-    === Authentication Required
-      Auth0 token has to be passed as part of the request.
-    === Authorization & Roles
-      # Who is Authorized
-    === Response Format
-      JSON
-  EOS
-  param :patient_id, String, desc: 'ID of the Patient', required: true
-  error code: 401, desc: 'Unauthorized'
-  error code: 202, desc: 'Accepted'
-  error code: 500, desc: 'Internal Server Error'
-  error code: 504, desc: 'Gateway Timeout (Usually occues when the Server is down)'
-
-  def trigger
-    # Nothing here, it's just a stub
-  end
+  # api :POST, '/patients/:patient_id', 'Inserts a new Patient'
+  # description <<-EOS
+  #   === What this API Call does
+  #     This API call takes a JSON body sent from COG, NCH, MDA, and IR Ecosystem as the input along with patient_id as the Parameter,
+  #     Undergoes a couple of Validations and then puts the JSON on to the Queue to be consumed by the Patient Processor.
+  #   === Authentication Required
+  #     Auth0 token has to be passed as part of the request.
+  #   === Authorization & Roles
+  #     # Who is Authorized
+  #   === Response Format
+  #     JSON
+  # EOS
+  # param :patient_id, String, desc: 'ID of the Patient', required: true
+  # error code: 401, desc: 'Unauthorized'
+  # error code: 202, desc: 'Accepted'
+  # error code: 500, desc: 'Internal Server Error'
+  # error code: 504, desc: 'Gateway Timeout (Usually occues when the Server is down)'
+  #
+  # def trigger
+  #   # Nothing here, it's just a stub
+  # end
 
   api :GET, '/patients/:patient_id/specimen_events', '#Fill in description'
   description <<-EOS
@@ -497,14 +524,19 @@ module PatientsDoc
     # Nothing here, it's just a stub
   end
 
-  api :PATCH, '/patients/users', '#Fill in description'
+  api :PATCH, '/patients/users', 'To change password for a user account'
   description <<-EOS
     === What this API Call does
-
+      Change password for a user account.
+      Example message body:
+        {“password”:“<your new password>“}
     === Authentication Required
       Auth0 token has to be passed as part of the request.
     === Authorization & Roles
-      # Who is Authorized
+      ADMIN
+      SPECIMEN_MESSAGE_SENDER
+      PATIENT_MESSAGE_SENDER
+      ASSAY_MESSAGE_SENDER
     === Response Format
       JSON
   EOS
