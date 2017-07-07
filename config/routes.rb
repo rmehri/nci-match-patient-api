@@ -15,6 +15,7 @@ Rails.application.routes.draw do
         resources :events, only: [:show, :index, :create]
         resources :shipment_status, only: [:show]
         patch 'users', to: 'users#update'
+        post 'treatment_arms', controller: 'treatment_arms', action: :create
         get 'healthcheck', to: 'health_checks#health_check'
       end
 
