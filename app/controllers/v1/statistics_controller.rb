@@ -9,10 +9,12 @@ module V1
                                                                      attribute_value_list: ['ON_TREATMENT_ARM']}},
                                                                      attributes_to_get: ['current_assignment']}).collect { |r| r.to_h.deep_symbolize_keys!.compact }
         render json: {
-            number_of_patients: NciMatchPatientModels::Patient.scan({}).collect{}.length.to_s,
+            # number_of_patients: NciMatchPatientModels::Patient.scan({}).collect{}.length.to_s,
+            number_of_patients: NciMatchPatientModels::Patient.scan_and_find_by({}).length.to_s,
             number_of_patients_on_treatment_arm: patients_assignments.length.to_s,
-            number_of_patients_with_confirmed_variant_report: NciMatchPatientModels::VariantReport.find_by({"status" => "CONFIRMED", "variant_report_type" => "TISSUE"}).map(&:patient_id).uniq.collect{}.count.to_s,
-            treatment_arm_accrual: build_treatment_arm_accrual(patients_assignments)
+            number_of_patients_with_confirmed_variant_report: NciMatchPatientModels::VariantReport.scan_and_find_by({"status" => "CONFIRMED", "variant_report_type" => "TISSUE"}).uniq{|vr| vr["patient_id"]}.length.to_s
+            # number_of_patients_with_confirmed_variant_report: NciMatchPatientModels::VariantReport.find_by({"status" => "CONFIRMED", "variant_report_type" => "TISSUE"}).map(&:patient_id).uniq.collect{}.count.to_s
+            # treatment_arm_accrual: build_treatment_arm_accrual(patients_assignments)
         }
       rescue => error
         standard_error_message(error)
@@ -41,31 +43,31 @@ module V1
 
     private
 
-    def build_treatment_arm_accrual(patients_assignments)
-      begin
-        treatment_arm_accrual = {}
-        patients_assignments.each do |assignment|
-          if assignment.has_key?(:current_assignment)
-            if assignment[:current_assignment].has_key?(:selected_treatment_arm)
-              taKey = assignment[:current_assignment][:selected_treatment_arm][:treatment_arm_id] +
-                  ' (' + assignment[:current_assignment][:selected_treatment_arm][:stratum_id] +
-                  ', ' + assignment[:current_assignment][:selected_treatment_arm][:version] + ')'
-              if treatment_arm_accrual.has_key?(taKey)
-                treatment_arm_accrual[taKey][:patients] = treatment_arm_accrual[taKey][:patients] + 1
-              else
-                treatment_arm_accrual[taKey] = {
-                    name: assignment[:current_assignment][:selected_treatment_arm][:treatment_arm_id],
-                    stratum_id: assignment[:current_assignment][:selected_treatment_arm][:stratum_id],
-                    patients: 1
-                }
-              end
-            end
-          end
-        end
-        treatment_arm_accrual
-      rescue => error
-        standard_error_message(error)
-      end
-    end
+    # def build_treatment_arm_accrual(patients_assignments)
+    #   begin
+    #     treatment_arm_accrual = {}
+    #     patients_assignments.each do |assignment|
+    #       if assignment.has_key?(:current_assignment)
+    #         if assignment[:current_assignment].has_key?(:selected_treatment_arm)
+    #           taKey = assignment[:current_assignment][:selected_treatment_arm][:treatment_arm_id] +
+    #               ' (' + assignment[:current_assignment][:selected_treatment_arm][:stratum_id] +
+    #               ', ' + assignment[:current_assignment][:selected_treatment_arm][:version] + ')'
+    #           if treatment_arm_accrual.has_key?(taKey)
+    #             treatment_arm_accrual[taKey][:patients] = treatment_arm_accrual[taKey][:patients] + 1
+    #           else
+    #             treatment_arm_accrual[taKey] = {
+    #                 name: assignment[:current_assignment][:selected_treatment_arm][:treatment_arm_id],
+    #                 stratum_id: assignment[:current_assignment][:selected_treatment_arm][:stratum_id],
+    #                 patients: 1
+    #             }
+    #           end
+    #         end
+    #       end
+    #     end
+    #     treatment_arm_accrual
+    #   rescue => error
+    #     standard_error_message(error)
+    #   end
+    # end
   end
 end
