@@ -27,6 +27,7 @@ describe V1::PendingViewController do
     patient = NciMatchPatientModels::Patient.new
     patient.patient_id = "3366"
     patient.current_status = "TISSUE_VARIANT_REPORT_RECEIVED"
+    patient.active_tissue_specimen = {'specimen_received_date' => "2017-06-06"}
     allow(NciMatchPatientModels::Patient).to receive(:query).and_return([patient])
 
     allow(NciMatchPatientModels::Assignment).to receive(:scan_and_find_by).and_return([])
