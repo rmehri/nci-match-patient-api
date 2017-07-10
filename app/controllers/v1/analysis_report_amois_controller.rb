@@ -10,6 +10,12 @@ module V1
     private
 
     def set_resource(_resource = {})
+      /##
+        Needs to be moved to backend since it is doing to much
+        Treatment arm should send us a message when a TA has been updated
+        we will then update amois on backend for each patient on that TA
+        Making this just a get from DB & to convert to model for frontend
+      ##/
       variant_report = NciMatchPatientModels::VariantReport.query_by_analysis_id(params[:patient_id], params[:id])
       raise Errors::ResourceNotFound if variant_report.nil?
 
