@@ -7,20 +7,12 @@ module V1
       tissue_reports = []
 
       variant_reports.each do | variant_report |
-
-        p "================ var report: #{variant_report}"
-
-
         next if variant_report['variant_report_type'] == 'BLOOD'
 
-        p "=============================== p1"
         patient = NciMatchPatientModels::Patient.query_patient_by_id(variant_report['patient_id'])
-        p "=============================== p2"
-
         next if (patient.current_status == "OFF_STUDY" || patient.current_status == "OFF_STUDY_BIOPSY_EXPIRED") || (patient.current_status.blank?)
-        p "=============================== p3"
+
         tissue_report_data = variant_report.slice('patient_id', 'molecular_id', 'analysis_id', 'surgical_event_id', 'ion_reporter_id', 'clia_lab', 'variant_report_received_date')
-        p "=============================== p4"
         tissue_reports.push tissue_report_data.merge(specimen_received_date: get_specimen_received_date(variant_report['patient_id'], variant_report['variant_report_type']))
       end
 
@@ -40,10 +32,6 @@ module V1
     end
 
     def get_specimen_received_date(patient_id, type)
-
-      p "======================== type: #{type} patient id: #{patient_id}"
-
-
       specimen = (type == 'TISSUE' ? NciMatchPatientModels::Specimen.query_latest_tissue_specimen_by_patient_id(patient_id) : NciMatchPatientModels::Specimen.query_latest_blood_specimen_by_patient_id(patient_id))
       specimen.nil? ? '' : specimen.received_date
     end
