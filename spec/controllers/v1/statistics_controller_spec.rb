@@ -27,12 +27,12 @@ describe V1::StatisticsController do
   end
 
   it 'GET #amois with data' do
-    allow(NciMatchPatientModels::VariantReport).to receive(:find_by).and_return([{:total_confirmed_amois => 0},
-                                                                                 {:total_confirmed_amois => 1},
-                                                                                 {:total_confirmed_amois => 2},
-                                                                                 {:total_confirmed_amois => 3},
-                                                                                 {:total_confirmed_amois => 4},
-                                                                                 {:total_confirmed_amois => 5}])
+    allow(NciMatchPatientModels::VariantReport).to receive(:scan_and_find_by).and_return([{'total_confirmed_amois' => 0},
+                                                                                 {'total_confirmed_amois' => 1},
+                                                                                 {'total_confirmed_amois' => 2},
+                                                                                 {'total_confirmed_amois' => 3},
+                                                                                 {'total_confirmed_amois' => 4},
+                                                                                 {'total_confirmed_amois' => 5}])
     get :sequenced_and_confirmed_patients
     expect(response).to have_http_status(200)
     expect(JSON.parse(response.body)["amois"]).to eq([1, 1, 1, 1, 1, 1])
