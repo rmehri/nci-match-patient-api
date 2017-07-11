@@ -13,15 +13,18 @@ module V1
       variant_report = NciMatchPatientModels::VariantReport.query_by_analysis_id(params[:patient_id], params[:id])
       raise Errors::ResourceNotFound if variant_report.nil?
 
-      #if some dateComparison is true refresh mois/amois and send to backend to be saved
       variant_report_hash = variant_report.to_h.deep_symbolize_keys!
       treatment_arms_updated = Rails.cache.fetch("treatment_arms_updated") { Time.now.to_i }
       if(treatment_arms_updated > DateTime.parse(variant_report_hash[:amoi_updated_date]))
         mois = get_amois(variant_report_hash)
         amoi_count = match_amois_with_uuid(variant_report_hash, mois)
+        updated_amois = Convert::AmoisRuleModel.to_ui_model(mois)
+        #send to backend to be saved!
+      else
+        variants = NciMatchPatientModels::Variant.find_by({:analysis_id => variant_report_hash[:analysis_id]})
+        updated_amois = Convert::AmoisRuleModel.find_amois(variants)
+        amoi_count = updated_amois[:total_amois]
       end
-
-      updated_amois = Convert::AmoisRuleModel.to_ui_model(variant_report_hash[:analysis_id],mois)
       update_amoi_count_in_variant_report(variant_report, amoi_count)
 
       instance_variable_set("@#{resource_name}", updated_amois.to_json)
