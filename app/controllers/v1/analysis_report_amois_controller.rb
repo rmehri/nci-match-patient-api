@@ -10,20 +10,18 @@ module V1
     private
 
     def set_resource(_resource = {})
-      /##
-        Needs to be moved to backend since it is doing to much
-        Treatment arm should send us a message when a TA has been updated
-        we will then update amois on backend for each patient on that TA
-        Making this just a get from DB & to convert to model for frontend
-      ##/
       variant_report = NciMatchPatientModels::VariantReport.query_by_analysis_id(params[:patient_id], params[:id])
       raise Errors::ResourceNotFound if variant_report.nil?
 
-      variant_report_hash = variant_report.to_h
-      mois = get_amois(variant_report_hash.deep_symbolize_keys!)
-      amoi_count = match_amois_with_uuid(variant_report_hash, mois)
+      #if some dateComparison is true refresh mois/amois and send to backend to be saved
+      variant_report_hash = variant_report.to_h.deep_symbolize_keys!
+      treatment_arms_updated = Rails.cache.fetch("treatment_arms_updated") { Time.now.to_i }
+      if(treatment_arms_updated > DateTime.parse(variant_report_hash[:amoi_updated_date]))
+        mois = get_amois(variant_report_hash)
+        amoi_count = match_amois_with_uuid(variant_report_hash, mois)
+      end
 
-      updated_amois = Convert::AmoisRuleModel.to_ui_model(mois)
+      updated_amois = Convert::AmoisRuleModel.to_ui_model(variant_report_hash[:analysis_id],mois)
       update_amoi_count_in_variant_report(variant_report, amoi_count)
 
       instance_variable_set("@#{resource_name}", updated_amois.to_json)
