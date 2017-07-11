@@ -14,7 +14,7 @@ module V1
       raise Errors::ResourceNotFound if variant_report.nil?
 
       variant_report_hash = variant_report.to_h.deep_symbolize_keys!
-      treatment_arms_updated = Rails.cache.fetch("treatment_arms_updated") { Time.now.to_i }
+      treatment_arms_updated = Rails.cache.fetch("treatment_arms_updated") { DateTime.now.utc }
       if(treatment_arms_updated > DateTime.parse(variant_report_hash[:amoi_updated_date]))
         mois = get_amois(variant_report_hash)
         amoi_count = match_amois_with_uuid(variant_report_hash, mois)
@@ -26,7 +26,6 @@ module V1
         amoi_count = updated_amois[:total_amois]
       end
       update_amoi_count_in_variant_report(variant_report, amoi_count)
-
       instance_variable_set("@#{resource_name}", updated_amois.to_json)
     end
 

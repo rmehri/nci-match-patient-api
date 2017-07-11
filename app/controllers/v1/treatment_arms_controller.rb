@@ -5,7 +5,7 @@ module V1
 
     def create
       authorize! :create, :System
-      Rails.cache.write("treatment_arms_updated", Time.now.to_i)
+      Rails.cache.write("treatment_arms_updated", Time.now.utc)
 
       # message = JSON.parse(json).deep_transform_keys!(&:underscore).symbolize_keys
       # JobBuilder.new("TreatmentArms::UpdateVariantReportJob").job.perform_later(request.raw_post)
