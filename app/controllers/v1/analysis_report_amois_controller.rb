@@ -14,11 +14,13 @@ module V1
       raise Errors::ResourceNotFound if variant_report.nil?
 
       variant_report_hash = variant_report.to_h.deep_symbolize_keys!
+      variant_report.amoi_updated_date ||= -> {DateTime.now.utc}
       treatment_arms_updated = Rails.cache.fetch("treatment_arms_updated") { DateTime.now.utc }
-      if(treatment_arms_updated > DateTime.parse(variant_report_hash[:amoi_updated_date]))
+      if(treatment_arms_updated >= DateTime.parse(variant_report.amoi_updated_date.to_s))
         mois = get_amois(variant_report_hash)
         amoi_count = match_amois_with_uuid(variant_report_hash, mois)
         updated_amois = Convert::AmoisRuleModel.to_ui_model(mois)
+        JobBuilder.new('Variant::UpdateAmoisJob').job.perform_later(variant_report_hash, updated_amois)
         #send to backend to be saved!
       else
         variants = NciMatchPatientModels::Variant.find_by({:analysis_id => variant_report_hash[:analysis_id]})
