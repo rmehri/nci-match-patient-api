@@ -7,6 +7,8 @@ class ApplicationController < ActionController::Base
   rescue_from TypeError, ArgumentError, ActionController::RoutingError, with: lambda { |exception| render_error(:bad_request, exception) }
   rescue_from NameError, RuntimeError, with: lambda { |exception| render_error(:internal_server_error, exception) }
 
+  # this is used when building instance (returns 422) - it is hijacked in v1 from middleware (returns 403)
+  rescue_from AbstractMessage::ValidationError, with: lambda { |exception| render_error(:unprocessable_entity, exception) }
 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
@@ -19,6 +21,7 @@ class ApplicationController < ActionController::Base
     respond_to do |format|
       format.all { head status, :message => exception.message}
     end
+    # render :json => {:message => exception.message}, :status => status
   end
 
   def render_error_with_message(status, exception)
@@ -33,28 +36,6 @@ class ApplicationController < ActionController::Base
   def standard_error_message(error_message, error_code=500)
     AppLogger.log_error(self.class.name, error_message)
     render :json => {:message => error_message}, :status => error_code
-  end
-
-  def get_url_path_segments
-    return request.fullpath.split("/")
-  end
-
-  def get_post_data
-    json_data = JSON.parse(request.raw_post)
-    logger.info "Patient Api received message: #{json_data.to_json}"
-    json_data.deep_transform_keys!(&:underscore).symbolize_keys!
-  end
-
-
-  def get_patient_id_from_url
-    parts = get_url_path_segments
-    logger.info "============== url parts: #{parts}"
-    index = parts.index("patients")
-    patient_id = parts[index+1]
-    end_index = patient_id.index("?")
-    patient_id = (!end_index.nil? && end_index.to_i > 0) ? patient_id[0..end_index-1] : patient_id
-
-    return patient_id
   end
 
   def queue_message(message, message_type)

@@ -8,7 +8,7 @@ class SpecimenReceivedMessage < AbstractMessage
 
     # Override
     def include_correct_module
-      case @type.to_sym
+      case @type&.to_sym # missing nested keys are nil
         when :BLOOD
           class << self; include BloodSpecimenReceivedValidator end
         when :TISSUE
@@ -16,7 +16,7 @@ class SpecimenReceivedMessage < AbstractMessage
       end
     end
 
-    # @Override
+    # Override
     def specimen_received=(value)
       @specimen_received = value
       unless value.blank?

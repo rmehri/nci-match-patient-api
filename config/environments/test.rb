@@ -39,4 +39,8 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
   config.log_level = :INFO
   config.log_tags = [ :uuid, lambda {|request| Rails.application.class.parent_name} ]
+
+  # remove new relic middleware
+  # config.middleware.delete NewRelic::Rack::BrowserMonitoring
+  # config.middleware.delete NewRelic::Rack::AgentHooks
 end
