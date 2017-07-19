@@ -1,5 +1,6 @@
 module MessageFactory
 
+  # TODO: we construct only few of these, see messages controller spec
   def self.get_message_type(message)
     case message.to_s
       when SpecimenReceivedMessage.message_format

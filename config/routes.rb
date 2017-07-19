@@ -33,15 +33,53 @@ Rails.application.routes.draw do
 
     end
 
-    controller :services do
-      post "patients/:patient_id" => :trigger
-      post "patients/variant_report/:molecular_id" => :variant_report_uploaded
+    # input processing for patient processor API
+    controller :messages do
+      # specimen received type
+      post "patients/:patient_id/message/specimen_received" => :specimen_received
 
-      put "patients/:patient_id/variant_reports/:analysis_id/:status" => :variant_report_status, :defaults => {:status => ['confirm', 'reject']}
-      put "patients/:patient_id/assignment_reports/:analysis_id/:status" => :assignment_confirmation, :defaults => {:status => ['confirm', 'reject']}
-      put "patients/variant/:variant_uuid/:status" => :variant_status, :defaults => {:status => ['checked','unchecked']}
+      # specimen shipped type
+      post "patients/:patient_id/message/specimen_shipped" => :specimen_shipped
 
+      # assay type
+      post "patients/:patient_id/message/assay" => :assay
+
+      # variant report status type
+      post "patients/:patient_id/message/variant_report" => :variant_report
+
+      # cog type
+      post "patients/:patient_id/message/cog" => :cog
     end
+
+    # input processing for local changes
+    controller :services do
+
+      # this route is rewritten in ServicesRoutesMiddleware - it is re-routed to messages controller above
+      # TODO: obsolete, should be removed in api/v2
+      post  "patients/:patient_id" => :trigger, :as => 'trigger'
+
+      # upload variant report
+      post  "patients/variant_report/:molecular_id" => :variant_report_uploaded
+
+      # set variant report status
+      put   "patients/:patient_id/variant_reports/:analysis_id/:status" => :variant_report_status, :defaults => {:status => ['confirm', 'reject']}
+
+      # set assignment status
+      put   "patients/:patient_id/assignment_reports/:analysis_id/:status" => :assignment_confirmation, :defaults => {:status => ['confirm', 'reject']}
+
+      # set variant status
+      put   "patients/variant/:variant_uuid/:status" => :variant_status, :defaults => {:status => ['checked','unchecked']}
+    end
+
+    # controller :services do
+    #   post "patients/:patient_id" => :trigger
+    #   post "patients/variant_report/:molecular_id" => :variant_report_uploaded
+    #
+    #   put "patients/:patient_id/variant_reports/:analysis_id/:status" => :variant_report_status, :defaults => {:status => ['confirm', 'reject']}
+    #   put "patients/:patient_id/assignment_reports/:analysis_id/:status" => :assignment_confirmation, :defaults => {:status => ['confirm', 'reject']}
+    #   put "patients/variant/:variant_uuid/:status" => :variant_status, :defaults => {:status => ['checked','unchecked']}
+    #
+    # end
 
     controller :rollback do
       put "patients/:patient_id/variant_report_rollback" => :variant_report

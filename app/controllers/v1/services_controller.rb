@@ -123,5 +123,29 @@ module V1
 
       ((200..250).include? result.code) ? standard_success_message(result) : standard_error_message(result)
     end
+
+    private
+
+    def get_url_path_segments
+      return request.fullpath.split("/")
+    end
+
+    def get_post_data
+      json_data = JSON.parse(request.raw_post)
+      logger.info "Patient Api received message: #{json_data.to_json}"
+      json_data.deep_transform_keys!(&:underscore).symbolize_keys!
+    end
+
+    def get_patient_id_from_url
+      parts = get_url_path_segments
+      logger.info "============== url parts: #{parts}"
+      index = parts.index("patients")
+      patient_id = parts[index+1]
+      end_index = patient_id.index("?")
+      patient_id = (!end_index.nil? && end_index.to_i > 0) ? patient_id[0..end_index-1] : patient_id
+
+      return patient_id
+    end
+
   end
 end

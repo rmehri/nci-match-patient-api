@@ -23,6 +23,7 @@ module NciPedMatchPatientApi
     config.autoload_paths += Dir[Rails.root.join('app', 'controllers', '*')]
     config.autoload_paths += Dir[Rails.root.join('app', 'controllers', '{*}')]
     config.autoload_paths += Dir[Rails.root.join('app', 'helpers', '{*/}')]
+    config.autoload_paths += Dir[Rails.root.join('app', 'messages', '{*/}')]
     config.autoload_paths += Dir[Rails.root.join('app', 'validators', '{*/}')]
     config.autoload_paths += Dir[Rails.root.join('app', 'services', '{*/}')]
     config.autoload_paths += Dir[Rails.root.join('lib')]
@@ -57,5 +58,9 @@ module NciPedMatchPatientApi
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     # config.active_record.raise_in_transactional_callbacks = true
+
+    # add service re-routing middleware to bottom
+    require_relative '../lib/services_routes_middleware.rb'
+    config.middleware.use NciPedMatchPatientApi::ServicesRoutesMiddleware
   end
 end
