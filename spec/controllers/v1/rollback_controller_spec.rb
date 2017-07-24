@@ -12,7 +12,7 @@ describe V1::RollbackController, type: :controller do
     allow(HTTParty::Request).to receive(:perform).and_return(HTTParty::Response)
     allow(HTTParty::Response).to receive(:code).and_return(400)
     allow(HTTParty::Response).to receive(:body).and_return("")
-    put :variant_report, :patient_id => "123"
+    put :variant_report, params: {patient_id: '123'}
     expect(response).to have_http_status(403)
   end
 
@@ -22,7 +22,7 @@ describe V1::RollbackController, type: :controller do
     allow(HTTParty::Request).to receive(:perform).and_return(HTTParty::Response)
     allow(HTTParty::Response).to receive(:code).and_return(200)
     allow(HTTParty::Response).to receive(:body).and_return(true)
-    put :variant_report, :patient_id => "123"
+    put :variant_report, params: {patient_id: '123'}
     expect(response).to have_http_status(204)
   end
 
@@ -32,7 +32,7 @@ describe V1::RollbackController, type: :controller do
     allow(HTTParty::Request).to receive(:perform).and_return(HTTParty::Response)
     allow(HTTParty::Response).to receive(:code).and_return(400)
     allow(HTTParty::Response).to receive(:body).and_return("")
-    put :assignment_report, :patient_id => "123"
+    put :assignment_report, params: {patient_id: '123'}
     expect(response).to have_http_status(403)
   end
 
@@ -42,7 +42,7 @@ describe V1::RollbackController, type: :controller do
     allow(HTTParty::Request).to receive(:perform).and_return(HTTParty::Response)
     allow(HTTParty::Response).to receive(:code).and_return(200)
     allow(HTTParty::Response).to receive(:body).and_return({statue: "true"})
-    put :variant_report, :patient_id => "123"
+    put :variant_report, params: {patient_id: '123'}
     expect(response).to have_http_status(204)
   end
 

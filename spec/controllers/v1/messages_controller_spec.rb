@@ -19,8 +19,8 @@ describe 'Services re-route middleware', :type => :request do
   # do not rewrite /api/v1/patients/:patient_id for invalid inputs
   describe "that do not re-route to MessagesController" do
     it "should not re-route for GET" do
-      get trigger_path(123)
-      expect(response).to have_http_status(404)
+      get trigger_path(123) # GET "/api/v1/patients/123" => V1::PatientsController#show
+      expect(response).to have_http_status(401)
     end
 
     it "should return 404 for unknown message type" do

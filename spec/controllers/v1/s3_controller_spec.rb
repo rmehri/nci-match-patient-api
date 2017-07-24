@@ -17,7 +17,7 @@ RSpec.describe V1::S3Controller, type: :controller do
       allow(knock).to receive(:current_user).and_return({:email => "test@nih.gov"})
       allow(Aws::S3::Client).to receive(:new).and_return(s3_client)
       allow(Aws::S3::Presigner.new).to receive(:presigned_url).and_return('')
-      post :create, :patient_id => "test" , :file_name => 'Test.txt'
+      post :create, params: {:patient_id => "test" , :file_name => 'Test.txt'}
       p response.body
     end
   end

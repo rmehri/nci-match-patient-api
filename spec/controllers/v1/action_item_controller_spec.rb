@@ -10,7 +10,7 @@ describe V1::ActionItemsController, type: :controller do
       patient.current_status = "TISSUE_VARIANT_REPORT_RECEIVED"
       allow(NciMatchPatientModels::Patient).to receive(:query).and_return([patient])
 
-      get :index, patient_id: '123'
+      get :index, params: {patient_id: '123'}
       expect(JSON.parse(response.body)).to eq([{ 'action_type' => 'pending_tissue_variant_report', 'molecular_id' => '123', 'analysis_id' => 'ABC', 'created_date' => Date.current.to_s, 'assignment_uuid' =>  '1cbe6e30-ffa0-4842-8017-7deda9d19115' }])
     end
 
@@ -22,7 +22,7 @@ describe V1::ActionItemsController, type: :controller do
       patient.current_status = "TISSUE_VARIANT_REPORT_RECEIVED"
       allow(NciMatchPatientModels::Patient).to receive(:query).and_return([patient])
 
-      get :index, patient_id: '123'
+      get :index, params: {patient_id: '123'}
       expect(JSON.parse(response.body)).to eq([{ 'action_type' => 'pending_tissue_variant_report', 'molecular_id' => '123', 'analysis_id' => 'ABC', 'created_date' => Date.current.to_s, 'assignment_uuid' => '1cbe6e30-ffa0-4842-8017-7deda9d19115' }, {'action_type' => 'pending_blood_variant_report', 'molecular_id' => '321', 'analysis_id' => 'CBA', 'created_date' => Date.current.to_s, 'assignment_uuid' => '03e6ebc1-0aff-2484-7108-8efab8e2625' }])
     end
 
@@ -34,7 +34,7 @@ describe V1::ActionItemsController, type: :controller do
       patient.current_status = "TISSUE_VARIANT_REPORT_RECEIVED"
       allow(NciMatchPatientModels::Patient).to receive(:query).and_return([patient])
 
-      get :index, patient_id: '123'
+      get :index, params: {patient_id: '123'}
       expect(JSON.parse(response.body)).to eq([{ 'action_type' => 'pending_assignment_report', 'molecular_id' => '123', 'analysis_id' => 'ABC', 'created_date' => Date.current.to_s, 'assignment_uuid' => '1cbe6e30-ffa0-4842-8017-7deda9d19115' }])
     end
 
@@ -47,7 +47,7 @@ describe V1::ActionItemsController, type: :controller do
       patient.current_status = "TISSUE_VARIANT_REPORT_RECEIVED"
       allow(NciMatchPatientModels::Patient).to receive(:query).and_return([patient])
 
-      get :index, patient_id: '123'
+      get :index, params: {patient_id: '123'}
       expect(JSON.parse(response.body)).to eq([{ 'action_type' => 'pending_assignment_report', 'molecular_id' => '123', 'analysis_id' => 'ABC', 'created_date' => Date.current.to_s, 'assignment_uuid' => '1cbe6e30-ffa0-4842-8017-7deda9d19115' }, { 'action_type' => 'pending_assignment_report', 'molecular_id' => '321', 'analysis_id' => 'CBA', 'created_date' => Date.current.to_s, 'assignment_uuid' => '03e6ebc1-0aff-2484-7108-8efab8e2625' }])
     end
 
@@ -60,7 +60,7 @@ describe V1::ActionItemsController, type: :controller do
       patient.current_status = "TISSUE_VARIANT_REPORT_RECEIVED"
       allow(NciMatchPatientModels::Patient).to receive(:query).and_return([patient])
 
-      get :index, patient_id: '123'
+      get :index, params: {patient_id: '123'}
       expect(JSON.parse(response.body)).to eq([{ 'action_type' => 'pending_tissue_variant_report', 'molecular_id' => '123', 'analysis_id' => 'ABC', 'created_date' => Date.current.to_s, 'assignment_uuid' => '03e6ebc1-0aff-2484-7108-8efab8e2625'}, {'action_type' => 'pending_assignment_report', 'molecular_id' => '321', 'analysis_id' => 'CBA', 'created_date' => Date.current.to_s, 'assignment_uuid' => '03e6ebc1-0aff-2484-7108-8efab8e2625' }])
     end
   end
@@ -75,7 +75,7 @@ describe V1::ActionItemsController, type: :controller do
       patient.current_status = "TISSUE_VARIANT_REPORT_RECEIVED"
       allow(NciMatchPatientModels::Patient).to receive(:query).and_return([patient])
 
-      get :index, patient_id: 'random'
+      get :index, params: {patient_id: 'random'}
       expect(response).to have_http_status(200)
       expect(response.body).to eq('[]')
     end

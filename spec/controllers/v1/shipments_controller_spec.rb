@@ -12,20 +12,20 @@ describe V1::ShipmentsController do
 
   it 'GET #show will return something' do
     allow(NciMatchPatientModels::Shipment).to receive(:scan).and_return({})
-    get :show, id: '123_test'
+    get :show, params: {id: '123_test'}
     expect(response.body).to eq("")
   end
 
   it 'POST #create' do
-    expect { post :create, :id => 1}.to raise_error(ActionController::UrlGenerationError)
+    expect { post :create, params: {id: 1}}.to raise_error(ActionController::UrlGenerationError)
   end
 
   it '#update should throw an route error' do
-    expect { patch :update, :id => 1}.to raise_error(ActionController::UrlGenerationError)
+    expect { patch :update, params: {id: 1}}.to raise_error(ActionController::UrlGenerationError)
   end
 
   it '#delete should throw an route error' do
-    expect { delete :destroy, :id => 1}.to raise_error(ActionController::UrlGenerationError)
+    expect { delete :destroy, params: {id: 1}}.to raise_error(ActionController::UrlGenerationError)
   end
 
 end

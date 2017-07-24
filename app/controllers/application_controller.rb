@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   rescue_from TypeError, ArgumentError, ActionController::RoutingError, with: lambda { |exception| render_error(:bad_request, exception) }
   rescue_from NameError, RuntimeError, with: lambda { |exception| render_error(:internal_server_error, exception) }
 
-  # this is used when building instance (returns 422) - it is hijacked in v1 from middleware (returns 403)
+  # this is used when building instance (returns 422) - it is hijacked in v1 from middleware which does validation (returns 403)
   rescue_from AbstractMessage::ValidationError, with: lambda { |exception| render_error(:unprocessable_entity, exception) }
 
   # Prevent CSRF attacks by raising an exception.

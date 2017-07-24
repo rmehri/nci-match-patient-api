@@ -1,64 +1,97 @@
 source 'https://rubygems.org'
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '5.0.0.1'
-gem 'sass-rails', '~> 5.0'
+gem 'rails', '5.1.2'
 
-gem 'newrelic_rpm', '3.17.1.326'
+# web server
+gem 'puma'
 
-# Use jquery as the JavaScript library
-gem 'jquery-rails', '4.2.1'
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '2.6.1'
-# bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', '0.4.2', group: :doc
+# telemetry service
+gem 'newrelic_rpm'
 
-gem 'rack-cors', '0.4.0'
+# slack
+gem 'slack-logger', git: 'https://github.com/damir/slack-logger.git'
 
+# JWT authentication
+gem 'knock'
+
+# authorization
+gem 'cancan', git: 'https://github.com/damir/cancan.git'
+
+# cors
+gem 'rack-cors'
+
+# DynamoDB
+gem 'aws-sdk'
+gem 'aws-sdk-rails'
+gem 'aws-record'
+
+# fast JSON parser and Object marshaller
+gem 'oj'
+
+# generate JSON objects with a Builder-style DSL
+gem 'jbuilder'
+
+# AWS SQS thread-based message processor.
 gem 'shoryuken'
 
-gem 'aws-sdk', '2.6.34'
-gem 'aws-sdk-rails', '1.0.1'
-gem 'aws-record', '>= 1.0.0.pre.8'
-gem 'json-schema', '2.7.0'
-gem 'cancan', git: 'https://github.com/damir/cancan.git'
-gem 'knock', '2.0'
-gem 'rubyzip', '= 1.0.0'
-gem 'axlsx', '= 2.0.1'
+# JSON Schema Validator
+gem 'json-schema'
+
+# reading and writing zip files
+gem 'rubyzip'
+
+# Office Open XML Spreadsheet Generation
+gem 'axlsx'
 gem 'axlsx_rails'
 
-gem 'puma', '3.9.1'
+# If string, numeric, symbol and nil values wanna be a boolean value, they can with the new #to_b method
+gem 'wannabe_bool'
 
-gem 'wannabe_bool', '0.6.0'
-gem 'responders', '2.3.0'
+# A set of Rails responders to dry up your application
+gem 'responders'
 
-gem 'slack-logger'
-gem 'nci_match_patient_models', git: 'git://github.com/CBIIT/nci-match-lib.git', tag: 'v1.1.23'
-gem 'nci_match_roles', git: 'git://github.com/CBIIT/nci_match_roles.git', tag: 'v1.1.0'
+# in-house gem
+gem 'nci_match_patient_models', git: 'https://github.com/CBIIT/nci-match-lib.git', tag: 'v1.1.23'
+gem 'nci_match_roles', git: 'https://github.com/CBIIT/nci_match_roles.git', tag: 'v1.1.0'
 
-gem 'httparty', '0.14.0'
+# http client
+gem 'httparty'
 
+# API documentation tool
 gem 'apipie-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
-  gem 'rspec-rails', '~> 3.0'
+
+  # rspec
+  gem 'rspec-rails'
   gem 'rspec-activemodel-mocks'
-  gem 'factory_girl_rails', '~> 4.0'
+
+  # fixtures
+  gem 'factory_girl_rails'
+
+  # generate fake data
   gem 'faker'
+
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 end
 
 group :test do
+  # code coverage
   gem 'simplecov'
-  # Ruby coverage report for Codacy
+
+  # coverage report for Codacy
   gem 'codacy-coverage', require: false
+
+  # stubbing and setting expectations on HTTP requests
   gem 'webmock'
 end
 
 group :development do
-  # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 2.0'
+
 end
+
+# bundle exec rake doc:rails generates the API under doc/api.
+gem 'sdoc', group: :doc

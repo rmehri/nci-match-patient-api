@@ -8,7 +8,7 @@ describe V1::TreatmentArmHistoryController, :type => :controller do
 
       allow(NciMatchPatientModels::Assignment).to receive(:query).and_return([{:cog_assignment_date => cog_assignment_date ,:step_number => 1.1 , :assignment_date => cog_assignment_date,
                                                                               :selected_treatment_arm => {:treatment_arm_id => "ABC", :version => "123", :stratum_id => "A", :reason => "Just because"}}])
-      get :index, :patient_id => "123"
+      get :index, params: {patient_id: "123"}
       expect(response).to have_http_status(200)
       expect(JSON.parse(response.body)).to eq([{"treatment_arm_id"=>"ABC", "stratum_id"=>"A", "version"=>"123", "step"=>1.1, "assignment_reason"=>"Just because", "date_on_arm"=>cog_assignment_date, "date_off_arm"=>nil}])
     end
@@ -19,7 +19,7 @@ describe V1::TreatmentArmHistoryController, :type => :controller do
                                                                               {:cog_assignment_date => "2017-02-29T17:52:18+00:00" ,:step_number => 1.1 , :assignment_date => Date.current.to_s,
                                                                                 :selected_treatment_arm => {:treatment_arm_id => "ABC", :version => "123", :stratum_id => "A", :reason => "Just because"}}
                                                                               ])
-      get :index, :patient_id => "123"
+      get :index, params: {patient_id: "123"}
       expect(response).to have_http_status(200)
 
       assignments = JSON.parse(response.body)
@@ -38,7 +38,7 @@ describe V1::TreatmentArmHistoryController, :type => :controller do
                                                                               {:step_number => 1.1 , :assignment_date => cog_assignment_date,
                                                                                :selected_treatment_arm => {:treatment_arm_id => "ABC", :version => "123", :stratum_id => "A", :reason => "Just because"}}
                                                                              ])
-      get :index, :patient_id => "123"
+      get :index, params: {patient_id: "123"}
       expect(response).to have_http_status(200)
       expect(JSON.parse(response.body).length).to eq(2)
       expect(JSON.parse(response.body)).to eq([{"treatment_arm_id"=>"ABC", "stratum_id"=>"A", "version"=>"123", "step"=>1.1, "assignment_reason"=>"Just because", "date_on_arm"=>"2017-01-29T18:52:18+00:00", "date_off_arm"=>nil},
@@ -53,7 +53,7 @@ describe V1::TreatmentArmHistoryController, :type => :controller do
                                                                                :selected_treatment_arm => {:treatment_arm_id => "ABC", :version => "123", :stratum_id => "A", :reason => "Just because"}},
                                                                               {:cog_assignment_date => cog_assignment_date, :step_number => 1.1 , :assignment_date => cog_assignment_date}
                                                                              ])
-      get :index, :patient_id => "123"
+      get :index, params: {patient_id: "123"}
       expect(response).to have_http_status(200)
       expect(JSON.parse(response.body).length).to eq(2)
       expect(JSON.parse(response.body)).to eq([{"treatment_arm_id"=>"ABC", "stratum_id"=>"A", "version"=>"123", "step"=>1.1, "assignment_reason"=>"Just because", "date_on_arm"=>cog_assignment_date.to_s, "date_off_arm"=>nil}, {"treatment_arm_id"=>"CBA", "stratum_id"=>"C", "version"=>"321", "step"=>2.1, "assignment_reason"=>"Just because", "date_on_arm"=>cog_assignment_date.to_s, "date_off_arm"=>nil}])
@@ -63,7 +63,7 @@ describe V1::TreatmentArmHistoryController, :type => :controller do
 
   it "should handle empty db return with empty array" do
     allow(NciMatchPatientModels::Assignment).to receive(:scan).and_return([])
-    get :index, :patient_id => "random"
+    get :index, params: {patient_id: "random"}
     expect(response).to have_http_status(200)
     expect(response.body).to eq("[]")
   end

@@ -14,7 +14,7 @@ describe V1::ReportDownloadsController do
 
     it 'should throw 404 if the patient is not found' do
       allow(NciMatchPatientModels::Patient).to receive(:query_patient_by_id).and_return('')
-      get :variant_report_download, patient_id: '', analysis_id: '3366_job1'
+      get :variant_report_download, params: {patient_id: '', analysis_id: '3366_job1'}
       expect(response).to have_http_status(404)
     end
 
@@ -47,13 +47,13 @@ describe V1::ReportDownloadsController do
 
       allow(NciMatchPatientModelExtensions::VariantReportExtension).to receive(:compose_variant_report).and_return(variant_report)
 
-      get :variant_report_download, format: :xlsx, patient_id: '3366', analysis_id: '3366_job1'
-      response.content_type.to_s.should eq Mime::Type.lookup_by_extension(:xlsx).to_s
+      get :variant_report_download, as: :xlsx, params: {patient_id: '3366', analysis_id: '3366_job1'}
+      expect(response.content_type.to_s).to eq(Mime::Type.lookup_by_extension(:xlsx).to_s)
     end
 
     it 'Should generate a proper Assignment Report excel sheet' do
-      get :assignment_report_download, format: :xlsx, patient_id: '3366', uuid: 'd6c03b15-f0c3-4b4c-a810-007f919f399d'
-      response.content_type.to_s.should eq Mime::Type.lookup_by_extension(:xlsx).to_s
+      get :assignment_report_download, as: :xlsx, params: {patient_id: '3366', uuid: 'd6c03b15-f0c3-4b4c-a810-007f919f399d'}
+      expect(response.content_type.to_s).to eq(Mime::Type.lookup_by_extension(:xlsx).to_s)
     end
 
     it 'should return variant report for a patient if there is one' do
@@ -85,7 +85,7 @@ describe V1::ReportDownloadsController do
 
       allow(NciMatchPatientModelExtensions::VariantReportExtension).to receive(:compose_variant_report).and_return(variant_report)
 
-      get :variant_report_download, :patient_id => '3366', :analysis_id => '3366_job1'
+      get :variant_report_download, params: {patient_id: '3366', analysis_id: '3366_job1'}
       expect(response).to have_http_status(200)
     end
 
@@ -107,7 +107,7 @@ describe V1::ReportDownloadsController do
       specimen.collected_date = DateTime.current.getutc().to_s
       allow(NciMatchPatientModels::Specimen).to receive(:scan).and_return([specimen])
 
-      get :assignment_report_download, patient_id: '3366', uuid: 'd6c03b15-f0c3-4b4c-a810-007f919f399d'
+      get :assignment_report_download, params: {patient_id: '3366', uuid: 'd6c03b15-f0c3-4b4c-a810-007f919f399d'}
       expect(response).to have_http_status(200)
     end
   end
