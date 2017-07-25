@@ -42,7 +42,7 @@ describe V1::AnalysisReportController do
     specimen.collected_date = DateTime.current.getutc().to_s
     allow(NciMatchPatientModels::Specimen).to receive(:scan).and_return([specimen])
 
-    get :show, :patient_id => "3366", :id => "an-1234"
+    get :show, params: {:patient_id => "3366", :id => "an-1234"}
     expect(response).to have_http_status(200)
   end
 
@@ -51,15 +51,15 @@ describe V1::AnalysisReportController do
   end
 
   it 'POST #create' do
-    expect { post :create, :id => 1}.to raise_error(ActionController::UrlGenerationError)
+    expect { post :create, params: {id: 1}}.to raise_error(ActionController::UrlGenerationError)
   end
 
   it '#update should throw an route error' do
-    expect { patch :update, :id => 1}.to raise_error(ActionController::UrlGenerationError)
+    expect { patch :update, params: {id: 1}}.to raise_error(ActionController::UrlGenerationError)
   end
 
   it '#delete should throw an route error' do
-    expect { delete :destroy, :id => 1}.to raise_error(ActionController::UrlGenerationError)
+    expect { delete :destroy, params: {id: 1}}.to raise_error(ActionController::UrlGenerationError)
   end
 
 end

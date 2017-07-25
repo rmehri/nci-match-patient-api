@@ -8,7 +8,7 @@ RSpec.describe VariantReportUpdater do
     let(:variant_report_updater) { VariantReportUpdater.new }
     it 'fail gracefully ' do
       allow(TreatmentArmApi).to receive(:get_treatment_arms).and_return({})
-      expect{variant_report_updater.updated_variant_report({}, "request", "token")}.to raise_error
+      expect{variant_report_updater.updated_variant_report({}, "request", "token")}.to raise_error(TypeError)
     end
 
     it 'return a updated variant_report' do

@@ -20,7 +20,7 @@ describe V1::VariantReportsController do
 
   it 'GET #show no data found' do
     allow(NciMatchPatientModels::VariantReport).to receive(:query).and_return([])
-    expect(get :show, :id => "3366").to have_http_status(404)
+    expect(get :show, params: {id: "3366"}).to have_http_status(404)
   end
 
   it 'GET #show with data' do
@@ -29,17 +29,17 @@ describe V1::VariantReportsController do
     allow(TreatmentArmApi).to receive(:get_treatment_arms).and_return([{}])
     allow(RuleEngine).to receive(:get_mois).and_return({}.to_json)
     allow(Convert::VariantReportDbModel).to receive(:to_ui_model).and_return([])
-    get :show, :id =>"12123"
+    get :show, params: {id: "12123"}
     expect(response).to have_http_status(200)
     expect(response.body).not_to be_empty
   end
 
   it 'POST #create' do
-    expect { post :create, :id => 1}.to raise_error(ActionController::UrlGenerationError)
+    expect { post :create, params: {id: 1}}.to raise_error(ActionController::UrlGenerationError)
   end
 
   it '#update should throw an route error' do
-    expect { patch :update, :id => 1}.to raise_error(ActionController::UrlGenerationError)
+    expect { patch :update, params: {id: 1}}.to raise_error(ActionController::UrlGenerationError)
   end
 
   # it '#delete should route correctly' do
@@ -56,7 +56,7 @@ describe V1::VariantReportsController do
   #   allow(HTTParty::Request).to receive(:perform).and_return(HTTParty::Response)
   #   allow(HTTParty::Response).to receive(:body).and_return(message_body)
   #   allow(JobBuilder).to receive(:new).and_return(true)
-  #   expect(delete :destroy, :id => 1).to be_truthy
+  #   expect(delete :destroy, params: {id: 1}).to be_truthy
   # end
   #
   # it "#delte will raise error" do
@@ -64,7 +64,7 @@ describe V1::VariantReportsController do
   #   allow(HTTParty::Response).to receive(:new).and_return(HTTParty::Response)
   #   allow(HTTParty::Request).to receive(:perform).and_return(HTTParty::Response)
   #   allow(HTTParty::Response).to receive(:code).and_return(500)
-  #   expect(delete :destroy, :id => 1).to have_http_status(403)
+  #   expect(delete :destroy, params: {id: 1}).to have_http_status(403)
   # end
 
 end

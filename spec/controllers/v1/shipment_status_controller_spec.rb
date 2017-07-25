@@ -13,16 +13,21 @@ RSpec.describe V1::ShipmentStatusController, :type => :controller do
     end
 
     it 'return data' do
-      allow(NciMatchPatientModels::Shipment).to receive(:find_by).and_return([{patient_id: '123', destination: 'mocha',
-                                                                               molecular_id: '123_mol_test'}])
+      allow(NciMatchPatientModels::Shipment).to receive(:find_by).and_return([{ patient_id: '123',
+                                                                                destination: 'mocha',
+                                                                                molecular_id: '123_mol_test'}])
+                                                                                
       allow(NciMatchPatientModels::VariantReport).to receive(:query_by_patient_id).and_return([{molecular_id: '123_mol_test',
-                                                                                               status: 'CONFIRMED',
+                                                                                                status: 'CONFIRMED',
                                                                                                 analysis_id: '123_ana_test'}])
       get :show, params: {id: '123_mol_test'}
       expect(response.body).to be_truthy
-      expect(JSON.parse(response.body)).to eq({"patient_id"=>"123", "molecular_id"=>"123_mol_test",
-                                               "eligible_for_new_variant_report"=>false, "message"=>"Molecular_id [123_mol_test] already has a confirmed variant report",
-                                               "analysis_ids"=>["123_ana_test"], "site"=>"mocha"})
+      expect(JSON.parse(response.body)).to eq({"patient_id"=>"123",
+                                                "molecular_id"=>"123_mol_test",
+                                                "eligible_for_new_variant_report"=>false,
+                                                "message"=>"Molecular_id [123_mol_test] already has a confirmed variant report",
+                                                "analysis_ids"=>["123_ana_test"],
+                                                "site"=>"mocha"})
     end
   end
 

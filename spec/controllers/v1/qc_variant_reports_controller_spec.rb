@@ -10,7 +10,7 @@ describe V1::QcVariantReportsController do
   end
 
   it 'GET #show 404 error' do
-    expect(get :show, :patient_id => "123", :id => "1" ).to have_http_status(404)
+    expect(get :show, params: {patient_id: "123", id: "1"}).to have_http_status(404)
   end
 
   it 'GET #show 200 code' do
@@ -23,7 +23,7 @@ describe V1::QcVariantReportsController do
 
     allow(NciMatchPatientModels::VariantReport).to receive(:query).and_return([variant_report])
     allow(Aws::S3::S3Reader).to receive(:read).and_return({:patient_id => "3366"})
-    expect( get :show, :patient_id => "3366", :id => "1").to have_http_status(200)
+    expect( get :show, params: {patient_id: "3366", id: "1"}).to have_http_status(200)
   end
 
   it 'GET #show correctly' do
@@ -37,10 +37,10 @@ describe V1::QcVariantReportsController do
 
     allow(NciMatchPatientModels::VariantReport).to receive(:query).and_return([variant_report])
     allow(Aws::S3::S3Reader).to receive(:read).and_return({:patient_id => "3366"})
-    expect( get :show, :patient_id => "3366", :id => "1").to have_http_status(200)
+    expect( get :show, params: {patient_id: "3366", id: "1"}).to have_http_status(200)
   end
 
   it 'should not route' do
-    expect { get :index, :patient_id => "3366", :id => "1"}.to raise_error(ActionController::UrlGenerationError)
+    expect { get :index, params: {patient_id: "3366", id: "1"}}.to raise_error(ActionController::UrlGenerationError)
   end
 end

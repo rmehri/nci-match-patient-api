@@ -2,7 +2,7 @@ module V1
   class MessagesController < ApplicationController
 
     attr_accessor :message
-    before_action{|c| self.message = request.parameters['message'].deep_transform_values(&:strip)}
+    before_action{self.message = request.parameters['message'].deep_transform_values{|v| v.is_a?(String) ? v.strip : v}} # strip string values
     before_action :authenticate_user
 
     def specimen_received

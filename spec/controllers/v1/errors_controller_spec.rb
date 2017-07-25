@@ -8,17 +8,17 @@ describe V1::ErrorsController do
     end
 
     it 'should raise the UrlGenerationError' do
-      expect { get :bad_request, patient_id: '3366' }.to raise_error(ActionController::UrlGenerationError)
+      expect { get :bad_request, params: {patient_id: '3366'} }.to raise_error(ActionController::UrlGenerationError)
     end
 
-    it 'should raise the UrlGenerationError JSON' do
-      header = {'ACCEPT' => 'application/json'}
-      expect { get :bad_request, patient_id: '3366', headers: header, :format => 'json'}.to raise_error(ActionController::UrlGenerationError)
+    it 'should raise the UrlGenerationError for JSON' do
+      request.headers.merge!({'ACCEPT' => 'application/json'}) # headers: {'ACCEPT' => 'application/json'} is invalid in the call below !!??
+      expect { get :bad_request, params: {patient_id: '3366'}, as: :json}.to raise_error(ActionController::UrlGenerationError)
     end
 
     it 'should raise the UrlGenerationError, any other format' do
-      header = {'ACCEPT' => 'text/html'}
-      expect { get :bad_request, patient_id: '3366', headers: header, :format => 'xml'}.to raise_error(ActionController::UrlGenerationError)
+      request.headers.merge!({'ACCEPT' => 'text/html'})
+      expect { get :bad_request, params: {patient_id: '3366'}, as: :xml}.to raise_error(ActionController::UrlGenerationError)
     end
   end
 end

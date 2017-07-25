@@ -46,7 +46,7 @@ describe V1::AnalysisReportAmoisController do
 
     allow(NciMatchPatientModels::Variant).to receive(:scan).and_return([variant2])
 
-    expect( get :show, :patient_id => "3366", :id => "an-1234").to have_http_status(200)
+    expect( get :show, params: {:patient_id => "3366", :id => "an-1234"}).to have_http_status(200)
 
     report = JSON.parse(response.body).deep_symbolize_keys
     expect(report[:gene_fusions].length).to eq(1)
@@ -59,15 +59,15 @@ describe V1::AnalysisReportAmoisController do
   end
 
   it 'POST #create' do
-    expect { post :create, :id => 1}.to raise_error(ActionController::UrlGenerationError)
+    expect { post :create, params: {id: 1}}.to raise_error(ActionController::UrlGenerationError)
   end
 
   it '#update should throw an route error' do
-    expect { patch :update, :id => 1}.to raise_error(ActionController::UrlGenerationError)
+    expect { patch :update, params: {id: 1}}.to raise_error(ActionController::UrlGenerationError)
   end
 
   it '#delete should throw an route error' do
-    expect { delete :destroy, :id => 1}.to raise_error(ActionController::UrlGenerationError)
+    expect { delete :destroy, params: {id: 1}}.to raise_error(ActionController::UrlGenerationError)
   end
 
 end

@@ -42,11 +42,11 @@ describe V1::AssignmentsController do
   end
 
   it 'POST #create' do
-    expect { post :create, :id => 1}.to raise_error(ActionController::UrlGenerationError)
+    expect { post :create, params: {id: 1}}.to raise_error(ActionController::UrlGenerationError)
   end
 
   it '#update should throw an route error' do
-    expect { patch :update, :id => 1}.to raise_error(ActionController::UrlGenerationError)
+    expect { patch :update, params: {id: 1}}.to raise_error(ActionController::UrlGenerationError)
   end
 
   # it '#delete should route correctly' do
@@ -61,7 +61,7 @@ describe V1::AssignmentsController do
   #   allow(HTTParty::Request).to receive(:perform).and_return(HTTParty::Response)
   #   allow(HTTParty::Response).to receive(:body).and_return(message_body)
   #   allow(JobBuilder).to receive(:new).and_return(true)
-  #   expect(delete :destroy, :id => 1).to be_truthy
+  #   expect(delete :destroy, params: {id: 1}).to be_truthy
   # end
   #
   # it "#delte will raise error" do
@@ -69,7 +69,7 @@ describe V1::AssignmentsController do
   #   allow(HTTParty::Response).to receive(:new).and_return(HTTParty::Response)
   #   allow(HTTParty::Request).to receive(:perform).and_return(HTTParty::Response)
   #   allow(HTTParty::Response).to receive(:code).and_return(500)
-  #   expect(delete :destroy, :id => 1).to have_http_status(403)
+  #   expect(delete :destroy, params: {id: 1}).to have_http_status(403)
   # end
 
 end

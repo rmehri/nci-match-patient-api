@@ -51,6 +51,9 @@ RSpec.configure do |config|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
 
     config.include FactoryGirl::Syntax::Methods
+
+    # raise errors for any deprecation warning
+    config.raise_errors_for_deprecations!
   end
 
   # rspec-mocks config goes here. You can use an alternate test double

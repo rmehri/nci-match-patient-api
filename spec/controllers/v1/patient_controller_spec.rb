@@ -77,7 +77,7 @@ describe V1::PatientsController, :type => :controller do
   it "GET /patients to return json list of patients" do
     allow(NciMatchPatientModels::Patient).to receive(:scan).and_return([patient_dbm, patient_dbm])
 
-    get :index, format: :json
+    get :index, as: :json
 
     expect(response).to have_http_status(200)
 
@@ -89,7 +89,7 @@ describe V1::PatientsController, :type => :controller do
   it "GET /patients/1 to return json patient" do
     allow(NciMatchPatientModels::Patient).to receive(:query).and_return([patient_dbm])
 
-    get :show, :id => "2222"
+    get :show, params: {id: "2222"}
 
     expect(response).to have_http_status(200)
 
@@ -101,11 +101,11 @@ describe V1::PatientsController, :type => :controller do
   it "GET /patients/1 should handle errors by returning status 500" do
     allow(NciMatchPatientModels::Patient).to receive(:scan).and_raise("Valid Error")
 
-    expect(get :show, :id => "2222").to have_http_status(404)
+    expect(get :show, params: {id: "2222"}).to have_http_status(404)
   end
 
   it "GET /patients/1 only allow specified params to be queried" do
-    get :show, :id => "23413"
+    get :show, params: {id: "2222"}
     expect(controller.params[:id]).not_to be_nil
   end
 
@@ -149,7 +149,7 @@ describe V1::PatientsController, :type => :controller do
     }
     allow(StateMachine).to receive(:validate).and_return('true')
     allow(Aws::Sqs::Publisher).to receive(:publish).and_return(true)
-    expect(post :create, registration_message.to_json).to have_http_status(200)
+    expect(post :create, params: registration_message, as: :json).to have_http_status(200)
   end
 
   it "#create should fail validation for registration message" do
@@ -164,7 +164,7 @@ describe V1::PatientsController, :type => :controller do
         "status_date": "2016-05-09T22:06:33+00:00",
         "status": "REGISTRATION",
     }
-    post :create, registration_message.to_json
+    post :create, params: registration_message, as: :json
     expect(response).to have_http_status(500)
   end
 
@@ -179,18 +179,18 @@ describe V1::PatientsController, :type => :controller do
     allow(StateMachine).to receive(:validate).and_return('true')
     allow(NciMatchPatientModels::Shipment).to receive(:find_by).and_return([{:random => "data"}])
     allow(Aws::Sqs::Publisher).to receive(:publish).and_return(true)
-    expect(post :create, variant_message.to_json).to have_http_status(200)
+    expect(post :create, params: variant_message, as: :json).to have_http_status(200)
   end
 
   it "#create should throw error when message is unknown" do
-    expect(post :create, {"unknown": "unknown"}.to_json).to have_http_status(404)
+    expect(post :create, params: {unknown: "unknown"}, as: :json).to have_http_status(404)
   end
 
   it '#update should throw an route error' do
-    expect { patch :update, :id => 1}.to raise_error(ActionController::UrlGenerationError)
+    expect { patch :update, params: {id: 1}}.to raise_error(ActionController::UrlGenerationError)
   end
 
   it '#delete should throw an route error' do
-    expect { delete :destroy, :id => 1}.to raise_error(ActionController::UrlGenerationError)
+    expect { delete :destroy, params: {id: 1}}.to raise_error(ActionController::UrlGenerationError)
   end
 end
