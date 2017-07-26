@@ -163,7 +163,7 @@ class CogMessage
     stratum_id: "100",
     status_date: "2017-01-29T17:52:18+00:00",
     status: "ON_TREATMENT_ARM",
-    messagee: "ABCD",
+    message: "test message",
     internal_use_only: {
       request_id: "4-654400",
       environment: "5",
