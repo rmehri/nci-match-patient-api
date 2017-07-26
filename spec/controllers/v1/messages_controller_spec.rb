@@ -63,6 +63,11 @@ describe 'Services re-route middleware', :type => :request do
       expect(response).to have_http_status(403)
     end
 
+    it "should return 403 for invalid message with the end date in the past" do
+      post trigger_path(123), {params: AssayMessage::INVALID_SAMPLE_WITH_END_DATE_IN_PAST}.merge(@request_env)
+      expect(response).to have_http_status(403)
+    end
+
     it "should re-route AssayMessage input to ServicesControlle#assay" do
       post trigger_path(123), {params: AssayMessage::VALID_SAMPLE}.merge(@request_env)
       expect(response).to have_http_status(202)
