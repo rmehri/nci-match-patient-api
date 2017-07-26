@@ -91,13 +91,23 @@ describe 'Services re-route middleware', :type => :request do
 
   # rewrite /api/v1/patients/:patient_id to /api/v1/patients/:patient_id/cog
   describe "that re-route to cog path" do
-    it "should return 403 for invalid message" do
+    it "should return 403 for invalid REGISTRATION CogMessage input" do
       post trigger_path(123), {params: CogMessage::INVALID_REGISTRATION_SAMPLE}.merge(@request_env)
       expect(response).to have_http_status(403)
     end
 
-    it "should re-route CogMessage input to ServicesControlle#cog" do
+    it "should re-route REGISTRATION CogMessage input to ServicesControlle#cog" do
       post trigger_path(123), {params: CogMessage::VALID_REGISTRATION_SAMPLE}.merge(@request_env)
+      expect(response).to have_http_status(202)
+    end
+
+    it "should re-route VALID_REQUEST_ASSIGNMENT_SAMPLE CogMessage input to ServicesControlle#cog" do
+      post trigger_path(123), {params: CogMessage::VALID_REQUEST_ASSIGNMENT_SAMPLE}.merge(@request_env)
+      expect(response).to have_http_status(202)
+    end
+
+    it "should re-route ON_TREATMENT_ARM CogMessage input to ServicesControlle#cog" do
+      post trigger_path(123), {params: CogMessage::VALID_ON_TREATMENT_ARM_SAMPLE}.merge(@request_env)
       expect(response).to have_http_status(202)
     end
   end

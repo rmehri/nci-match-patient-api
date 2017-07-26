@@ -55,7 +55,7 @@ Rails.application.routes.draw do
     controller :services do
 
       # this route is rewritten in ServicesRoutesMiddleware - it is re-routed to messages controller above
-      # TODO: obsolete, should be removed in api/v2
+      # TODO: obsolete, should be removed after refactoring is done
       post  "patients/:patient_id" => :trigger, :as => 'trigger'
 
       # upload variant report

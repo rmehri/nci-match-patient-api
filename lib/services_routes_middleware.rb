@@ -31,17 +31,24 @@ module NciPedMatchPatientApi
       payload = JSON.parse(env['rack.input'].read)
       env['rack.input'].rewind
 
+      # init message
       begin
         # get input type and check for its validity
         type = MessageFactory.get_message_type(payload.symbolize_keys)
       rescue => e
         # 404 not found, compatible with original handler - UnknownMessage#from_json will rise Errors::ResourceNotFound
+        Rails.logger.info 'Building message failed.'
         return [404, {'Content-Type': 'application/json'}, "#{e.message}"]
       end
 
+      # validate message
       # 403 forbidden, compatible with original handler - Errors::RequestForbidden is used there
       # we also validate against schema in instance save! method, that should be triggered in v2 when this middleware is gone
-      return [403, {'Content-Type': 'application/json'}, ["#{type} message failed message schema validation: #{type.errors.messages}"]] unless type.valid?
+      unless type.valid?
+        msg = "#{type} message failed message schema validation: #{type.errors.messages}"
+        Rails.logger.info msg
+        return [403, {'Content-Type': 'application/json'}, [msg]]
+      end
 
       # rewrite path
       new_path = "#{env['PATH_INFO']}/message/#{type.class.to_route_name}"

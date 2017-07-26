@@ -10,10 +10,6 @@ class ApplicationController < ActionController::Base
   # this is used when building instance (returns 422) - it is hijacked in v1 from middleware which does validation (returns 403)
   rescue_from AbstractMessage::ValidationError, with: lambda { |exception| render_error(:unprocessable_entity, exception) }
 
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
-  # protect_from_forgery with: :exception
-
   protected
 
   def render_error(status, exception)
@@ -21,6 +17,7 @@ class ApplicationController < ActionController::Base
     respond_to do |format|
       format.all { head status, :message => exception.message}
     end
+    # TODO: activate this by removing non json responses 
     # render :json => {:message => exception.message}, :status => status
   end
 

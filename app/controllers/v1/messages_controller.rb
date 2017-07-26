@@ -1,9 +1,11 @@
 module V1
   class MessagesController < ApplicationController
 
-    attr_accessor :message
-    before_action{self.message = request.parameters['message'].deep_transform_values{|v| v.is_a?(String) ? v.strip : v}} # strip string values
+    wrap_parameters :payload # avoid clash with 'message' key in input json
     before_action :authenticate_user
+
+    attr_accessor :message
+    before_action{self.message = request.parameters['payload'].deep_transform_values{|v| v.is_a?(String) ? v.strip : v}} # strip string values
 
     def specimen_received
       authorize! :validate_json_message, SpecimenReceivedMessage

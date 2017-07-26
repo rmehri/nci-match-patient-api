@@ -22,6 +22,7 @@ class SpecimenReceivedMessage
     }
   }.deep_stringify_keys
 
+  # TODO: extend validator to cover this
   STILL_VALID_SAMPLE = {
     :header=> {
         # :msg_guid => "5c64192f-8a25-4874-9db6-fd55c398822d",
@@ -130,4 +131,45 @@ class CogMessage
   }.deep_stringify_keys
 
   INVALID_REGISTRATION_SAMPLE = VALID_REGISTRATION_SAMPLE.except('patient_id')
+
+  VALID_REQUEST_ASSIGNMENT_SAMPLE = {
+    header: {
+      msg_guid: "0f8fad5b-d9cb-469f-a165-80067728950e",
+      msg_dttm: "2016-05-09T22:06:33+00:00"
+    },
+    study_id: "APEC1621SC",
+    patient_id: "3366",
+    step_number: "2.0",
+    status: "REQUEST_ASSIGNMENT",
+    status_date: "2016-05-10T22:05:33+00:00",
+    message: "Physician determines it is not in the patient’s best interest.",
+    internal_use_only: {
+      request_id: "4-654400",
+      environment: "5",
+      request: "REQUEST_ASSIGNMENT for patient_id 1111",
+      treatment_id: "APEC1621-A"
+    }
+  }.deep_stringify_keys
+
+  VALID_ON_TREATMENT_ARM_SAMPLE = {
+    header: {
+      msg_guid: "0f8fad5b-d9cb-469f-a165-80067728950e",
+      msg_dttm: "2016-05-09T22:06:33+00:00"
+    },
+    study_id: "APEC1621SC",
+    patient_id: "3366",
+    step_number: "1.1",
+    treatment_arm_id: "APEC1621-A",
+    stratum_id: "100",
+    status_date: "2017-01-29T17:52:18+00:00",
+    status: "ON_TREATMENT_ARM",
+    messagee: "ABCD",
+    internal_use_only: {
+      request_id: "4-654400",
+      environment: "5",
+      request: "ON_TREATMENT_ARM for patient_id 00001",
+      treatment_id: "APEC1621-A"
+    }
+  }.deep_stringify_keys
+
 end
