@@ -1,9 +1,9 @@
 # whitelist
 branches:
   only:
-    - master
+    - shoyukenizing
 sudo: required
-services: 
+services:
   - docker
 language: ruby
 rvm:
@@ -25,7 +25,7 @@ script:
   #Build Docker image
   - docker build -t $DOCKER_IMAGE:$DATE -t $DOCKER_IMAGE:latest .
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-  # - docker run -it --rm -e "RAILS_ENV=test" $DOCKER_IMAGE:$DATE 
+  # - docker run -it --rm -e "RAILS_ENV=test" $DOCKER_IMAGE:$DATE
   #     bundle exec rspec spec/
 after_success:
   - docker images
@@ -33,14 +33,13 @@ after_success:
   #Deploy to AWS IntTest
   - docker run -it --rm -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
     -e AWS_DEFAULT_REGION=us-east-1 silintl/ecs-deploy
-    --cluster PedMatch-IntTest-Backend --service-name PedMatch-nci-match-patient-api-INTTEST 
+    --cluster PedMatch-IntTest-Backend --service-name PedMatch-nci-match-patient-api-INTTEST
     -i $DOCKER_IMAGE:$DATE
   #Trigger Travis bdd tests
-  - curl -s -X POST -H "Content-Type:application/json" -H "Accept:application/json" 
-    -H "Travis-API-Version:3" -H "Authorization:token $TRAVIS_TOKEN" 
-    -d "{\"request\":{\"message\":\"Triggered by nci-match-patient-api $TRAVIS_COMMIT\", \"branch\":\"master\", \"config\":{\"env\":{\"matrix\":[\"TRIGGER_REPO=nci-match-patient-api;TRIGGER_VER=$DATE;CUC_TAG=@patients;AUTHOR=$AUTHOR\"]}}}}" 
+  - curl -s -X POST -H "Content-Type:application/json" -H "Accept:application/json"
+    -H "Travis-API-Version:3" -H "Authorization:token $TRAVIS_TOKEN"
+    -d "{\"request\":{\"message\":\"Triggered by nci-match-patient-api $TRAVIS_COMMIT\", \"branch\":\"master\", \"config\":{\"env\":{\"matrix\":[\"TRIGGER_REPO=nci-match-patient-api;TRIGGER_VER=$DATE;CUC_TAG=@patients;AUTHOR=$AUTHOR\"]}}}}"
     https://api.travis-ci.org/repo/CBIIT%2Fnci-uMatch-bddtests/requests
 notifications:
   slack: clinicalbiomed:gRp5LqKElNOjUUMPLlq4qC1j
 addons:
-  
