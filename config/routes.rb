@@ -84,6 +84,7 @@ Rails.application.routes.draw do
     controller :rollback do
       put "patients/:patient_id/variant_report_rollback" => :variant_report
       put "patients/:patient_id/assignment_report_rollback" => :assignment_report
+      put "patients/:patient_id/rollback" => :rollback
     end
 
     match "*path", to: 'errors#bad_request', via: :all
