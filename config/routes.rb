@@ -82,8 +82,6 @@ Rails.application.routes.draw do
     # end
 
     controller :rollback do
-      put "patients/:patient_id/variant_report_rollback" => :variant_report
-      put "patients/:patient_id/assignment_report_rollback" => :assignment_report
       put "patients/:patient_id/rollback" => :rollback
     end
 

@@ -12,7 +12,7 @@ describe V1::RollbackController, type: :controller do
     allow(HTTParty::Response).to receive(:code).and_return(400)
     allow(HTTParty::Response).to receive(:body).and_return("")
 
-    expect(response).to have_http_status(403)
+    expect( put :rollback, params: {:patient_id => "3366"}).to have_http_status(403)
   end
 
   it "PUT#rollback success" do
@@ -21,8 +21,8 @@ describe V1::RollbackController, type: :controller do
     allow(HTTParty::Request).to receive(:perform).and_return(HTTParty::Response)
     allow(HTTParty::Response).to receive(:code).and_return(200)
     allow(HTTParty::Response).to receive(:body).and_return(true)
-    put :rollback, :patient_id => "123"
-    expect(response).to have_http_status(204)
+
+    expect( put :rollback, params: {:patient_id => "3366"}).to have_http_status(204)
   end
 
 end
