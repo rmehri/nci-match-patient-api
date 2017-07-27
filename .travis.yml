@@ -1,7 +1,7 @@
 # whitelist
 branches:
   only:
-    - shoyukenizing
+    - master
 sudo: required
 services:
   - docker
