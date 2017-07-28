@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   rescue_from CanCan::AccessDenied, with: lambda { | exception | render_error_with_message(:unauthorized, exception)}
   rescue_from TypeError, ArgumentError, ActionController::RoutingError, with: lambda { |exception| render_error(:bad_request, exception) }
   rescue_from NameError, RuntimeError, with: lambda { |exception| render_error(:internal_server_error, exception) }
+  rescue_from Errno::ECONNREFUSED, with: lambda { |exception| render_error_with_message(:service_unavailable, exception) }
 
   # this is used when building instance (returns 422) - it is hijacked in v1 from middleware which does validation (returns 403)
   rescue_from AbstractMessage::ValidationError, with: lambda { |exception| render_error(:unprocessable_entity, exception) }
@@ -17,12 +18,12 @@ class ApplicationController < ActionController::Base
     respond_to do |format|
       format.all { head status, :message => exception.message}
     end
-    # TODO: activate this by removing non json responses 
+    # TODO: activate this by removing non json responses
     # render :json => {:message => exception.message}, :status => status
   end
 
   def render_error_with_message(status, exception)
-    logger.error status.to_s +  " " + exception.to_s
+    logger.error "#{Rack::Utils::SYMBOL_TO_STATUS_CODE[status]} #{status.to_s.humanize} - #{exception.class}: #{exception.message}"
     render :json => {:message => exception.message}, :status => status
   end
 

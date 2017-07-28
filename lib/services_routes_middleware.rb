@@ -44,10 +44,18 @@ module NciPedMatchPatientApi
       # validate message
       # 403 forbidden, compatible with original handler - Errors::RequestForbidden is used there
       # we also validate against schema in instance save! method, that should be triggered in v2 when this middleware is gone
-      unless type.valid?
-        msg = "#{type} message failed message schema validation: #{type.errors.messages}"
+      begin
+        unless type.valid?
+          msg = "#{type} message failed message schema validation: #{type.errors.messages}"
+          Rails.logger.info msg
+          return [403, {'Content-Type' => 'application/json'}, [msg]]
+        end
+      rescue => e
+        # catch ArgumentError (invalid date and friends)
+        # 400 bad request, compatible with original handler
+        msg = "#{type} message failed message schema validation: #{e.message}"
         Rails.logger.info msg
-        return [403, {'Content-Type' => 'application/json'}, [msg]]
+        return [400, {'Content-Type' => 'application/json'}, [msg]]
       end
 
       # rewrite path

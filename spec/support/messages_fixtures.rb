@@ -101,7 +101,7 @@ class AssayMessage
     surgical_event_id:"3366-bsn",
     case_number: "case-3366",
     type: "RESULT",
-    biomarker:"ICCBRG1s",
+    biomarker:"ICCBRG1s_in_past",
     reported_date:"2016-09-15T13:12:09.071-05:00",
     result:"POSITIVE"
   }.deep_stringify_keys
