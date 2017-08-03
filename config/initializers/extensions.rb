@@ -7,3 +7,6 @@ class Hash
     end
   end
 end
+
+# faster json processing
+Oj.mimic_JSON

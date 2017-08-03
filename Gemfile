@@ -87,6 +87,9 @@ group :test do
 
   # stubbing and setting expectations on HTTP requests
   gem 'webmock'
+
+  # brings back assigns to your controller tests
+  gem 'rails-controller-testing'
 end
 
 group :development do

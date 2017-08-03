@@ -17,4 +17,5 @@
 /tmp
 *.sqlite3
 .idea/*
+.DS_Store
 /coverage

@@ -52,13 +52,3 @@ module Aws
     end
   end
 end
-
-# module NciMatchPatientModels
-#   [Patient, VariantReport, Assignment, Specimen].each{|c| c.extend(Aws::DynamoDB::Helpers)}
-# end
-
-# extend all classes in the module
-NciMatchPatientModels.constants.select do |constant_symbol|
-   constant = NciMatchPatientModels.const_get(constant_symbol)
-   constant.extend(Aws::DynamoDB::Helpers) if constant.is_a?(Class)
-end

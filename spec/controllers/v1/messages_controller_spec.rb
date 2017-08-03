@@ -40,6 +40,11 @@ describe 'Services re-route middleware', :type => :request do
       post trigger_path(123), {params: SpecimenReceivedMessage::VALID_SAMPLE}.merge(@request_env)
       expect(response).to have_http_status(202)
     end
+
+    it "should strip spaces from valid input" do
+      post trigger_path(123), {params: SpecimenReceivedMessage::VALID_SAMPLE.merge('key_with_spaces' => ' a b c  ')}.merge(@request_env)
+      expect(assigns['message']['key_with_spaces']).to eq('a b c')
+    end
   end
 
   # rewrite /api/v1/patients/:patient_id to /api/v1/patients/:patient_id/specimen_shipped
