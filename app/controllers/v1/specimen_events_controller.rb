@@ -45,7 +45,9 @@ module V1
 
       return false if variant_report_confirmed
       return false unless latest_specimen
-      return false unless is_variant_report_sender(clia_lab)
+
+      # check for permission
+      return false unless authorize(:variant_report_sender, clia_lab)
 
       patient = NciMatchPatientModels::Patient.query_patient_by_id(params[:patient_id])
       return false if patient.current_status == "OFF_STUDY" || patient.current_status == "REQUEST_NO_ASSIGNMENT"

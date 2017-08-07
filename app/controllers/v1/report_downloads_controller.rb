@@ -24,7 +24,8 @@ module V1
       variant_report_hash = NciMatchPatientModelExtensions::VariantReportExtension.compose_variant_report(params[:patient_id], params[:analysis_id])
       raise Errors::ResourceNotFound if variant_report_hash.blank?
 
-      variant_report_hash[:editable] = is_variant_report_reviewer(variant_report_hash[:clia_lab]) && variant_report_hash[:status] != 'CONFIRMED'
+      # mark variant_report as editable
+      variant_report_hash[:editable] = variant_report_hash[:status] != 'CONFIRMED' && authorize(:variant_report_status, variant_report_hash[:clia_lab]) # is_variant_report_reviewer ?
 
       VariantReportHelper.add_download_links(variant_report_hash)
       assignments = NciMatchPatientModels::Assignment.query_by_patient_id(params[:patient_id], false).collect { |data| data.to_h.compact }
@@ -32,7 +33,8 @@ module V1
 
       assignments_with_assays = []
       assignments.each do |assignment|
-        assignment[:editable] = is_assignment_reviewer && assignment[:status] != 'CONFIRMED'
+        # mark assignment as editable
+        assignment[:editable] = assignment[:status] != "CONFIRMED" && authorize(:validate_json_message, AssignmentStatusMessage) # is_assignment_reviewer ?
         assays = find_assays(assignment[:surgical_event_id])
         assignments_with_assays.push(Convert::AssignmentDbModel.to_ui(assignment, assays)) unless assignment.blank?
       end

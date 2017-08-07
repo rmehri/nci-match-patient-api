@@ -126,38 +126,5 @@ module V1
       query
     end
 
-    protected
-    def is_variant_report_reviewer(clia_lab)
-      return false if clia_lab.nil?
-      begin
-        authorize! :variant_report_status, clia_lab.to_sym
-        return true
-      rescue => error
-        return false
-      end
-
-    end
-
-    def is_variant_report_sender(clia_lab)
-      return false if clia_lab.nil?
-      begin
-        authorize! :variant_report_sender, clia_lab.to_sym
-        return true
-      rescue => error
-        return false
-      end
-
-    end
-
-    def is_assignment_reviewer
-      begin
-        authorize! :validate_json_message, AssignmentStatusMessage
-        return true
-      rescue
-        return false
-      end
-
-    end
-
   end
 end

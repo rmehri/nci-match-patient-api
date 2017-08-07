@@ -18,6 +18,16 @@ class Ability
     can methods, subjects.flatten
   end
 
+  # similar to authorize!, it returns true/false instead raising CanCan::AccessDenied
+  def authorize(role, subject)
+    begin
+      subject = subject.is_a?(Class) ? subject : subject&.to_sym # subject can be class/symbol/nil/false - we need class/symbol
+      return true if authorize!(role, subject)
+    rescue CanCan::AccessDenied
+      return false
+    end
+  end
+
   def methods
     @methods ||= []
   end
