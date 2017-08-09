@@ -38,7 +38,7 @@ after_success:
   #Trigger Travis bdd tests
   - curl -s -X POST -H "Content-Type:application/json" -H "Accept:application/json"
     -H "Travis-API-Version:3" -H "Authorization:token $TRAVIS_TOKEN"
-    -d "{\"request\":{\"message\":\"Triggered by nci-match-patient-api $TRAVIS_COMMIT\", \"branch\":\"master\", \"config\":{\"env\":{\"matrix\":[\"TRIGGER_REPO=nci-match-patient-api;TRIGGER_VER=$DATE;CUC_TAG=@patients;AUTHOR=$AUTHOR\"]}}}}"
+    -d "{\"request\":{\"message\":\"Triggered by nci-match-patient-api $TRAVIS_COMMIT\", \"branch\":\"master\", \"config\":{\"env\":{\"matrix\":[\"TRIGGER_REPO=nci-match-patient-api;TRIGGER_VER=$DATE;TRIGGER_DOCKER_IMAGE=$DOCKER_IMAGE;CUC_TAG=@patients;AUTHOR=$AUTHOR\"]}}}}"
     https://api.travis-ci.org/repo/CBIIT%2Fnci-uMatch-bddtests/requests
 notifications:
   slack: clinicalbiomed:gRp5LqKElNOjUUMPLlq4qC1j
