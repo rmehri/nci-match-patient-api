@@ -5,6 +5,9 @@ gem 'rails', '5.1.2'
 # web server
 gem 'puma'
 
+# memached client
+gem 'dalli'
+
 # telemetry service
 gem 'newrelic_rpm'
 

@@ -11,7 +11,7 @@ module NciPedMatchPatientApi
 
       # routes that are positive with regex match below: /api/v1/patients/:patient_id =~ /api/v1/patients/event
       # NOTE: patient_id should not contain this strings
-      post_routes_to_skip = %w(events)
+      post_routes_to_skip = %w(events treatment_arms)
 
       # puts "REQUEST_METHOD: #{env['REQUEST_METHOD']}"
       # puts "PATH_INFO: #{env['PATH_INFO']}"

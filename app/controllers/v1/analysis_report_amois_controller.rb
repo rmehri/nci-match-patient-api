@@ -1,27 +1,30 @@
 module V1
   class AnalysisReportAmoisController < BaseController
     before_action :authenticate_user
-    include Knock::Authenticable
+    skip_before_action :set_resource
 
+    # GET /api/v1/patients/:patient_id/analysis_report_amois/:id
     def show
-      render json: instance_variable_get("@#{resource_name}")
-    end
 
-    private
-
-    def set_resource(_resource = {})
+      # find variant_report
       variant_report = NciMatchPatientModels::VariantReport.query_by_analysis_id(params[:patient_id], params[:id])
       raise Errors::ResourceNotFound if variant_report.nil?
 
+      # find amois and cache those
       variant_report_hash = variant_report.to_h
-      mois = get_amois(variant_report_hash.deep_symbolize_keys!)
-      amoi_count = match_amois_with_uuid(variant_report_hash, mois)
+      mois = MemoryCache.memoize(variant_report_hash){get_amois(variant_report_hash.deep_symbolize_keys!)}
 
+      amoi_count = match_amois_with_uuid(variant_report_hash, mois)
       updated_amois = Convert::AmoisRuleModel.to_ui_model(mois)
+
+      # update amoi counts for variant_report
       update_amoi_count_in_variant_report(variant_report, amoi_count)
 
-      instance_variable_set("@#{resource_name}", updated_amois.to_json)
+      # render output
+      render json: updated_amois
     end
+
+    private
 
     def get_amois(variant_report)
       VariantReportUpdater.new.updated_variant_report(variant_report, request.uuid, token)

@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   scope '/api/v1', module: 'v1' do # main scope
 
+    # /api/v1/patients scope
     resources :patients, only: [:show, :index, :create] do
       collection do
 
@@ -37,13 +38,14 @@ Rails.application.routes.draw do
       resources :action_items,          only: [:index]
       resources :treatment_arm_history, only: [:index]
       resources :specimen_events,       only: [:index]
-      resources :analysis_report,       only: [:show] # V1::AnalysisReportController#show
+      resources :analysis_report,       only: [:show]
       resources :analysis_report_amois, only: [:show]
       resources :qc_variant_reports,    only: [:show]
       resources :variant_file_download, only: [:show]
     end
 
     # input processing for patient processor queue
+    # re-routed from middleware
     controller :messages do
       # specimen received type
       post "patients/:patient_id/message/specimen_received" => :specimen_received
@@ -64,9 +66,11 @@ Rails.application.routes.draw do
     # input processing for local changes
     controller :services do
 
+      # TAs change notification
+      post 'patients/treatment_arms' => :treatment_arms_changed
+
       # this route is rewritten in ServicesRoutesMiddleware - it is re-routed to messages controller above
-      # TODO: obsolete, should be removed after refactoring is done
-      post  "patients/:patient_id" => :trigger, :as => 'trigger'
+      post  "patients/:patient_id" => :trigger, :as => 'trigger' # I DONT EXIST !!!
 
       # upload variant report
       post  "patients/variant_report/:molecular_id" => :variant_report_uploaded

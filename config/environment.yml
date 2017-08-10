@@ -3,6 +3,9 @@ common: &defaults
   s3_url: "https://s3.amazonaws.com"
   auth0_domain: "https://ncimatch.auth0.com"
 
+  # do not put aws cluster config endpoint here, use single node (we dont have auto-discovery)
+  memcached_node_endpoint: <%= ENV["MEMCACHED_NODE_ENDPOINT"] %>
+
 
 development:
   <<: *defaults

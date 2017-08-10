@@ -8,10 +8,8 @@ common: &default
 
 development:
   <<: *default
-
   ICCBRG1s:
-    start_date: "Jan 1 2011"
-    end_date: "Jan 1 2016"
+    start_date: "Jan 1 2016"
 test:
   <<: *default
   ICCPTENs:

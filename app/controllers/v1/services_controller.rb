@@ -3,8 +3,8 @@ module V1
     before_action :authenticate_user
     load_and_authorize_resource :class => NciMatchPatientModels
 
-
     # POST /api/v1/patients/{patient_id}
+    # TODO: remove me, i am re-routed to MessagesController
     def trigger
       logger.info("================== current user: #{current_user.to_json}")
       patient_id = get_patient_id_from_url
@@ -124,9 +124,18 @@ module V1
       ((200..250).include? result.code) ? standard_success_message(result) : standard_error_message(result)
     end
 
+    # flush cache when TAs change
+    def treatment_arms_changed
+      MemoryCache.flush_all!
+      render json: {message: 'Cache flushed because of TAs change.'}
+    end
+
     private
 
     def get_url_path_segments
+      puts "uuid: #{request.uuid}"
+      puts "token: #{token}"
+
       return request.fullpath.split("/")
     end
 
