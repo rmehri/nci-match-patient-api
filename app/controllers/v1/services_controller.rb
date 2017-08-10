@@ -127,15 +127,12 @@ module V1
     # flush cache when TAs change
     def treatment_arms_changed
       MemoryCache.flush_all!
-      render json: {message: 'Cache flushed because of TAs change.'}
+      render json: { message: 'Cache flushed because of TAs change.' }
     end
 
     private
 
     def get_url_path_segments
-      puts "uuid: #{request.uuid}"
-      puts "token: #{token}"
-
       return request.fullpath.split("/")
     end
 
