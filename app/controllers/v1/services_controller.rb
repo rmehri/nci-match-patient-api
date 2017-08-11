@@ -1,14 +1,14 @@
 module V1
   class ServicesController < ApplicationController
     before_action :authenticate_user
-    load_and_authorize_resource :class => NciMatchPatientModels
+    load_and_authorize_resource class: NciMatchPatientModels
 
     # POST /api/v1/patients/{patient_id}
     # TODO: remove me, i am re-routed to MessagesController
     def trigger
       logger.info("================== current user: #{current_user.to_json}")
       patient_id = get_patient_id_from_url
-      message = ApplicationHelper.replace_value_in_patient_message(get_post_data, "patient_id", patient_id)
+      message = ApplicationHelper.replace_value_in_patient_message(get_post_data, 'patient_id', patient_id)
       message = ApplicationHelper.trim_value_in_patient_message(message)
       message.deep_symbolize_keys!
 
@@ -16,8 +16,8 @@ module V1
       raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{type.errors.messages}" unless type.valid?
       authorize! :validate_json_message, type.class
       #Needs to be moved -jv
-      if (type.class == VariantReportMessage)
-        shipments = NciMatchPatientModels::Shipment.find_by({"molecular_id" => message[:molecular_id]})
+      if type.class == VariantReportMessage
+        shipments = NciMatchPatientModels::Shipment.find_by({ 'molecular_id' => message[:molecular_id] })
         raise "Unable to find shipment with molecular id [#{message[:molecular_id]}]" if shipments.length == 0
 
         patient_id = shipments[0].patient_id
@@ -39,7 +39,7 @@ module V1
       raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{type.errors.messages}" unless type.valid?
 
       authorize! :validate_json_message, type.class
-      shipments = NciMatchPatientModels::Shipment.find_by({"molecular_id" => message[:molecular_id]})
+      shipments = NciMatchPatientModels::Shipment.find_by({ 'molecular_id' => message[:molecular_id] })
       raise Errors::RequestForbidden, "Unable to find shipment with molecular id [#{message[:molecular_id]}]" if shipments.length == 0
 
       lab_type = shipments[0].destination
@@ -63,20 +63,20 @@ module V1
       message[:comment_user] = post_data[:comment_user]
 
       variant = NciMatchPatientModels::Variant.query_by_uuid(message[:variant_uuid])
-      raise Errors::ResourceNotFound, "Unable to find variant with uuid" if variant.nil?
+      raise Errors::ResourceNotFound, 'Unable to find variant with uuid' if variant.nil?
 
       variant_report = NciMatchPatientModels::VariantReport.query_by_analysis_id(variant.patient_id, variant.analysis_id)
-      raise Errors::RequestForbidden, "Variant with uuid does not belong to any variant report" if variant_report.nil?
+      raise Errors::RequestForbidden, 'Variant with uuid does not belong to any variant report' if variant_report.nil?
 
       lab_type = variant_report.clia_lab
       authorize! :variant_report_status, lab_type.to_sym
 
-      response = PatientProcessor.run_service("/confirm_variant", message, request.uuid, token)
+      response = PatientProcessor.run_service('/confirm_variant', message, request.uuid, token)
       response_hash = response.parsed_response
-      raise Errors::RequestForbidden, response_hash["message"] unless ((200..299).include? response.code)
+      raise Errors::RequestForbidden, response_hash['message'] unless (200..299).include?(response.code)
 
       AppLogger.log(self.class.name, "variant_status response from Patient Processor: #{response_hash}")
-      standard_success_message(response_hash["message"])
+      standard_success_message(response_hash['message'])
 
     end
 
@@ -94,7 +94,7 @@ module V1
       authorize! :validate_json_message, type.class
 
       variant_report = NciMatchPatientModels::VariantReport.query_by_analysis_id(message[:patient_id], message[:analysis_id])
-      raise Errors::RequestForbidden, "Unable to confirm non existent variant report" if variant_report.nil?
+      raise Errors::RequestForbidden, 'Unable to confirm non existent variant report' if variant_report.nil?
 
       lab_type = variant_report.to_h[:clia_lab]
       authorize! :variant_report_status, lab_type.to_sym
@@ -121,7 +121,7 @@ module V1
       validate_patient_state(message, type.class)
       result = PatientProcessor.run_service('/confirm_assignment', message, request.uuid, token)
 
-      ((200..250).include? result.code) ? standard_success_message(result) : standard_error_message(result)
+      (200..250).include?(result.code) ? standard_success_message(result) : standard_error_message(result)
     end
 
     # flush cache when TAs change
@@ -133,7 +133,7 @@ module V1
     private
 
     def get_url_path_segments
-      return request.fullpath.split("/")
+      return request.fullpath.split('/')
     end
 
     def get_post_data
@@ -145,10 +145,10 @@ module V1
     def get_patient_id_from_url
       parts = get_url_path_segments
       logger.info "============== url parts: #{parts}"
-      index = parts.index("patients")
-      patient_id = parts[index+1]
-      end_index = patient_id.index("?")
-      patient_id = (!end_index.nil? && end_index.to_i > 0) ? patient_id[0..end_index-1] : patient_id
+      index = parts.index('patients')
+      patient_id = parts[index + 1]
+      end_index = patient_id.index('?')
+      patient_id = !end_index.nil? && end_index.to_i > 0 ? patient_id[0..end_index - 1] : patient_id
 
       return patient_id
     end
