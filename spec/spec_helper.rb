@@ -50,8 +50,6 @@ RSpec.configure do |config|
     #     # => "be bigger than 2"
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
 
-    config.include FactoryGirl::Syntax::Methods
-
     # raise errors for any deprecation warning
     config.raise_errors_for_deprecations!
   end
