@@ -1,4 +1,4 @@
-Dir.glob(Rails.root.to_s + '/spec/fixtures/*') {|file| require file}
+Dir.glob(Rails.root.to_s + '/spec/fixtures/*') {|file| load file}
 
 namespace :fixtures do
   [AssayFixture, CogFixture, SpecimenReceivedFixture, SpecimenShippedFixture, VariantReportFixture].each do |fixture|
