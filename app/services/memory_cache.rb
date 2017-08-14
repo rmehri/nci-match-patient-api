@@ -8,7 +8,6 @@ module MemoryCache
     return cached_value if cached_value
 
     # cache miss
-    puts "Cache miss: [#{key}]"
     new_value = block.call
     write(key, new_value)
     new_value
@@ -16,17 +15,17 @@ module MemoryCache
 
   def read(key)
     value = MemoryStoreClient.get(key)
-    puts "Cache hit: [#{key}] => #{value.inspect[0..20]}..."
+    AppLogger.log(self, "read [#{key}] => #{value.inspect[0..50]}...")
     value
   end
 
   def write(key, value)
-    puts "Cache write: [#{key}] => #{value.inspect[0..20]}..."
+    AppLogger.log(self, "write [#{key}] => #{value.inspect[0..50]}...")
     MemoryStoreClient.set(key, value)
   end
 
   def flush_all!
     MemoryStoreClient.flush
-    puts "Cache flushed."
+    AppLogger.log(self, 'flushed')
   end
 end

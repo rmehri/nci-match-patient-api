@@ -1,8 +1,6 @@
+module VariantReportUpdater
 
-class VariantReportUpdater
-  attr_accessor :patient_id, :ion_reporter_id, :molecular_id, :analysis_id, :tsv_file_name
-
-  def updated_variant_report(variant_report, uuid, token)
+  def self.updated_variant_report(variant_report, uuid, token)
 
     begin
       treatment_arms = TreatmentArmApi.get_treatment_arms(uuid, token)
@@ -13,8 +11,8 @@ class VariantReportUpdater
                           variant_report[:tsv_file_name],
                           treatment_arms, uuid, token)
 
-      variant_report = JSON.parse(report)
-      variant_report.deep_symbolize_keys
+      mois_from_rule = JSON.parse(report)
+      mois_from_rule.deep_symbolize_keys
     rescue => ex
       AppLogger.log_error(self.class.name, "Got error while getting updated variant report: #{ex.message}")
       raise ex
