@@ -1,5 +1,5 @@
 # Base image
-FROM ruby:2.3.1
+FROM ruby:2.3.4
 
 MAINTAINER jeremy.pumphrey@nih.gov
 

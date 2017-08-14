@@ -13,9 +13,3 @@ namespace :fixtures do
     end
   end
 end
-
-# Models = NciMatchPatientModels.constants.reduce([]) do |acc, constant_symbol|
-#   constant = NciMatchPatientModels.const_get(constant_symbol)
-#   acc << constant if constant.is_a?(Class)
-#   acc
-# end
