@@ -7,7 +7,7 @@ services:
   - docker
 language: ruby
 rvm:
-  - 2.3.1
+  - 2.3.4
 before_install:
   #Set up Docker exports
   - export AUTHOR=`git --no-pager show -s --format='%an <%ae>'`
