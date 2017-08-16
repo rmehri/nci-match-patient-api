@@ -6,8 +6,8 @@ module V1
     def update
       authorize! :user_update, NciMatchPatientModels
       Auth0Service.get_management_token
-      code = Auth0Service.update_password(current_user[:sub], params[:password])
-      render :json => {:status => code}, :status => code
+      response = Auth0Service.update_password(current_user[:sub], params[:password])
+      render json: response.parsed_response, status: response.code
     end
 
     def users_params

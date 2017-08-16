@@ -1,7 +1,5 @@
-
 class Auth0Service
   include HTTParty
-
 
   def self.get_management_token
     options = {
@@ -13,22 +11,15 @@ class Auth0Service
         }.to_json,
         headers: {'Content-Type' => 'application/json'}
     }
-    result = post("#{Rails.configuration.environment.fetch('auth0_domain')}/oauth/token", options)
-    @management_token = JSON.parse(result.body)['access_token']
-    true
+    response = post("#{Rails.configuration.environment.fetch('auth0_domain')}/oauth/token", options)
+    management_token = JSON.parse(response.body)['access_token']
   end
-
 
   def self.update_password(user_id, password)
     options = {
         body: {'password' => password, 'connection' => Rails.configuration.environment.fetch('auth0_connection')}.to_json,
-        headers: {'Content-Type' => 'application/json', 'Authorization' => "Bearer #{@management_token}"}
+        headers: {'Content-Type' => 'application/json', 'Authorization' => "Bearer #{Auth0Service.get_management_token}"}
     }
-    result = patch(URI.encode("#{Rails.configuration.environment.fetch('auth0_domain')}/api/v2/users/#{user_id}"), options)
-    result.code
+    response = patch(URI.encode("#{Rails.configuration.environment.fetch('auth0_domain')}/api/v2/users/#{user_id}"), options)
   end
-
-  private
-  attr_accessor :management_token
-
 end
