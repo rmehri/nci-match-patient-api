@@ -7,6 +7,7 @@ gem 'puma'
 
 # memached client
 gem 'dalli'
+gem 'connection_pool'
 
 # telemetry service
 gem 'newrelic_rpm'

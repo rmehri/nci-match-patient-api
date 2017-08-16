@@ -14,18 +14,18 @@ module MemoryCache
   end
 
   def read(key)
-    value = MemoryStoreClient.get(key)
+    value = MemoryStoreClientPool.with {|client| client.get(key)}
     AppLogger.log(self, "read [#{key}] => #{value.inspect[0..50]}...")
     value
   end
 
   def write(key, value)
     AppLogger.log(self, "write [#{key}] => #{value.inspect[0..50]}...")
-    MemoryStoreClient.set(key, value)
+    MemoryStoreClientPool.with{|client| client.set(key, value)}
   end
 
   def flush_all!
-    MemoryStoreClient.flush
+    MemoryStoreClientPool.with{|client| client.flush}
     AppLogger.log(self, 'flushed')
   end
 end

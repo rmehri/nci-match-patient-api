@@ -8,8 +8,13 @@ begin
                                         compress: true,
                                         expires_in: 24*3600) # one day default
   MemoryStoreClient.set('test', true)
-  MemoryCache.flush_all!
 rescue
-  Rails.logger.error "ERROR: Memcached client is not runing at #{endpoint}."
+  Rails.logger.error "ERROR: Memcached client is not reachable at #{endpoint}."
   exit
 end
+
+# set connection pool
+MemoryStoreClientPool = ConnectionPool.new(size: 5, timeout: 5) { MemoryStoreClient }
+
+# invalidate all
+MemoryCache.flush_all!

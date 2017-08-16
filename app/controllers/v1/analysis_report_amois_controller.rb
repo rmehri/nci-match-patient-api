@@ -10,7 +10,7 @@ module V1
       variant_report = NciMatchPatientModels::VariantReport.query_by_analysis_id(params[:patient_id], params[:id])
       raise Errors::ResourceNotFound unless variant_report
 
-      # process mois from rule, update variant_report and cache result
+      # process mois from rule, update variant_report and cache the transformed mois
       cached_amois_stats = MemoryCache.memoize(variant_report.to_h) do
 
         # get mois from rule engine
