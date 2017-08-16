@@ -540,7 +540,7 @@ module PatientsDoc
     === Response Format
       JSON
   EOS
-  param :patient_id, String, desc: 'ID of the Patient', required: true
+  # param :patient_id, String, desc: 'ID of the Patient', required: true
   error code: 401, desc: 'Unauthorized'
   error code: 200, desc: 'Success (OK)'
   error code: 500, desc: 'Internal Server Error'
