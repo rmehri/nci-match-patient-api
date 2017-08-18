@@ -38,7 +38,7 @@ module NciPedMatchPatientApi
       rescue => e
         # 404 not found, compatible with original handler - UnknownMessage#from_json will rise Errors::ResourceNotFound
         Rails.logger.info 'Building message failed.'
-        return [404, {'Content-Type' => 'application/json'}, "#{e.message}"]
+        return [404, {'Content-Type' => 'application/json'}, [e.message]]
       end
 
       # validate message
