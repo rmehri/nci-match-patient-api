@@ -10,11 +10,11 @@ begin
   MemoryStoreClient.set('test', true)
 rescue
   Rails.logger.error "ERROR: Memcached client is not reachable at #{endpoint}."
-  exit
+  # exit
 end
 
 # set connection pool
-MemoryStoreClientPool = ConnectionPool.new(size: 5, timeout: 5) { MemoryStoreClient }
+# MemoryStoreClientPool = ConnectionPool.new(size: 5, timeout: 5) { MemoryStoreClient }
 
 # invalidate all
-MemoryCache.flush_all!
+# MemoryCache.flush_all!
