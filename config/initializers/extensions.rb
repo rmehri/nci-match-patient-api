@@ -8,6 +8,14 @@ class Hash
   end
 end
 
+
+# check if http respnse code is 2xx ok
+class Integer
+  def ok?
+    (200..226).include? self
+  end
+end
+
 # faster json processing
 Oj.mimic_JSON
 
