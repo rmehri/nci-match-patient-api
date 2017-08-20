@@ -55,7 +55,7 @@ gem 'wannabe_bool'
 gem 'responders'
 
 # in-house gem
-gem 'nci_match_patient_models', git: 'https://github.com/CBIIT/nci-match-lib.git', tag: 'v1.1.26'
+gem 'nci_match_patient_models', git: 'https://github.com/CBIIT/nci-match-lib.git', tag: 'v1.1.23'
 gem 'nci_match_roles', git: 'https://github.com/CBIIT/nci_match_roles.git', tag: 'v1.1.0'
 
 # http client
