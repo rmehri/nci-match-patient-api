@@ -17,11 +17,10 @@ module V1
     end
 
     def index
-      plural_resource_name = "@#{resource_name.pluralize}"
-      resources = resource_class.scan(query_params).collect { |data| data.to_h }
+      db_objs = NciMatchPatientModels::VariantReport.find_by({:patient_id => params[:patient_id], :analysis_id => params[:analysis_id]})
+      resources = db_objs.collect { |data| data.to_h }
       resources = resources.select {| resource| resource[:status] != "UNDETERMINED"}
-      instance_variable_set(plural_resource_name, resources)
-      render json: instance_variable_get(plural_resource_name)
+      render json: resources
     end
 
     def destroy
