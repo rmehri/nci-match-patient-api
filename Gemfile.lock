@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/CBIIT/nci-match-lib.git
-  revision: 080a36e25a1a75f38dcebb3d4da0641809f9f632
-  tag: v1.1.23
+  revision: 7e0852b6f2ba5ca16b41c42b104d3b56ac1f431b
+  tag: v1.1.26
   specs:
-    nci_match_patient_models (1.1.23)
+    nci_match_patient_models (1.1.26)
       activesupport (~> 5.0)
       aws-record (~> 1.0)
 
