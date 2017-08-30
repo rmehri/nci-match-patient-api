@@ -11,7 +11,7 @@ module V1
       raise Errors::ResourceNotFound unless variant_report
 
       # process mois from rule, update variant_report and cache the transformed mois
-      # cached_amois_stats = MemoryCache.memoize(variant_report.to_h) do
+      cached_amois_stats = MemoryCache.memoize(variant_report.to_h) do
 
         # get mois from rule engine
         mois_from_rule = VariantReportUpdater.updated_variant_report(variant_report.to_h.deep_symbolize_keys!, request.uuid, token)
@@ -20,12 +20,12 @@ module V1
         report = AmoisAnalysisReport.new(variant_report, mois_from_rule)
         report.update_mois!
 
-        # cache result for print: {:total_amois => n, :snv_indels => [...], :copy_number_variants => [...], :gene_fusions => [...]}
-        # Convert::AmoisRuleModel.to_ui(report.updated_mois)
-      # end
+        # last expresion is cached - it is transformed result for print: {:total_amois => n, :snv_indels => [...], :copy_number_variants => [...], :gene_fusions => [...]}
+        Convert::AmoisRuleModel.to_ui(report.updated_mois)
+      end
 
       # render output
-      render json: Convert::AmoisRuleModel.to_ui(report.updated_mois)
+      render json: cached_amois_stats
     end
 
   end
