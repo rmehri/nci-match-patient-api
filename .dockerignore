@@ -2,6 +2,7 @@
 
 # IDEs and editors
 .idea
+.vscode
 
 # Docker
 docker-compose.yml
