@@ -63,7 +63,7 @@ module V1
       message[:comment_user] = post_data[:comment_user]
 
       variant = NciMatchPatientModels::Variant.query_by_uuid(message[:variant_uuid])
-      raise Errors::ResourceNotFound, 'Unable to find variant with uuid' if variant.nil?
+      raise Errors::ResourceNotFound, "Variant with uuid #{message[:variant_uuid]} does not exist" if variant.nil?
 
       variant_report = NciMatchPatientModels::VariantReport.query_by_analysis_id(variant.patient_id, variant.analysis_id)
       raise Errors::RequestForbidden, 'Variant with uuid does not belong to any variant report' if variant_report.nil?

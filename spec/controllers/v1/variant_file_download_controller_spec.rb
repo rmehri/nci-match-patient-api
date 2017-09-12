@@ -23,11 +23,11 @@ RSpec.describe V1::VariantFileDownloadController, type: :controller do
   end
 
 
-  it 'return blank when nothing is found' do
+  it 'return Not Found error when nothing is found' do
     allow(NciMatchPatientModels::VariantReport).to receive(:query_by_analysis_id).and_return({})
     allow(Aws::S3::S3Reader).to receive(:get_presigned_url).and_return("https://url/faker")
     get :show, params: {:file => 'file_name', :patient_id => '123_test', :id => 'abc'}
-    expect(response.body).to eq("")
+    expect(response.body).to include("404")
   end
 
 end
