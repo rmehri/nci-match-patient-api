@@ -22,7 +22,7 @@ describe V1::RollbackController, type: :controller do
     allow(HTTParty::Response).to receive(:code).and_return(200)
     allow(HTTParty::Response).to receive(:body).and_return(true)
 
-    expect( put :rollback, params: {:patient_id => "3366"}).to have_http_status(204)
+    expect( put :rollback, params: {:patient_id => "3366"}).to have_http_status(202)
   end
 
 end
