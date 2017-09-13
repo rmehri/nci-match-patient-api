@@ -3,32 +3,6 @@ module V1
     before_action :authenticate_user
     load_and_authorize_resource class: NciMatchPatientModels
 
-    # POST /api/v1/patients/{patient_id}
-    # TODO: remove me, i am re-routed to MessagesController
-    def trigger
-      logger.info("================== current user: #{current_user.to_json}")
-      patient_id = get_patient_id_from_url
-      message = ApplicationHelper.replace_value_in_patient_message(get_post_data, 'patient_id', patient_id)
-      message = ApplicationHelper.trim_value_in_patient_message(message)
-      message.deep_symbolize_keys!
-
-      type = MessageFactory.get_message_type(message)
-      raise Errors::RequestForbidden, "Incoming message failed message schema validation: #{type.errors.messages}" unless type.valid?
-      authorize! :validate_json_message, type.class
-      #Needs to be moved -jv
-      if type.class == VariantReportMessage
-        shipments = NciMatchPatientModels::Shipment.find_by({ 'molecular_id' => message[:molecular_id] })
-        raise "Unable to find shipment with molecular id [#{message[:molecular_id]}]" if shipments.length == 0
-
-        patient_id = shipments[0].patient_id
-        message[:patient_id] = patient_id
-      end
-
-      validate_patient_state_and_queue(message, type.class)
-      standard_success_message('Message has been processed successfully', 202)
-
-    end
-
     # POST /api/v1/patients/variant_report/:molecular_id
     def variant_report_uploaded
       message = get_post_data
@@ -142,17 +116,5 @@ module V1
       logger.info "Patient Api received message: #{json_data.to_json}"
       json_data.deep_transform_keys!(&:underscore).symbolize_keys!
     end
-
-    def get_patient_id_from_url
-      parts = get_url_path_segments
-      logger.info "============== url parts: #{parts}"
-      index = parts.index('patients')
-      patient_id = parts[index + 1]
-      end_index = patient_id.index('?')
-      patient_id = !end_index.nil? && end_index.to_i > 0 ? patient_id[0..end_index - 1] : patient_id
-
-      return patient_id
-    end
-
   end
 end
