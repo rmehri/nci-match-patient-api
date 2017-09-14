@@ -7,7 +7,7 @@ module V1
     attr_accessor :message
     before_action do
       self.message = request.parameters['payload'].deep_transform_values{|v| v.is_a?(String) ? v.strip : v} # strip string values
-      self.message[:patient_id] = params[:patient_id] # this is not merged with wrap_parameters
+      self.message = self.message.deep_update_value('patient_id', params['patient_id']) # this is not merged with wrap_parameters 
     end
 
     def specimen_received
