@@ -64,11 +64,7 @@ module V1
       resource[:specimen_shipments].collect do | shipment |
         clia_lab = shipment[:destination]
         assignments = NciMatchPatientModels::Assignment.scan(build_index_query({:molecular_id => shipment[:molecular_id], :projection => [:assignment_date, :analysis_id, :status, :status_date, :uuid, :comment_user,:comment, :selected_treatment_arm]})).collect{|record| record.to_h.compact}
-        variant_reports = NciMatchPatientModels::VariantReport.scan(build_index_query({:molecular_id => shipment[:molecular_id],
-                                                                                       :projection => [:ion_reporter_id, :molecular_id, :analysis_id, :variant_report_received_date, :comment_user, :clia_lab,
-                                                                                                       :dna_bam_name, :vcf_file_name, :cdna_bam_name, :tsv_file_name,
-                                                                                                       :status, :status_date, :qc_report_url, :vr_chart_data_url]})).collect{|record| record.to_h.compact }
-
+        variant_reports = get_variant_reports_by_molecular_id(shipment[:molecular_id])
         variant_reports = variant_reports.sort_by{ |report| report[:variant_report_received_date]}.reverse
         assignments = assignments.sort_by{ |record| record[:assignment_date]}.reverse
 
@@ -111,10 +107,7 @@ module V1
       latest = true
       resources.collect do | shipment |
         clia_lab = shipment[:destination]
-        variant_reports = NciMatchPatientModels::VariantReport.scan(build_index_query({:molecular_id => shipment[:molecular_id],
-                                                                                       :projection => [:ion_reporter_id, :molecular_id, :analysis_id, :clia_lab, :variant_report_received_date,
-                                                                                                       :status, :dna_bam_name, :rna_bam_name , :vcf_file_name]})).collect{|record| record.to_h.compact }
-
+        variant_reports = get_variant_reports_by_molecular_id(shipment[:molecular_id])
         variant_reports = variant_reports.sort_by{ |report| report[:variant_report_received_date]}.reverse
 
         shipment[:analyses] = []
@@ -135,6 +128,13 @@ module V1
 
     def specimen_events_params
       build_index_query({:patient_id => params.require(:patient_id)})
+    end
+
+    def get_variant_reports_by_molecular_id(molecular_id)
+      NciMatchPatientModels::VariantReport.scan(build_index_query({:molecular_id => molecular_id,
+                                                                   :projection => [:ion_reporter_id, :molecular_id, :analysis_id, :variant_report_received_date, :comment_user, :clia_lab,
+                                                                                   :dna_bam_name, :vcf_file_name, :cdna_bam_name, :tsv_file_name,
+                                                                                   :status, :status_date, :qc_report_url, :vr_chart_data_url]})).collect{|record| record.to_h.compact }
     end
 
     def build_variant_report_analyses_model(variant_report)
