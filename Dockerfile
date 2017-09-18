@@ -23,7 +23,7 @@ RUN pwd;ls -alt $INSTALL_PATH
 #Add a file with build number and date for /version to use
 RUN cat $INSTALL_PATH/build_number.html
 
-# RUN rake apipie:cache
+RUN rake apipie:cache
 
 #Insert script to change localhost to docker-compose names
 ADD https://raw.githubusercontent.com/CBIIT/match-docker/master/docker-compose-env.sh .
