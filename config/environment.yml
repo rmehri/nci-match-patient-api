@@ -6,7 +6,6 @@ common: &defaults
   # do not put aws cluster config endpoint here, use single node (we dont have auto-discovery)
   memcached_node_endpoint: <%= ENV["MEMCACHED_NODE_ENDPOINT"] %>
 
-
 development:
   <<: *defaults
   aws_dynamo_endpoint: "http://localhost:8000"
@@ -26,7 +25,7 @@ development:
   s3_bucket: "pedmatch-dev"
   auth0_connection: "MATCH-Development"
 
-test:
+test: &test
   <<: *defaults
   slack_channel: "#match-bot-int"
   aws_dynamo_endpoint: "https://dynamodb.us-east-1.amazonaws.com"
@@ -45,6 +44,11 @@ test:
 
   s3_bucket: "pedmatch-int"
   auth0_connection: "MATCH-IntTest"
+
+test_local:
+  <<: *defaults
+  <<: *test
+
 uat:
   <<: *defaults
   slack_channel: "#match-bot-uat"

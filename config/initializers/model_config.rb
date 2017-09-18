@@ -16,6 +16,9 @@ module DynamoDBModelsConfig
 
   # configure each model
   def self.configure
+    # faster check if dynamoDB is running (default will fail after 25 seconds)
+    Aws::DynamoDB::Client.new(retry_limit: 5).list_tables rescue (puts('DynamoDB is not running, exiting ...'); exit)
+
     begin
       DynamoDBModels.each{|m| ensure_table(m)}
     rescue Aws::Errors::MissingCredentialsError => error
@@ -34,8 +37,5 @@ module DynamoDBModelsConfig
   end
 end
 
-# faster check if dynamoDB is running (default will fail after 25 seconds)
-Aws::DynamoDB::Client.new(retry_limit: 5).list_tables rescue (puts('DynamoDB is not running'); exit)
-
-# configure now
-DynamoDBModelsConfig.configure
+# configure now unless test env
+DynamoDBModelsConfig.configure unless Rails.env.test_local?

@@ -3,13 +3,15 @@ require 'rails_helper'
 describe V1::QcVariantReportsController do
 
   it 'GET #show' do
-    expect(:get => "api/v1/patients/3366/qc_variant_reports/analysis123").to route_to(:controller => "v1/qc_variant_reports",
-                                                                       :action => "show",
-                                                                                      :patient_id => "3366",
-                                                                                      :id => "analysis123")
+    expect( :get => "api/v1/patients/3366/qc_variant_reports/analysis123").to route_to(
+            :controller => "v1/qc_variant_reports",
+            :action => "show",
+            :patient_id => "3366",
+            :id => "analysis123")
   end
 
   it 'GET #show 404 error' do
+    allow(NciMatchPatientModels::VariantReport).to receive(:query).and_return([])
     expect(get :show, params: {patient_id: "123", id: "1"}).to have_http_status(404)
   end
 

@@ -1,7 +1,10 @@
 describe V1::AnalysisReportController do
 
-
   it 'should return variant report with assignment' do
+
+    # mock file download
+    allow(VariantReportHelper).to receive(:add_download_links)
+
     patient = NciMatchPatientModels::Patient.new
     patient.patient_id = "3366"
     patient.registration_date = DateTime.current.getutc().to_s

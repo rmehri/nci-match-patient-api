@@ -64,7 +64,7 @@ gem 'httparty'
 # API documentation tool
 gem 'apipie-rails'
 
-group :development, :test do
+group :development, :test, :test_local do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
 
@@ -82,7 +82,7 @@ group :development, :test do
   gem 'spring'
 end
 
-group :test do
+group :test, :test_local do
   # code coverage
   gem 'simplecov'
 
@@ -94,10 +94,6 @@ group :test do
 
   # brings back assigns to your controller tests
   gem 'rails-controller-testing'
-end
-
-group :development do
-
 end
 
 # bundle exec rake doc:rails generates the API under doc/api.

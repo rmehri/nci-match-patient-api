@@ -10,7 +10,8 @@ development:
   <<: *default
   ICCBRG1s:
     start_date: "Jan 1 2016"
-test:
+
+test: &test
   <<: *default
   ICCPTENs:
     start_date: "Jan 1 2016"
@@ -21,7 +22,13 @@ test:
   # ICCBRG1s_in_past:
   #   start_date: "Jan 1 2016"
   #   end_date: "Jan 1 2016"
+
+test_local:
+  <<: *default
+  <<: *test
+
 uat:
   <<: *default
+
 production:
   <<: *default
