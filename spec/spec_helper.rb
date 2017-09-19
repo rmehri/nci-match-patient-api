@@ -35,8 +35,22 @@ require 'webmock/rspec'
 #need to remove all tests that make outside connections. -jv
 WebMock.allow_net_connect!
 
+RSpec.shared_context 'mocks for online services' do # dynamo, sqs and s3
+  # mock dynamo, sqs and s3 clients
+  let(:db_client)   { instance_double(Aws::DynamoDB::Client) }
+  let(:sqs_client)  { instance_double(Aws::SQS::Client) }
+  let(:s3_client)   { instance_double(Aws::S3::Client) }
+
+  before(:each, :type => :controller) do
+    allow(Aws::DynamoDB::Client).to receive(:new).and_return(db_client)
+    allow(Aws::SQS::Client).to receive(:new).and_return(sqs_client)
+    allow(Aws::S3::Client).to receive(:new).and_return(s3_client)
+  end
+end
 
 RSpec.configure do |config|
+  config.include_context 'mocks for online services'
+
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
@@ -62,8 +76,6 @@ RSpec.configure do |config|
     # `true` in RSpec 4.
     # mocks.verify_partial_doubles = true
   end
-
-  Aws::DynamoDB::Client.new(stub_responses: true)
 
   config.before(:each, :type => :controller) do
     setup_knock

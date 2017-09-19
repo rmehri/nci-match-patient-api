@@ -13,6 +13,7 @@ ENV RAILS_ENV test
 
 # Install gems
 COPY Gemfile $INSTALL_PATH/
+COPY Gemfile.lock $INSTALL_PATH/
 RUN gem install bundler && bundle install
 
 COPY . .

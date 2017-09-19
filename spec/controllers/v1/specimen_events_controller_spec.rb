@@ -1,16 +1,23 @@
 describe V1::SpecimenEventsController do
-
   it 'GET #show' do
     expect { get :show, params: {id: 1}}.to raise_error(ActionController::UrlGenerationError)
   end
+
   it 'GET #index' do
-    expect(:get => "api/v1/patients/1/specimen_events?surgical_event_id=msn_3344").to route_to(:controller => "v1/specimen_events",
-                                                                        :action => "index",
-                                                                        :patient_id => "1", :surgical_event_id => "msn_3344")
-    expect(:get => "api/v1/patients/1/specimen_events").to route_to(:controller => "v1/specimen_events", :action => "index", :patient_id => "1")
+    expect( :get => "api/v1/patients/1/specimen_events?surgical_event_id=msn_3344").to route_to(
+            :controller => "v1/specimen_events",
+            :action => "index",
+            :patient_id => "1",
+            :surgical_event_id => "msn_3344")
+    expect( :get => "api/v1/patients/1/specimen_events").to route_to(
+            :controller => "v1/specimen_events",
+            :action => "index",
+            :patient_id => "1")
   end
 
   it 'GET #index should return something' do
+    allow(NciMatchPatientModels::Shipment).to receive(:scan).and_return([])
+    allow(NciMatchPatientModels::Specimen).to receive(:scan).and_return([])
     get :index, params: {patient_id: '1234'}
     expect(response).to have_http_status(200)
     expect(response.body).to include("{\"tissue_specimens\":[]")
@@ -53,11 +60,11 @@ describe V1::SpecimenEventsController do
     allow(NciMatchPatientModels::Assignment).to receive(:scan).and_return([assignment])
 
     file_set = [{:file_path_name => "bucket/folder/file.vcf",
-     :public_url => "https://s3.aws.com",
-     :file_size => 5,
-     :last_modified => "2016-11-11"}]
-    allow(Aws::S3::S3Reader).to receive(:get_file_set).and_return(file_set)
+                 :public_url => "https://s3.aws.com",
+                 :file_size => 5,
+                 :last_modified => "2016-11-11"}]
 
+    allow(Aws::S3::S3Reader).to receive(:get_file_set).and_return(file_set)
     get :index, params: {patient_id: "3366"}
     expect(response).to have_http_status(200)
 
@@ -95,5 +102,4 @@ describe V1::SpecimenEventsController do
   it '#delete should throw an route error' do
     expect { delete :destroy, params: {id: 1}}.to raise_error(ActionController::UrlGenerationError)
   end
-
 end

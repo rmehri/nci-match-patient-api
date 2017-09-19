@@ -1,14 +1,6 @@
 require 'rails_helper'
-require 'factory_girl_rails'
-require 'aws-record'
-require 'nci_match_patient_models'
 
 describe V1::PatientsController, :type => :controller do
-
-  # before(:each) do
-  #   setup_knock()
-  # end
-
   before(:each) do
     allow(HTTParty::Request).to receive(:new).and_return(HTTParty::Request)
     allow(HTTParty::Request).to receive(:perform).and_return(true)
@@ -52,7 +44,6 @@ describe V1::PatientsController, :type => :controller do
                        "user" => "Fox Mulder"
                    }
                ]}
-
   end
 
   it "model from gem should include Aws::Record" do
@@ -76,11 +67,8 @@ describe V1::PatientsController, :type => :controller do
 
   it "GET /patients to return json list of patients" do
     allow(NciMatchPatientModels::Patient).to receive(:scan).and_return([patient_dbm, patient_dbm])
-
     get :index, as: :json
-
     expect(response).to have_http_status(200)
-
     expect {
       JSON.parse(response.body)
     }.to_not raise_error
@@ -88,11 +76,8 @@ describe V1::PatientsController, :type => :controller do
 
   it "GET /patients/1 to return json patient" do
     allow(NciMatchPatientModels::Patient).to receive(:query).and_return([patient_dbm])
-
     get :show, params: {id: "2222"}
-
     expect(response).to have_http_status(200)
-
     expect {
       JSON.parse(response.body)
     }.to_not raise_error
@@ -100,11 +85,12 @@ describe V1::PatientsController, :type => :controller do
 
   it "GET /patients/1 should handle errors by returning status 500" do
     allow(NciMatchPatientModels::Patient).to receive(:scan).and_raise("Valid Error")
-
+    allow(NciMatchPatientModels::Patient).to receive(:query).and_return([])
     expect(get :show, params: {id: "2222"}).to have_http_status(404)
   end
 
   it "GET /patients/1 only allow specified params to be queried" do
+    allow(NciMatchPatientModels::Patient).to receive(:query).and_return([])
     get :show, params: {id: "2222"}
     expect(controller.params[:id]).not_to be_nil
   end
@@ -114,21 +100,6 @@ describe V1::PatientsController, :type => :controller do
     controller.params = {:random => "random", :patient_id => "3344"}
     expect(controller.send(:query_params)).not_to include(:random)
   end
-
-  # it 'should return an assignment report based on analysis id' do
-  #   assignment = NciMatchPatientModels::Assignment.new
-  #   allow(NciMatchPatientModels::Assignment).to receive(:scan).and_return([assignment])
-  #
-  #   get :show, :id => "2222"
-  #
-  #   expect(response).to have_http_status(200)
-  #
-  #   expect {
-  #     JSON.parse(response.body)
-  #   }.to_not raise_error
-  # end
-
-
 
   it "#create should accept registration message" do
     registration_message = {

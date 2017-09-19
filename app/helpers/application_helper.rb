@@ -43,20 +43,6 @@ module ApplicationHelper
     false
   end
 
-  def self.replace_value_in_patient_message(message_hash, target_key, replacement)
-    return message_hash if message_hash.blank?
-
-    message_hash.each do |key, value |
-      if (key.to_s == target_key)
-        message_hash[key] = replacement
-      elsif (value.is_a? Hash)
-        replace_value_in_patient_message(value, target_key, replacement)
-      end
-    end
-
-    message_hash
-  end
-
   def self.trim_value_in_patient_message(message_hash)
     return message_hash if message_hash.blank?
 

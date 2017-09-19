@@ -18,10 +18,11 @@ describe ApplicationHelper do
         }
     }
   end
+
+  # we actually test Hash#deep_update_value with this
   it 'should replace patient id in cog message' do
-    message = ApplicationHelper.replace_value_in_patient_message(cog_message, "patient_id", "6677")
-    message.deep_symbolize_keys!
-    expect(message[:patient_id]).to eq("6677")
+    message = cog_message.deep_update_value "patient_id", "6677"
+    expect(message['patient_id']).to eq("6677")
   end
 
   let(:nch_message) do
@@ -49,9 +50,8 @@ describe ApplicationHelper do
     }
   end
   it 'should replace patient id in nch message' do
-    message = ApplicationHelper.replace_value_in_patient_message(nch_message, "patient_id", "6677")
-    message.deep_symbolize_keys!
-    expect(message[:specimen_received][:patient_id]).to eq("6677")
+    message = nch_message.deep_update_value "patient_id", "6677"
+    expect(message['specimen_received']['patient_id']).to eq("6677")
   end
 
   let(:no_patient_id_message) do
@@ -79,9 +79,8 @@ describe ApplicationHelper do
   end
 
   it 'should not throw error in a message that does not have a patient id' do
-    message = ApplicationHelper.replace_value_in_patient_message(no_patient_id_message, "patient_id", "6677")
-    message.deep_symbolize_keys!
-    expect(message[:specimen_received][:patient_id]).to be_nil
+    message = no_patient_id_message.deep_update_value "patient_id", "6677"
+    expect(message['specimen_received']['patient_id']).to be_nil
   end
 
   let(:nch_message_with_spaces) do

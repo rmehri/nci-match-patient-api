@@ -1,5 +1,9 @@
-
 describe V1::ActionItemsController, type: :controller do
+
+  before(:each) do
+    allow(NciMatchPatientModels::Assignment).to receive(:scan).and_return({})
+    allow(NciMatchPatientModels::VariantReport).to receive(:scan).and_return({})
+  end
 
   describe 'should return valid data model' do
     it 'single VariantReport object return' do

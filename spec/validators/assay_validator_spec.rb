@@ -24,7 +24,6 @@ RSpec.describe AssayMessage do
         :reported_date => "2015-12-12T12:12:09.071-05:00",
         :result => "POSITIVE"
     }
-
   end
 
   it "should get type 'Assay' from MessageValidator" do
@@ -41,5 +40,4 @@ RSpec.describe AssayMessage do
     type = MessageFactory.get_message_type(bad_message)
     expect(type.valid?).to be_falsy
   end
-
 end

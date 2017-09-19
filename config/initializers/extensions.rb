@@ -6,6 +6,13 @@ class Hash
       result
     end
   end
+
+  def deep_update_value(key, value)
+    reduce({}) do |result, (k, v)|
+      result[k] = v.is_a?(Hash) ? v.deep_update_value(key, value) : ( k == key ? value : v)
+      result
+    end
+  end
 end
 
 

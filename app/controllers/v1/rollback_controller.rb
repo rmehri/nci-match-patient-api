@@ -7,6 +7,7 @@ module V1
                               {:headers => {'X-Request-Id' => request.uuid, 'Authorization' => "Bearer #{token}"}})
       raise Errors::RequestForbidden, "Incoming message failed patient state validation: #{is_valid}" if is_valid.code.to_i > 200
       JobBuilder.new("RollBack::RollbackJob").job.perform_later(convert_request(request.raw_post, params[:patient_id]))
+      standard_success_message('Rollback job has been placed in queue successfully', 202)
     end
 
     private

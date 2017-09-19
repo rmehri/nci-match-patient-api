@@ -1,12 +1,32 @@
 #Files or directories to ignore
-.docker*
-.Docker*
-Docker*
-.git*
+
+# IDEs and editors
+.idea
+.vscode
+
+# Docker
+docker-compose.yml
+.docker
+
+# Git
+.git
+.gitignore
+
+# CI
+.codeclimate.yml
+.codacy.yml
 .travis.yml
-temp*
-tmp*
-spec*
-.rspec*
-Gemfile.lock
-log/*
+
+# Unit test and coverage
+spec/*
+.rspec
+coverage/*
+
+# misc
+temp
+tmp
+log
+
+# System Files
+.DS_Store
+

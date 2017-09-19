@@ -3,13 +3,19 @@ require'spec_helper'
 describe V1::ReportDownloadsController do
   describe 'GET #VariantReport(ExcelFormat)' do
     it 'should route to the correct controller' do
-      expect(get: 'api/v1/patients/3366/variant_report/3366_job1').to route_to(controller: 'v1/report_downloads', action: 'variant_report_download',
-                                                                               'patient_id' => '3366', 'analysis_id' => '3366_job1')
+      expect( get: 'api/v1/patients/3366/variant_report/3366_job1').to route_to(
+              controller: 'v1/report_downloads',
+              action: 'variant_report_download',
+              'patient_id' => '3366',
+              'analysis_id' => '3366_job1')
     end
 
     it 'should route to the correct controller' do
-      expect(get: 'api/v1/patients/3366/assignment_report/d6c03b15-f0c3-4b4c-a810-007f919f399d').to route_to(controller: 'v1/report_downloads', action: 'assignment_report_download',
-                                                                                                             'patient_id' => '3366', 'uuid' => 'd6c03b15-f0c3-4b4c-a810-007f919f399d')
+      expect( get: 'api/v1/patients/3366/assignment_report/d6c03b15-f0c3-4b4c-a810-007f919f399d').to route_to(
+              controller: 'v1/report_downloads',
+              action: 'assignment_report_download',
+              'patient_id' => '3366',
+              'uuid' => 'd6c03b15-f0c3-4b4c-a810-007f919f399d')
     end
 
     it 'should throw 404 if the patient is not found' do
@@ -19,6 +25,9 @@ describe V1::ReportDownloadsController do
     end
 
     it 'Should generate a proper Variant Report excel sheet' do
+      # mock file download
+      allow(VariantReportHelper).to receive(:add_download_links)
+
       patient = NciMatchPatientModels::Patient.new
       patient.patient_id = '3366'
       patient.registration_date = DateTime.current.getutc().to_s
@@ -46,17 +55,22 @@ describe V1::ReportDownloadsController do
       variant_report[:gene_fusions] = [variant2.to_h]
 
       allow(NciMatchPatientModelExtensions::VariantReportExtension).to receive(:compose_variant_report).and_return(variant_report)
+      allow(NciMatchPatientModels::Assignment).to receive(:query).and_return([])
 
       get :variant_report_download, as: :xlsx, params: {patient_id: '3366', analysis_id: '3366_job1'}
       expect(response.content_type.to_s).to eq(Mime::Type.lookup_by_extension(:xlsx).to_s)
     end
 
     it 'Should generate a proper Assignment Report excel sheet' do
+      allow(NciMatchPatientModels::Patient).to receive(:query).and_return([])
       get :assignment_report_download, as: :xlsx, params: {patient_id: '3366', uuid: 'd6c03b15-f0c3-4b4c-a810-007f919f399d'}
       expect(response.content_type.to_s).to eq(Mime::Type.lookup_by_extension(:xlsx).to_s)
     end
 
     it 'should return variant report for a patient if there is one' do
+      # mock file download
+      allow(VariantReportHelper).to receive(:add_download_links)
+
       patient = NciMatchPatientModels::Patient.new
       patient.patient_id = '3366'
       patient.registration_date = DateTime.current.getutc().to_s
@@ -84,6 +98,7 @@ describe V1::ReportDownloadsController do
       variant_report[:gene_fusions] = [variant2.to_h]
 
       allow(NciMatchPatientModelExtensions::VariantReportExtension).to receive(:compose_variant_report).and_return(variant_report)
+      allow(NciMatchPatientModels::Assignment).to receive(:query).and_return([])
 
       get :variant_report_download, params: {patient_id: '3366', analysis_id: '3366_job1'}
       expect(response).to have_http_status(200)

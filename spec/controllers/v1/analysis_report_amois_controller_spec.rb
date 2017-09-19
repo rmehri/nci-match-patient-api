@@ -48,6 +48,8 @@ describe V1::AnalysisReportAmoisController do
     variant2.chromosome = "chr1"
     allow(NciMatchPatientModels::Variant).to receive(:scan).and_return([variant2])
 
+    allow(db_client).to receive(:put_item)
+
     # check expectations
     expect( get :show, params: {:patient_id => "3366", :id => "an-1234"}).to have_http_status(200)
     report = JSON.parse(response.body).deep_symbolize_keys

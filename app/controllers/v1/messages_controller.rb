@@ -5,7 +5,10 @@ module V1
     before_action :authenticate_user
 
     attr_accessor :message
-    before_action{self.message = request.parameters['payload'].deep_transform_values{|v| v.is_a?(String) ? v.strip : v}} # strip string values
+    before_action do
+      self.message = request.parameters['payload'].deep_transform_values{|v| v.is_a?(String) ? v.strip : v} # strip string values
+      self.message = self.message.deep_update_value('patient_id', params['patient_id']) # this is not merged with wrap_parameters 
+    end
 
     def specimen_received
       authorize! :validate_json_message, SpecimenReceivedMessage
