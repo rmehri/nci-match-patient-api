@@ -2,7 +2,6 @@ require 'jwt'
 require 'knock'
 
 Knock.setup do |config|
-
   ## Expiration claim
   ## ----------------
   ##
@@ -11,7 +10,6 @@ Knock.setup do |config|
   ##
   ## Default:
   # config.token_lifetime = 1.day
-
 
   ## Audience claim
   ## --------------
@@ -40,8 +38,11 @@ Knock.setup do |config|
   ##
   ## Default:
   # config.token_secret_signature_key = -> { Rails.application.secrets.secret_key_base }
-
-  config.token_secret_signature_key = -> { Rails.application.secrets.auth0_client_secret }
+  config.token_secret_signature_key = Proc.new do
+    auth0_client_secret = Rails.application.secrets.auth0_client_secret
+    auth0_client_secret_encoded = Rails.configuration.environment['auth0_base64_encoded_secret'] == 'true'
+    auth0_client_secret_encoded ? JWT.base64url_decode(auth0_client_secret) : auth0_client_secret
+  end
 
   ## Public key
   ## ----------
@@ -58,5 +59,4 @@ Knock.setup do |config|
   ##
   ## Default:
   config.not_found_exception_class_name = 'Errors::ResourceNotFound'
-
 end
