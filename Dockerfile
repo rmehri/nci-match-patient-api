@@ -11,12 +11,8 @@ WORKDIR $INSTALL_PATH
 
 ENV RAILS_ENV test
 
-# Install gems
-COPY Gemfile $INSTALL_PATH/
-COPY Gemfile.lock $INSTALL_PATH/
-RUN gem install bundler && bundle install
-
 COPY . .
+RUN gem install bundler && bundle install
 RUN ruby -v; rails -v; bundler -v; gem -v
 RUN pwd;ls -alt $INSTALL_PATH
 
