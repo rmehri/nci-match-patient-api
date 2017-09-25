@@ -2,6 +2,7 @@ common: &defaults
   aws_region: "us-east-1"
   s3_url: "https://s3.amazonaws.com"
   auth0_domain: "https://ncimatch.auth0.com"
+  auth0_base64_encoded_secret: <%= ENV["AUTH0_BASE64_ENCODED_SECRET"].to_s %> # true/false string
 
   # do not put aws cluster config endpoint here, use single node (we dont have auto-discovery)
   memcached_node_endpoint: <%= ENV["MEMCACHED_NODE_ENDPOINT"] %>
