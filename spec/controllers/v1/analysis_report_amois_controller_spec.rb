@@ -1,7 +1,23 @@
+# mock cache
+module MemoryCache
+  mattr_accessor :storage
+  def self.memoize(*key_fragments, &block)
+    # cache hit
+    key = key_fragments.hash
+    puts "Cache key: #{key}"
+
+    cached_value = self.storage[key]
+    return cached_value if cached_value
+
+    # cache miss
+    new_value = block.call
+    self.storage[key] = new_value
+  end
+end
+MemoryCache.storage = {}
+
 describe V1::AnalysisReportAmoisController do
-
   it 'should return updated variant report with amois' do
-
     # patient
     patient = NciMatchPatientModels::Patient.new
     patient.patient_id        = "3366"
@@ -16,6 +32,7 @@ describe V1::AnalysisReportAmoisController do
     variant_report.ion_reporter_id  = "ion-1234"
     variant_report.tsv_file_name    = "4.tsv"
     variant_report.variant_report_received_date = DateTime.current.getutc().to_s
+
     allow(NciMatchPatientModels::VariantReport).to receive(:query).and_return([variant_report])
 
     # rules report
@@ -50,11 +67,21 @@ describe V1::AnalysisReportAmoisController do
 
     allow(db_client).to receive(:put_item)
 
+    # check cache storage before first call
+    expect(MemoryCache.storage.size).to eq(0)
+
     # check expectations
     expect( get :show, params: {:patient_id => "3366", :id => "an-1234"}).to have_http_status(200)
     report = JSON.parse(response.body).deep_symbolize_keys
     expect(report[:gene_fusions].length).to eq(1)
     expect(report[:gene_fusions][0][:uuid]).to eq("random2")
+
+    # check cache storage after first call
+    expect(MemoryCache.storage.size).to eq(1)
+
+    # check cache storage after second call
+    get :show, params: {:patient_id => "3366", :id => "an-1234"}
+    expect(MemoryCache.storage.size).to eq(2) # variant_report in memoize input is mutated so we have diffrent cache keys :(
   end
 
   it 'GET #index' do
@@ -72,5 +99,4 @@ describe V1::AnalysisReportAmoisController do
   it '#delete should throw an route error' do
     expect { delete :destroy, params: {id: 1}}.to raise_error(ActionController::UrlGenerationError)
   end
-
 end

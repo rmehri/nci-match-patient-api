@@ -99,9 +99,8 @@ module V1
     end
 
     # flush cache when TAs change
-    # NOTE: temporally disabled
     def treatment_arms_changed
-      # MemoryCache.flush_all!
+      MemoryCache.flush_all!
       render json: { message: 'Cache flushed because of TAs change.' }
     end
 
