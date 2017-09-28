@@ -27,6 +27,7 @@ module V1
       url = Aws::S3::Presigner.new(client: s3_client).presigned_url(:put_object,
                                                                     bucket: Rails.configuration.environment.fetch('s3_bucket'),
                                                                     key: "#{params[:patient_id]}/#{params[:file_name]}",
+                                                                    server_side_encryption: 'AES256',
                                                                     acl: 'public-read-write', metadata: {'user' => current_user[:email].split('@')[0]})
       render json: {:presigned_url => url}
     end
