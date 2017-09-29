@@ -40,7 +40,7 @@ Knock.setup do |config|
   # config.token_secret_signature_key = -> { Rails.application.secrets.secret_key_base }
   config.token_secret_signature_key = Proc.new do
     auth0_client_secret = Rails.application.secrets.auth0_client_secret
-    auth0_client_secret_encoded = Rails.configuration.environment['auth0_base64_encoded_secret'] == 'true'
+    auth0_client_secret_encoded = Rails.configuration.environment['auth0_base64_encoded_secret'].to_s == 'true'
     auth0_client_secret_encoded ? JWT.base64url_decode(auth0_client_secret) : auth0_client_secret
   end
 
