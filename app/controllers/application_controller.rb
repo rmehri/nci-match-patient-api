@@ -35,12 +35,12 @@ class ApplicationController < ActionController::Base
   end
 
   def standard_success_message(message, status_code=200)
-    render json: {message: message, uuid: request.uuid}, status: status_code
+    render json: {message: message, pedmatch_uuid: request.uuid}, status: status_code
   end
 
   def standard_error_message(message, status_code=500)
     AppLogger.log_error(self.class.name, message)
-    render json: {message: message, uuid: request.uuid}, status: status_code
+    render json: {message: message, pedmatch_uuid: request.uuid}, status: status_code
   end
 
   # enqueue message

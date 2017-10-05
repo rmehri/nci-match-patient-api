@@ -28,6 +28,16 @@ describe V1::ServicesController do
     }
   end
 
+  it "should route to treatment_arms_changed" do
+    expect(post: "api/v1/patients/treatment_arms").to route_to(controller: "v1/services", action: "treatment_arms_changed")
+  end
+
+  it "should flush cache in treatment_arms_changed" do
+    allow(MemoryCache).to receive(:flush_all!).and_return({})
+    post :treatment_arms_changed, params: {}, as: :json
+    expect(response).to have_http_status(200)
+  end
+
   # it "should process a registration message" do
   #   HTTParty.post('api/v1/patients/1', body: good_message.to_json, headers: { 'Content-Type' => 'application/json' } )
   #   expect(response).to have_http_status(200)

@@ -100,7 +100,8 @@ module V1
 
     # flush cache when TAs change
     def treatment_arms_changed
-      MemoryCache.flush_all!
+      # flush_all will succeed but it sometimes renders 500 on first run (thread sync error)
+      MemoryCache.flush_all! rescue MemoryCache.flush_all!
       render json: { message: 'Cache flushed because of TAs change.' }
     end
 
