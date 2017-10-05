@@ -1,4 +1,3 @@
-
 module AppLogger
   def self.log(component_name, message)
     Rails.logger.info Time.now.strftime("%Y-%m-%d %H:%M:%S") + " Patient-API #{component_name}: #{message}"
