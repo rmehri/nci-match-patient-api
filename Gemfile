@@ -12,8 +12,11 @@ gem 'connection_pool'
 # telemetry service
 gem 'newrelic_rpm'
 
-# slack
+# slack logging
 gem 'slack-logger', git: 'https://github.com/damir/slack-logger.git'
+
+# customize rails default request logging
+gem 'lograge'
 
 # JWT authentication
 gem 'knock'

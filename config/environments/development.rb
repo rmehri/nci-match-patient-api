@@ -1,5 +1,14 @@
 Rails.application.configure do
+
+  # exit if queue_name is not set in env
+  if Rails.configuration.environment.fetch('queue_name').blank?
+    puts "Please set your environment queue name for the project before running, exiting ..."; exit
+  end
+
   # Settings specified here will take precedence over those in config/application.rb.
+
+  # Set log level: Unknown > Fatal > Error > Warn > Info > Debug
+  config.log_level = :DEBUG
 
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development
@@ -31,16 +40,4 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
-
-  # Enable stdout logger
-  # Set log level
-  # config.logger = Logger.new(STDOUT)
-  config.log_level = :INFO
-  config.log_tags = [ :uuid, lambda {|request| Rails.application.class.parent_name} ]
-  # config.logger.formatter = Proc.new { |severity, datetime, _progname, msg| "[#{datetime.strftime("%B %d %H:%M:%S")}] [#{$$}] [#{severity}] [#{Rails.application.class.parent_name}], #{msg}\n"}
-
-  if Rails.configuration.environment.fetch('queue_name').blank?
-    raise "Please set your environment queue name for the project before running"
-  end
-
 end

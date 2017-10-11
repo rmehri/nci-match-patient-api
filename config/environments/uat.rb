@@ -1,13 +1,10 @@
 Rails.application.configure do
-# Settings specified here will take precedence over those in config/application.rb.
+  # Settings specified here will take precedence over those in config/application.rb.
 
-  # Enable stdout logger
-  # config.logger = Logger.new(STDOUT)
-  # Set log level
-  config.log_level = :WARN
-  config.log_tags = [ :uuid, lambda {|request| Rails.application.class.parent_name} ]
+  # Set log level: Unknown > Fatal > Error > Warn > Info > Debug
+  config.log_level = :DEBUG
 
-# Code is not reloaded between requests.
+  # Code is not reloaded between requests.
   config.cache_classes = true
 
   # Eager load code on boot. This eager loads most of Rails and
@@ -80,7 +77,4 @@ Rails.application.configure do
 
   # Disable automatic flushing of the log to improve performance.
   # config.autoflush_log = false
-
-  # Use default logging formatter so that PID and timestamp are not suppressed.
-  # config.log_formatter = ::Logger::Formatter.new
 end

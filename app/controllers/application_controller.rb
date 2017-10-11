@@ -15,6 +15,15 @@ class ApplicationController < ActionController::Base
   rescue_from TypeError, ArgumentError, with: lambda {|exception| render_error(:bad_request, exception)}
   rescue_from NameError, RuntimeError,  with: lambda {|exception| render_error(:internal_server_error, exception)}
 
+  # save uuid to global state for logger use
+  before_action do
+    # we use request.uuid when calling other services so we need to override system one if uuid is already set in ServicesRoutesMiddleware#call
+    request.request_id = RequestStore.store[:uuid] if RequestStore.store[:uuid]
+
+    # if its not set then copy to store one provided by rails
+    RequestStore.store[:uuid] ||= request.request_id
+  end
+
   protected
 
   # success/error output

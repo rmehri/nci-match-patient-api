@@ -36,8 +36,6 @@ module NciPedMatchPatientApi
       end
     end
 
-    config.logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
-
     config.environment = Rails.application.config_for(:environment)
     config.assay = Rails.application.config_for(:assay)
 
@@ -45,20 +43,38 @@ module NciPedMatchPatientApi
 
     config.active_job.queue_adapter = :shoryuken
 
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.
+    # for dynamo, dalli and others
+    config.logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
 
-    # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
-    # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
-    # config.time_zone = 'Central Time (US & Canada)'
+    # customize rails default request logging
+    config.lograge.enabled = true
 
-    # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
-    # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
-    # config.i18n.default_locale = :de
+    # add params and time to logger
+    config.lograge.custom_options = lambda do |event|
+      {
+        params: event.payload[:params].except(*%w(controller action format id payload)), # payload wraps the params using wrap_parameters
+        time: event.time
+      }
+    end
 
-    # Do not swallow errors in after_commit/after_rollback callbacks.
-    # config.active_record.raise_in_transactional_callbacks = true
+    # add custom data to logger
+    config.lograge.custom_payload do |controller|
+      {
+        host: controller.request.host,
+        uuid: controller.request.uuid
+      }
+    end
+
+    # data available to formatter:
+    # {:method=>"POST", :path=>"/api/v1/patients/37/message/cog", :format=>"*/*", :controller=>"V1::MessagesController",
+    # :action=>"cog", :status=>403, :duration=>283.62, :view=>0.3, :time=>2017-10-10 14:40:47 -0400,
+    # :host=>"localhost", :uuid=>"ea8cabc3-d59f-48f9-be69-01bfc90de905"}
+    config.lograge.formatter = Proc.new do |data|
+      tags = "[#{data[:time]}] [#{Rails.application.class.parent}] [#{data[:uuid]}] [INFO] " # space for alignment
+      "#{tags} #{data[:method]} to #{data[:path]} as #{data[:format]} called #{data[:controller]}##{data[:action]}\n" +
+      "#{tags} Parameters: #{data[:params]}\n" +
+      "#{tags} Completed #{data[:status]} #{Rack::Utils::HTTP_STATUS_CODES[data[:status]]} in #{data[:duration]}ms (View: #{data[:view]}ms)\n"
+    end
 
     # add service re-routing middleware to bottom
     require_relative '../lib/services_routes_middleware.rb'
