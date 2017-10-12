@@ -43,7 +43,7 @@ module NciPedMatchPatientApi
       begin
         unless type.valid?
           message = "#{type} message failed message schema validation: #{type.errors.messages}"
-          AppLogger.log_error(self.class.name, msg)
+          AppLogger.log_error(self.class.name, message)
           return rack_output(403, message)
         end
       rescue => e
@@ -51,7 +51,7 @@ module NciPedMatchPatientApi
         # 400 bad request, compatible with original handler
         message = "#{type} message failed message schema validation: #{e.message}"
         AppLogger.log_error(self.class.name, message)
-        return rack_output(403, message)
+        return rack_output(400, message)
       end
 
       # rewrite path
