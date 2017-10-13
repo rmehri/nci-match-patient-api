@@ -15,13 +15,23 @@ class ApplicationController < ActionController::Base
   rescue_from TypeError, ArgumentError, with: lambda {|exception| render_error(:bad_request, exception)}
   rescue_from NameError, RuntimeError,  with: lambda {|exception| render_error(:internal_server_error, exception)}
 
-  # save uuid to global state for logger use
+  # save uuid to global state for use in logger and print request stats
   before_action do
-    # we use request.uuid when calling other services so we need to override system one if uuid is already set in ServicesRoutesMiddleware#call
+    # override rails uuid if it is already set in ServicesRoutesMiddleware#call
     request.request_id = RequestStore.store[:uuid] if RequestStore.store[:uuid]
 
     # if its not set then copy to store one provided by rails
     RequestStore.store[:uuid] ||= request.request_id
+
+    # log request stats
+    puts "[#{Time.now}] [#{Rails.application.class.parent}] [#{RequestStore.store[:uuid]}] [INFO]  REQUEST STARTED:" # extra space for alignment
+    puts '-' * 115
+    puts "Method: #{request.request_method}"
+    puts "Path: #{request.fullpath}"
+    puts "Format: #{request.format}"
+    puts "Query parameters: #{request.query_parameters}"
+    puts "Payload: #{request.raw_post}" unless request.form_data? or request.get?
+    puts "Method called: #{params[:controller].camelize}Controller##{params[:action]}\n\n"
   end
 
   protected

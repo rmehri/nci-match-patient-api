@@ -59,7 +59,7 @@ module NciPedMatchPatientApi
       env['PATH_INFO'] = env['REQUEST_URI'] = new_path
 
       # log re-route info
-      AppLogger.log(self.class.name, "Route for ServiceController is rewritten for #{type.class} input: /api/v1/patients/:patient_id => #{new_path}")
+      AppLogger.log(self.class.name, "Route for ServiceController is rewritten for #{type.class} input: /api/v1/patients/:patient_id => #{new_path}\n")
 
       @app.call(env)
     end

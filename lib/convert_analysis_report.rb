@@ -1,14 +1,11 @@
 module Convert
   class AnalysisReportDbModel
     def self.to_ui_model(patient, variant_report_hash, assignments)
-
-      ui = { patient: to_patient_ui_model(patient), variant_report: variant_report_hash, assignments: assignments }
-      ui
+      { patient: to_patient_ui_model(patient), variant_report: variant_report_hash, assignments: assignments }
     end
 
     def self.to_patient_ui_model(patient)
       patient.deep_symbolize_keys!
-      puts "patient: #{patient.to_json}"
 
       unless patient[:current_assignment].blank?
         unless patient[:current_assignment][:selected_treatment_arm].blank?

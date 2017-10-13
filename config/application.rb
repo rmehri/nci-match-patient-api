@@ -52,7 +52,7 @@ module NciPedMatchPatientApi
     # add params and time to logger
     config.lograge.custom_options = lambda do |event|
       {
-        params: event.payload[:params].except(*%w(controller action format id payload)), # payload wraps the params using wrap_parameters
+        # params: event.payload[:params].except(*%w(controller action format id payload)), # payload wraps the params using wrap_parameters
         time: event.time
       }
     end
@@ -71,9 +71,7 @@ module NciPedMatchPatientApi
     # :host=>"localhost", :uuid=>"ea8cabc3-d59f-48f9-be69-01bfc90de905"}
     config.lograge.formatter = Proc.new do |data|
       tags = "[#{data[:time]}] [#{Rails.application.class.parent}] [#{data[:uuid]}] [INFO] " # space for alignment
-      "#{tags} #{data[:method]} to #{data[:path]} as #{data[:format]} called #{data[:controller]}##{data[:action]}\n" +
-      "#{tags} Parameters: #{data[:params]}\n" +
-      "#{tags} Completed #{data[:status]} #{Rack::Utils::HTTP_STATUS_CODES[data[:status]]} in #{data[:duration]}ms (View: #{data[:view]}ms)\n"
+      "#{tags} Completed #{data[:status]} #{Rack::Utils::HTTP_STATUS_CODES[data[:status]]} in #{data[:duration]}ms (View: #{data[:view]}ms)\n\n"
     end
 
     # add service re-routing middleware to bottom
