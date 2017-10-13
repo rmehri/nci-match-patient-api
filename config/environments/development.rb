@@ -8,7 +8,7 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Set log level: Unknown > Fatal > Error > Warn > Info > Debug
-  config.log_level = :DEBUG
+  config.log_level = :debug
 
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development

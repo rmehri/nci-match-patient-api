@@ -2,7 +2,7 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Set log level: Unknown > Fatal > Error > Warn > Info > Debug
-  config.log_level = :DEBUG
+  config.log_level = :debug
 
   # Code is not reloaded between requests.
   config.cache_classes = true
