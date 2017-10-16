@@ -25,7 +25,7 @@ class ApplicationController < ActionController::Base
 
     # log request stats
     puts "[#{Time.now}] [#{Rails.application.class.parent}] [#{RequestStore.store[:uuid]}] [INFO]  REQUEST STARTED:" # extra space for alignment
-    puts '-' * 115
+    puts '=' * 120
     puts "Method: #{request.request_method}"
     puts "Path: #{request.fullpath}"
     puts "Format: #{request.format}"

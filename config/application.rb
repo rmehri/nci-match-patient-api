@@ -70,7 +70,7 @@ module NciPedMatchPatientApi
     # :action=>"cog", :status=>403, :duration=>283.62, :view=>0.3, :time=>2017-10-10 14:40:47 -0400,
     # :host=>"localhost", :uuid=>"ea8cabc3-d59f-48f9-be69-01bfc90de905"}
     config.lograge.formatter = Proc.new do |data|
-      tags = "[#{data[:time]}] [#{Rails.application.class.parent}] [#{data[:uuid]}] [INFO] " # space for alignment
+      tags = "[#{data[:time] + data[:duration] / 1000}] [#{Rails.application.class.parent}] [#{data[:uuid]}] [INFO] " # space for alignment
       "#{tags} Completed #{data[:status]} #{Rack::Utils::HTTP_STATUS_CODES[data[:status]]} in #{data[:duration]}ms (View: #{data[:view]}ms)\n\n"
     end
 
