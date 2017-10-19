@@ -1,17 +1,8 @@
 describe V1::PendingViewController do
 
   it 'should return a pending view with 1 pending variant report' do
-    # variant_report = NciMatchPatientModels::VariantReport.new
-    # variant_report.patient_id = "3366"
-    # variant_report.variant_report_received_date = DateTime.current.getutc().to_s
-    # variant_report.analysis_id = "an-1234"
-    # variant_report.molecular_id = "mo-1234"
-    # variant_report.ion_reporter_id = "ion-1234"
-    # variant_report.tsv_file_name = "4.tsv"
-    # variant_report.status = 'PENDING'
-    # variant_report.variant_report_type = 'TISSUE'
-
-    vr = {"patient_id" => "3366",
+    vr_tissue = {
+          "patient_id" => "3366",
           "variant_report_received_date" => DateTime.current.getutc().to_s,
           "analysis_id" => "an-1234",
           "molecular_id" => "mo-1234",
@@ -20,9 +11,8 @@ describe V1::PendingViewController do
           "status" => 'PENDING',
           "variant_report_type" => 'TISSUE'}
 
-    allow(Aws::DynamoDB::Client).to receive(:new).and_return(Aws::DynamoDB::Client.new)
-
-    allow(NciMatchPatientModels::VariantReport).to receive(:scan_and_find_by).and_return([vr])
+    vr_blood = vr_tissue.merge("variant_report_type" => 'BLOOD')
+    allow(NciMatchPatientModels::VariantReport).to receive(:scan_and_find_by).and_return([vr_tissue, vr_blood])
 
     patient = NciMatchPatientModels::Patient.new
     patient.patient_id = "3366"
@@ -36,6 +26,7 @@ describe V1::PendingViewController do
 
     pending_view = JSON.parse(response.body).deep_symbolize_keys
     expect(pending_view[:tissue_variant_reports].length).to eq(1)
+    expect(pending_view[:blood_variant_reports].length).to eq(1)
     expect(pending_view[:assignment_reports].length).to eq(0)
   end
 
